@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nr: MyString
+  custom_nr: MyString
+  part_type: 1
+  measure_unit_id: 
+
+two:
+  nr: MyString
+  custom_nr: MyString
+  part_type: 1
+  measure_unit_id: 

@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @measure_unit.code %>
+</p>
+
+<p>
+  <strong>Describe:</strong>
+  <%= @measure_unit.describe %>
+</p>
+
+<p>
+  <strong>Cn:</strong>
+  <%= @measure_unit.cn %>
+</p>
+
+<p>
+  <strong>En:</strong>
+  <%= @measure_unit.en %>
+</p>
+
+<%= link_to 'Edit', edit_measure_unit_path(@measure_unit) %> |
+<%= link_to 'Back', measure_units_path %>

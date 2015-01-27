@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nr:</strong>
+  <%= @part.nr %>
+</p>
+
+<p>
+  <strong>Custom nr:</strong>
+  <%= @part.custom_nr %>
+</p>
+
+<p>
+  <strong>Part type:</strong>
+  <%= @part.part_type %>
+</p>
+
+<p>
+  <strong>Measure unit:</strong>
+  <%= @part.measure_unit %>
+</p>
+
+<%= link_to 'Edit', edit_part_path(@part) %> |
+<%= link_to 'Back', parts_path %>

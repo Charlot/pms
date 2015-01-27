@@ -1,0 +1,29 @@
+<h1>Listing part_boms</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th>Part</th>
+    <th>Bom item</th>
+    <th>Quantity</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @part_boms.each do |part_bom| %>
+      <tr>
+        <td><%= part_bom.part.nr %></td>
+        <td><%= part_bom.bom_item.nr %></td>
+        <td><%= part_bom.quantity %></td>
+        <td><%= link_to 'Show', part_bom %></td>
+        <td><%= link_to 'Edit', edit_part_bom_path(part_bom) %></td>
+        <td><%= link_to 'Destroy', part_bom, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Part bom', new_part_bom_path %>

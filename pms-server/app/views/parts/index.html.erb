@@ -1,0 +1,31 @@
+<h1>Listing parts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nr</th>
+      <th>Custom nr</th>
+      <th>Part type</th>
+      <th>Measure unit</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @parts.each do |part| %>
+      <tr>
+        <td><%= part.nr %></td>
+        <td><%= part.custom_nr %></td>
+        <td><%= part.part_type %></td>
+        <td><%= part.measure_unit %></td>
+        <td><%= link_to 'Show', part %></td>
+        <td><%= link_to 'Edit', edit_part_path(part) %></td>
+        <td><%= link_to 'Destroy', part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Part', new_part_path %>
