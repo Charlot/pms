@@ -1,10 +1,15 @@
 Rails.application.routes.draw do
-  resources :part_boms
+  root :to => 'welcome#index'
+
+  resources :part_boms do
+    collection do
+      get :search
+      match :import, to: :import, via: [:get, :post]
+    end
+  end
 
   resources :measure_units
-
   resources :parts
-
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

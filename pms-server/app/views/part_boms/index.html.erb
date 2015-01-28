@@ -1,5 +1,8 @@
 <h1>Listing part_boms</h1>
+<%= link_to 'New Part bom', new_part_bom_path %>
+<%= link_to 'Import Part bom', import_part_boms_path %>
 
+<%= render partial: 'search_bom_bar' %>
 <table>
   <thead>
   <tr>
@@ -16,7 +19,6 @@
         <td><%= part_bom.part.nr %></td>
         <td><%= part_bom.bom_item.nr %></td>
         <td><%= part_bom.quantity %></td>
-        <td><%= link_to 'Show', part_bom %></td>
         <td><%= link_to 'Edit', edit_part_bom_path(part_bom) %></td>
         <td><%= link_to 'Destroy', part_bom, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
@@ -26,4 +28,3 @@
 
 <br>
 
-<%= link_to 'New Part bom', new_part_bom_path %>

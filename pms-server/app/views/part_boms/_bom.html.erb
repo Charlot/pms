@@ -1,0 +1,15 @@
+<div>
+  <% if @bom %>
+      <div class='tree'>
+        <ul>
+          <li class="icon-plus-sign">
+            <a href='#'> <%= @bom.node.nr %></a>
+            <%= render(partial: 'node', locals: {bom: @bom.children}) if @bom.children %>
+          </li>
+        </ul>
+      </div>
+
+  <% end %>
+  <hr/>
+</div>
+<div><%= @bom.to_json %></div>

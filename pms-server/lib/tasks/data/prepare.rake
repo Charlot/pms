@@ -22,11 +22,13 @@ namespace :data do
   # H B,F
   desc 'prepare part bom'
   task :part_bom => :environment do
-    bom={A: %w(B C), B: %w(D E), C: %w(F G), H: %w(B F)}
+    PartBom.destroy_all
+
+    bom={A: %w(B C H), B: %w(D E), C: %w(F G), H: %w(B F)}
     bom.each do |k, v|
       p=Part.find_by_nr(k.to_s)
       v.each do |vv|
-        p.part_boms.create(bom_item_id: Part.find_by_nr(vv).id)
+        p.part_boms.create(bom_item_id: Part.find_by_nr(vv).id, quantity: rand(10))
       end
     end
   end
