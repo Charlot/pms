@@ -38,3 +38,4 @@ bower.json
 /uploadfiles/**/*
 !/uploadfiles/**/.keep
 !/uploadfiles/template/*
+/uploadfiles/template/*.*~
