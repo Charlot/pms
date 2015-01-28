@@ -1,6 +1,6 @@
 module FileHandler
   module Csv
-    class Base<BaseClass
+    class Base<FileHandler::Base
       SEPARATOR=$csv_separator
 
       def self.get_encoding(user_agent)

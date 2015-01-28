@@ -1,5 +1,5 @@
 class Message<BaseClass
-  attr_accessor :result, :object, :content
+  attr_accessor :result, :object, :content, :contents
 
   def default
     {result: false}

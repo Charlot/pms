@@ -10,7 +10,9 @@ Rails.application.routes.draw do
 
   resources :measure_units
   resources :parts
-  # The priority is based upon order of creation: first created -> highest priority.
+  resources :files
+
+    # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
