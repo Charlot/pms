@@ -13,7 +13,6 @@ module FileHandler
             line_no = 0
             CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
               line_no+=1
-              row<<'JACK'
             end
             msg.result=true
             msg.content='Bom 上传成功！'
@@ -52,12 +51,16 @@ module FileHandler
 
       def self.validate_row(row)
         msg=Message.new(contents: [])
-        unless Part.find_by_nr(row['Part Nr'])
+        unless root=Part.find_by_nr(row['Part Nr'])
           msg.contents<<"Part Nr:#{row['Part Nr']}不存在"
         end
 
-        unless Part.find_by_nr(row['Component Nr'])
+        unless node=Part.find_by_nr(row['Component Nr'])
           msg.contents<<"Component Nr:#{row['Component Nr']}不存在"
+        end
+
+        if root && node && (root.part_boms(bom_item_id:node.id))
+          msg.contents<<"Component Nr:#{row['Component Nr']}已存在BOM中"
         end
 
         unless msg.result=(msg.contents.size==0)
