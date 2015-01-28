@@ -4,6 +4,11 @@ class PartsController < ApplicationController
   # GET /parts
   # GET /parts.json
   def index
+    puts '000000000000000000000000000000000'
+    puts request.user_agent.downcase
+    puts System::Base.os_by_user_agent(request.user_agent)
+
+    puts '000000000000000000000000000000000'
     @parts = Part.all
   end
 
@@ -62,13 +67,13 @@ class PartsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_part
-      @part = Part.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_part
+    @part = Part.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def part_params
-      params.require(:part).permit(:nr, :custom_nr, :part_type, :measure_unit_id)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def part_params
+    params.require(:part).permit(:nr, :custom_nr, :part_type, :measure_unit_id)
+  end
 end

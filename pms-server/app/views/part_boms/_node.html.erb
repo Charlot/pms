@@ -1,0 +1,10 @@
+<ul>
+  <% bom.each do |b| %>
+      <li>
+        <a href='#'><%= b.node.nr %>/<%= b.node.quantity %></a>
+        <% if b.children %>
+            <%= render partial: 'node', locals: {bom: b.children} %>
+        <% end %>
+      </li>
+  <% end %>
+</ul>
