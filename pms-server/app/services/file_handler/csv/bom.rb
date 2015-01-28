@@ -3,6 +3,7 @@ module FileHandler
     class Bom
       IMPORT_HEADERS=['Part Nr', 'Component Nr', 'Quantity']
 
+      # import bom by file
       def self.import(file)
         msg=Message.new
         begin
@@ -11,10 +12,17 @@ module FileHandler
             row.strip
             line_no+=1
           end
+          msg.result=true
+          msg.content='Bom 上传成功！'
         rescue => e
           msg.content = e.message
         end
         return msg
+      end
+
+      def self.validate_import(file)
+        msg=ValidateMessage.new
+
       end
     end
   end

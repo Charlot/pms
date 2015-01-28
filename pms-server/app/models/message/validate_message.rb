@@ -1,0 +1,3 @@
+class ValidateMessage<Message
+
+end
