@@ -32,6 +32,7 @@ bower.json
 
 # editor cache
 *.*~
+/.idea
 
 # upload files
 /uploadfiles/**/*
