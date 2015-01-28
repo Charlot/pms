@@ -12,10 +12,8 @@ module FileHandler
           puts '00000000000000000'
           puts validate_msg.to_json
           if validate_msg.result
-            line_no = 0
             PartBom.transaction do
               CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
-                line_no+=1
                 root=Part.find_by_nr(row['Part Nr'])
                 node=Part.find_by_nr(row['Component Nr'])
                 unless pm=root.part_boms.where(bom_item_id: node.id).first
@@ -49,9 +47,9 @@ module FileHandler
             if mmsg.result
               csv<<row.fields
             else
-              unless msg.result
+              if msg.result
                 msg.result=false
-                msg.content = "请下载错误文件<a href='/files/#{Base64.encode64(tmp_file)}'>#{::File.basename(tmp_file)}</a>"
+                msg.content = "请下载错误文件<a href='/files/#{Base64.urlsafe_encode64(tmp_file)}'>#{::File.basename(tmp_file)}</a>"
               end
               csv<<(row.fields<<mmsg.content)
             end

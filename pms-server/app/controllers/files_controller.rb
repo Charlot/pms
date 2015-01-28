@@ -6,6 +6,6 @@ class FilesController < ApplicationController
   end
 
   def show
-    send_file Base64.decode64(params[:id])
+    send_file Base64.urlsafe_decode64(params[:id])
   end
 end
