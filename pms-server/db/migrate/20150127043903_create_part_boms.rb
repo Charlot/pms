@@ -3,7 +3,7 @@ class CreatePartBoms < ActiveRecord::Migration
     create_table :part_boms do |t|
       t.references :part, index: true
       t.integer :bom_item_id
-      t.integer :quantity
+      t.float :quantity
 
       t.timestamps
     end

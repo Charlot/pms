@@ -9,10 +9,21 @@ module FileHandler
         msg=Message.new
         begin
           validate_msg=validate_import(file)
+          puts '00000000000000000'
+          puts validate_msg.to_json
           if validate_msg.result
             line_no = 0
-            CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
-              line_no+=1
+            PartBom.transaction do
+              CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+                line_no+=1
+                root=Part.find_by_nr(row['Part Nr'])
+                node=Part.find_by_nr(row['Component Nr'])
+                unless pm=root.part_boms.where(bom_item_id: node.id).first
+                  root.part_boms.create(bom_item_id: node.id, quantity: row['Quantity'])
+                else
+                  pm.update_attributes(quantity: row['Quantity'])
+                end
+              end
             end
             msg.result=true
             msg.content='Bom 上传成功！'
@@ -30,7 +41,7 @@ module FileHandler
 
       def self.validate_import(file)
         tmp_file=full_tmp_path(file.file_name)
-        msg=Message.new
+        msg=Message.new(result: true)
         CSV.open(tmp_file, 'wb', write_headers: true,
                  headers: INVALID_CSV_HEADERS, col_sep: file.col_sep, encoding: file.encoding) do |csv|
           CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
@@ -59,14 +70,13 @@ module FileHandler
           msg.contents<<"Component Nr:#{row['Component Nr']}不存在"
         end
 
-        if root && node && (root.part_boms(bom_item_id:node.id))
-          msg.contents<<"Component Nr:#{row['Component Nr']}已存在BOM中"
-        end
+        # if root && node && (root.part_boms(bom_item_id: node.id))
+        #   msg.contents<<"Component Nr:#{row['Component Nr']}已存在BOM中"
+        # end
 
         unless msg.result=(msg.contents.size==0)
           msg.content=msg.contents.join('/')
         end
-        puts msg.to_json
         return msg
       end
     end
