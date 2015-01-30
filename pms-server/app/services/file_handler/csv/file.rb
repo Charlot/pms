@@ -1,7 +1,7 @@
 module FileHandler
   module Csv
     class File<Base
-      attr_accessor :encoding, :col_sep, :path, :user_agent, :headers
+      attr_accessor :encoding, :col_sep, :file_path, :file_name, :user_agent, :headers
 
       def initialize (args={})
         super

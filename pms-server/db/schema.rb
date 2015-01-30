@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 20150127043903) do
   create_table "part_boms", force: true do |t|
     t.integer  "part_id"
     t.integer  "bom_item_id"
-    t.integer  "quantity"
+    t.float    "quantity"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
