@@ -4,11 +4,6 @@ class PartsController < ApplicationController
   # GET /parts
   # GET /parts.json
   def index
-    puts '000000000000000000000000000000000'
-    puts request.user_agent.downcase
-    puts System::Base.os_by_user_agent(request.user_agent)
-
-    puts '000000000000000000000000000000000'
     @parts = Part.all
   end
 
