@@ -11,7 +11,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150127043903) do
+ActiveRecord::Schema.define(version: 20150202024904) do
+
+  create_table "kanbans", force: true do |t|
+    t.string   "nr",                             null: false
+    t.string   "remark"
+    t.float    "quantity",         default: 0.0
+    t.float    "safety_stock",                   null: false
+    t.float    "task_time",        default: 0.0
+    t.integer  "copies",           default: 0
+    t.integer  "state",            default: 0
+    t.integer  "version",          default: 1
+    t.string   "source_warehouse"
+    t.string   "source_storage"
+    t.string   "des_warehouse"
+    t.string   "des_storage"
+    t.integer  "part_id"
+    t.datetime "print_time"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "kanbans", ["nr"], name: "index_kanbans_on_nr", using: :btree
+  add_index "kanbans", ["part_id"], name: "index_kanbans_on_part_id", using: :btree
 
   create_table "measure_units", force: true do |t|
     t.string   "code"

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :kanbans
+
   root :to => 'welcome#index'
 
   resources :part_boms do
