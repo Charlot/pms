@@ -1,0 +1,45 @@
+<h1>Listing kanbans</h1>
+
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+    <tr>
+      <th>KANBAN号</th>
+      <th>版本号</th>
+      <th>打印日期</th>
+      <th>打印份数</th>
+      <th>状态</th>
+      <th>卡量</th>
+      <th>线号</th>
+      <th>总成号</th>
+      <th>客户号</th>
+      <th>取料位置</th>
+      <th>送料位置</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @kanbans.each do |kanban| %>
+      <tr>
+        <td><%= kanban.nr %></td>
+        <td><%= kanban.version%></td>
+        <td><%= kanban.print_time%></td>
+        <td><%= kanban.copies%></td>
+        <td><%= kanban.state%></td>
+        <td><%= kanban.quantity%></td>
+        <td><%= kanban.part_id%></td>
+        <td></td>
+        <td></td>
+        <td><%= "#{kanban.source_warehouse} | #{kanban.source_storage}"%></td>
+        <td><%= "#{kanban.des_warehouse} | #{kanban.des_storage}"%></td>
+        <td><%= link_to 'Show', kanban %></td>
+        <td><%= link_to 'Edit', edit_kanban_path(kanban) %></td>
+        <td><%= link_to 'Destroy', kanban, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Kanban', new_kanban_path %>

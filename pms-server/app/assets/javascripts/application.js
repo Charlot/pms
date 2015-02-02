@@ -15,4 +15,5 @@
 //= require jquery.ui/jquery-ui-1.9.1.custom.min
 //= require turbolinks
 //= require jquery.file.upload/jquery.fileupload
+//= require bootstrap.min
 //= require_tree .
