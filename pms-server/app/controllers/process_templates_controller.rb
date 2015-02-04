@@ -1,4 +1,5 @@
 class ProcessTemplatesController < ApplicationController
+  include ProcessTemplatesHelper
   before_action :set_process_template, only: [:show, :edit, :update, :destroy]
   before_action :permit_new_process_type, only: [:new, :create]
   # GET /process_templates
@@ -25,20 +26,8 @@ class ProcessTemplatesController < ApplicationController
   # POST /process_templates
   # POST /process_templates.json
   def create
-    puts '-------------------------'
-    puts process_template_params
-
-    @process_template = ProcessTemplate.new(process_template_params)
-
-    respond_to do |format|
-      if @process_template.save
-        format.html { redirect_to @process_template, notice: 'Process template was successfully created.' }
-        format.json { render :show, status: :created, location: @process_template }
-      else
-        format.html { render :new }
-        format.json { render json: @process_template.errors, status: :unprocessable_entity }
-      end
-    end
+    params.permit!
+    build_process_template
   end
 
   # PATCH/PUT /process_templates/1
@@ -73,7 +62,8 @@ class ProcessTemplatesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def process_template_params
-    params.require(:process_template).permit(:code, :type, :name, :template, :description)
+     params.permit!
+   # params.require(:process_template).permit!#(:code, :type, :name, :template, :description)
   end
 
   def permit_new_process_type
