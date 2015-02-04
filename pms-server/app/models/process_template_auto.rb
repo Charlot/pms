@@ -1,0 +1,3 @@
+class ProcessTemplateAuto < ProcessTemplate
+
+end

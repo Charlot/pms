@@ -1,0 +1,47 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  type: 
+  name: MyString
+  field_format: MyString
+  possible_values: MyText
+  regexp: MyString
+  min_length: 1
+  max_length: 1
+  is_required: false
+  is_for_all: false
+  is_filter: false
+  position: 1
+  searchable: false
+  default_value: MyText
+  editable: false
+  visible: false
+  multiple: false
+  format_store: MyText
+  is_query_value: false
+  validate_query: MyText
+  value_query: MyText
+  description: MyText
+
+two:
+  type: 
+  name: MyString
+  field_format: MyString
+  possible_values: MyText
+  regexp: MyString
+  min_length: 1
+  max_length: 1
+  is_required: false
+  is_for_all: false
+  is_filter: false
+  position: 1
+  searchable: false
+  default_value: MyText
+  editable: false
+  visible: false
+  multiple: false
+  format_store: MyText
+  is_query_value: false
+  validate_query: MyText
+  value_query: MyText
+  description: MyText

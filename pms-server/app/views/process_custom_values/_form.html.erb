@@ -1,0 +1,33 @@
+<%= form_for(@process_custom_value) do |f| %>
+  <% if @process_custom_value.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@process_custom_value.errors.count, "error") %> prohibited this process_custom_value from being saved:</h2>
+
+      <ul>
+      <% @process_custom_value.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :customized_type %><br>
+    <%= f.text_field :customized_type %>
+  </div>
+  <div class="field">
+    <%= f.label :customized_id %><br>
+    <%= f.number_field :customized_id %>
+  </div>
+  <div class="field">
+    <%= f.label :custom_field_id %><br>
+    <%= f.number_field :custom_field_id %>
+  </div>
+  <div class="field">
+    <%= f.label :value %><br>
+    <%= f.text_area :value %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

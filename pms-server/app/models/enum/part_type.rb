@@ -1,3 +1,3 @@
-class PartType
+class PartType<BaseType
 
 end

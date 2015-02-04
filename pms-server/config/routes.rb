@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  resources :process_templates
+
+  resources :process_custom_values
+
+  resources :process_custom_fields
+
   resources :kanbans
 
   root :to => 'welcome#index'
