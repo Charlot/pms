@@ -14,7 +14,7 @@ module ProcessTemplatesHelper
         if to_enum_value(params[:type])==ProcessType::AUTO
           puts '================='
           params[:process_custom_field].keys.each do |key|
-            puts key
+            ProcessTemplateAuto.build_custom_field(key)
           end
           puts '================='
 

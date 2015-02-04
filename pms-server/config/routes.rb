@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
+  resources :custom_values
+
+  resources :custom_fields
+
   resources :process_templates
-
-  resources :process_custom_values
-
-  resources :process_custom_fields
 
   resources :kanbans
 

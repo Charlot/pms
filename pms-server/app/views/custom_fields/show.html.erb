@@ -1,0 +1,109 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @custom_field.type %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @custom_field.name %>
+</p>
+
+<p>
+  <strong>Field format:</strong>
+  <%= @custom_field.field_format %>
+</p>
+
+<p>
+  <strong>Possible values:</strong>
+  <%= @custom_field.possible_values %>
+</p>
+
+<p>
+  <strong>Regexp:</strong>
+  <%= @custom_field.regexp %>
+</p>
+
+<p>
+  <strong>Min length:</strong>
+  <%= @custom_field.min_length %>
+</p>
+
+<p>
+  <strong>Max length:</strong>
+  <%= @custom_field.max_length %>
+</p>
+
+<p>
+  <strong>Is required:</strong>
+  <%= @custom_field.is_required %>
+</p>
+
+<p>
+  <strong>Is for all:</strong>
+  <%= @custom_field.is_for_all %>
+</p>
+
+<p>
+  <strong>Is filter:</strong>
+  <%= @custom_field.is_filter %>
+</p>
+
+<p>
+  <strong>Position:</strong>
+  <%= @custom_field.position %>
+</p>
+
+<p>
+  <strong>Searchable:</strong>
+  <%= @custom_field.searchable %>
+</p>
+
+<p>
+  <strong>Default value:</strong>
+  <%= @custom_field.default_value %>
+</p>
+
+<p>
+  <strong>Editable:</strong>
+  <%= @custom_field.editable %>
+</p>
+
+<p>
+  <strong>Visible:</strong>
+  <%= @custom_field.visible %>
+</p>
+
+<p>
+  <strong>Multiple:</strong>
+  <%= @custom_field.multiple %>
+</p>
+
+<p>
+  <strong>Format store:</strong>
+  <%= @custom_field.format_store %>
+</p>
+
+<p>
+  <strong>Is query value:</strong>
+  <%= @custom_field.is_query_value %>
+</p>
+
+<p>
+  <strong>Validate query:</strong>
+  <%= @custom_field.validate_query %>
+</p>
+
+<p>
+  <strong>Value query:</strong>
+  <%= @custom_field.value_query %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @custom_field.description %>
+</p>
+
+<%= link_to 'Edit', edit_custom_field_path(@custom_field) %> |
+<%= link_to 'Back', custom_fields_path %>
