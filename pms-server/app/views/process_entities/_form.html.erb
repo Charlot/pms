@@ -1,6 +1,6 @@
 <div class="field">
   input process template no:
-  <input type="text" id="process_template_nr">
+  <input type="text" id="process_template_code">
 </div>
 
 <%= form_for(@process_entity) do |f| %>
@@ -56,7 +56,7 @@
 <% end %>
 <script type="text/javascript">
     $(
-            $('#process_template_nr').bind('keyup', function (event) {
+            $('#process_template_code').bind('keyup', function (event) {
                 var e = adapt_event(event);
                 if (e.keyCode == 13) {
                     load_process_template_partial($(this).val(), function (template) {

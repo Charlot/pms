@@ -55,7 +55,7 @@ class ProcessTemplatesController < ApplicationController
   end
 
   def template
-    render json: '23'
+    @process_template=ProcessTemplate.find_by_code(params[:code])
   end
 
   private
