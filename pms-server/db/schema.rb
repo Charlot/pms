@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150205095451) do
+ActiveRecord::Schema.define(version: 20150205195721) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "type",                                null: false
@@ -113,6 +113,22 @@ ActiveRecord::Schema.define(version: 20150205095451) do
   add_index "parts", ["measure_unit_id"], name: "index_parts_on_measure_unit_id", using: :btree
   add_index "parts", ["nr"], name: "index_parts_on_nr", using: :btree
   add_index "parts", ["part_type"], name: "index_parts_on_part_type", using: :btree
+
+  create_table "process_entities", force: true do |t|
+    t.string   "nr",                                null: false
+    t.string   "name"
+    t.text     "description"
+    t.float    "stand_time",          default: 0.0
+    t.integer  "process_template_id"
+    t.integer  "workstation_type_id"
+    t.integer  "cost_center_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "process_entities", ["cost_center_id"], name: "index_process_entities_on_cost_center_id", using: :btree
+  add_index "process_entities", ["process_template_id"], name: "index_process_entities_on_process_template_id", using: :btree
+  add_index "process_entities", ["workstation_type_id"], name: "index_process_entities_on_workstation_type_id", using: :btree
 
   create_table "process_templates", force: true do |t|
     t.string   "code"

@@ -1,0 +1,37 @@
+<h1>Listing process_entities</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nr</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Stand time</th>
+      <th>Process template</th>
+      <th>Workstation type</th>
+      <th>Cost center</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @process_entities.each do |process_entity| %>
+      <tr>
+        <td><%= process_entity.nr %></td>
+        <td><%= process_entity.name %></td>
+        <td><%= process_entity.description %></td>
+        <td><%= process_entity.stand_time %></td>
+        <td><%= process_entity.process_template %></td>
+        <td><%= process_entity.workstation_type %></td>
+        <td><%= process_entity.cost_center %></td>
+        <td><%= link_to 'Show', process_entity %></td>
+        <td><%= link_to 'Edit', edit_process_entity_path(process_entity) %></td>
+        <td><%= link_to 'Destroy', process_entity, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Process entity', new_process_entity_path %>

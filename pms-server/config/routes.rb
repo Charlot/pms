@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :process_entities
+
   resources :custom_values
 
   resources :custom_fields
