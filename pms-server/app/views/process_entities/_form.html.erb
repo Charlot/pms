@@ -1,45 +1,68 @@
+<div class="field">
+  input process template no:
+  <input type="text" id="process_template_nr">
+</div>
+
 <%= form_for(@process_entity) do |f| %>
-  <% if @process_entity.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@process_entity.errors.count, "error") %> prohibited this process_entity from being saved:</h2>
+    <% if @process_entity.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@process_entity.errors.count, "error") %> prohibited this process_entity from being
+            saved:</h2>
 
-      <ul>
-      <% @process_entity.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+          <ul>
+            <% @process_entity.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :nr %>
+      <%= f.text_field :nr %>
     </div>
-  <% end %>
+    <div class="field">
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </div>
+    <div class="field">
+      <%= f.label :description %>
+      <%= f.text_area :description %>
+    </div>
+    <div class="field">
+      <%= f.label :stand_time %>
+      <%= f.text_field :stand_time %>
+    </div>
 
-  <div class="field">
-    <%= f.label :nr %><br>
-    <%= f.text_field :nr %>
-  </div>
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :description %><br>
-    <%= f.text_area :description %>
-  </div>
-  <div class="field">
-    <%= f.label :stand_time %><br>
-    <%= f.text_field :stand_time %>
-  </div>
-  <div class="field">
-    <%= f.label :process_template_id %><br>
-    <%= f.text_field :process_template_id %>
-  </div>
-  <div class="field">
-    <%= f.label :workstation_type_id %><br>
-    <%= f.text_field :workstation_type_id %>
-  </div>
-  <div class="field">
-    <%= f.label :cost_center_id %><br>
-    <%= f.text_field :cost_center_id %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+    <div class="field">
+      <%= f.label :process_template_id %>
+      <%= f.text_field :process_template_id %>
+    </div>
+
+    <div class="field">
+      <%= f.label :workstation_type_id %>
+      <%= f.text_field :workstation_type_id %>
+    </div>
+    <div class="field">
+      <%= f.label :cost_center_id %>
+      <%= f.text_field :cost_center_id %>
+    </div>
+    <div class="process_template_container">
+
+    </div>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
 <% end %>
+<script type="text/javascript">
+    $(
+            $('#process_template_nr').bind('keyup', function (event) {
+                var e = adapt_event(event);
+                if (e.keyCode == 13) {
+                    load_process_template_partial($(this).val(), function (template) {
+                        $('.process_template_container').html(template)
+                    });
+                }
+            })
+    )
+</script>

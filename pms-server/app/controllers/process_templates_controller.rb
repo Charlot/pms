@@ -54,6 +54,10 @@ class ProcessTemplatesController < ApplicationController
     end
   end
 
+  def template
+    render json: '23'
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_process_template
@@ -62,8 +66,8 @@ class ProcessTemplatesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def process_template_params
-     params.permit!
-   # params.require(:process_template).permit!#(:code, :type, :name, :template, :description)
+    params.permit!
+    # params.require(:process_template).permit!#(:code, :type, :name, :template, :description)
   end
 
   def permit_new_process_type
