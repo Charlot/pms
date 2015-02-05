@@ -27,7 +27,7 @@ class ProcessTemplatesController < ApplicationController
   # POST /process_templates.json
   def create
     params.permit!
-    build_process_template
+    build_process_template(params)
   end
 
   # PATCH/PUT /process_templates/1
@@ -55,7 +55,11 @@ class ProcessTemplatesController < ApplicationController
   end
 
   def template
-    @process_template=ProcessTemplate.find_by_code(params[:code])
+    if @process_template=ProcessTemplate.find_by_code(params[:code])
+      render_template_html(@process_template)
+    else
+      render partial: 'shared/messages/no_found'
+    end
   end
 
   private
