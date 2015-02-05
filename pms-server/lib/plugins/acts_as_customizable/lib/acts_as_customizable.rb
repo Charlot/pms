@@ -27,17 +27,16 @@ module Pms
           base.send :alias_method_chain, :reload, :custom_fields
         end
 
-
         def method_missing(method_name, *args, &block)
           if /custom_\w+/.match(method_name.to_s)
-            custom_field_values.detect { |v| v.custom_field.name.downcase== method_name.to_s.sub(/custom_/,'')}.try(:value)
+            custom_field_values.detect { |v| v.custom_field.name.downcase== method_name.to_s.sub(/custom_/, '') }.try(:value)
           else
             super
           end
         end
 
         def available_custom_fields
-          CustomField.where("type = '#{self.class.name}CustomField'").sorted.to_a
+          CustomField.where("type = '#{self.custom_field_type}'").sorted.to_a
         end
 
         # Sets the values of the object's custom fields
@@ -96,7 +95,6 @@ module Pms
             x
           end
         end
-
 
         def visible_custom_field_values
           custom_field_values.select(&:visible?)

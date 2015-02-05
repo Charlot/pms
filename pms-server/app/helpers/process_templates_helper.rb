@@ -5,23 +5,21 @@ module ProcessTemplatesHelper
 
   def build_process_template
     puts '----------------------------------------'
-
     puts params
     puts '----------------------------------------'
     ProcessTemplate.transaction do
       @process_template=ProcessTemplate.new(params[:process_template])
-      unless params[:process_custom_field].blank?
-        if to_enum_value(params[:type])==ProcessType::AUTO
-          puts '================='
-          params[:process_custom_field].keys.each do |key|
-            ProcessTemplateAuto.build_custom_field(key)
-          end
-          puts '================='
-
-        end
-      end
       respond_to do |format|
         if @process_template.save
+          unless params[:custom_field].blank?
+            if to_enum_value(params[:type])==ProcessType::AUTO
+              puts '================='
+              ProcessTemplateAuto.build_custom_fields(params[:custom_field].keys, @process_template).each do |cf|
+                puts cf.class.name
+                cf.save
+              end
+            end
+          end
           format.html { redirect_to @process_template, notice: 'Process template was successfully created.' }
           format.json { render :show, status: :created, location: @process_template }
         else

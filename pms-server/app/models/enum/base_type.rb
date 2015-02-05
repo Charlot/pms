@@ -3,7 +3,8 @@ class BaseType<BaseClass
     define_method(:has_value?) { |s| self.constants.map { |c| self.const_get(c.to_s) }.include?(s) }
   end
 
-  def get_type(type)
+  def self.get_type(type)
+    puts '---------'+type
     const_get(type.upcase)
   end
 
