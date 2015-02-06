@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <% if to_enum_value(@process_type)==ProcessType::AUTO %>
+    <% if ProcessType.auto?(@process_type) %>
         <%= render 'form_auto' %>
     <% end %>
     <%= hidden_field_tag 'process_template[type]', @process_type %>

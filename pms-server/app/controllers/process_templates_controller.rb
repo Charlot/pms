@@ -32,7 +32,7 @@ class ProcessTemplatesController < ApplicationController
       respond_to do |format|
         if @process_template.save
           unless params[:custom_field].blank?
-            if to_enum_value(params[:type])==ProcessType::AUTO
+            if ProcessType.auto?(params[:type])
               ProcessTemplateAuto.build_custom_fields(params[:custom_field].keys, @process_template).each do |cf|
                 cf.save
               end
