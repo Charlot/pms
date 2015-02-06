@@ -75,7 +75,11 @@ class ProcessTemplatesController < ApplicationController
 
   def template
     if @process_template=ProcessTemplate.find_by_code(params[:code])
+      if ProcessType.auto?(@process_template.type)
+        render partial: 'new_process_auto'
+      else
 
+      end
     else
       render partial: 'shared/messages/no_found'
     end
@@ -89,8 +93,8 @@ class ProcessTemplatesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def process_template_params
-    params.permit!
-    # params.require(:process_template).permit!#(:code, :type, :name, :template, :description)
+    #params.permit!
+    params.require(:process_template).permit!#(:code, :type, :name, :template, :description)
   end
 
   def permit_new_process_type

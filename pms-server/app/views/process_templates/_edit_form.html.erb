@@ -1,0 +1,44 @@
+<%= form_for(@process_template) do |f| %>
+    <% if @process_template.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@process_template.errors.count, "error") %> prohibited this process_template from being
+            saved:</h2>
+
+          <ul>
+            <% @process_template.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+    <div>
+      <p>Base Info</p>
+
+      <div class="field">
+        <%= f.label :code %>:
+        <%= f.text_field :code %>
+      </div>
+      <div class="field">
+        <%= f.label :type %>:
+        <%= f.label :type, ProcessType.display(@process_template.type) %>
+      </div>
+      <div class="field">
+        <%= f.label :name %>:
+        <%= f.text_field :name %>
+      </div>
+      <div class="field">
+        <%= f.label :description %>:
+        <%= f.text_area :description %>
+      </div>
+    </div>
+
+    <% if ProcessType.auto?(@process_type) %>
+        <%= render 'form_auto' %>
+    <% end %>
+    <%= hidden_field_tag 'process_template[type]', @process_type %>
+    <%= hidden_field_tag 'type', @process_type %>
+
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>
