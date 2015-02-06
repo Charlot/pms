@@ -14,10 +14,9 @@ module Pms
                    :as => :customized,
                    :dependent => :delete_all,
                    :validate => false
-
           send :include, Pms::Acts::Customizable::InstanceMethods
           validate :validate_custom_field_values
-          after_save :save_custom_field_values
+          # after_save :save_custom_field_values
         end
       end
 
@@ -28,15 +27,17 @@ module Pms
         end
 
         def method_missing(method_name, *args, &block)
-          if /custom_\w+/.match(method_name.to_s)
+          if /value_\w+/.match(method_name.to_s)
             custom_field_values.detect { |v| v.custom_field.name.downcase== method_name.to_s.sub(/custom_/, '') }.try(:value)
+          elsif /field_\w+/.match(method_name.to_s)
+            available_custom_fields.detect { |f| f.name==method_name.to_s.sub(/field_/, '') }
           else
             super
           end
         end
 
         def available_custom_fields
-          CustomField.where("type = '#{self.custom_field_type}'").sorted.to_a
+          @available_custom_fields ||= CustomField.where("type = '#{self.custom_field_type}'").sorted.to_a
         end
 
         # Sets the values of the object's custom fields
