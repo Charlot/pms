@@ -27,7 +27,26 @@ class ProcessTemplatesController < ApplicationController
   # POST /process_templates.json
   def create
     params.permit!
-    build_process_template(params)
+    ProcessTemplate.transaction do
+      @process_template=ProcessTemplate.new(params[:process_template])
+      respond_to do |format|
+        if @process_template.save
+          unless params[:custom_field].blank?
+            if to_enum_value(params[:type])==ProcessType::AUTO
+              ProcessTemplateAuto.build_custom_fields(params[:custom_field].keys, @process_template).each do |cf|
+                cf.save
+              end
+            end
+          end
+          format.html { redirect_to @process_template, notice: 'Process template was successfully created.' }
+          format.json { render :show, status: :created, location: @process_template }
+        else
+          format.html { render :new }
+          format.json { render json: @process_template.errors, status: :unprocessable_entity }
+        end
+      end
+    end
+
   end
 
   # PATCH/PUT /process_templates/1
@@ -56,7 +75,7 @@ class ProcessTemplatesController < ApplicationController
 
   def template
     if @process_template=ProcessTemplate.find_by_code(params[:code])
-      render_template_html(@process_template)
+
     else
       render partial: 'shared/messages/no_found'
     end
