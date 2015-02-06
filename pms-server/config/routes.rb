@@ -3,7 +3,11 @@ Rails.application.routes.draw do
 
   resources :custom_values
 
-  resources :custom_fields
+  resources :custom_fields do
+    collection do
+      post :validate
+    end
+  end
 
   resources :process_templates do
     collection do

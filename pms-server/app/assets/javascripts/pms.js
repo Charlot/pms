@@ -7,3 +7,9 @@ function load_process_template_partial(code, callback) {
         callback(template);
     });
 }
+
+function validate_custom_field_part(id, args, callback) {
+    $.post('/custom_fields/validate', {id: id, args: args}, function (data) {
+        callback(data);
+    });
+}

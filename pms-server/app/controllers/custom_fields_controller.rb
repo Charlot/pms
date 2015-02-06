@@ -1,5 +1,5 @@
 class CustomFieldsController < ApplicationController
-  before_action :set_custom_field, only: [:show, :edit, :update, :destroy]
+  before_action :set_custom_field, only: [:show, :edit, :update, :destroy, :validate]
 
   # GET /custom_fields
   # GET /custom_fields.json
@@ -61,14 +61,32 @@ class CustomFieldsController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_custom_field
-      @custom_field = CustomField.find(params[:id])
+  def validate
+    puts '***************************'
+    puts params[:args]
+    puts '***************************'
+    msg=Message.new
+    begin
+      if @custom_field
+        @custom_field.becomes("custom_field_#{@custom_field.field_format}".classify.constantize).validate_field(params[:args])
+        msg.result = true
+      else
+        msg.content = 'no such custom field'
+      end
+    rescue => e
+      msg.content = e.message
     end
+    render json: msg
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def custom_field_params
-      params.require(:custom_field).permit(:type, :name, :field_format, :possible_values, :regexp, :min_length, :max_length, :is_required, :is_for_all, :is_filter, :position, :searchable, :default_value, :editable, :visible, :multiple, :format_store, :is_query_value, :validate_query, :value_query, :description)
-    end
+  private
+  # Use callbacks to share common setup or constraints between actions.
+  def set_custom_field
+    @custom_field = CustomField.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def custom_field_params
+    params.require(:custom_field).permit(:type, :name, :field_format, :possible_values, :regexp, :min_length, :max_length, :is_required, :is_for_all, :is_filter, :position, :searchable, :default_value, :editable, :visible, :multiple, :format_store, :is_query_value, :validate_query, :value_query, :description)
+  end
 end

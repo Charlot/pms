@@ -1,2 +1,73 @@
 <h4><%= @process_template.description %></h4>
-<%=@process_template.custom_wire_nr%>
+<input type="hidden" id="hidden-process_template_id" value="<%= @process_template.id %>">
+<div>
+  <p>Wire:</p>
+  <table>
+    <tr>
+      <td colspan="2">
+        Wire No:
+        <% if field=@process_template.field_wire_nr %>
+            <input type="text" name="<%= field.name %>" id="field-<%= field.id %>" class="format_part" field="<%= field.id %>"/>
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        Component:<%= check_box_tag 'custom_field[wire_nr]', nil, true %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        Qty factor:<%= check_box_tag 'custom_field[wire_qty_factor]', nil, true %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        Bundle Qty:<%= check_box_tag 'custom_field[default_bundle_qty]', nil, true %>
+      </td>
+    </tr>
+  </table>
+  <p>Terminator:</p>
+  <table>
+    <tr>
+      <td>T1: <%= check_box_tag 'custom_field[t1]' %></td>
+      <td>T2: <%= check_box_tag 'custom_field[t2]' %></td>
+    </tr>
+    <tr>
+      <td>T1 Qty factor: <%= check_box_tag 'custom_field[t1_qty_factor]' %></td>
+      <td>T2 Qty factor: <%= check_box_tag 'custom_field[t2_qty_factor]' %></td>
+    </tr>
+    <tr>
+      <td>T1 Default Strip Length: <%= check_box_tag 'custom_field[t1_default_strip_length]' %></td>
+      <td>T1 Strip Length: <%= check_box_tag 'custom_field[t1_strip_length]' %></td>
+      <td>T2 Default Strip Length: <%= check_box_tag 'custom_field[t2_default_strip_length]' %></td>
+      <td>T2 Strip Length: <%= check_box_tag 'custom_field[t2_strip_length]' %></td>
+    </tr>
+  </table>
+  <p>Seal:</p>
+  <table>
+    <tr>
+      <td>S1: <%= check_box_tag 'custom_field[s1]' %></td>
+      <td>S2: <%= check_box_tag 'custom_field[s2]' %></td>
+    </tr>
+    <tr>
+      <td>S1 Qty factor: <%= check_box_tag 'custom_field[s1_qty_factor]' %></td>
+      <td>S2 Qty factor: <%= check_box_tag 'custom_field[s2_qty_factor]' %></td>
+    </tr>
+  </table>
+</div>
+<script type="text/javascript">
+    $($('.format_part').bind('keyup', function (event) {
+                var e = adapt_event(event);
+                if (e.keyCode == 13) {
+                    var args = new Array();
+                    args.push($(this).val());
+                    validate_custom_field_part($(this).attr('field'), args, function (data) {
+                        if (!data.result) {
+                            alert(data.content);
+                        }
+                    });
+                }
+            })
+    )
+</script>
