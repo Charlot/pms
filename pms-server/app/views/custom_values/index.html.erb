@@ -1,0 +1,31 @@
+<h1>Listing custom_values</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Customized type</th>
+      <th>Customized</th>
+      <th>Custom field</th>
+      <th>Value</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @custom_values.each do |custom_value| %>
+      <tr>
+        <td><%= custom_value.customized_type %></td>
+        <td><%= custom_value.customized_id %></td>
+        <td><%= custom_value.custom_field %></td>
+        <td><%= custom_value.value %></td>
+        <td><%= link_to 'Show', custom_value %></td>
+        <td><%= link_to 'Edit', edit_custom_value_path(custom_value) %></td>
+        <td><%= link_to 'Destroy', custom_value, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Custom value', new_custom_value_path %>

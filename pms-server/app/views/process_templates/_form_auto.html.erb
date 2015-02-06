@@ -1,0 +1,67 @@
+<div>
+  <p>Wire:</p>
+  <table>
+    <tr>
+      <td colspan="2">Wire No: <%= check_box_tag 'custom_field[default_wire_nr]', nil, true %></td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        Component:<%= check_box_tag 'custom_field[wire_nr]', nil, true %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        Qty factor:<%= check_box_tag 'custom_field[wire_qty_factor]', nil, true %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        Bundle Qty:<%= check_box_tag 'custom_field[default_bundle_qty]', nil, true %>
+      </td>
+    </tr>
+  </table>
+  <p>Terminator:</p>
+  <table>
+    <tr>
+      <td>T1: <%= check_box_tag 'custom_field[t1]' %></td>
+      <td>T2: <%= check_box_tag 'custom_field[t2]' %></td>
+    </tr>
+    <tr>
+      <td>T1 Qty factor: <%= check_box_tag 'custom_field[t1_qty_factor]' %></td>
+      <td>T2 Qty factor: <%= check_box_tag 'custom_field[t2_qty_factor]' %></td>
+    </tr>
+    <tr>
+      <td>T1 Default Strip Length: <%= check_box_tag 'custom_field[t1_default_strip_length]' %></td>
+      <td>T1 Strip Length: <%= check_box_tag 'custom_field[t1_strip_length]' %></td>
+      <td>T2 Default Strip Length: <%= check_box_tag 'custom_field[t2_default_strip_length]' %></td>
+      <td>T2 Strip Length: <%= check_box_tag 'custom_field[t2_strip_length]' %></td>
+    </tr>
+  </table>
+  <p>Seal:</p>
+  <table>
+    <tr>
+      <td>S1: <%= check_box_tag 'custom_field[s1]' %></td>
+      <td>S2: <%= check_box_tag 'custom_field[s2]' %></td>
+    </tr>
+    <tr>
+      <td>S1 Qty factor: <%= check_box_tag 'custom_field[s1_qty_factor]' %></td>
+      <td>S2 Qty factor: <%= check_box_tag 'custom_field[s2_qty_factor]' %></td>
+    </tr>
+  </table>
+</div>
+<script type="text/javascript">
+    $('#custom_field_t1').change(function () {
+        $('#custom_field_t1_qty_factor').prop('checked', $(this).prop('checked'));
+        $('#custom_field_t1_default_strip_length').prop('checked', $(this).prop('checked'));
+    });
+    $('#custom_field_t2').change(function () {
+        $('#custom_field_t2_qty_factor').prop('checked', $(this).prop('checked'));
+        $('#custom_field_t2_default_strip_length').prop('checked', $(this).prop('checked'));
+    });
+    $('#custom_field_s1').change(function () {
+        $('#custom_field_s1_qty_factor').prop('checked', $(this).prop('checked'));
+    });
+    $('#custom_field_s2').change(function () {
+        $('#custom_field_s2_qty_factor').prop('checked', $(this).prop('checked'));
+    });
+</script>

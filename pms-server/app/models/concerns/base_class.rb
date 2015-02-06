@@ -11,4 +11,8 @@ class BaseClass
       instance_variable_set "@#{k}", v
     end
   end
+
+  def self.constant_by_value(v)
+    constants.find { |name| const_get(name)==v }
+  end
 end

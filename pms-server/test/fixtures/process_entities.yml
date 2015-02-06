@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nr: MyString
+  name: 
+  description: MyText
+  stand_time: 1.5
+  process_template_id: 
+  workstation_type_id: 
+  cost_center_id: 
+
+two:
+  nr: MyString
+  name: 
+  description: MyText
+  stand_time: 1.5
+  process_template_id: 
+  workstation_type_id: 
+  cost_center_id: 

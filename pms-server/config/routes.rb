@@ -1,4 +1,16 @@
 Rails.application.routes.draw do
+  resources :process_entities
+
+  resources :custom_values
+
+  resources :custom_fields
+
+  resources :process_templates do
+    collection do
+      get :template
+    end
+  end
+
   resources :kanbans
 
   root :to => 'welcome#index'
@@ -14,7 +26,7 @@ Rails.application.routes.draw do
   resources :parts
   resources :files
 
-    # The priority is based upon order of creation: first created -> highest priority.
+  # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
