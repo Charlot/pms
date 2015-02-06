@@ -4,7 +4,7 @@ class CreateKanbans < ActiveRecord::Migration
       t.string :nr, :null => false
       t.string :remark
       t.float :quantity, :default => 0
-      t.float :safety_stock, :null => false
+      t.float :safety_stock, :default => 0 ,:null => false
       t.float :task_time,:default => 0
       t.integer :copies,:default => 0 #份数
       t.integer :state, :default => 0

@@ -41,3 +41,7 @@ gem 'spring',        group: :development
 # Excel
 gem 'roo'
 gem 'axlsx'
+
+# ElasticSearch
+#gem 'elasticsearch-model'
+#gem 'elasticsearch-rails'

@@ -12,47 +12,47 @@
     <% end %>
 
     <p>
-      <%= f.label :nr, 'KANBAN号:'%>
+      <%= f.label :nr, "#{KanbanEnum::NR}:"%>
       <%= f.text_field :nr%>
     </p>
 
     <p>
-      <%= f.label :copies, '打印份数:'%>
+      <%= f.label :copies, "#{KanbanEnum::COPIES}:"%>
       <%= f.number_field :copies, {:min => 0}%>
     </p>
 
     <p>
-      <%= f.label :quantity, '卡量:'%>
+      <%= f.label :quantity, "#{KanbanEnum::QUANTITY}:"%>
       <%= f.number_field :quantity, {:min => 0}%>
     </p>
 
     <p>
-      <%= f.label :safety_stock, '安全库存:'%>
+      <%= f.label :safety_stock, "#{KanbanEnum::SAFETY_STOCK}:"%>
       <%= f.number_field :safety_stock, {:min => 0}%>
     </p>
 
     <p>
-      <%= f.label :source_warehouse, '取料仓库:'%>
+      <%= f.label :source_warehouse, "#{KanbanEnum::SOURCE_WAREHOUSE}:"%>
       <%= f.text_field :source_warehouse%>
     </p>
 
     <p>
-      <%= f.label :source_storage, '取料库位:'%>
+      <%= f.label :source_storage, "#{KanbanEnum::SOURCE_STORAGE}:"%>
       <%= f.text_field :source_storage%>
     </p>
 
     <p>
-      <%= f.label :des_warehouse, '送料仓库:'%>
+      <%= f.label :des_warehouse, "#{KanbanEnum::DES_WAREHOUSE}:"%>
       <%= f.text_field :des_warehouse%>
     </p>
 
     <p>
-      <%= f.label :des_storage, '送料库位:'%>
+      <%= f.label :des_storage, "#{KanbanEnum::DES_STORAGE}:"%>
       <%= f.text_field :des_storage%>
     </p>
 
     <p>
-      <%= f.label :remark, '备注:'%>
+      <%= f.label :remark, "#{KanbanEnum::REMARK}:"%>
       <%= f.text_field :remark%>
     </p>
 
