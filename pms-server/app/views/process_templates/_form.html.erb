@@ -34,6 +34,8 @@
 
     <% if ProcessType.auto?(@process_type) %>
         <%= render 'form_auto' %>
+    <% elsif ProcessType.semi_auto?(@process_type) %>
+        <%= render 'form_semi_auto' %>
     <% end %>
     <%= hidden_field_tag 'process_template[type]', @process_type %>
     <%= hidden_field_tag 'type', @process_type %>
