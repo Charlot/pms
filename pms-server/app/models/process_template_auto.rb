@@ -58,12 +58,17 @@ class ProcessTemplateAuto < ProcessTemplate
                             validate_query: 'Part.find_by_nr(#)',
                             is_for_out_stock: true,
                             description: "auto template default custom field, #{field}")
+        # cf<<CustomField.new(name: "#{field}_default_strip_length",
+        #                     type: target.custom_field_type,
+        #                     is_query_value: true,
+        #                     field_format: 'part',
+        #                     value_query: 'Part.find_by_id(#).strip_length',
+        #                     validate_query: 'Part.find_by_nr(#)',
+        #                     description: "auto template default custom field,#{field}_default_strip_length")
         cf<<CustomField.new(name: "#{field}_default_strip_length",
                             type: target.custom_field_type,
-                            is_query_value: true,
-                            field_format: 'part',
-                            value_query: 'Part.find_by_id(#).strip_length',
-                            validate_query: 'Part.find_by_nr(#)',
+                            field_format: 'label',
+                            default_value: '0',
                             description: "auto template default custom field,#{field}_default_strip_length")
       when 't1_default_strip_length', 't2_default_strip_length'
       else
