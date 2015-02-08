@@ -1,4 +1,4 @@
-class KanbanType
+class KanbanType < BaseType
   WHITE=0
   BLUE=1
 
@@ -11,9 +11,5 @@ class KanbanType
       else
         '未知'
     end
-  end
-
-  def self.list
-    
   end
 end
