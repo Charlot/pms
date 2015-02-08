@@ -1,6 +1,6 @@
 module CustomFieldsHelper
   def format_type_options
-    CustomFieldFormatType.to_select.map { |t| [t.display, t.value] }
+    CustomFieldFormatType.to_select.map { |t| [t.display, t.value, t.key] }
   end
 
   def format_type_js_var
