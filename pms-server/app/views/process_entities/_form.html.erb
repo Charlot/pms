@@ -3,7 +3,7 @@
   <input type="text" id="process_template_code">
 </div>
 
-<%= form_for(@process_entity) do |f| %>
+<%= form_for(@process_entity,html:{id:'process_entity_form'}) do |f| %>
     <% if @process_entity.errors.any? %>
         <div id="error_explanation">
           <h2><%= pluralize(@process_entity.errors.count, "error") %> prohibited this part from being saved:</h2>
@@ -16,41 +16,40 @@
         </div>
     <% end %>
     <div class="field">
-      <label for="process_entity_nr">Nr</label>
-      <input id="process_entity_nr" name="process_entity[nr]" type="text" value=""/>
+      <%= f.label :nr %><br>
+      <%= f.text_field :nr %>
     </div>
     <div class="field">
-      <label for="process_entity_name">Name</label>
-      <input id="process_entity_name" name="process_entity[name]" type="text" value=""/>
+      <%= f.label :name %><br>
+      <%= f.text_field :name %>
     </div>
     <div class="field">
-      <label for="process_entity_description">Description</label>
-      <textarea id="process_entity_description" name="process_entity[description]">
-</textarea>
+      <%= f.label :description %>:
+      <%= f.text_area :description %>
     </div>
     <div class="field">
-      <label for="process_entity_stand_time">Stand time</label>
-      <input id="process_entity_stand_time" name="process_entity[stand_time]" type="text" value="0.0"/>
-    </div>
-
-    <div class="field">
-      <label for="process_entity_process_template_id">Process template</label>
-      <input id="process_entity_process_template_id" name="process_entity[process_template_id]" type="text"/>
+      <%= f.label :stand_time %><br>
+      <%= f.number_field :stand_time %>
     </div>
 
     <div class="field">
-      <label for="process_entity_workstation_type_id">Workstation type</label>
-      <input id="process_entity_workstation_type_id" name="process_entity[workstation_type_id]" type="text"/>
+      <%= f.label :process_template_id %><br>
+      <%= f.text_field :process_template_id %>
+    </div>
+
+    <div class="field">
+      <%= f.label :workstation_type_id %><br>
+      <%= f.text_field :workstation_type_id %>
     </div>
     <div class="field">
-      <label for="process_entity_cost_center_id">Cost center</label>
-      <input id="process_entity_cost_center_id" name="process_entity[cost_center_id]" type="text"/>
+      <%= f.label :cost_center_id %><br>
+      <%= f.text_field :cost_center_id %>
     </div>
     <div class="process_template_container">
 
     </div>
     <div class="actions">
-      <input type="button" value="Create Process entity" onclick="create_process_auto();"/>
+      <input type="button" value="Submit" onclick="submit_process_form();"/>
     </div>
 <% end %>
 
@@ -65,9 +64,9 @@
                 }
             })
     )
-    function create_process_auto() {
-        if (confirm('confirm to create AUTO process?')) {
-            $('#new_process_entity').submit();
+    function submit_process_form() {
+        if (confirm('confirm to submit?')) {
+            $('#process_entity_form').submit();
         }
     }
 </script>
