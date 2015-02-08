@@ -27,11 +27,15 @@ class BaseType<BaseClass
     constant_by_value(v)
   end
 
+  def self.key(v)
+    constant_by_value(v).downcase
+  end
+
   def self.to_select
     select_options = []
     constants.each do |c|
       v = const_get(c.to_s)
-      select_options << SelectOption.new(display: self.display(v), value: v)
+      select_options << SelectOption.new(display: self.display(v), value: v, key: self.key(v))
     end
     select_options
   end

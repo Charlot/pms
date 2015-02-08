@@ -1,18 +1,29 @@
 <h4>----------------SEMI AUTO------------------</h4>
-<textarea id="process_entity_editor">
-
-</textarea>
+<div>
+  <% selected = 0 %>
+  <% format_type_options.each do |name, type| %>
+      <label><%= radio_button_tag 'type', type, 1==selected+=1, class: 'input_format_rb' %> <%= name %></label>
+  <% end %>
+  <input type="button" value="ADD" id="add_input_to_template_btn"/>
+</div>
+<textarea id="process_entity_editor" cols="50" rows="6"></textarea>
+<input type="hidden" id="process_entity_editor_hidden"/>
 <script type="text/javascript">
+    var custom_field_formats = <%= format_type_js_var.to_json.html_safe%>;
     $(
             $('#process_entity_editor').bind('keypress', function (event) {
                 var e = adapt_event(event);
                 console.log(e.keyCode);
                 // keypress is @
-                if (e.keyCode == 64) {
-                    return false;
-                }
-                return true;
-//                console.log(e.shiftKey);
-            })
+                return !(e.keyCode == 64);
+            }),
+            $('#add_input_to_template_btn').bind('click', function () {
+                        var format = $('.input_format_rb:checked').attr('value');
+                        if (format == custom_field_formats['part']) {
+                        }
+//                        $('#process_entity_editor').insertAtCursor(format);
+
+                    }
+            )
     )
 </script>
