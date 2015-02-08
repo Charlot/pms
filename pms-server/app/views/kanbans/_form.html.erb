@@ -12,52 +12,57 @@
   <% end %>
 
     <p>
-      <%= f.label :nr, "#{KanbanEnum::NR}:"%>
+      <%= f.label :nr, "#{KanbanDesc::NR}:"%>
       <%= f.text_field :nr%>
     </p>
 
     <p>
-      <%= f.label :copies, "#{KanbanEnum::COPIES}:"%>
+      <%= f.label :copies, "#{KanbanDesc::COPIES}:"%>
       <%= f.number_field :copies, {:min => 0}%>
     </p>
 
     <p>
-      <%= f.label :quantity, "#{KanbanEnum::QUANTITY}:"%>
+      <%= f.label :ktype, "#{KanbanDesc::TYPE}"%>
+      <%= f.select(:ktype,kanban_type_options,{include_blank: false})%>
+    </p>
+
+    <p>
+      <%= f.label :quantity, "#{KanbanDesc::QUANTITY}:"%>
       <%= f.number_field :quantity, {:min => 0}%>
     </p>
 
     <p>
-      <%= f.label :safety_stock, "#{KanbanEnum::SAFETY_STOCK}:"%>
+      <%= f.label :safety_stock, "#{KanbanDesc::SAFETY_STOCK}:"%>
       <%= f.number_field :safety_stock, {:min => 0}%>
     </p>
 
     <p>
-      <%= f.label :source_warehouse, "#{KanbanEnum::SOURCE_WAREHOUSE}:"%>
+      <%= f.label :source_warehouse, "#{KanbanDesc::SOURCE_WAREHOUSE}:"%>
       <%= f.text_field :source_warehouse%>
     </p>
 
     <p>
-      <%= f.label :source_storage, "#{KanbanEnum::SOURCE_STORAGE}:"%>
+      <%= f.label :source_storage, "#{KanbanDesc::SOURCE_STORAGE}:"%>
       <%= f.text_field :source_storage%>
     </p>
 
     <p>
-      <%= f.label :des_warehouse, "#{KanbanEnum::DES_WAREHOUSE}:"%>
+      <%= f.label :des_warehouse, "#{KanbanDesc::DES_WAREHOUSE}:"%>
       <%= f.text_field :des_warehouse%>
     </p>
 
     <p>
-      <%= f.label :des_storage, "#{KanbanEnum::DES_STORAGE}:"%>
+      <%= f.label :des_storage, "#{KanbanDesc::DES_STORAGE}:"%>
       <%= f.text_field :des_storage%>
     </p>
 
     <p>
-      <%= f.label :remark, "#{KanbanEnum::REMARK}:"%>
+      <%= f.label :remark, "#{KanbanDesc::REMARK}:"%>
       <%= f.text_field :remark%>
     </p>
 
     <p>
-      <%= f.label :part_id, "#{KanbanEnum::WIRE_NR}"%>
+      <%= f.label :part_id, "#{KanbanDesc::WIRE_NR}"%>
       <%= f.text_field :part_id%>
     </p>
 

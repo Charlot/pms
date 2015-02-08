@@ -70,6 +70,6 @@ class KanbansController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def kanban_params
       #params[:kanban]
-      params.require(:kanban).permit(:id,:nr,:state,:remark,:quantity,:safety_stock,:source_warehouse,:source_storage,:des_warehouse,:des_storage,:print_time,:part_id,:version)
+      params.require(:kanban).permit(:id,:nr,:state,:remark,:quantity,:safety_stock,:source_warehouse,:source_storage,:des_warehouse,:des_storage,:print_time,:part_id,:version,:ktype)
     end
 end

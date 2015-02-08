@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150205195721) do
+ActiveRecord::Schema.define(version: 20150208111111) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "type",                                null: false
@@ -56,6 +56,16 @@ ActiveRecord::Schema.define(version: 20150205195721) do
   add_index "custom_values", ["custom_field_id"], name: "index_custom_values_on_custom_field_id", using: :btree
   add_index "custom_values", ["customized_type", "customized_id"], name: "index_custom_values_on_customized_type_and_customized_id", using: :btree
 
+  create_table "kanban_process_entities", force: true do |t|
+    t.integer  "kanban_id"
+    t.integer  "process_entity_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "kanban_process_entities", ["kanban_id"], name: "index_kanban_process_entities_on_kanban_id", using: :btree
+  add_index "kanban_process_entities", ["process_entity_id"], name: "index_kanban_process_entities_on_process_entity_id", using: :btree
+
   create_table "kanbans", force: true do |t|
     t.string   "nr",                             null: false
     t.string   "remark"
@@ -73,6 +83,7 @@ ActiveRecord::Schema.define(version: 20150205195721) do
     t.datetime "print_time"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "ktype"
   end
 
   add_index "kanbans", ["nr"], name: "index_kanbans_on_nr", using: :btree
