@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150208111111) do
+ActiveRecord::Schema.define(version: 20150208121528) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "type",                                null: false
@@ -153,5 +153,16 @@ ActiveRecord::Schema.define(version: 20150208111111) do
 
   add_index "process_templates", ["code"], name: "index_process_templates_on_code", using: :btree
   add_index "process_templates", ["type"], name: "index_process_templates_on_type", using: :btree
+
+  create_table "production_orders", force: true do |t|
+    t.string   "nr",             null: false
+    t.integer  "orderable_id"
+    t.string   "orderable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "production_orders", ["nr"], name: "index_production_orders_on_nr", using: :btree
+  add_index "production_orders", ["orderable_id"], name: "index_production_orders_on_orderable_id", using: :btree
 
 end
