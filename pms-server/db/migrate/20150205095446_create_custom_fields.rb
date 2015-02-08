@@ -22,6 +22,7 @@ class CreateCustomFields < ActiveRecord::Migration
       t.boolean :is_query_value, default: false
       t.boolean :is_auto_query_value, default: false
       t.text :validate_query
+      t.string :validate_message
       t.text :value_query
       t.text :description
 

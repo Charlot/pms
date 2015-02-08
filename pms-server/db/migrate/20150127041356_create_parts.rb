@@ -4,6 +4,7 @@ class CreateParts < ActiveRecord::Migration
       t.string :nr
       t.string :custom_nr
       t.integer :part_type
+      t.float :strip_length
       t.references :measure_unit, index: true
 
       t.timestamps

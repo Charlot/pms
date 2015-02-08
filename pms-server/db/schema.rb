@@ -70,7 +70,7 @@ ActiveRecord::Schema.define(version: 20150208111111) do
     t.string   "nr",                             null: false
     t.string   "remark"
     t.float    "quantity",         default: 0.0
-    t.float    "safety_stock",     default: 0.0, null: false
+    t.float    "safety_stock",                   null: false
     t.float    "task_time",        default: 0.0
     t.integer  "copies",           default: 0
     t.integer  "state",            default: 0

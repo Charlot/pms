@@ -1,0 +1,5 @@
+<% if field %>
+    <%= render "custom_fields/format/input_#{field.field_format}", {field: field} %>
+<% else %>
+    <span style="color: blue">NO INPUT HERE</span>
+<% end %>
