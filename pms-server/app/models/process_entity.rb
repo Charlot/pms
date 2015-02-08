@@ -5,6 +5,13 @@ class ProcessEntity < ActiveRecord::Base
   belongs_to :workstation_type
   belongs_to :cost_center
 
-  attr_accessor :process_template_id, :workstation_type_id, :cost_center_id
   acts_as_customizable
+
+  def custom_field_type
+    puts '***************************************8'
+    puts "#{self.process_template_id}_#{ProcessTemplate.name}"
+    puts '***************************************8'
+
+    @custom_field_type || (self.process_template_id.nil? ? nil : "#{self.process_template_id}_#{ProcessTemplate.name}")
+  end
 end

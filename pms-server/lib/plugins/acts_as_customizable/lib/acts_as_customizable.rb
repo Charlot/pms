@@ -28,7 +28,7 @@ module Pms
 
         def method_missing(method_name, *args, &block)
           if /value_\w+/.match(method_name.to_s)
-            custom_field_values.detect { |v| v.custom_field.name.downcase== method_name.to_s.sub(/custom_/, '') }.try(:value)
+            custom_field_values.detect { |v| v.custom_field.name.downcase== method_name.to_s.sub(/value_/, '') }.try(:value)
           elsif /field_\w+/.match(method_name.to_s)
             available_custom_fields.detect { |f| f.name==method_name.to_s.sub(/field_/, '') }
           else

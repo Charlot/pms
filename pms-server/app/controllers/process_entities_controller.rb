@@ -32,6 +32,7 @@ class ProcessEntitiesController < ApplicationController
       # puts permit_params[:process_entity].except(:custom_field)
       puts '*****'
       @process_entity = ProcessEntity.new(params[:process_entity])
+      @process_entity.process_template=ProcessTemplate.find_by_id(params[:process_entity][:process_template_id])
       respond_to do |format|
         if @process_entity.save
           unless params[:custom_field].blank?
