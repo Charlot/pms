@@ -1,4 +1,18 @@
 <h4>----------------SEMI AUTO------------------</h4>
-<textarea>
+<textarea id="process_entity_editor">
 
 </textarea>
+<script type="text/javascript">
+    $(
+            $('#process_entity_editor').bind('keypress', function (event) {
+                var e = adapt_event(event);
+                console.log(e.keyCode);
+                // keypress is @
+                if (e.keyCode == 64) {
+                    return false;
+                }
+                return true;
+//                console.log(e.shiftKey);
+            })
+    )
+</script>

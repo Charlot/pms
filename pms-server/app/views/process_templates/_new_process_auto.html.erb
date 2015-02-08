@@ -82,7 +82,8 @@
   </table>
 </div>
 <script type="text/javascript">
-    $($('.format_part').bind('keyup', function (event) {
+    $(
+            $('.format_part').bind('keyup', function (event) {
                 var e = adapt_event(event);
                 if (e.keyCode == 13) {
                     var input_names = ['t1', 't2'];
@@ -91,7 +92,7 @@
                         if (!data.result) {
                             alert(data.content);
                         }
-                        else if ($.inArray(input_name, input_names)>-1) {
+                        else if ($.inArray(input_name, input_names) > -1) {
                             $("label[name='" + input_name + "_default_strip_length'").text(data.content.strip_length);
                         }
                     });
