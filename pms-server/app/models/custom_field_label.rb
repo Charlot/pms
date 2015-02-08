@@ -1,0 +1,2 @@
+class CustomFieldLabel<CustomField
+end

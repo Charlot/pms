@@ -6,7 +6,8 @@ class CustomFieldPart<CustomField
   end
 
   def validate_validate_query(args)
-    query=self.validate_query.gsub('#').each_with_index { |v, i| "'#{args[i]}'" }
+    args=self.class.parse_args(args)
+    query=field_to_query(args)
     # lt is not safe, should improve later
     unless value=eval(query)
       raise('未通过验证查询')
@@ -15,9 +16,14 @@ class CustomFieldPart<CustomField
     end
   end
 
-  def get_value_query_value(args)
-
+  def get_field_value(args)
+    args=self.class.parse_args(args)
+    validate_validate_query(args)
+    return eval(field_to_query(args))
   end
 
-
+  private
+  def field_to_query(args)
+    self.validate_query.gsub('#').each_with_index { |v, i| "'#{args[i]}'" }
+  end
 end

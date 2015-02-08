@@ -65,7 +65,7 @@ class CustomFieldsController < ApplicationController
     msg=Message.new
     begin
       if @custom_field
-        msg.content = @custom_field.becomes("custom_field_#{@custom_field.field_format}".classify.constantize).validate_field(params[:args])
+        msg.content = @custom_field.validate_format_field(params[:args])
         msg.result = true
       else
         msg.content = 'no such custom field'

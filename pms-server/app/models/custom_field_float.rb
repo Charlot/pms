@@ -1,0 +1,2 @@
+class CustomFieldFloat<CustomField
+end

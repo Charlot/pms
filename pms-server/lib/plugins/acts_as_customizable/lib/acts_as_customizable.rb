@@ -15,7 +15,7 @@ module Pms
                    :dependent => :delete_all,
                    :validate => false
           send :include, Pms::Acts::Customizable::InstanceMethods
-          validate :validate_custom_field_values
+          # validate :validate_custom_field_values
           # after_save :save_custom_field_values
         end
       end

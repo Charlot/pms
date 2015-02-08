@@ -1,5 +1,5 @@
 <h4><%= @process_template.description %></h4>
-<input type="hidden" id="hidden-process_template_id" value="<%= @process_template.id %>">
+<input type="hidden" id="hidden-process_template_id" name="process_entity[process_template_id]" value="<%= @process_template.id %>">
 <div>
   <p>Wire:</p>
   <table>
@@ -85,11 +85,9 @@
     $($('.format_part').bind('keyup', function (event) {
                 var e = adapt_event(event);
                 if (e.keyCode == 13) {
-                    var args = new Array();
-                    args.push($(this).val());
                     var input_names = ['t1', 't2'];
                     var input_name = $(this).attr('name');
-                    validate_custom_field_part($(this).attr('field'), args, function (data) {
+                    validate_custom_field_part($(this).attr('field'), $(this).val(), function (data) {
                         if (!data.result) {
                             alert(data.content);
                         }

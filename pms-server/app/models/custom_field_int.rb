@@ -1,0 +1,2 @@
+class CustomFieldInt<CustomField
+end

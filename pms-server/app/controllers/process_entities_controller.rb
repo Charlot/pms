@@ -24,15 +24,30 @@ class ProcessEntitiesController < ApplicationController
   # POST /process_entities
   # POST /process_entities.json
   def create
-    @process_entity = ProcessEntity.new(process_entity_params)
-
-    respond_to do |format|
-      if @process_entity.save
-        format.html { redirect_to @process_entity, notice: 'Process entity was successfully created.' }
-        format.json { render :show, status: :created, location: @process_entity }
-      else
-        format.html { render :new }
-        format.json { render json: @process_entity.errors, status: :unprocessable_entity }
+    params.permit!
+    ProcessEntity.transaction do
+      puts '*****'
+      puts params[:process_entity]
+      puts params[:custom_field]
+      # puts permit_params[:process_entity].except(:custom_field)
+      puts '*****'
+      @process_entity = ProcessEntity.new(params[:process_entity])
+      respond_to do |format|
+        if @process_entity.save
+          unless params[:custom_field].blank?
+            params[:custom_field].each do |k, v|
+              puts "#{k}:#{v}"
+              if cf=CustomField.find_by_id(k)
+                @process_entity.custom_values<<CustomValue.new(custom_field_id: k, value: cf.get_field_format_value(v))
+              end
+            end
+          end
+          format.html { redirect_to @process_entity, notice: 'Process entity was successfully created.' }
+          format.json { render :show, status: :created, location: @process_entity }
+        else
+          format.html { render :new }
+          format.json { render json: @process_entity.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -62,13 +77,13 @@ class ProcessEntitiesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_process_entity
-      @process_entity = ProcessEntity.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_process_entity
+    @process_entity = ProcessEntity.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def process_entity_params
-      params.require(:process_entity).permit(:nr, :name, :description, :stand_time, :process_template_id, :workstation_type_id, :cost_center_id)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def process_entity_params
+    params.require(:process_entity).permit(:nr, :name, :description, :stand_time, :process_template_id, :workstation_type_id, :cost_center_id)
+  end
 end
