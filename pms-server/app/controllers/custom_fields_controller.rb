@@ -62,9 +62,6 @@ class CustomFieldsController < ApplicationController
   end
 
   def validate
-    puts '***************************'
-    puts params[:args]
-    puts '***************************'
     msg=Message.new
     begin
       if @custom_field
