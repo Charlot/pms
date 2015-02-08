@@ -7,9 +7,11 @@ class CustomFieldPart<CustomField
 
   def validate_validate_query(args)
     query=self.validate_query.gsub('#').each_with_index { |v, i| "'#{args[i]}'" }
-    
+    # lt is not safe, should improve later
+    unless eval(query)
+      raise('未通过验证查询')
+    end
   end
-
 
   def get_value_query_value(args)
 
