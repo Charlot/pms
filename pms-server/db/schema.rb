@@ -118,6 +118,7 @@ ActiveRecord::Schema.define(version: 20150208121528) do
     t.integer  "measure_unit_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.float    "strip_length"
   end
 
   add_index "parts", ["custom_nr"], name: "index_parts_on_custom_nr", using: :btree
