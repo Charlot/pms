@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :production_orders
+
   resources :process_entities
 
   resources :custom_values
