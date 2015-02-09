@@ -28,7 +28,7 @@
         <td><%= kanban.version%></td>
         <td><%= kanban.print_time%></td>
         <td><%= kanban.copies%></td>
-        <td><%= kanban.state%></td>
+        <td><%= KanbanState.display(kanban.state) %></td>
         <td><%= kanban.quantity%></td>
         <td><%= kanban.part_id%></td>
         <td></td>

@@ -22,7 +22,7 @@
                     var routing_id = $('#new-routing').val();
                     pms.kanban.addRouting(kanban_id, routing_id, function (data) {
                         if (data.result) {
-                            $("#routing-list").append("<li id=" + data.content.id + ">" + data.content.nr + "</li>");
+                            $("#routing-list").append("<li id=" + data.content.id + ">" + data.content.nr + "<a class='btn del-process-entity'>Del</a></li>");
                         } else {
 
                         }
