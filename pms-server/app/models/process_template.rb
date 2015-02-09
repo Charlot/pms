@@ -19,13 +19,14 @@ class ProcessTemplate < ActiveRecord::Base
       index=Hash.new(0)
       self.template.scan(/{\w+}/).each do |format|
         format=format.sub(/{/, '').sub(/}/, '').downcase
-        cf=CustomField.build_by_format(format, "#{format}_#{index[format]}", self.custom_field_type)
+        format_key=format.to_sym
+        cf=CustomField.build_by_format(format, "#{format}_#{index[format_key]}", self.custom_field_type)
         puts '----------------'
         self.custom_fields<<cf
         # puts cf.to_json
         # cf.save
         puts '----------------'
-        index[format] +=1
+        index[format_key] +=1
       end
       puts '*************************'
       puts self.template
