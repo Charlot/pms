@@ -43,7 +43,7 @@ class ProcessTemplate < ActiveRecord::Base
     puts '*************************'
   end
 
-  def parsed_template
-
+  def template_display_text
+    self.template.gsub(/{\w+}/, ' ________')
   end
 end
