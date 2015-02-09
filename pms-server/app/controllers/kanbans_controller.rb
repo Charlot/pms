@@ -1,5 +1,5 @@
 class KanbansController < ApplicationController
-  before_action :set_kanban, only: [:show, :edit, :update, :destroy, :process_entities,:create_process_entities,:destroy_process_entities]
+  before_action :set_kanban, only: [:show, :edit, :update, :destroy, :process_entities,:create_process_entities,:destroy_process_entities,:finish_production]
 
   # GET /kanbans
   # GET /kanbans.json
@@ -97,6 +97,19 @@ class KanbansController < ApplicationController
     else
       msg.content = @kanban_process_entity.errors.full_messages
     end
+    render :json => msg
+  end
+
+  # POST /kanbans/1/finish_production
+  # POST /kanbans/1/finish_production.json
+  def finish_production
+    msg = Message.new
+    end_product = {part_id: @kanban.part_id,quantity:@kanban.quantity}
+    raw_materials = []
+    @kanban.get_raw_materials.each {|raw_material|
+      raw_materials << {part_id: raw_material.part_id,quantity: raw_material.quantity * @kanban.quantity}
+    }
+    #TODO Move storage for both end products and raw materials
     render :json => msg
   end
 
