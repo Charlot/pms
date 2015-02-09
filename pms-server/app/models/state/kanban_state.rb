@@ -3,6 +3,7 @@ class KanbanState < BaseClass
   RELEASED = 1
   LOCKED = 2
   DELETED = 3
+  VERSIONED = 4
 
   def self.display(state)
     case state
@@ -14,6 +15,12 @@ class KanbanState < BaseClass
       'Locked'
     when DELETED
       'Deleted'
+    when VERSIONED
+      'Versioned'
     end
+  end
+
+  def self.non_versioned_states
+    [INIT,RELEASED,LOCKED,DELETED]
   end
 end

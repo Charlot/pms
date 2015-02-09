@@ -1,5 +1,7 @@
 class Kanban < ActiveRecord::Base
-  validates :nr, :presence => true, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
+  default_scope {where state: KanbanState.non_versioned_states}
+
+  validates :nr, :presence => true#, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
   belongs_to :part
 
   has_many :kanban_process_entities, dependent: :destroy
