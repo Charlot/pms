@@ -116,7 +116,6 @@ ActiveRecord::Schema.define(version: 20150208121528) do
     t.string   "nr"
     t.string   "custom_nr"
     t.integer  "part_type"
-    t.float    "strip_length"
     t.integer  "measure_unit_id"
     t.datetime "created_at"
     t.datetime "updated_at"

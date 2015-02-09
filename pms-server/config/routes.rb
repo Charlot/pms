@@ -17,7 +17,13 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :kanbans
+  resources :kanbans do
+    member do
+      get :process_entities
+      post :create_process_entities
+      delete :destroy_process_entities
+    end
+  end
 
   root :to => 'welcome#index'
 

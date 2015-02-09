@@ -1,0 +1,44 @@
+<h2>Routing</h2>
+<ul id="routing-list" kanban-id="<%= @kanban.id %>">
+  <% @kanban.kanban_process_entities.each do |kpe| %>
+      <li id="<%= kpe.id %>"><%= kpe.process_entity.nr %><a class="btn del-process-entity">Del</a></li>
+  <% end %>
+</ul>
+<div>
+  <p>Add Routing</p>
+  <input type="text" id="new-routing"/>
+  <input type="submit" id="add-routing"/>
+</div>
+
+<% content_for :javascript_includes do %>
+    <%= javascript_include_tag "kanban" %>
+<% end %>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('body')
+                .on('click', '#add-routing', function () {
+                    var kanban_id = $('#routing-list').attr("kanban-id");
+                    var routing_id = $('#new-routing').val();
+                    pms.kanban.addRouting(kanban_id, routing_id, function (data) {
+                        if (data.result) {
+                            $("#routing-list").append("<li id=" + data.content.id + ">" + data.content.nr + "</li>");
+                        } else {
+
+                        }
+                    });
+                })
+                .on('click', '.del-process-entity', function () {
+                    var kanban_id = $('#routing-list').attr("kanban-id");
+                    var target = $(this).parent();
+                    var kpe_id = target.attr("id");
+                    pms.kanban.delRouting(kanban_id, kpe_id, function (data) {
+                        if (data.result) {
+                            target.remove();
+                        } else {
+
+                        }
+                    });
+                })
+    });
+</script>
