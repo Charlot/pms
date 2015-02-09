@@ -87,13 +87,13 @@
                 var e = adapt_event(event);
                 if (e.keyCode == 13) {
                     var input_names = ['t1', 't2'];
-                    var input_name = $(this).attr('name');
+                    var input_name = $(this).attr('id');
                     validate_custom_field_part($(this).attr('field'), $(this).val(), function (data) {
                         if (!data.result) {
                             alert(data.content);
                         }
                         else if ($.inArray(input_name, input_names) > -1) {
-                            $("label[name='" + input_name + "_default_strip_length'").text(data.content.strip_length);
+                            $("label[id='" + input_name + "_default_strip_length'").text(data.content.strip_length);
                         }
                     });
                 }

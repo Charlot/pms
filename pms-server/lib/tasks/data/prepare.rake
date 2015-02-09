@@ -11,7 +11,7 @@ namespace :data do
   task :part => :environment do
     ('A'..'Z').each do |nr|
       puts nr
-      part= Part.create(nr: nr)
+      part= Part.create(nr: nr,strip_length:Random.new.rand(100))
       puts part.errors.as_json
     end
   end
