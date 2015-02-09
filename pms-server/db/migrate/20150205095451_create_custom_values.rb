@@ -3,6 +3,7 @@ class CreateCustomValues < ActiveRecord::Migration
     create_table :custom_values do |t|
       t.string :customized_type
       t.integer :customized_id
+      t.boolean :is_for_out_stock, default: false, null: false
       t.references :custom_field, index: true
       t.text :value
 

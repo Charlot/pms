@@ -29,15 +29,19 @@ class ProcessTemplatesController < ApplicationController
     params.permit!
     ProcessTemplate.transaction do
       @process_template=ProcessTemplate.new(params[:process_template])
+      if ProcessType.auto?(params[:type])
+        unless params[:custom_field].blank?
+          ProcessTemplateAuto.build_custom_fields(params[:custom_field].keys, @process_template).each do |cf|
+            # cf.save
+            @process_template.custom_fields<<cf
+          end
+        end
+      elsif ProcessType.semi_auto?(params[:type])
+
+      end
+
       respond_to do |format|
         if @process_template.save
-          unless params[:custom_field].blank?
-            if ProcessType.auto?(params[:type])
-              ProcessTemplateAuto.build_custom_fields(params[:custom_field].keys, @process_template).each do |cf|
-                cf.save
-              end
-            end
-          end
           format.html { redirect_to @process_template, notice: 'Process template was successfully created.' }
           format.json { render :show, status: :created, location: @process_template }
         else
@@ -94,7 +98,7 @@ class ProcessTemplatesController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def process_template_params
     #params.permit!
-    params.require(:process_template).permit!#(:code, :type, :name, :template, :description)
+    params.require(:process_template).permit! #(:code, :type, :name, :template, :description)
   end
 
   def permit_new_process_type

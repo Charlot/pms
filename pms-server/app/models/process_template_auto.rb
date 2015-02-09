@@ -22,7 +22,7 @@ class ProcessTemplateAuto < ProcessTemplate
     case field
       when 'default_wire_nr'
         cf<<CustomField.new(name: field,
-                            type: target.custom_field_type,
+                            # type: target.custom_field_type,
                             is_query_value: true,
                             field_format: 'part',
                             value_query: 'Part.find_by_id(#).nr',
@@ -30,7 +30,7 @@ class ProcessTemplateAuto < ProcessTemplate
                             description: 'auto template default custom field, default for white kb part, default_wire_nr')
       when 'wire_nr', 's1', 's2'
         cf<<CustomField.new(name: field,
-                            type: target.custom_field_type,
+                            # type: target.custom_field_type,
                             is_query_value: true,
                             field_format: 'part',
                             value_query: 'Part.find_by_id(#).nr',
@@ -39,19 +39,19 @@ class ProcessTemplateAuto < ProcessTemplate
                             description: "auto template default custom field, #{field}")
       when 'wire_qty_factor', 't1_qty_factor', 't2_qty_factor', 't1_strip_length', 't2_strip_length', 's1_qty_factor', 's2_qty_factor'
         cf<<CustomField.new(name: field,
-                            type: target.custom_field_type,
+                            # type: target.custom_field_type,
                             field_format: 'float',
                             default_value: '0',
                             description: "auto template default custom field, #{field}")
       when 'default_bundle_qty'
         cf<<CustomField.new(name: field,
-                            type: target.custom_field_type,
+                            # type: target.custom_field_type,
                             field_format: 'int',
                             default_value: '0',
                             description: 'auto template default custom field, default_bundle_qty')
       when 't1', 't2'
         cf<<CustomField.new(name: field,
-                            type: target.custom_field_type,
+                            # type: target.custom_field_type,
                             is_query_value: true,
                             field_format: 'part',
                             value_query: 'Part.find_by_id(#).nr',
@@ -66,7 +66,7 @@ class ProcessTemplateAuto < ProcessTemplate
         #                     validate_query: 'Part.find_by_nr(#)',
         #                     description: "auto template default custom field,#{field}_default_strip_length")
         cf<<CustomField.new(name: "#{field}_default_strip_length",
-                            type: target.custom_field_type,
+                            # type: target.custom_field_type,
                             field_format: 'label',
                             default_value: '0',
                             description: "auto template default custom field,#{field}_default_strip_length")
