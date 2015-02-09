@@ -17,13 +17,13 @@
 
 <p>
   <strong>Template:</strong>
-  <%= @process_template.template %>
+  <%=simple_format @process_template.template %>
 </p>
 
-<p>
+<!--<p>-->
   <strong>Description:</strong>
-  <%= @process_template.description %>
-</p>
+  <%= simple_format(@process_template.description) %>
+<!--</p>-->
 
 <%= link_to 'Edit', edit_process_template_path(@process_template) %> |
 <%= link_to 'Back', process_templates_path %>

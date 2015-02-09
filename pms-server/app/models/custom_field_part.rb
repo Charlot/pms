@@ -22,6 +22,16 @@ class CustomFieldPart<CustomField
     return eval(field_to_query(args))
   end
 
+  def self.build_default(field_format, name, type)
+    new(name: name,
+        is_query_value: true,
+        field_format: field_format,
+        value_query: 'Part.find_by_id(#).nr',
+        validate_query: 'Part.find_by_nr(#)',
+        is_for_out_stock: true,
+        description: "dynamic template default custom field, #{name}")
+  end
+
   private
   def field_to_query(args)
     self.validate_query.gsub('#').each_with_index { |v, i| "'#{args[i]}'" }

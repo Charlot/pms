@@ -1,7 +1,10 @@
 class CreateCustomFields < ActiveRecord::Migration
   def change
     create_table :custom_fields do |t|
-      t.string :type, null: false
+      t.string :custom_fieldable_type
+      t.integer :custom_fieldable_id
+
+      t.string :type#, null: false
       t.string :name, null: false
       t.string :field_format, null: false
       t.text :possible_values
@@ -30,5 +33,6 @@ class CreateCustomFields < ActiveRecord::Migration
     end
     add_index :custom_fields, :type
     add_index :custom_fields, [:id, :type]
+    add_index :custom_fields, [:custom_fieldable_id, :custom_fieldable_type], name: 'custom_fieldable_index'
   end
 end

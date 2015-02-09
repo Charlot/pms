@@ -37,7 +37,7 @@ module Pms
         end
 
         def available_custom_fields
-          @available_custom_fields ||= CustomField.where("type = '#{self.custom_field_type}'").sorted.to_a
+          @available_custom_fields ||= self.custom_fields.sorted.to_a #CustomField.where("type = '#{self.custom_field_type}'").sorted.to_a
         end
 
         # Sets the values of the object's custom fields

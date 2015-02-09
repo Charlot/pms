@@ -6,18 +6,19 @@
   <% end %>
   <input type="button" value="ADD" id="add_input_to_template_btn"/>
 </div>
-<textarea id="process_entity_editor" cols="50" rows="6"></textarea>
+<%= f.text_area :template, cols: 50,rows:8 %>
+
 <input type="hidden" id="process_entity_editor_hidden" name="custom_field_is_for_out"/>
 <script type="text/javascript">
     var custom_field_formats = <%= format_type_js_var.to_json.html_safe%>;
     $(
             $('#process_entity_editor').bind('keypress', function (event) {
                 var e = adapt_event(event);
-                console.log(e.keyCode);
+//                console.log(e.keyCode);
                 // keypress is @
-                if(e.keyCode == 64){
+                if (e.keyCode == 64) {
                     return false;
-                }else{
+                } else {
 
                 }
 
@@ -29,7 +30,7 @@
                         if (format == custom_field_formats['part']) {
 
                         }
-                        $('#process_entity_editor').replaceSelectedText('@' + key.toUpperCase() + '@','collapseToEnd');
+                        $('#process_template_template').replaceSelectedText('{' + key.toUpperCase() + '}', 'collapseToEnd');
                     }
             )
     )

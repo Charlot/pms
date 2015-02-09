@@ -32,14 +32,18 @@ class ProcessEntitiesController < ApplicationController
       # puts permit_params[:process_entity].except(:custom_field)
       puts '*****'
       @process_entity = ProcessEntity.new(params[:process_entity])
-      @process_entity.process_template=ProcessTemplate.find_by_id(params[:process_entity][:process_template_id])
+      @process_template=ProcessTemplate.find_by_id(params[:process_entity][:process_template_id])
+      @process_entity.process_template=@process_template
+
       respond_to do |format|
         if @process_entity.save
-          unless params[:custom_field].blank?
-            params[:custom_field].each do |k, v|
-              puts "#{k}:#{v}"
-              if cf=CustomField.find_by_id(k)
-                @process_entity.custom_values<<CustomValue.new(custom_field_id: k, value: cf.get_field_format_value(v))
+          if ProcessType.auto?(@process_template.type)
+            unless params[:custom_field].blank?
+              params[:custom_field].each do |k, v|
+                puts "#{k}:#{v}"
+                if cf=CustomField.find_by_id(k)
+                  @process_entity.custom_values<<CustomValue.new(custom_field_id: k, is_for_out_stock: cf.is_for_out_stock, value: cf.get_field_format_value(v))
+                end
               end
             end
           end
