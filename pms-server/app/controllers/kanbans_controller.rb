@@ -1,5 +1,7 @@
 class KanbansController < ApplicationController
-  before_action :set_kanban, only: [:show, :edit, :update, :destroy, :process_entities,:create_process_entities,:destroy_process_entities,:finish_production]
+  before_action :set_kanban, only: [:show, :edit, :update, :destroy, :process_entities,
+                                    :create_process_entities,:destroy_process_entities,
+                                    :finish_production,:history]
 
   # GET /kanbans
   # GET /kanbans.json
@@ -111,6 +113,12 @@ class KanbansController < ApplicationController
     }
     #TODO Move storage for both end products and raw materials
     render :json => msg
+  end
+
+  # GET /kanbans/1/history
+  # GET /kanbans/1/history.json
+  def history
+    @versioned_kanbans = Kanban.unscoped.where(nr: @kanban.nr, state:KanbanState::VERSIONED).order('updated_at desc')
   end
 
   private
