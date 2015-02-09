@@ -28,7 +28,7 @@ class ProcessTemplateAuto < ProcessTemplate
                             value_query: 'Part.find_by_id(#).nr',
                             validate_query: 'Part.find_by_nr(#)',
                             description: 'auto template default custom field, default for white kb part, default_wire_nr')
-      when 'wire_nr', 's1', 's2', 's1_qty_factor', 's2_qty_factor'
+      when 'wire_nr', 's1', 's2'
         cf<<CustomField.new(name: field,
                             type: target.custom_field_type,
                             is_query_value: true,
@@ -37,7 +37,7 @@ class ProcessTemplateAuto < ProcessTemplate
                             validate_query: 'Part.find_by_nr(#)',
                             is_for_out_stock: true,
                             description: "auto template default custom field, #{field}")
-      when 'wire_qty_factor', 't1_qty_factor', 't2_qty_factor', 't1_strip_length', 't2_strip_length'
+      when 'wire_qty_factor', 't1_qty_factor', 't2_qty_factor', 't1_strip_length', 't2_strip_length', 's1_qty_factor', 's2_qty_factor'
         cf<<CustomField.new(name: field,
                             type: target.custom_field_type,
                             field_format: 'float',
@@ -70,7 +70,6 @@ class ProcessTemplateAuto < ProcessTemplate
                             field_format: 'label',
                             default_value: '0',
                             description: "auto template default custom field,#{field}_default_strip_length")
-      when 't1_default_strip_length', 't2_default_strip_length'
       else
         raise ' No such field for auto process template custom field'
     end
