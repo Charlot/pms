@@ -44,6 +44,6 @@ class ProcessTemplate < ActiveRecord::Base
   end
 
   def template_display_text
-    self.template.gsub(/{\w+}/, ' ________')
+    self.template.gsub(/{\d+}/, ' ________')
   end
 end
