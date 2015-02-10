@@ -3,42 +3,18 @@
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
-    <th><%= KanbanDesc::NR %></th>
-    <th><%= KanbanDesc::TYPE%></th>
-    <th><%= KanbanDesc::VERSION %></th>
-    <th><%= KanbanDesc::PRINT_DATE%></th>
-    <th><%= KanbanDesc::COPIES%></th>
-    <th><%= KanbanDesc::STATE%></th>
-    <th><%= KanbanDesc::QUANTITY%></th>
-    <th><%= KanbanDesc::WIRE_NR%></th>
-    <th><%= KanbanDesc::PRODUCT_NR%></th>
-    <th><%= KanbanDesc::CUSTOMER_NR%></th>
-    <th><%= KanbanDesc::SOURCE_POSITION%></th>
-    <th><%= KanbanDesc::DES_POSITION%></th>
-    <th>Process Entities</th>
-    <th colspan="3"></th>
+    <th>Created at</th>
+    <th>Event</th>
+    <th>Object</th>
   </tr>
   </thead>
 
   <tbody>
-  <% @versioned_kanbans.each do |kanban| %>
+  <% @versions.each do |v| %>
       <tr>
-        <td><%= kanban.nr %></td>
-        <td><%= KanbanType.display(kanban.ktype) %></td>
-        <td><%= kanban.version%></td>
-        <td><%= kanban.print_time%></td>
-        <td><%= kanban.copies%></td>
-        <td><%= KanbanState.display(kanban.state) %></td>
-        <td><%= kanban.quantity%></td>
-        <td><%= kanban.part_id%></td>
-        <td></td>
-        <td></td>
-        <td><%= "#{kanban.source_warehouse} | #{kanban.source_storage}"%></td>
-        <td><%= "#{kanban.des_warehouse} | #{kanban.des_storage}"%></td>
-        <td><%= link_to 'Process Entites', process_entities_kanban_path(kanban)%></td>
-        <td><%= link_to 'Show', kanban %></td>
-        <td><%= link_to 'Edit', edit_kanban_path(kanban) %></td>
-        <td><%= link_to 'Destroy', kanban, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= v.created_at %></td>
+        <td><%= v.event %></td>
+        <td><%= v.reify.to_json %></td>
       </tr>
   <% end %>
   </tbody>

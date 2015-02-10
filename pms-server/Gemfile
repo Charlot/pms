@@ -45,3 +45,6 @@ gem 'axlsx'
 # ElasticSearch
 #gem 'elasticsearch-model'
 #gem 'elasticsearch-rails'
+
+# Version
+gem 'paper_trail'
