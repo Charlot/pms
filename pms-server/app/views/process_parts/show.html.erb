@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Quantity:</strong>
+  <%= @process_part.quantity %>
+</p>
+
+<p>
+  <strong>Part:</strong>
+  <%= @process_part.part %>
+</p>
+
+<p>
+  <strong>Process entity:</strong>
+  <%= @process_part.process_entity %>
+</p>
+
+<p>
+  <strong>Unit:</strong>
+  <%= @process_part.unit %>
+</p>
+
+<%= link_to 'Edit', edit_process_part_path(@process_part) %> |
+<%= link_to 'Back', process_parts_path %>

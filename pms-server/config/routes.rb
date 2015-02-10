@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :process_parts
+
   resources :production_orders
 
   resources :process_entities

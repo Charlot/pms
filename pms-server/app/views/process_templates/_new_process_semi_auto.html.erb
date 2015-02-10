@@ -5,17 +5,16 @@
 </div>
 <script type="text/javascript">
     $(
-            $('.format_part').bind('keyup', function (event) {
+            $('.format_part').on('keyup blur', function (event) {
                 var e = adapt_event(event);
-                if (e.keyCode == 13) {
-                    var input_names = ['t1', 't2'];
-                    var input_name = $(this).attr('id');
+                console.log(e)
+                if ((e.type == 'keyup' && ( e.keyCode == 13 || e.keyCode == 9)) || (e.type == 'blur')) {
                     validate_custom_field_part($(this).attr('field'), $(this).val(), function (data) {
-                        if (!data.result) {
-                            alert(data.content);
+                        if (data.result) {
+
                         }
-                        else if ($.inArray(input_name, input_names) > -1) {
-                            $("label[id='" + input_name + "_default_strip_length'").text(data.content.strip_length);
+                        else {
+                            alert(data.content);
                         }
                     });
                 }

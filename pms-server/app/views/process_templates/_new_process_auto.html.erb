@@ -83,9 +83,9 @@
 </div>
 <script type="text/javascript">
     $(
-            $('.format_part').bind('keyup', function (event) {
+            $('.format_part').bind('keyup blur', function (event) {
                 var e = adapt_event(event);
-                if (e.keyCode == 13) {
+                if ((e.type == 'keyup' && ( e.keyCode == 13 || e.keyCode == 9)) || (e.type == 'blur')) {
                     var input_names = ['t1', 't2'];
                     var input_name = $(this).attr('id');
                     validate_custom_field_part($(this).attr('field'), $(this).val(), function (data) {

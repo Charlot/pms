@@ -1,12 +1,12 @@
 class ProcessTemplateAuto < ProcessTemplate
   # DEFAULT_CUSTOM_FIELDS=%w(default_wire_nr wire_nr wire_qty_factor)
   def t1_strip_length
-    self.custom_t1_strip_length || self.custom_t1_default_strip_length
+    @t1_strip_length ||=(self.custom_t1_strip_length || self.custom_t1_default_strip_length)
   end
 
 
   def t2_strip_length
-    self.custom_t2_strip_length || self.custom_t2_default_strip_length
+    @t2_strip_length||=(self.custom_t2_strip_length || self.custom_t2_default_strip_length)
   end
 
   def self.build_custom_fields(fields, target)
