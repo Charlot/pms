@@ -81,8 +81,8 @@ class ProcessTemplatesController < ApplicationController
     if @process_template=ProcessTemplate.find_by_code(params[:code])
       if ProcessType.auto?(@process_template.type)
         render partial: 'new_process_auto'
-      else
-
+      elsif ProcessType.semi_auto?(@process_template.type)
+        render partial: 'new_process_semi_auto'
       end
     else
       render partial: 'shared/messages/no_found'

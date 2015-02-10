@@ -37,8 +37,8 @@ class ProcessEntitiesController < ApplicationController
 
       respond_to do |format|
         if @process_entity.save
-          if ProcessType.auto?(@process_template.type)
-            unless params[:custom_field].blank?
+          unless params[:custom_field].blank?
+            if ProcessType.auto?(@process_template.type)
               params[:custom_field].each do |k, v|
                 puts "#{k}:#{v}"
                 if cf=CustomField.find_by_id(k)
