@@ -11,42 +11,47 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150208121528) do
+ActiveRecord::Schema.define(version: 20150210093352) do
 
   create_table "custom_fields", force: true do |t|
-    t.string   "type",                                null: false
-    t.string   "name",                                null: false
-    t.string   "field_format",                        null: false
+    t.string   "custom_fieldable_type"
+    t.integer  "custom_fieldable_id"
+    t.string   "type"
+    t.string   "name",                                  null: false
+    t.string   "field_format",                          null: false
     t.text     "possible_values"
     t.string   "regexp"
     t.integer  "min_length"
     t.integer  "max_length"
-    t.boolean  "is_required",         default: false, null: false
-    t.boolean  "is_for_all",          default: false, null: false
-    t.boolean  "is_filter",           default: false, null: false
-    t.boolean  "is_for_out_stock",    default: false, null: false
-    t.integer  "position",            default: 1
-    t.boolean  "searchable",          default: false, null: false
+    t.boolean  "is_required",           default: false, null: false
+    t.boolean  "is_for_all",            default: false, null: false
+    t.boolean  "is_filter",             default: false, null: false
+    t.boolean  "is_for_out_stock",      default: false, null: false
+    t.integer  "position",              default: 1
+    t.boolean  "searchable",            default: false, null: false
     t.text     "default_value"
-    t.boolean  "editable",            default: true
-    t.boolean  "visible",             default: true,  null: false
-    t.boolean  "multiple",            default: false
+    t.boolean  "editable",              default: true
+    t.boolean  "visible",               default: true,  null: false
+    t.boolean  "multiple",              default: false
     t.text     "format_store"
-    t.boolean  "is_query_value",      default: false
-    t.boolean  "is_auto_query_value", default: false
+    t.boolean  "is_query_value",        default: false
+    t.boolean  "is_auto_query_value",   default: false
     t.text     "validate_query"
+    t.string   "validate_message"
     t.text     "value_query"
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "custom_fields", ["custom_fieldable_id", "custom_fieldable_type"], name: "custom_fieldable_index", using: :btree
   add_index "custom_fields", ["id", "type"], name: "index_custom_fields_on_id_and_type", using: :btree
   add_index "custom_fields", ["type"], name: "index_custom_fields_on_type", using: :btree
 
   create_table "custom_values", force: true do |t|
     t.string   "customized_type"
     t.integer  "customized_id"
+    t.boolean  "is_for_out_stock", default: false, null: false
     t.integer  "custom_field_id"
     t.text     "value"
     t.datetime "created_at"
@@ -115,6 +120,7 @@ ActiveRecord::Schema.define(version: 20150208121528) do
     t.string   "nr"
     t.string   "custom_nr"
     t.integer  "part_type"
+    t.float    "strip_length"
     t.integer  "measure_unit_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -140,6 +146,18 @@ ActiveRecord::Schema.define(version: 20150208121528) do
   add_index "process_entities", ["cost_center_id"], name: "index_process_entities_on_cost_center_id", using: :btree
   add_index "process_entities", ["process_template_id"], name: "index_process_entities_on_process_template_id", using: :btree
   add_index "process_entities", ["workstation_type_id"], name: "index_process_entities_on_workstation_type_id", using: :btree
+
+  create_table "process_parts", force: true do |t|
+    t.float    "quantity",          default: 0.0
+    t.integer  "part_id"
+    t.integer  "process_entity_id"
+    t.integer  "unit"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "process_parts", ["part_id"], name: "index_process_parts_on_part_id", using: :btree
+  add_index "process_parts", ["process_entity_id"], name: "index_process_parts_on_process_entity_id", using: :btree
 
   create_table "process_templates", force: true do |t|
     t.string   "code"

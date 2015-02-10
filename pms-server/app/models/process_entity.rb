@@ -5,6 +5,7 @@ class ProcessEntity < ActiveRecord::Base
   belongs_to :workstation_type
   belongs_to :cost_center
   has_many :kanban_process_entities, dependent: :destroy
+  has_many :process_parts
 
   acts_as_customizable
 

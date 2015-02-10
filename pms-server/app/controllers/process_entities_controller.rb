@@ -42,7 +42,11 @@ class ProcessEntitiesController < ApplicationController
               params[:custom_field].each do |k, v|
                 puts "#{k}:#{v}"
                 if cf=CustomField.find_by_id(k)
-                  @process_entity.custom_values<<CustomValue.new(custom_field_id: k, is_for_out_stock: cf.is_for_out_stock, value: cf.get_field_format_value(v))
+                  cv=CustomValue.new(custom_field_id: k, is_for_out_stock: cf.is_for_out_stock, value: cf.get_field_format_value(v))
+                  if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
+
+                  end
+                  @process_entity.custom_values<<cv
                 end
               end
             end
