@@ -29,14 +29,15 @@ class CustomField < ActiveRecord::Base
     arg
   end
 
-  def self.build_by_format(field_format, name, type)
-    to_constantize(field_format).build_default(field_format, name, type)
+  def self.build_by_format(field_format, name, type, position=1)
+    to_constantize(field_format).build_default(field_format, name, type, position)
   end
 
-  def self.build_default(field_format, name, type)
+  def self.build_default(field_format, name, type, position=1)
     new(name: name,
         field_format: field_format,
         default_value: '0',
+        position: position,
         description: "dynamic template default custom field, #{name}")
   end
 

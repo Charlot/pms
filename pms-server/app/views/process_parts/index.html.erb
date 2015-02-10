@@ -1,0 +1,31 @@
+<h1>Listing process_parts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Quantity</th>
+      <th>Part</th>
+      <th>Process entity</th>
+      <th>Unit</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @process_parts.each do |process_part| %>
+      <tr>
+        <td><%= process_part.quantity %></td>
+        <td><%= process_part.part %></td>
+        <td><%= process_part.process_entity %></td>
+        <td><%= process_part.unit %></td>
+        <td><%= link_to 'Show', process_part %></td>
+        <td><%= link_to 'Edit', edit_process_part_path(process_part) %></td>
+        <td><%= link_to 'Destroy', process_part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Process part', new_process_part_path %>
