@@ -9,14 +9,16 @@
                 var e = adapt_event(event);
                 console.log(e)
                 if ((e.type == 'keyup' && ( e.keyCode == 13 || e.keyCode == 9)) || (e.type == 'blur')) {
-                    validate_custom_field_part($(this).attr('field'), $(this).val(), function (data) {
-                        if (data.result) {
+                    if ($(this).val() != '') {
+                        validate_custom_field_part($(this).attr('field'), $(this).val(), function (data) {
+                            if (data.result) {
 
-                        }
-                        else {
-                            alert(data.content);
-                        }
-                    });
+                            }
+                            else {
+                                alert(data.content);
+                            }
+                        });
+                    }
                 }
             })
     )

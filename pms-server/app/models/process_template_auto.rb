@@ -1,23 +1,15 @@
 class ProcessTemplateAuto < ProcessTemplate
-  OUT_STOCK_FIELD_MAP={wire_nr: 'wire_qty_factor',
-                       s1: 's1_qty_factor',
-                       s2: 's2_qty_factor',
+  OUT_STOCK_FIELD_MAP={wire_nr: 'value_wire_qty_factor',
+                       s1: 'value_s1_qty_factor',
+                       s2: 'value_s2_qty_factor',
                        t1: 't1_strip_length',
                        t2: 't2_strip_length'}
   # DEFAULT_CUSTOM_FIELDS=%w(default_wire_nr wire_nr wire_qty_factor)
 
-  def self.process_part_quantity(key)
-
+  def self.process_part_quantity_field(key)
+    OUT_STOCK_FIELD_MAP[key]
   end
 
-  def t1_strip_length
-    @t1_strip_length ||=(self.value_t1_strip_length || self.value_t1_default_strip_length)
-  end
-
-
-  def t2_strip_length
-    @t2_strip_length||=(self.value_t2_strip_length || self.value_t2_default_strip_length)
-  end
 
   def self.build_custom_fields(fields, target)
     cfs=[]

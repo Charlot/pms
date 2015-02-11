@@ -41,16 +41,31 @@ class ProcessEntitiesController < ApplicationController
             if ProcessType.auto?(@process_template.type)
               params[:custom_field].each do |k, v|
                 puts "#{k}:#{v}"
+
                 if cf=CustomField.find_by_id(k)
                   cv=CustomValue.new(custom_field_id: k, is_for_out_stock: cf.is_for_out_stock, value: cf.get_field_format_value(v))
-                  if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
-
-                  end
                   @process_entity.custom_values<<cv
                 end
               end
+
+              puts '-----------------------------------------------'
+              puts  @process_entity.custom_values.to_json
+              puts '-----------------------------------------------'
+              # build process part
+              @process_entity.custom_values.each do |cv|
+                cf=cv.custom_field
+                puts '*************************'
+                puts cf.to_json
+                puts '*************************'
+                if CustomFieldFormatType.part?(cf.field_format) #&& cf.is_for_out_stock
+
+                  @process_entity<<ProcessPart.new(part_id: cv.value, quantity: @process_entity.process_part_quantity_by_cf(cf.name))
+                end
+              end
             end
+            raise
           end
+
           format.html { redirect_to @process_entity, notice: 'Process entity was successfully created.' }
           format.json { render :show, status: :created, location: @process_entity }
         else

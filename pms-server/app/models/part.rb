@@ -4,4 +4,11 @@ class Part < ActiveRecord::Base
   has_many :kanbans
   validates :nr, presence: true, uniqueness: {message: 'part nr should be uniq'}
 
+  after_save :update_cv_strip_length
+
+  private
+  def update_cv_strip_length
+    if self.strip_length_changed?
+    end
+  end
 end
