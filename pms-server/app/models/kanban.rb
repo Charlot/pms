@@ -1,12 +1,12 @@
 class Kanban < ActiveRecord::Base
-  default_scope {where state: KanbanState.non_versioned_states}
-
-  validates :nr, :presence => true#, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
+  validates :nr, :presence => true, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
   belongs_to :part
 
   has_many :kanban_process_entities, dependent: :destroy
   has_many :process_entities, :through => :kanban_process_entities
   has_many :production_order, as: :orderable
+
+  has_paper_trail
 
   def can_update?
     if self.state == KanbanState::INIT

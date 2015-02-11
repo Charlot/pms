@@ -25,6 +25,7 @@ Rails.application.routes.draw do
       post :create_process_entities
       delete :destroy_process_entities
       get :history
+      get :release
     end
   end
 
