@@ -32,3 +32,17 @@ pms.kanban.delRouting = function(kanban_id,id,callback){
         }
     })
 };
+
+pms.kanban.scan = function(code,callback){
+    $.ajax({
+        url: '/kanbans/scan',
+        data: {code:code},
+        dataType:'json',
+        type:'POST',
+        success: function(data){
+            if(callback){
+                callback(data);
+            }
+        }
+    })
+}
