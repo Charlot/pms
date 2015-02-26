@@ -9,7 +9,7 @@ function is_auto_validate_input_event(event, element, can_not_blank) {
     // 13: ENTER
     // 9:  TAB
     if ((e.type == 'keyup' && ( e.keyCode == 13 || e.keyCode == 9)) || e.type == 'blur') {
-        return can_not_blank && ($(element).val() != '');
+        return can_not_blank ? ($(element).val() != '') : true;
     }
     return false;
 }
