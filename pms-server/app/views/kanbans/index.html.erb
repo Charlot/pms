@@ -38,9 +38,9 @@
         <td><%= "#{kanban.des_warehouse} | #{kanban.des_storage}"%></td>
         <td><%= link_to 'Process Entites', process_entities_kanban_path(kanban)%></td>
         <td><%= link_to 'History',history_kanban_path(kanban)%></td>
+        <td><%= link_to 'Manage', manage_kanban_path(kanban)%></td>
         <td><%= link_to 'Show', kanban %></td>
         <td><%= link_to 'Edit', edit_kanban_path(kanban) %></td>
-        <td><%= link_to 'Release',release_kanban_path(kanban) %></td>
         <td><%= link_to 'Destroy', kanban, method: :delete, data: { confirm: 'Are you sure?' } %></td>
 
       </tr>

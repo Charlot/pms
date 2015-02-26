@@ -22,10 +22,16 @@ Rails.application.routes.draw do
   resources :kanbans do
     member do
       get :process_entities
-      post :create_process_entities
+      #post :create_process_entities
       delete :destroy_process_entities
       get :history
-      get :release
+      post :release
+      #post :scan
+      get :manage
+    end
+
+    collection do
+      post :scan
     end
   end
 
