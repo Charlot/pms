@@ -23,7 +23,6 @@ class BaseType<BaseClass
   end
 
   def self.display(v)
-    v=v.to_i
     constant_by_value(v)
   end
 

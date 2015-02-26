@@ -2,29 +2,29 @@
 
 <table>
   <thead>
-    <tr>
-      <th>Code</th>
-      <th>Type</th>
-      <th>Name</th>
-      <th>Template</th>
-      <th>Description</th>
-      <th colspan="3"></th>
-    </tr>
+  <tr>
+    <th>Code</th>
+    <th>Type</th>
+    <th>Name</th>
+    <th>Template</th>
+    <th>Description</th>
+    <th colspan="3"></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @process_templates.each do |process_template| %>
+  <% @process_templates.each do |process_template| %>
       <tr>
         <td><%= process_template.code %></td>
-        <td><%= process_template.type %></td>
+        <td><%= ProcessType.display process_template.type %></td>
         <td><%= process_template.name %></td>
         <td><%= process_template.template %></td>
         <td><%= process_template.description %></td>
         <td><%= link_to 'Show', process_template %></td>
         <td><%= link_to 'Edit', edit_process_template_path(process_template) %></td>
-        <td><%= link_to 'Destroy', process_template, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Destroy', process_template, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 

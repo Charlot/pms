@@ -8,7 +8,7 @@ module ProcessTemplatesHelper
     process_template.template_texts.each_with_index do |s, i|
       html +=s
       if cf= process_template.custom_fields[i]
-        html+=(render partial: 'custom_fields/format/input', locals: {field: cf}).to_s.html_safe
+        html+=(render partial: 'custom_fields/format/input', locals: {field: cf, index: i}).to_s.html_safe
       end
     end
     html.html_safe
