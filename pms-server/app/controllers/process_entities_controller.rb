@@ -55,11 +55,11 @@ class ProcessEntitiesController < ApplicationController
               @process_entity.custom_values.each do |cv|
                 cf=cv.custom_field
                 puts '*************************'
-                puts cf.to_json
+                # puts cf.to_json
                 puts '*************************'
                 if CustomFieldFormatType.part?(cf.field_format) #&& cf.is_for_out_stock
 
-                  @process_entity<<ProcessPart.new(part_id: cv.value, quantity: @process_entity.process_part_quantity_by_cf(cf.name))
+                  @process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: @process_entity.process_part_quantity_by_cf(cf.name.to_sym))
                 end
               end
             end

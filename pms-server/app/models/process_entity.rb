@@ -6,6 +6,7 @@ class ProcessEntity < ActiveRecord::Base
   belongs_to :cost_center
   has_many :kanban_process_entities, dependent: :destroy
   has_many :process_parts
+  delegate :custom_fields, to: :process_template
 
   acts_as_customizable
 
@@ -21,8 +22,13 @@ class ProcessEntity < ActiveRecord::Base
 
 
   def process_part_quantity_by_cf(cf_name)
-    quantity_cf_name=ProcessTemplateAuto.process_part_quantity_field(cf_name)
-    self.send(quantity_cf_name)
+    puts '---------'
+    puts cf_name
+    puts '------------'
+    if quantity_cf_name=ProcessTemplateAuto.process_part_quantity_field(cf_name)
+      puts "#{self.to_json}*********************#{quantity_cf_name}"
+      self.send(quantity_cf_name)
+    end
   end
 
   # for auto process entity
