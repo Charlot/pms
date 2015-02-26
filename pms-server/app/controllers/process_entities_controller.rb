@@ -62,8 +62,10 @@ class ProcessEntitiesController < ApplicationController
                   @process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: @process_entity.process_part_quantity_by_cf(cf.name.to_sym))
                 end
               end
+            elsif ProcessType.semi_auto?(@process_template.type)
+
             end
-            # raise
+            raise
           end
 
           format.html { redirect_to @process_entity, notice: 'Process entity was successfully created.' }
