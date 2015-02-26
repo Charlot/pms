@@ -22,9 +22,6 @@ class ProcessEntity < ActiveRecord::Base
 
 
   def process_part_quantity_by_cf(cf_name)
-    puts '---------'
-    puts cf_name
-    puts '------------'
     if quantity_cf_name=ProcessTemplateAuto.process_part_quantity_field(cf_name)
       puts "#{self.to_json}*********************#{quantity_cf_name}"
       self.send(quantity_cf_name)
@@ -33,12 +30,13 @@ class ProcessEntity < ActiveRecord::Base
 
   # for auto process entity
   def t1_strip_length
-    @t1_strip_length ||=(self.value_t1_strip_length.blank? || self.value_t1_default_strip_length)
+    puts "-----#{self.value_t1_strip_length}---#{self.value_t1_default_strip_length}***************************"
+    @t1_strip_length ||=(self.value_t1_strip_length || self.value_t1_default_strip_length)
   end
 
 
   def t2_strip_length
-    @t2_strip_length||=(self.value_t2_strip_length.blank? || self.value_t2_default_strip_length)
+    @t2_strip_length||=(self.value_t2_strip_length || self.value_t2_default_strip_length)
   end
 
   # def build_process_parts
