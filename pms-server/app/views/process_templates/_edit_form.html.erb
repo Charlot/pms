@@ -20,7 +20,7 @@
       </div>
       <div class="field">
         <%= f.label :type %>:
-        <%= f.label :type, ProcessType.display(@process_template.type) %>
+        <%= f.label :type, ProcessType.display(@process_template.type.to_i) %>
       </div>
       <div class="field">
         <%= f.label :name %>:
@@ -32,11 +32,14 @@
       </div>
     </div>
 
-    <% if ProcessType.auto?(@process_type) %>
+    <% if ProcessType.auto?(@process_template.type) %>
         <%= render 'form_auto' %>
+    <% elsif ProcessType.semi_auto?(@process_template.type) %>
+        <%= render 'form_semi_auto', {f: f} %>
+
     <% end %>
-    <%= hidden_field_tag 'process_template[type]', @process_type %>
-    <%= hidden_field_tag 'type', @process_type %>
+    <%= hidden_field_tag 'process_template[type]', @process_template.type %>
+    <%= hidden_field_tag 'type', @process_template.type %>
 
     <div class="actions">
       <%= f.submit %>
