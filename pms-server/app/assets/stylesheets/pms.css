@@ -28,3 +28,7 @@
 #handle-dialog-modal .handle-dialog-modal-content p {
     padding: 40px 0px 0px 60px;
 }
+
+.hidden {
+    display: none;
+}

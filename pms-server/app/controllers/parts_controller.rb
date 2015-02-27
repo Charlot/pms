@@ -61,6 +61,16 @@ class PartsController < ApplicationController
     end
   end
 
+  # GET /parts/search
+  # GET /parts/search
+  def search
+    @part = Part.send("find_by_"+params[:attr],params[:val])
+    respond_to do |format|
+      format.json { render json: {result: false, content: "Not Found!"}} unless @part
+      format.json { render json: {result: true, content: @part}}
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_part

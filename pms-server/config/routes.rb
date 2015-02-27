@@ -49,7 +49,11 @@ Rails.application.routes.draw do
   end
 
   resources :measure_units
-  resources :parts
+  resources :parts do
+    collection do
+      get :search
+    end
+  end
   resources :files
 
   # The priority is based upon order of creation: first created -> highest priority.
