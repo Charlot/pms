@@ -6,6 +6,7 @@ class ProcessEntity < ActiveRecord::Base
   belongs_to :cost_center
   has_many :kanban_process_entities, dependent: :destroy
   has_many :process_parts
+  has_many :parts, through: :process_parts
   delegate :custom_fields, to: :process_template
 
   acts_as_customizable

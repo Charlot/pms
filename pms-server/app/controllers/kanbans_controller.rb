@@ -72,19 +72,15 @@ class KanbansController < ApplicationController
   # POST /kanbans/1/create_process_entities
   # POST /kanbans/1/create_process_entities.json
   def create_process_entities
-    msg = Message.new
-    process_entity = ProcessEntity.find_by_nr(params[:process_entity_nr])
-    if process_entity.nil?
-      msg.content = 'Process Entity Not Found!'
-    elsif (kanban_process_entity = @kanban.kanban_process_entities.build({process_entity_id:process_entity.id})).nil?
-      msg.content = 'Created Failed'
-    elsif kanban_process_entity.save
-      msg.result = true
-      msg.content = {id:kanban_process_entity.id,nr:kanban_process_entity.process_entity.nr}
-    else
-      msg.content = kanban_process_entity.errors.full_messages
+    respond_to do |format|
+      process_entity = ProcessEntity.find_by_nr(params[:process_entity_nr])
+      format.json { render json: {result:false, content: 'Process Entity Not Found.'}} unless process_entity
+      format.json { render json: {reuslt:false, content: 'Kanban Part is in Process Entity Parts'}} if process_entity.parts.select('id').include?(@kanban.part_id)
+      kanban_process_entity = @kanban.kanban_process_entities.build({process_entity_id:process_entity.id})
+      format.json { render json: {result:false, content: 'Created Failed!'}} unless kanban_process_entity
+      format.json { render json: {result:false, content: kanban_process_entity.errors.full_messages}} unless kanban_process_entity.save
+      format.json { render json: {result:false, content: {id: kanban_process_entity.id, nr:kanban_process_entity.process_entity.nr}}}
     end
-    render :json => msg
   end
 
   # DELETE /kanbans/1/destroy_process_entities
@@ -158,9 +154,10 @@ class KanbansController < ApplicationController
       format.json { render json: { result: false, content: "Kanban has been updated,please reprint!" }} if need_update && @kanban.type == KanbanType::BLUE
 
       #reposne if has producing order
-      #TODO\
+      #TODO
 
       #加入到待优化队列
+      #TODO
 
       if need_update && @kanban.type == KanbanType::WHITE
         format.json { render json: { result:true, content: "Kanban Scaned,Causing! This Kanban was updated!" }}
