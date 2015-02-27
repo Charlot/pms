@@ -1,6 +1,6 @@
 class MachineScopesController < ApplicationController
   before_action :set_machine_scope, only: [:show, :edit, :update, :destroy]
-  before_action :set_machine, only: [:new,:edit]
+  before_action :set_machine, only: [:new, :show, :edit]
 
   # GET /machine_scopes
   # GET /machine_scopes.json
@@ -74,7 +74,7 @@ class MachineScopesController < ApplicationController
   end
 
   def set_machine
-    unless @machine=Machine.find_by_id(params[:machine])
+    unless (@machine=Machine.find_by_id(params[:machine])) || (@machine_scope && (@machine=@machine_scope.machine))
       redirect_to action: :index, controller: :machines
     end
   end

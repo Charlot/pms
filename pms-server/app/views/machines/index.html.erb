@@ -22,7 +22,7 @@
         <td><%= link_to 'Edit', edit_machine_path(machine) %></td>
         <td><%= link_to 'Destroy', machine, method: :delete, data: {confirm: 'Are you sure?'} %></td>
         <% if machine.machine_scope %>
-            <td><%= link_to 'Edit Scope', edit_machine_scope_path(machine.machine_scope, machine: machine) %></td>
+            <td><%= link_to 'Edit Scope', edit_machine_scope_path(machine.machine_scope) %></td>
         <% else %>
             <td><%= link_to 'Create Scope', new_machine_scope_path(machine: machine) %></td>
         <% end %>
