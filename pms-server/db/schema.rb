@@ -11,29 +11,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150210093352) do
+ActiveRecord::Schema.define(version: 20150227023040) do
 
   create_table "custom_fields", force: true do |t|
-    t.string   "type",                                null: false
-    t.string   "name",                                null: false
-    t.string   "field_format",                        null: false
+    t.string   "custom_fieldable_type"
+    t.integer  "custom_fieldable_id"
+    t.string   "type"
+    t.string   "name",                                  null: false
+    t.string   "field_format",                          null: false
     t.text     "possible_values"
     t.string   "regexp"
     t.integer  "min_length"
     t.integer  "max_length"
-    t.boolean  "is_required",         default: false, null: false
-    t.boolean  "is_for_all",          default: false, null: false
-    t.boolean  "is_filter",           default: false, null: false
-    t.boolean  "is_for_out_stock",    default: false, null: false
-    t.integer  "position",            default: 1
-    t.boolean  "searchable",          default: false, null: false
+    t.boolean  "is_required",           default: false, null: false
+    t.boolean  "is_for_all",            default: false, null: false
+    t.boolean  "is_filter",             default: false, null: false
+    t.boolean  "is_for_out_stock",      default: false, null: false
+    t.integer  "position",              default: 1
+    t.boolean  "searchable",            default: false, null: false
     t.text     "default_value"
-    t.boolean  "editable",            default: true
-    t.boolean  "visible",             default: true,  null: false
-    t.boolean  "multiple",            default: false
+    t.boolean  "editable",              default: true
+    t.boolean  "visible",               default: true,  null: false
+    t.boolean  "multiple",              default: false
     t.text     "format_store"
-    t.boolean  "is_query_value",      default: false
-    t.boolean  "is_auto_query_value", default: false
+    t.boolean  "is_query_value",        default: false
+    t.boolean  "is_auto_query_value",   default: false
     t.text     "validate_query"
     t.string   "validate_message"
     t.text     "value_query"
@@ -43,12 +45,14 @@ ActiveRecord::Schema.define(version: 20150210093352) do
     t.string   "out_stock_field"
   end
 
+  add_index "custom_fields", ["custom_fieldable_id", "custom_fieldable_type"], name: "custom_fieldable_index", using: :btree
   add_index "custom_fields", ["id", "type"], name: "index_custom_fields_on_id_and_type", using: :btree
   add_index "custom_fields", ["type"], name: "index_custom_fields_on_type", using: :btree
 
   create_table "custom_values", force: true do |t|
     t.string   "customized_type"
     t.integer  "customized_id"
+    t.boolean  "is_for_out_stock", default: false, null: false
     t.integer  "custom_field_id"
     t.text     "value"
     t.datetime "created_at"
@@ -91,6 +95,18 @@ ActiveRecord::Schema.define(version: 20150210093352) do
   add_index "kanbans", ["nr"], name: "index_kanbans_on_nr", using: :btree
   add_index "kanbans", ["part_id"], name: "index_kanbans_on_part_id", using: :btree
 
+  create_table "machines", force: true do |t|
+    t.string   "nr"
+    t.string   "name"
+    t.string   "description"
+    t.integer  "resource_group_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "machines", ["nr"], name: "index_machines_on_nr", using: :btree
+  add_index "machines", ["resource_group_id"], name: "index_machines_on_resource_group_id", using: :btree
+
   create_table "measure_units", force: true do |t|
     t.string   "code"
     t.string   "describe"
@@ -116,7 +132,9 @@ ActiveRecord::Schema.define(version: 20150210093352) do
   create_table "parts", force: true do |t|
     t.string   "nr"
     t.string   "custom_nr"
-    t.integer  "part_type"
+    t.integer  "type"
+    t.float    "strip_length"
+    t.integer  "resource_group_id"
     t.integer  "measure_unit_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -125,7 +143,8 @@ ActiveRecord::Schema.define(version: 20150210093352) do
   add_index "parts", ["custom_nr"], name: "index_parts_on_custom_nr", using: :btree
   add_index "parts", ["measure_unit_id"], name: "index_parts_on_measure_unit_id", using: :btree
   add_index "parts", ["nr"], name: "index_parts_on_nr", using: :btree
-  add_index "parts", ["part_type"], name: "index_parts_on_part_type", using: :btree
+  add_index "parts", ["resource_group_id"], name: "index_parts_on_resource_group_id", using: :btree
+  add_index "parts", ["type"], name: "index_parts_on_type", using: :btree
 
   create_table "process_entities", force: true do |t|
     t.string   "nr",                                null: false
@@ -178,6 +197,18 @@ ActiveRecord::Schema.define(version: 20150210093352) do
 
   add_index "production_orders", ["nr"], name: "index_production_orders_on_nr", using: :btree
   add_index "production_orders", ["orderable_id"], name: "index_production_orders_on_orderable_id", using: :btree
+
+  create_table "resource_groups", force: true do |t|
+    t.string   "nr"
+    t.integer  "resource_group_type"
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "resource_groups", ["nr"], name: "index_resource_groups_on_nr", using: :btree
+  add_index "resource_groups", ["resource_group_type"], name: "index_resource_groups_on_resource_group_type", using: :btree
 
   create_table "versions", force: true do |t|
     t.string   "item_type",  null: false

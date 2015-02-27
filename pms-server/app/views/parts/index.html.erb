@@ -1,31 +1,35 @@
 <h1>Listing parts</h1>
 
-<table class="table table-bordered table-striped table-hover">
+<table>
   <thead>
-  <tr>
-    <th>Nr</th>
-    <th>Custom nr</th>
-    <th>Part type</th>
-    <th>Measure unit</th>
-    <th colspan="4"></th>
-  </tr>
+    <tr>
+      <th>Nr</th>
+      <th>Custom nr</th>
+      <th>Type</th>
+      <th>Strip length</th>
+      <th>Resource group</th>
+      <th>Measure unit</th>
+      <th colspan="4"></th>
+    </tr>
   </thead>
 
   <tbody>
-  <% @parts.each do |part| %>
+    <% @parts.each do |part| %>
       <tr>
         <td><%= part.nr %></td>
         <td><%= part.custom_nr %></td>
-        <td><%= part.part_type %></td>
+        <td><%= part.type %></td>
+        <td><%= part.strip_length %></td>
+        <td><%= part.resource_group %></td>
         <td><%= part.measure_unit %></td>
         <td><%= link_to 'Show', part %></td>
         <td><%= link_to 'Edit', edit_part_path(part) %></td>
-        <td><%= link_to 'Destroy', part, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <td><%= link_to 'Destroy', part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         <td>
           <%= link_to 'BOM', part_bom_path(part.id) %>
         </td>
       </tr>
-  <% end %>
+    <% end %>
   </tbody>
 </table>
 

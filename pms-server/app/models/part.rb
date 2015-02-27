@@ -1,4 +1,5 @@
 class Part < ActiveRecord::Base
+  belongs_to :resource_group
   belongs_to :measure_unit
   has_many :part_boms
   has_many :kanbans
