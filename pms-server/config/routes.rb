@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   resources :kanbans do
     member do
       get :process_entities
-      #post :create_process_entities
+      post :create_process_entities
       delete :destroy_process_entities
       get :history
       post :release

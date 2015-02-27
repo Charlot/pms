@@ -79,7 +79,7 @@ class KanbansController < ApplicationController
       kanban_process_entity = @kanban.kanban_process_entities.build({process_entity_id:process_entity.id})
       format.json { render json: {result:false, content: 'Created Failed!'}} unless kanban_process_entity
       format.json { render json: {result:false, content: kanban_process_entity.errors.full_messages}} unless kanban_process_entity.save
-      format.json { render json: {result:false, content: {id: kanban_process_entity.id, nr:kanban_process_entity.process_entity.nr}}}
+      format.json { render json: {result:true, content: {id: kanban_process_entity.id, nr:kanban_process_entity.process_entity.nr}}}
     end
   end
 
