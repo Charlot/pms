@@ -2,16 +2,12 @@
 
 one:
   nr: MyString
-  custom_nr: MyString
-  type: 1
-  strip_length: 1.5
+  name: MyString
+  description: MyString
   resource_group_id: 
-  measure_unit_id: 
 
 two:
   nr: MyString
-  custom_nr: MyString
-  type: 1
-  strip_length: 1.5
+  name: MyString
+  description: MyString
   resource_group_id: 
-  measure_unit_id: 

@@ -62,13 +62,13 @@ class PartsController < ApplicationController
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
-  def set_part
-    @part = Part.find(params[:id])
-  end
+    # Use callbacks to share common setup or constraints between actions.
+    def set_part
+      @part = Part.find(params[:id])
+    end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
-  def part_params
-    params.require(:part).permit(:nr, :custom_nr, :part_type, :measure_unit_id)
-  end
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def part_params
+      params.require(:part).permit(:nr, :custom_nr, :type, :strip_length, :resource_group_id, :measure_unit_id)
+    end
 end

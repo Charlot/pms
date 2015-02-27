@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  resources :machines
+
+  resources :resource_groups
+
   resources :process_parts
 
   resources :production_orders

@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nr:</strong>
+  <%= @resource_group.nr %>
+</p>
+
+<p>
+  <strong>Resource group type:</strong>
+  <%= @resource_group.type %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @resource_group.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @resource_group.description %>
+</p>
+
+<%= link_to 'Edit', edit_resource_group_path(@resource_group) %> |
+<%= link_to 'Back', resource_groups_path %>
