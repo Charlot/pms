@@ -1,0 +1,65 @@
+<%= form_for(@machine_scope) do |f| %>
+    <% if @machine_scope.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@machine_scope.errors.count, "error") %> prohibited this machine_scope from being
+            saved:</h2>
+
+          <ul>
+            <% @machine_scope.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+    <table>
+      <tr>
+        <td colspan="2">
+          <%= f.label :machine_id %>:
+          <h5><%= @machine.nr %></h5>
+
+          <%= f.hidden_field :machine_id, value: @machine.id %>
+        </td>
+      </tr>
+      <tr>
+        <td><%= f.label :w1 %>:
+          <%= f.check_box :w1 %></td>
+        <td><%= f.label :w2 %>:
+          <%= f.check_box :w2 %></td>
+      </tr>
+      <tr>
+        <td>      <%= f.label :t1 %>:
+          <%= f.check_box :t1 %></td>
+        <td>  <%= f.label :t3 %>:
+          <%= f.check_box :t3 %></td>
+      </tr>
+      <tr>
+        <td> <%= f.label :t2 %>:
+          <%= f.check_box :t2 %></td>
+        <td>   <%= f.label :t4 %>:
+          <%= f.check_box :t4 %></td>
+      </tr>
+      <tr>
+        <td>
+          <%= f.label :s1 %>:
+          <%= f.check_box :s1 %></td>
+        <td> <%= f.label :s3 %>:
+          <%= f.check_box :s3 %></td>
+      </tr>
+      <tr>
+        <td>      <%= f.label :s2 %>:
+          <%= f.check_box :s2 %></td>
+        <td> <%= f.label :s4 %>:
+          <%= f.check_box :s4 %></td>
+      </tr>
+      <tr>
+        <td> <%= f.label :wd1 %>:
+          <%= f.check_box :wd1 %></td>
+        <td>      <%= f.label :wd2 %>:
+          <%= f.check_box :wd2 %></td>
+      </tr>
+    </table>
+
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>

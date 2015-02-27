@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :machine_scopes
+
   resources :machines
 
   resources :resource_groups

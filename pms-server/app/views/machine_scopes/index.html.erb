@@ -1,0 +1,49 @@
+<h1>Listing machine_scopes</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th>Machine</th>
+    <th>W1</th>
+    <th>T1</th>
+    <th>T2</th>
+    <th>S1</th>
+    <th>S2</th>
+    <th>Wd1</th>
+    <th>W2</th>
+    <th>T3</th>
+    <th>T4</th>
+    <th>S3</th>
+    <th>S4</th>
+    <th>Wd2</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @machine_scopes.each do |machine_scope| %>
+      <tr>
+        <td><%= machine_scope.machine.nr if machine_scope.machine %></td>
+        <td><%= machine_scope.w1 %></td>
+        <td><%= machine_scope.t1 %></td>
+        <td><%= machine_scope.t2 %></td>
+        <td><%= machine_scope.s1 %></td>
+        <td><%= machine_scope.s2 %></td>
+        <td><%= machine_scope.wd1 %></td>
+        <td><%= machine_scope.w2 %></td>
+        <td><%= machine_scope.t3 %></td>
+        <td><%= machine_scope.t4 %></td>
+        <td><%= machine_scope.s3 %></td>
+        <td><%= machine_scope.s4 %></td>
+        <td><%= machine_scope.wd2 %></td>
+        <td><%= link_to 'Show', machine_scope %></td>
+        <td><%= link_to 'Edit', edit_machine_scope_path(machine_scope) %></td>
+        <td><%= link_to 'Destroy', machine_scope, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Machine scope', new_machine_scope_path %>

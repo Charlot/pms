@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150227023040) do
+ActiveRecord::Schema.define(version: 20150227063518) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -94,6 +94,26 @@ ActiveRecord::Schema.define(version: 20150227023040) do
 
   add_index "kanbans", ["nr"], name: "index_kanbans_on_nr", using: :btree
   add_index "kanbans", ["part_id"], name: "index_kanbans_on_part_id", using: :btree
+
+  create_table "machine_scopes", force: true do |t|
+    t.boolean  "w1",         default: false
+    t.boolean  "t1",         default: false
+    t.boolean  "t2",         default: false
+    t.boolean  "s1",         default: false
+    t.boolean  "s2",         default: false
+    t.boolean  "wd1",        default: false
+    t.boolean  "w2",         default: false
+    t.boolean  "t3",         default: false
+    t.boolean  "t4",         default: false
+    t.boolean  "s3",         default: false
+    t.boolean  "s4",         default: false
+    t.boolean  "wd2",        default: false
+    t.integer  "machine_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "machine_scopes", ["machine_id"], name: "index_machine_scopes_on_machine_id", using: :btree
 
   create_table "machines", force: true do |t|
     t.string   "nr"
@@ -200,7 +220,7 @@ ActiveRecord::Schema.define(version: 20150227023040) do
 
   create_table "resource_groups", force: true do |t|
     t.string   "nr"
-    t.integer  "resource_group_type"
+    t.integer  "type"
     t.string   "name"
     t.string   "description"
     t.datetime "created_at"
@@ -208,7 +228,7 @@ ActiveRecord::Schema.define(version: 20150227023040) do
   end
 
   add_index "resource_groups", ["nr"], name: "index_resource_groups_on_nr", using: :btree
-  add_index "resource_groups", ["resource_group_type"], name: "index_resource_groups_on_resource_group_type", using: :btree
+  add_index "resource_groups", ["type"], name: "index_resource_groups_on_resource_group_type", using: :btree
 
   create_table "versions", force: true do |t|
     t.string   "item_type",  null: false

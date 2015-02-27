@@ -7,3 +7,5 @@ rails g scaffold custom_values customized_type:string customized_id:integer cust
 rails g scaffold process_template code:string:index type:integer:index name:string template:text description:text
 rails g scaffold process_entity nr:string name:strint description:text stand_time:float process_template:references workstation_type:references cost_center:references
 rails g scaffold machine nr:string:index name:string description:string resource_group:references
+rails g scaffold machine_scope w1:boolean t1:boolean t2:boolean s1:boolean s2:boolean wd1:boolean w2:boolean t3:boolean t4:boolean s3:boolean s4:boolean wd2:boolean machine:references
+rails g scaffold machine_scope w1:boolean t1:boolean t2:boolean s1:boolean s2:boolean wd1:boolean w2:boolean t3:boolean t4:boolean s3:boolean s4:boolean wd2:boolean machine:references
