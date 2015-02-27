@@ -45,4 +45,4 @@ pms.kanban.scan = function(code,callback){
             }
         }
     })
-}
+};

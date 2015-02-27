@@ -28,7 +28,7 @@ Rails.application.routes.draw do
   resources :kanbans do
     member do
       get :process_entities
-      #post :create_process_entities
+      post :create_process_entities
       delete :destroy_process_entities
       get :history
       post :release
@@ -51,7 +51,11 @@ Rails.application.routes.draw do
   end
 
   resources :measure_units
-  resources :parts
+  resources :parts do
+    collection do
+      get :search
+    end
+  end
   resources :files
 
   # The priority is based upon order of creation: first created -> highest priority.
