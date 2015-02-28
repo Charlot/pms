@@ -43,7 +43,6 @@ Rails.application.routes.draw do
 
     collection do
       post :scan
-      get :panel
     end
   end
 

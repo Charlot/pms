@@ -16,4 +16,5 @@
 //= require turbolinks
 //= require jquery.file.upload/jquery.fileupload
 //= require bootstrap.min
+//= require bootstrap-select.min
 //= require_tree .

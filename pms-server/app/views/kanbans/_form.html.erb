@@ -18,6 +18,12 @@
             基础信息
           </div>
           <div class="panel-body">
+            <!--验证是否重复-->
+            <div class="form-group">
+              <%= f.label :nr, "#{KanbanDesc::NR}:" %>
+              <%= f.text_field :nr,class: "form-control" %>
+            </div>
+
             <!--验证零件是否存在-->
             <div class="form-group">
               <%= f.label :part_id, "#{KanbanDesc::WIRE_NR}:" %>
@@ -25,10 +31,9 @@
               <%= f.text_field :part_id, class: "hidden",id:"search_Part_Res"%>
             </div>
 
-            <!--验证是否重复-->
             <div class="form-group">
-              <%= f.label :nr, "#{KanbanDesc::NR}:" %>
-              <%= f.text_field :nr,class: "form-control" %>
+              <%= f.label :product_id, "#{KanbanDesc::PRODUCT_NR}:" %>
+              <%= f.text_field :product_id, class: "form-control"%>
             </div>
 
             <div class="form-group">
@@ -74,7 +79,7 @@
 
             <div class="form-group">
               <%= f.label :ktype, "#{KanbanDesc::TYPE}" %>
-              <%= f.select(:ktype, kanban_type_options, {include_blank: false}) %>
+              <%= f.select(:ktype, kanban_type_options, {include_blank: false},{class:"selectpicker"}) %>
             </div>
           </div>
         </div>
@@ -85,7 +90,7 @@
     </div>
 
     <div class="actions">
-      <%= f.submit%>
+      <%= f.submit :class=> 'btn btn-info'%>
     </div>
 <% end %>
 

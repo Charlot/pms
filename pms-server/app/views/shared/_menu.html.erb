@@ -28,7 +28,7 @@
         <li class="<%= 'active' if current_controller?({controller: 'machine_scopes'})%>"><a href="<%= machine_scopes_path %>">Machine Scope</a></li>
         <li class="<%= 'active' if current_controller?({controller: 'process_templates'})%>"><a href="<%= process_templates_path %>">ProcessTemplate</a></li>
         <li class="<%= 'active' if current_controller?({controller: 'process_entities'})%>"><a href="<%= process_entities_path %>">ProcessEntity</a></li>
-        <li class="<%= 'active' if current_controller?({controller: 'kanbans'})%>"><a href="<%= panel_kanbans_path %>">KANBAN</a></li>
+        <li class="<%= 'active' if current_controller?({controller: 'kanbans'})%>"><a href="<%= new_kanban_path %>">KANBAN</a></li>
         <li class="<%= 'active' if current_controller?({controller: 'production_orders'})%>"><a href="<%= production_orders_path%>">Production Orders</a></li>
       </ul>
     </div>
