@@ -1,12 +1,28 @@
-<ul class="nav nav-pills">
-  <li><a href="<%= measure_units_path %>">MeasureUnit</a></li>
-  <li><a href="<%= resource_groups_path %>">ResourceGroup</a></li>
-  <li><a href="<%= parts_path %>">Part</a></li>
-  <li><a href="<%= part_boms_path %>">PartBOM</a></li>
-  <li><a href="<%= machines_path %>">Machine</a></li>
-  <li><a href="<%= machine_scopes_path %>">Machine Scope</a></li>
-  <li><a href="<%= process_templates_path %>">ProcessTemplate</a></li>
-  <li><a href="<%= process_entities_path %>">ProcessEntity</a></li>
-  <li><a href="<%= kanbans_path %>">KANBAN</a></li>
-  <li><a href="<%= production_orders_path%>">Production Orders</a></li>
-</ul>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapse" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="<%= root_path%>">P.M.S</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="<%= 'active' if current_controller?({controller: 'measure_units'})%>"><a href="<%= measure_units_path %>">MeasureUnit</a></li>
+        <li class="<%= 'active' if current_controller?({controller: 'resource_groups'})%>"><a href="<%= resource_groups_path %>">ResourceGroup</a></li>
+        <li class="<%= 'active' if current_controller?({controller: 'parts'})%>"><a href="<%= parts_path %>">Part</a></li>
+        <li class="<%= 'active' if current_controller?({controller: 'part_boms'})%>"><a href="<%= part_boms_path %>">PartBOM</a></li>
+        <li class="<%= 'active' if current_controller?({controller: 'machines'})%>"><a href="<%= machines_path %>">Machine</a></li>
+        <li class="<%= 'active' if current_controller?({controller: 'machine_scopes'})%>"><a href="<%= machine_scopes_path %>">Machine Scope</a></li>
+        <li class="<%= 'active' if current_controller?({controller: 'process_templates'})%>"><a href="<%= process_templates_path %>">ProcessTemplate</a></li>
+        <li class="<%= 'active' if current_controller?({controller: 'process_entities'})%>"><a href="<%= process_entities_path %>">ProcessEntity</a></li>
+        <li class="<%= 'active' if current_controller?({controller: 'kanbans'})%>"><a href="<%= kanbans_path %>">KANBAN</a></li>
+        <li class="<%= 'active' if current_controller?({controller: 'production_orders'})%>"><a href="<%= production_orders_path%>">Production Orders</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
