@@ -23,6 +23,10 @@ class KanbansController < ApplicationController
   def edit
   end
 
+  # GET /kanbans/panel
+  def panel
+  end
+
   # POST /kanbans
   # POST /kanbans.json
   def create

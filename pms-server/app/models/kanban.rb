@@ -17,6 +17,16 @@ class Kanban < ActiveRecord::Base
     end
   end
 
+  def version_now
+    self.versions.count
+  end
+
+  # version of kanban
+  def task_time
+    #TODO
+    "需要编写"
+  end
+
   # Get raw materials from kanban's routing
   def get_raw_materials
     #TODO Get raw materials of Routing

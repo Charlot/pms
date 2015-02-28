@@ -8,7 +8,16 @@
 </head>
 <body>
 <%= render 'shared/menu' %>
-<%= yield %>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2 sidebar">
+      <%= render partial: 'sidebar' rescue nil%>
+    </div>
+    <div class="col-md-10" id="result">
+      <%= yield %>
+    </div>
+  </div>
+</div>
 </body>
 <%= render partial: 'shared/handling_msg_box', locals: {handle_message: '处理中...'} %>
 

@@ -2,6 +2,7 @@ class KanbanDesc
   NR="KANBAN号"
   TYPE="类型"
   VERSION="版本号"
+  TASK_TIME="工时"
   PRINT_DATE="打印日期"
   COPIES="打印份数"
   STATE="状态"

@@ -6,6 +6,7 @@
       <th><%= KanbanDesc::NR %></th>
       <th><%= KanbanDesc::TYPE%></th>
       <th><%= KanbanDesc::VERSION %></th>
+      <th><%= KanbanDesc::TASK_TIME%></th>
       <th><%= KanbanDesc::PRINT_DATE%></th>
       <th><%= KanbanDesc::COPIES%></th>
       <th><%= KanbanDesc::STATE%></th>
@@ -26,7 +27,8 @@
       <tr>
         <td><%= kanban.nr %></td>
         <td><%= KanbanType.display(kanban.ktype) %></td>
-        <td><%= kanban.version%></td>
+        <td><%= kanban.version_now%></td>
+        <td><%= kanban.task_time%></td>
         <td><%= kanban.print_time%></td>
         <td><%= kanban.copies%></td>
         <td><%= KanbanState.display(kanban.state) %></td>
