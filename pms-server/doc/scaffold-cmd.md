@@ -9,3 +9,5 @@ rails g scaffold process_entity nr:string name:strint description:text stand_tim
 rails g scaffold machine nr:string:index name:string description:string resource_group:references
 rails g scaffold machine_scope w1:boolean t1:boolean t2:boolean s1:boolean s2:boolean wd1:boolean w2:boolean t3:boolean t4:boolean s3:boolean s4:boolean wd2:boolean machine:references
 rails g scaffold machine_scope w1:boolean t1:boolean t2:boolean s1:boolean s2:boolean wd1:boolean w2:boolean t3:boolean t4:boolean s3:boolean s4:boolean wd2:boolean machine:references
+rails g scaffold machine_combination w1:integer t1:integer t2:integer s1:integer s2:integer wd1:integer w2:integer t3:integer t4:integer s3:integer s4:integer wd2:integer machine:references
+
