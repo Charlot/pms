@@ -1,0 +1,67 @@
+<%= form_for(@machine_combination) do |f| %>
+    <% if @machine_combination.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@machine_combination.errors.count, "error") %> prohibited this machine_combination from
+            being saved:</h2>
+          <ul>
+            <% @machine_combination.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+    </div>
+
+    <div class="field">
+      <%= f.label :w1 %><br>
+      <%= f.number_field :w1 %>
+    </div>
+
+    <div class="field">
+      <%= f.label :t1 %><br>
+      <%= f.number_field :t1 %>
+    </div>
+    <div class="field">
+      <%= f.label :t2 %><br>
+      <%= f.number_field :t2 %>
+    </div>
+    <div class="field">
+      <%= f.label :s1 %><br>
+      <%= f.number_field :s1 %>
+    </div>
+    <div class="field">
+      <%= f.label :s2 %><br>
+      <%= f.number_field :s2 %>
+    </div>
+    <div class="field">
+      <%= f.label :wd1 %><br>
+      <%= f.number_field :wd1 %>
+    </div>
+    <div class="field">
+      <%= f.label :w2 %><br>
+      <%= f.number_field :w2 %>
+    </div>
+    <div class="field">
+      <%= f.label :t3 %><br>
+      <%= f.number_field :t3 %>
+    </div>
+    <div class="field">
+      <%= f.label :t4 %><br>
+      <%= f.number_field :t4 %>
+    </div>
+    <div class="field">
+      <%= f.label :s3 %><br>
+      <%= f.number_field :s3 %>
+    </div>
+    <div class="field">
+      <%= f.label :s4 %><br>
+      <%= f.number_field :s4 %>
+    </div>
+    <div class="field">
+      <%= f.label :wd2 %><br>
+      <%= f.number_field :wd2 %>
+    </div>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>

@@ -1,7 +1,6 @@
 class MachineScopesController < ApplicationController
   before_action :set_machine_scope, only: [:show, :edit, :update, :destroy]
-  before_action :set_machine, only: [:new, :show, :edit]
-
+  before_action :set_machine, only: [:new]
   # GET /machine_scopes
   # GET /machine_scopes.json
   def index
@@ -63,9 +62,16 @@ class MachineScopesController < ApplicationController
   end
 
   private
+  def set_machine
+    unless @machine=Machine.find_by_id(params[:machine_id])
+      redirect_to machines_path, notice: 'Please select a machine'
+    end
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_machine_scope
-    @machine_scope = MachineScope.find(params[:id])
+    @machine_scope = params.has_key?(:machine_id) ? Machine.find_by_id(params[:machine_id]).machine_scope : MachineScope.find(params[:id])
+    @machine=@machine_scope.machine
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
@@ -73,9 +79,4 @@ class MachineScopesController < ApplicationController
     params.require(:machine_scope).permit(:w1, :t1, :t2, :s1, :s2, :wd1, :w2, :t3, :t4, :s3, :s4, :wd2, :machine_id)
   end
 
-  def set_machine
-    unless (@machine=Machine.find_by_id(params[:machine])) || (@machine_scope && (@machine=@machine_scope.machine))
-      redirect_to action: :index, controller: :machines
-    end
-  end
 end

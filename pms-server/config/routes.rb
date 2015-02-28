@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
+  resources :machine_combinations
+
   resources :machine_scopes
 
-  resources :machines
+  resources :machines do
+    resource :machine_scope
+    resource :machine_combinations
+  end
 
   resources :resource_groups
 
