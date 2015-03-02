@@ -31,7 +31,7 @@ class MachineCombinationsController < ApplicationController
 
     respond_to do |format|
       if @machine_combination.save
-        format.html { redirect_to @machine_combination, notice: 'Machine combination was successfully created.' }
+        format.html { redirect_to machine_machine_combinations_path(@machine_combination.machine), notice: 'Machine combination was successfully created.' }
         format.json { render :show, status: :created, location: @machine_combination }
       else
         format.html { render :new }
@@ -59,7 +59,7 @@ class MachineCombinationsController < ApplicationController
   def destroy
     @machine_combination.destroy
     respond_to do |format|
-      format.html { redirect_to machine_combinations_url, notice: 'Machine combination was successfully destroyed.' }
+      format.html { redirect_to machine_machine_combinations_path(@machine_combination.machine), notice: 'Machine combination was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

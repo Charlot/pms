@@ -11,56 +11,98 @@
         </div>
     <% end %>
     </div>
+    <%= f.hidden_field :machine_id, value: @machine.id %>
+    <table class="table table-bordered" style="width: 1350px;text-align:  left">
+      <tr>
+        <td>
+          W1:
+          <% if @machine_scope.w1 %><%= f.number_field :w1 %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          T1:
+          <% if @machine_scope.t1 %><%= f.number_field :t1 %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          T2:
+          <% if @machine_scope.t2 %><%= f.number_field :t2 %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          S1:
+           <% if @machine_scope.s1 %><%= f.number_field :s1 %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          S2:
+          <% if @machine_scope.s2 %><%= f.number_field :s2 %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          WD1:
+          <% if @machine_scope.wd1 %><%= f.number_field :wd1 %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+      </tr>
 
-    <div class="field">
-      <%= f.label :w1 %><br>
-      <%= f.number_field :w1 %>
-    </div>
-
-    <div class="field">
-      <%= f.label :t1 %><br>
-      <%= f.number_field :t1 %>
-    </div>
-    <div class="field">
-      <%= f.label :t2 %><br>
-      <%= f.number_field :t2 %>
-    </div>
-    <div class="field">
-      <%= f.label :s1 %><br>
-      <%= f.number_field :s1 %>
-    </div>
-    <div class="field">
-      <%= f.label :s2 %><br>
-      <%= f.number_field :s2 %>
-    </div>
-    <div class="field">
-      <%= f.label :wd1 %><br>
-      <%= f.number_field :wd1 %>
-    </div>
-    <div class="field">
-      <%= f.label :w2 %><br>
-      <%= f.number_field :w2 %>
-    </div>
-    <div class="field">
-      <%= f.label :t3 %><br>
-      <%= f.number_field :t3 %>
-    </div>
-    <div class="field">
-      <%= f.label :t4 %><br>
-      <%= f.number_field :t4 %>
-    </div>
-    <div class="field">
-      <%= f.label :s3 %><br>
-      <%= f.number_field :s3 %>
-    </div>
-    <div class="field">
-      <%= f.label :s4 %><br>
-      <%= f.number_field :s4 %>
-    </div>
-    <div class="field">
-      <%= f.label :wd2 %><br>
-      <%= f.number_field :wd2 %>
-    </div>
+      <tr>
+        <td>
+          W2:
+          <% if @machine_scope.w2 %><%= f.number_field :w2 %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          T3:
+          <% if @machine_scope.t3 %><%= f.number_field :t3 %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          T4:
+          <% if @machine_scope.t4 %><%= f.number_field :t4 %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          S3:
+          <% if @machine_scope.s3 %><%= f.number_field :s3 %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          S4:
+          <% if @machine_scope.s4 %><%= f.number_field :s4 %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          WD2:
+          <% if @machine_scope.wd2 %><%= f.number_field :wd2 %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+      </tr>
+    </table>
     <div class="actions">
       <%= f.submit %>
     </div>
