@@ -27,7 +27,7 @@ class MachineCombinationsController < ApplicationController
   # POST /machine_combinations
   # POST /machine_combinations.json
   def create
-    @machine_combination = MachineCombination.new(machine_combination_params)
+    @machine_combination = MachineCombination.new(prepare_machine_combination_params)
 
     respond_to do |format|
       if @machine_combination.save
@@ -77,11 +77,19 @@ class MachineCombinationsController < ApplicationController
   end
 
   def set_machine_combinations
-    @machine_combinations = Machine.find_by_id(params[:machine_id]).machine_combinations
+    @machine_combinations = MachineCombinationPresenter.init_presenters(Machine.find_by_id(params[:machine_id]).machine_combinations)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def machine_combination_params
     params.require(:machine_combination).permit(:w1, :t1, :t2, :s1, :s2, :wd1, :w2, :t3, :t4, :s3, :s4, :wd2, :machine_id)
+  end
+
+  def prepare_machine_combination_params
+    mp=machine_combination_params
+    [:w1, :t1, :t2, :s1, :s2, :w2, :t3, :t4, :s3, :s4].each do |field|
+      mp[field]= (part=Part.find_by_nr(mp[field])).nil? ? nil : part.id
+    end
+    mp
   end
 end
