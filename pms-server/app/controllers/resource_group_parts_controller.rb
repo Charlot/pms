@@ -1,10 +1,10 @@
 class ResourceGroupPartsController < ApplicationController
   before_action :set_resource_group_part, only: [:show, :edit, :update, :destroy]
+  before_action :set_resource_group_parts, only: [:index]
 
   # GET /resource_group_parts
   # GET /resource_group_parts.json
   def index
-    @resource_group_parts = ResourceGroupPart.all
   end
 
   # GET /resource_group_parts/1
@@ -62,13 +62,18 @@ class ResourceGroupPartsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_resource_group_part
-      @resource_group_part = ResourceGroupPart.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def resource_group_part_params
-      params.require(:resource_group_part).permit(:part_id, :resource_group_id)
-    end
+  def set_resource_group_parts
+    @resource_group_parts = ResourceGroupTool.find_by_id(params[:resource_group_tool_id]).resource_group_parts
+  end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_resource_group_part
+    @resource_group_part = ResourceGroupPart.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def resource_group_part_params
+    params.require(:resource_group_part).permit(:part_id, :resource_group_id)
+  end
 end
