@@ -5,55 +5,23 @@
   <div class="panel-body">
     <div class="row">
       <div class="col-md-10">
-        <table class="table table-bordered table-striped table-hover">
-          <thead>
-          <tr>
-            <th><%= KanbanDesc::NR %></th>
-            <th><%= KanbanDesc::TYPE%></th>
-            <th><%= KanbanDesc::VERSION %></th>
-            <th><%= KanbanDesc::TASK_TIME%></th>
-            <th><%= KanbanDesc::PRINT_DATE%></th>
-            <th><%= KanbanDesc::COPIES%></th>
-            <th><%= KanbanDesc::STATE%></th>
-            <th><%= KanbanDesc::QUANTITY%></th>
-            <th><%= KanbanDesc::WIRE_NR%></th>
-            <th><%= KanbanDesc::PRODUCT_NR%></th>
-            <th><%= KanbanDesc::CUSTOMER_NR%></th>
-            <th><%= KanbanDesc::SOURCE_POSITION%></th>
-            <th><%= KanbanDesc::DES_POSITION%></th>
-            <th>Routing</th>
-            <th>历史</th>
-            <th colspan="4"></th>
-          </tr>
-          </thead>
-
-          <tbody>
-          <% @kanbans.each do |kanban| %>
-              <tr>
-                <td><%= kanban.nr %></td>
-                <td><%= KanbanType.display(kanban.ktype) %></td>
-                <td><%= kanban.version_now%></td>
-                <td><%= kanban.task_time%></td>
-                <td><%= kanban.print_time%></td>
-                <td><%= kanban.copies%></td>
-                <td><%= KanbanState.display(kanban.state) %></td>
-                <td><%= kanban.quantity%></td>
-                <td><%= kanban.part_id%></td>
-                <td></td>
-                <td></td>
-                <td><%= "#{kanban.source_warehouse} | #{kanban.source_storage}"%></td>
-                <td><%= "#{kanban.des_warehouse} | #{kanban.des_storage}"%></td>
-                <td><%= link_to '关联Routing', process_entities_kanban_path(kanban)%></td>
-                <td><%= link_to '修改历史',history_kanban_path(kanban)%></td>
-                <td><%= link_to '生产管理', manage_kanban_path(kanban)%></td>
-                <td><%= link_to 'Show', kanban %></td>
-                <td><%= link_to 'Edit', edit_kanban_path(kanban) %></td>
-                <td><%= link_to 'Destroy', kanban, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-
-              </tr>
-          <% end %>
-          </tbody>
-        </table>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-md-5">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Search for Kanban by Part Number...">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">Search</button>
+                </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel-body" id="search_Kanban_Res">
+            <%= render partial: 'list'%>
+          </div>
+        </div>
       </div>
       <div class="col-md-2">
         <h4>说明</h4>
