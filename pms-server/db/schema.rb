@@ -170,8 +170,9 @@ ActiveRecord::Schema.define(version: 20150228093409) do
   create_table "parts", force: true do |t|
     t.string   "nr"
     t.string   "custom_nr"
-    t.integer  "part_type"
+    t.integer  "type"
     t.float    "strip_length"
+    t.integer  "resource_group_id"
     t.integer  "measure_unit_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -180,7 +181,8 @@ ActiveRecord::Schema.define(version: 20150228093409) do
   add_index "parts", ["custom_nr"], name: "index_parts_on_custom_nr", using: :btree
   add_index "parts", ["measure_unit_id"], name: "index_parts_on_measure_unit_id", using: :btree
   add_index "parts", ["nr"], name: "index_parts_on_nr", using: :btree
-  add_index "parts", ["part_type"], name: "index_parts_on_part_type", using: :btree
+  add_index "parts", ["resource_group_id"], name: "index_parts_on_resource_group_id", using: :btree
+  add_index "parts", ["type"], name: "index_parts_on_type", using: :btree
 
   create_table "process_entities", force: true do |t|
     t.string   "nr",                                null: false
