@@ -40,6 +40,7 @@ Rails.application.routes.draw do
       #post :scan
       get :manage
       get :search
+      get :add_routing_template
     end
 
     collection do

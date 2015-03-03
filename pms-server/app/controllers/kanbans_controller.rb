@@ -140,6 +140,18 @@ class KanbansController < ApplicationController
     end
   end
 
+  # GET /kanbans/add_routing_template
+  def add_routing_template
+    case params[:type].to_i
+    when KanbanType::WHITE
+      render partial:'add_auto_routing'
+    when KanbanType::BLUE
+      render partial:'add_semi_auto_routing'
+    else
+      render partial:'add_auto_routing'
+    end
+  end
+
   # POST /kanbans/scan.json
   def scan
     respond_to do |format|
