@@ -1,6 +1,9 @@
 <%= form_for(machine_combination) do |f| %>
     <%= f.hidden_field :machine_id, value: machine.id %>
     <tr>
+      <td rowspan="2">
+        <%= i+1 %>
+      </td>
       <td>
         W1:
         <% if machine_scope.w1 %><%= f.text_field :w1, value: machine_combination_presenter.w1_display %>

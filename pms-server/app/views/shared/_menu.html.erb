@@ -21,7 +21,8 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li class="<%= 'active' if current_controller?({controller: 'measure_units'})%>"><a href="<%= measure_units_path %>">MeasureUnit</a></li>
-        <li class="<%= 'active' if current_controller?({controller: 'resource_groups'})%>"><a href="<%= resource_groups_path %>">ResourceGroup</a></li>
+        <li class="<%= 'active' if current_controller?({controller: 'resource_group_machines'})%>"><a href="<%= resource_group_machines_path %>">ResourceGroupMachine</a></li>
+        <li class="<%= 'active' if current_controller?({controller: 'resource_group_tools'})%>"><a href="<%= resource_group_tools_path %>">ResourceGroupTool</a></li>
         <li class="<%= 'active' if current_controller?({controller: 'parts'})%>"><a href="<%= parts_path %>">Part</a></li>
         <li class="<%= 'active' if current_controller?({controller: 'part_boms'})%>"><a href="<%= part_boms_path %>">PartBOM</a></li>
         <li class="<%= 'active' if current_controller?({controller: 'machines'})%>"><a href="<%= machines_path %>">Machine</a></li>
