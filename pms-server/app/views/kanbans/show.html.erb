@@ -11,6 +11,7 @@
           <div class="panel panel-default">
             <div class="panel-heading">
               基础信息
+              <%= render partial: 'manage' ,locals:{kanban:@kanban}%>
             </div>
             <div class="panel-body">
               <div class="row">
@@ -63,6 +64,10 @@
                     <li class="list-group-item">
                       <label><%= KanbanDesc::TASK_TIME%>:</label><ins><%= @kanban.task_time%></ins>
                     </li>
+                    <li class="list-group-item">
+                      <label><%= KanbanDesc::STATE%>:</label><span class="label <%= kanban_states_class(@kanban.state)%>"><%= KanbanState.display(@kanban.state)%></span></ins>
+                    </li>
+
                   </ul>
                 </div>
               </div>

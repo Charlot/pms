@@ -8,10 +8,14 @@
 </head>
 <body>
   <%= render 'shared/menu' %>
-  <div class="container theme-showcase" role="main">
-    <%= render partial: 'sidebar' rescue nil%>
-    <div class="row" id="result">
-      <%= yield %>
+  <div class="row">
+    <div class="col-md-2">
+      <%= render partial: 'sidebar' rescue nil%>
+    </div>
+    <div class="col-md-10">
+        <div class="row" id="result">
+          <%= yield %>
+        </div>
     </div>
   </div>
 </body>
