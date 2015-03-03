@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nr:</strong>
+  <%= @resource_group_tool.nr %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @resource_group_tool.type %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @resource_group_tool.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @resource_group_tool.description %>
+</p>
+
+<%= link_to 'Edit', edit_resource_group_tool_path(@resource_group_tool) %> |
+<%= link_to 'Back', resource_group_tools_path %>

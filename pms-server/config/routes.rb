@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   end
 
   resources :resource_groups
+  resources :resource_group_machines
+  resources :resource_group_tools
 
   resources :process_parts
 

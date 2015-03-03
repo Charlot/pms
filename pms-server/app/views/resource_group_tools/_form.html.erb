@@ -1,0 +1,29 @@
+<%= form_for(@resource_group_tool) do |f| %>
+  <% if @resource_group_tool.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@resource_group_tool.errors.count, "error") %> prohibited this resource_group_tool from being saved:</h2>
+
+      <ul>
+      <% @resource_group_tool.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :nr %><br>
+    <%= f.text_field :nr %>
+  </div>
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br>
+    <%= f.text_field :description %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
