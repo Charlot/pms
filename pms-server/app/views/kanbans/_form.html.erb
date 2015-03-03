@@ -1,4 +1,4 @@
-<%= form_for(@kanban) do |f| %>
+<%= form_for(@kanban,html:{onkeypress:"return event.keyCode != 13;"}) do |f| %>
     <% if @kanban.errors.any? %>
         <div id="error_explanation">
           <h2><%= pluralize(@kanban.errors.count, "error") %> prohibited this kanban from being saved:</h2>
@@ -12,8 +12,8 @@
     <% end %>
     <div class="row">
       <div class="col-md-12">
-        <div class="alert alert-danger" role="alert" id="error-message">
-          .......................
+        <div class="alert alert-danger hidden" role="alert" id="error-message">
+
         </div>
       </div>
     </div>
@@ -103,28 +103,37 @@
 
 <% content_for :javascript_includes do %>
     <%= javascript_include_tag "search" %>
+    <%= javascript_include_tag "fix"%>
 <% end %>
 
 <script type="text/javascript">
   $(document).ready(function(){
-      $('body').on("#search_Part",'mouseleave',function(){
+      $('#search_Part').on('keypress blur',function(event){
           var tar = $(this);
-          if(tar.val().length > 0) {
+          if(tar.val().length > 0 && (event.keyCode == undefined || event.keyCode == 13)) {
               pms.search('parts', {attr: 'nr', val: tar.val()}, function (data) {
                   if (data.result) {
                       $("#search_Part_Res").val(data.content.id);
                   } else {
-                      $("#error-message").clear();
-                      $("#error-message").text("12313123")
-                  }});}})
-              .on("#search_ProductNR","mouseleave",function(){
+                      $("#error-message").removeClass("hidden");
+                      $("#error-message").text(data.content);
+                  }
+              });
+          }
+      });
+
+      $("#search_ProductNR").on("keypress blur",function(event){
                   var tar = $(this);
-                  if(tar.val().length > 0) {
+                  if(tar.val().length > 0 && (event.keyCode == undefined || event.keyCode == 13)) {
                       pms.search('parts', {attr: 'nr', val: tar.val()}, function (data) {
                           if (data.result) {
                               $("#search_ProductNR_Res").val(data.content.id);
                           } else {
-                              $("#error-message").clear();
-                          }});}})
+                              $("#error-message").removeClass("hidden");
+                              $("#error-message").text(data.content);
+                          }
+                      });
+                  }
+      });
   });
 </script>
