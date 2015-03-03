@@ -10,7 +10,13 @@
           </ul>
         </div>
     <% end %>
-
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-danger" role="alert" id="error-message">
+          .......................
+        </div>
+      </div>
+    </div>
     <div class="row">
       <div class="col-md-6">
         <div class="panel panel-default">
@@ -27,13 +33,14 @@
             <!--验证零件是否存在-->
             <div class="form-group">
               <%= f.label :part_id, "#{KanbanDesc::WIRE_NR}:" %>
-              <input type="text", id="search_Part" class="form-control"/>
+              <input type="text" id="search_Part" class="form-control"/>
               <%= f.text_field :part_id, class: "hidden",id:"search_Part_Res"%>
             </div>
 
             <div class="form-group">
               <%= f.label :product_id, "#{KanbanDesc::PRODUCT_NR}:" %>
-              <%= f.text_field :product_id, class: "form-control"%>
+              <input type="text" id="search_ProductNR" class="form-control"/>
+              <%= f.text_field :product_id, class: "form-control hidden",id:"search_ProductNR_Res"%>
             </div>
 
             <div class="form-group">
@@ -100,17 +107,23 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-      $("#search_Part").on('mouseleave',function(){
+      $('body').on("#search_Part",'keypress',function(event){
           var tar = $(this);
-          if(tar.val().length > 0) {
+          if(tar.val().length > 0 && event.code == 13) {
               pms.search('parts', {attr: 'nr', val: tar.val()}, function (data) {
                   if (data.result) {
                       $("#search_Part_Res").val(data.content.id);
                   } else {
-                      alert.content(data.content);
-                  }
-              });
-          }
-      })
+                      $("#error-message").clear();
+                  }});}})
+              .on("#search_ProductNR","keypress",function(event){
+                  var tar = $(this);
+                  if(tar.val().length > 0 && event.code == 13) {
+                      pms.search('parts', {attr: 'nr', val: tar.val()}, function (data) {
+                          if (data.result) {
+                              $("#search_ProductNR_Res").val(data.content.id);
+                          } else {
+                              $("#error-message").clear();
+                          }});}})
   });
 </script>

@@ -62,7 +62,7 @@ class PartsController < ApplicationController
   end
 
   # GET /parts/search
-  # GET /parts/search
+  # GET /parts/search.json
   def search
     @part = Part.send("find_by_"+params[:attr],params[:val])
     respond_to do |format|

@@ -131,6 +131,15 @@ class KanbansController < ApplicationController
     end
   end
 
+  # GET /kanbans/search.json
+  def search
+    @kanban = Kanban.send("find_by_"+params[:attr],params[:val])
+    respond_to do |format|
+      format.json { render json: {result: false, content: "Not Found!"}} unless @part
+      format.json { render json: {result: true, content: @kanban}}
+    end
+  end
+
   # POST /kanbans/scan.json
   def scan
     respond_to do |format|

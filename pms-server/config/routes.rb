@@ -39,6 +39,7 @@ Rails.application.routes.draw do
       post :release
       #post :scan
       get :manage
+      get :search
     end
 
     collection do
