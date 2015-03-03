@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150228093409) do
+ActiveRecord::Schema.define(version: 20150303073126) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -101,13 +101,13 @@ ActiveRecord::Schema.define(version: 20150228093409) do
     t.integer  "t2"
     t.integer  "s1"
     t.integer  "s2"
-    t.integer  "wd1"
+    t.string   "wd1"
     t.integer  "w2"
     t.integer  "t3"
     t.integer  "t4"
     t.integer  "s3"
     t.integer  "s4"
-    t.integer  "wd2"
+    t.string   "wd2"
     t.integer  "machine_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -237,6 +237,16 @@ ActiveRecord::Schema.define(version: 20150228093409) do
 
   add_index "production_orders", ["nr"], name: "index_production_orders_on_nr", using: :btree
   add_index "production_orders", ["orderable_id"], name: "index_production_orders_on_orderable_id", using: :btree
+
+  create_table "resource_group_parts", force: true do |t|
+    t.integer  "part_id"
+    t.integer  "resource_group_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "resource_group_parts", ["part_id"], name: "index_resource_group_parts_on_part_id", using: :btree
+  add_index "resource_group_parts", ["resource_group_id"], name: "index_resource_group_parts_on_resource_group_id", using: :btree
 
   create_table "resource_groups", force: true do |t|
     t.string   "nr"

@@ -1,12 +1,12 @@
 class MachineCombinationsController < ApplicationController
   before_action :set_machine_combination, only: [:edit, :update, :destroy]
-  before_action :set_machine, only: [:show, :new]
-  before_action :set_machine_combinations, only: [:show]
+  before_action :set_machine, only: [:index, :new]
+  before_action :set_machine_combinations, only: [:index]
   before_action :prepare_machine_combination_params, only: [:create, :update]
   # GET /machine_combinations
   # GET /machine_combinations.json
   def index
-    @machine_combinations = MachineCombination.all
+    @machine_combination = MachineCombination.new
   end
 
   # GET /machine_combinations/1

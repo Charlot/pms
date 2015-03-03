@@ -1,16 +1,21 @@
 Rails.application.routes.draw do
+  resources :resource_group_parts
+
   resources :machine_combinations
 
   resources :machine_scopes
 
   resources :machines do
     resource :machine_scope
-    resource :machine_combinations
+    resources :machine_combinations
   end
 
   resources :resource_groups
   resources :resource_group_machines
-  resources :resource_group_tools
+
+  resources :resource_group_tools do
+    resources :resource_group_parts
+  end
 
   resources :process_parts
 

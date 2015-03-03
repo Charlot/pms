@@ -1,0 +1,2 @@
+module ResourceGroupPartsHelper
+end

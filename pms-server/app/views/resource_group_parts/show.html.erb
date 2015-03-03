@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Part:</strong>
+  <%= @resource_group_part.part %>
+</p>
+
+<p>
+  <strong>Resource group:</strong>
+  <%= @resource_group_part.resource_group %>
+</p>
+
+<%= link_to 'Edit', edit_resource_group_part_path(@resource_group_part) %> |
+<%= link_to 'Back', resource_group_parts_path %>
