@@ -1,15 +1,7 @@
-<!--<div class="navbar-wrapper">
-  <div class="container">
-    <nav class="navbar navbar-inverse navbar-static-top">
-
-    </nav>
-  </div>
-</div>-->
-
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default navbar-static-top" xmlns="http://www.w3.org/1999/html">
   <div class="container-fluid">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapse" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <button type="button" class="navbar-toggle collapse" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" aria-controls="navbar">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -35,3 +27,37 @@
     </div>
   </div>
 </nav>
+<!--
+<nav class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="<%= root_path%>">P.M.S.</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="<%= 'active' if current_controller?({controller: 'kanbans'})%>"><a href="<%= new_kanban_path %>">KANBAN</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li class="<%= 'active' if current_controller?({controller: 'measure_units'})%>"><a href="<%= measure_units_path %>">MeasureUnit</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'resource_group_machines'})%>"><a href="<%= resource_group_machines_path %>">ResourceGroupMachine</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'resource_group_tools'})%>"><a href="<%= resource_group_tools_path %>">ResourceGroupTool</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'parts'})%>"><a href="<%= parts_path %>">Part</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'part_boms'})%>"><a href="<%= part_boms_path %>">PartBOM</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'machines'})%>"><a href="<%= machines_path %>">Machine</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'machine_scopes'})%>"><a href="<%= machine_scopes_path %>">Machine Scope</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'process_templates'})%>"><a href="<%= process_templates_path %>">ProcessTemplate</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'process_entities'})%>"><a href="<%= process_entities_path %>">ProcessEntity</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'production_orders'})%>"><a href="<%= production_orders_path%>">Production Orders</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>&lt;!&ndash;/.nav-collapse &ndash;&gt;
+  </div>
+</nav>-->
