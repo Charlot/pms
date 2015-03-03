@@ -66,7 +66,6 @@ class KanbansController < ApplicationController
   # GET /kanbans/1/process_entities
   # GET /kanbans/1/process_entities.json
   def process_entities
-
   end
 
   # POST /kanbans/1/create_process_entities
