@@ -1,10 +1,12 @@
 class ResourceGroupPartsController < ApplicationController
   before_action :set_resource_group_part, only: [:show, :edit, :update, :destroy]
+  before_action :set_resource_group_tool, only: [:index, :new]
   before_action :set_resource_group_parts, only: [:index]
 
   # GET /resource_group_parts
   # GET /resource_group_parts.json
   def index
+    @resource_group_part = ResourceGroupPart.new
   end
 
   # GET /resource_group_parts/1
@@ -62,6 +64,11 @@ class ResourceGroupPartsController < ApplicationController
   end
 
   private
+  def set_resource_group_tool
+    unless (@resource_group_tool=ResourceGroupTool.find_by_id(params[:resource_group_tool_id]))
+      redirect_to resource_group_tools_path, notice: 'Please select a ResourceGroupTool'
+    end
+  end
 
   def set_resource_group_parts
     @resource_group_parts = ResourceGroupTool.find_by_id(params[:resource_group_tool_id]).resource_group_parts
