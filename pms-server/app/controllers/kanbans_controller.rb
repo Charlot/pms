@@ -1,7 +1,7 @@
 class KanbansController < ApplicationController
   before_action :set_kanban, only: [:show, :edit, :update, :destroy, :process_entities,
                                     :create_process_entities,:destroy_process_entities,
-                                    :finish_production,:history,:release,:manage]
+                                    :finish_production,:history,:release,:lock,:discard,:manage]
 
   # GET /kanbans
   # GET /kanbans.json
@@ -124,6 +124,36 @@ class KanbansController < ApplicationController
       format.html { redirect_to kanban_path, notice: 'State Error.'} unless KanbanState.switch_to(@kanban.state,KanbanState::RELEASED)
 
       if @kanban.update(state: KanbanState::RELEASED)
+        format.html { redirect_to kanban_path, notice: 'Kanban was successfully released.' }
+      else
+        format.html { redirect_to kanban_path, notice: 'Kanban was failed released.'  }
+      end
+    end
+  end
+
+  # POST /kanbans/1/lock
+  # POST /kanbans/1/lock.json
+  def lock
+    #TODO Lock kanban
+    respond_to do |format|
+      format.html { redirect_to kanban_path, notice: 'State Error.'} unless KanbanState.switch_to(@kanban.state,KanbanState::LOCKED)
+
+      if @kanban.update(state: KanbanState::LOCKED)
+        format.html { redirect_to kanban_path, notice: 'Kanban was successfully released.' }
+      else
+        format.html { redirect_to kanban_path, notice: 'Kanban was failed released.'  }
+      end
+    end
+  end
+
+  # DELETE /kanbans/1/discard
+  # DELETE /kanbasn/1/discard.json
+  def discard
+    #TODO Delete kanban
+    respond_to do |format|
+      format.html { redirect_to kanban_path, notice: 'State Error.'} unless KanbanState.switch_to(@kanban.state,KanbanState::DELETED)
+
+      if @kanban.update(state: KanbanState::DELETED)
         format.html { redirect_to kanban_path, notice: 'Kanban was successfully released.' }
       else
         format.html { redirect_to kanban_path, notice: 'Kanban was failed released.'  }

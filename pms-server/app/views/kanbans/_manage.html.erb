@@ -3,9 +3,9 @@
     <%= link_to 'Release',release_kanban_path(kanban),method: :post%>
   </button>
   <button type="button" class="btn btn-default">
-    Lock
+    <%= link_to 'Lock',lock_kanban_path(kanban), method: :post%>
   </button>
   <button type="button" class="btn btn-default">
-    Delete
+    <%= link_to 'Discard', discard_kanban_path(kanban),method: :delete%>
   </button>
 </div>

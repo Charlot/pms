@@ -44,6 +44,8 @@ Rails.application.routes.draw do
       delete :destroy_process_entities
       get :history
       post :release
+      post :lock
+      delete :discard
       #post :scan
       get :manage
       get :search
