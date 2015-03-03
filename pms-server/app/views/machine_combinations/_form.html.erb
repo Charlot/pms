@@ -10,7 +10,6 @@
           </ul>
         </div>
     <% end %>
-    </div>
     <%= f.hidden_field :machine_id, value: @machine.id %>
     <table class="table table-bordered" style="width: 1350px;text-align:  left">
       <tr>
@@ -23,14 +22,14 @@
         </td>
         <td>
           T1:
-          <% if @machine_scope.t1 %><%= f.text_field :t1 , value: flash[:t1]%>
+          <% if @machine_scope.t1 %><%= f.text_field :t1, value: flash[:t1] %>
           <% else %>
               <label>NA</label>
           <% end %>
         </td>
         <td>
           T2:
-          <% if @machine_scope.t2 %><%= f.text_field :t2 , value: flash[:t2]%>
+          <% if @machine_scope.t2 %><%= f.text_field :t2, value: flash[:t2] %>
           <% else %>
               <label>NA</label>
           <% end %>
@@ -68,14 +67,14 @@
         </td>
         <td>
           T3:
-          <% if @machine_scope.t3 %><%= f.text_field :t3 , value: flash[:t3]%>
+          <% if @machine_scope.t3 %><%= f.text_field :t3, value: flash[:t3] %>
           <% else %>
               <label>NA</label>
           <% end %>
         </td>
         <td>
           T4:
-          <% if @machine_scope.t4 %><%= f.text_field :t4 , value: flash[:t4]%>
+          <% if @machine_scope.t4 %><%= f.text_field :t4, value: flash[:t4] %>
           <% else %>
               <label>NA</label>
           <% end %>

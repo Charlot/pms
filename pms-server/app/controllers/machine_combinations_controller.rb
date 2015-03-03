@@ -2,7 +2,7 @@ class MachineCombinationsController < ApplicationController
   before_action :set_machine_combination, only: [:edit, :update, :destroy]
   before_action :set_machine, only: [:show, :new]
   before_action :set_machine_combinations, only: [:show]
-  before_action :prepare_machine_combination_params, only: [:create]
+  before_action :prepare_machine_combination_params, only: [:create, :update]
   # GET /machine_combinations
   # GET /machine_combinations.json
   def index
@@ -33,10 +33,9 @@ class MachineCombinationsController < ApplicationController
         format.html { redirect_to machine_machine_combinations_path(@machine), notice: 'Machine combination was successfully created.' }
         format.json { render :show, status: :created, location: @machine_combination }
       else
-        format.html { redirect_to machine_machine_combinations_path(@machine), notice: @machine_combination.errors.to_json }
+        format.html { redirect_to machine_machine_combinations_path(@machine), notice: @machine_combination.errors.to_json } #.collect { |e| e[1] }.to_json }
         format.json { render json: @machine_combination.errors, status: :unprocessable_entity }
       end
-      # raise
     end
   end
 
@@ -44,11 +43,12 @@ class MachineCombinationsController < ApplicationController
   # PATCH/PUT /machine_combinations/1.json
   def update
     respond_to do |format|
-      if @machine_combination.update(machine_combination_params)
-        format.html { redirect_to @machine_combination, notice: 'Machine combination was successfully updated.' }
-        format.json { render :show, status: :ok, location: @machine_combination }
+      if @machine_combination.errors.empty? && @machine_combination.save
+        flash.clear
+        format.html { redirect_to machine_machine_combinations_path(@machine), notice: 'Machine combination was successfully updated.' }
+        format.json { render :show, status: :created, location: @machine_combination }
       else
-        format.html { render :edit }
+        format.html { redirect_to machine_machine_combinations_path(@machine), notice: @machine_combination.errors.to_json }
         format.json { render json: @machine_combination.errors, status: :unprocessable_entity }
       end
     end
@@ -88,18 +88,28 @@ class MachineCombinationsController < ApplicationController
   def prepare_machine_combination_params
     mp=machine_combination_params
     @machine=Machine.find_by_id(params[:machine_combination][:machine_id])
-    @machine_combination = MachineCombination.new(mp)
+    if action_name=='create'
+      @machine_combination = MachineCombination.new(mp) if action_name=='create'
 
-    mp.keys.each { |k|
-      flash[k]=mp[k]
-    }
+      mp.keys.each { |k|
+        flash[k]=mp[k]
+      }
+    end
+
+    [:wd1, :wd2].each do |field|
+      @machine_combination.send("#{field}=", mp[field].blank? ? nil : mp[field])
+    end
 
     [:w1, :t1, :t2, :s1, :s2, :w2, :t3, :t4, :s3, :s4].each do |field|
       if (part=Part.find_by_nr(mp[field]))
         @machine_combination.send("#{field}=", part.id)
       else
-        @machine_combination.errors.add(field, "part: #{mp[field]}, no exists")
-      end unless mp[field].blank?
+        if (action_name=='create') || (action_name=='update' && !@machine_combination.send("#{field}").nil? && mp[field].blank?)
+          @machine_combination.send("#{field}=", nil)
+        end
+        @machine_combination.errors.add(field, "part: #{mp[field]}, no exists") unless mp[field].blank?
+      end
     end
   end
+
 end

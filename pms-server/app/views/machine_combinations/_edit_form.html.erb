@@ -1,0 +1,95 @@
+<%= form_for(machine_combination) do |f| %>
+    <%= f.hidden_field :machine_id, value: machine.id %>
+    <tr>
+      <td>
+        W1:
+        <% if machine_scope.w1 %><%= f.text_field :w1, value: machine_combination_presenter.w1_display %>
+        <% else %>
+            <label>NA</label>
+        <% end %>
+      </td>
+      <td>
+        T1:
+        <% if machine_scope.t1 %><%= f.text_field :t1, value: machine_combination_presenter.t1_display %>
+        <% else %>
+            <label>NA</label>
+        <% end %>
+      </td>
+      <td>
+        T2:
+        <% if machine_scope.t2 %><%= f.text_field :t2, value: machine_combination_presenter.t2_display %>
+        <% else %>
+            <label>NA</label>
+        <% end %>
+      </td>
+      <td>
+        S1:
+        <% if machine_scope.s1 %><%= f.text_field :s1, value: machine_combination_presenter.s1_display %>
+        <% else %>
+            <label>NA</label>
+        <% end %>
+      </td>
+      <td>
+        S2:
+        <% if machine_scope.s2 %><%= f.text_field :s2, value: machine_combination_presenter.s2_display %>
+        <% else %>
+            <label>NA</label>
+        <% end %>
+      </td>
+      <td>
+        WD1:
+        <% if machine_scope.wd1 %><%= f.text_field :wd1, value: machine_combination_presenter.wd1_display %>
+        <% else %>
+            <label>NA</label>
+        <% end %>
+      </td>
+      <td rowspan="2">
+        <%= f.submit 'Update', style: 'width: 50px' %>
+        <%= link_to 'Destroy', machine_combination, method: :delete, data: {confirm: 'Are you sure?'} %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        W2:
+        <% if machine_scope.w2 %><%= f.text_field :w2, value: machine_combination_presenter.w2_display %>
+        <% else %>
+            <label>NA</label>
+        <% end %>
+      </td>
+      <td>
+        T3:
+        <% if machine_scope.t3 %><%= f.text_field :t3, value: machine_combination_presenter.t3_display %>
+        <% else %>
+            <label>NA</label>
+        <% end %>
+      </td>
+      <td>
+        T4:
+        <% if machine_scope.t4 %><%= f.text_field :t4, value: machine_combination_presenter.t4_display %>
+        <% else %>
+            <label>NA</label>
+        <% end %>
+      </td>
+      <td>
+        S3:
+        <% if machine_scope.s3 %><%= f.text_field :s3, value: machine_combination_presenter.s3_display %>
+        <% else %>
+            <label>NA</label>
+        <% end %>
+      </td>
+      <td>
+        S4:
+        <% if machine_scope.s4 %><%= f.text_field :s4, value: machine_combination_presenter.s4_display %>
+        <% else %>
+            <label>NA</label>
+        <% end %>
+      </td>
+      <td>
+        WD2:
+        <% if machine_scope.wd2 %><%= f.text_field :wd2, value: machine_combination_presenter.wd2_display %>
+        <% else %>
+            <label>NA</label>
+        <% end %>
+      </td>
+    </tr>
+<% end %>
