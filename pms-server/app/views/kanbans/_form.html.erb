@@ -107,18 +107,19 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-      $('body').on("#search_Part",'keypress',function(event){
+      $('body').on("#search_Part",'mouseleave',function(){
           var tar = $(this);
-          if(tar.val().length > 0 && event.code == 13) {
+          if(tar.val().length > 0) {
               pms.search('parts', {attr: 'nr', val: tar.val()}, function (data) {
                   if (data.result) {
                       $("#search_Part_Res").val(data.content.id);
                   } else {
                       $("#error-message").clear();
+                      $("#error-message").text("12313123")
                   }});}})
-              .on("#search_ProductNR","keypress",function(event){
+              .on("#search_ProductNR","mouseleave",function(){
                   var tar = $(this);
-                  if(tar.val().length > 0 && event.code == 13) {
+                  if(tar.val().length > 0) {
                       pms.search('parts', {attr: 'nr', val: tar.val()}, function (data) {
                           if (data.result) {
                               $("#search_ProductNR_Res").val(data.content.id);
