@@ -1,4 +1,5 @@
 <h1>Listing machine_combinations</h1>
+<p id="notice"><%= notice %></p>
 <div>
   <h5>Machine: <%= @machine.nr %></h5>
 </div>
@@ -6,48 +7,45 @@
   <span>Machine Scope: </span>
   <%= render 'machine_scopes/display/inline' %>
 </div>
-<table>
-  <thead>
-  <tr>
-    <th>W1</th>
-    <th>T1</th>
-    <th>T2</th>
-    <th>S1</th>
-    <th>S2</th>
-    <th>Wd1</th>
-    <th>W2</th>
-    <th>T3</th>
-    <th>T4</th>
-    <th>S3</th>
-    <th>S4</th>
-    <th>Wd2</th>
-    <th colspan="1"></th>
-  </tr>
-  </thead>
+<div>
+  <%= render 'form' %>
+  <table class="table table-bordered table-striped table-hover">
+    <thead>
+    <tr>
+      <th>W1</th>
+      <th>T1</th>
+      <th>T2</th>
+      <th>S1</th>
+      <th>S2</th>
+      <th>Wd1</th>
+      <th>W2</th>
+      <th>T3</th>
+      <th>T4</th>
+      <th>S3</th>
+      <th>S4</th>
+      <th>Wd2</th>
+      <th colspan="1"></th>
+    </tr>
+    </thead>
 
-  <tbody>
-  <% @machine_combinations.each do |machine_combination| %>
-      <tr>
-        <td><%= machine_combination.w1 %></td>
-        <td><%= machine_combination.t1 %></td>
-        <td><%= machine_combination.t2 %></td>
-        <td><%= machine_combination.s1 %></td>
-        <td><%= machine_combination.s2 %></td>
-        <td><%= machine_combination.wd1 %></td>
-        <td><%= machine_combination.w2 %></td>
-        <td><%= machine_combination.t3 %></td>
-        <td><%= machine_combination.t4 %></td>
-        <td><%= machine_combination.s3 %></td>
-        <td><%= machine_combination.s4 %></td>
-        <td><%= machine_combination.wd2 %></td>
-        <td><%= link_to 'Destroy', machine_combination, method: :delete, data: {confirm: 'Are you sure?'} %></td>
-      </tr>
-  <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= render 'form' %>
-
-<%= link_to 'New Machine combination', new_machine_combination_path %>
+    <tbody>
+    <% @machine_combinations.each do |machine_combination| %>
+        <tr>
+          <td><%= machine_combination.w1_display %></td>
+          <td><%= machine_combination.t1_display %></td>
+          <td><%= machine_combination.t2_display %></td>
+          <td><%= machine_combination.s1_display %></td>
+          <td><%= machine_combination.s2_display %></td>
+          <td><%= machine_combination.wd1 %></td>
+          <td><%= machine_combination.w2_display %></td>
+          <td><%= machine_combination.t3_display %></td>
+          <td><%= machine_combination.t4_display %></td>
+          <td><%= machine_combination.s3_display %></td>
+          <td><%= machine_combination.s4_display %></td>
+          <td><%= machine_combination.wd2 %></td>
+          <td><%= link_to 'Destroy', machine_combination.origin, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
