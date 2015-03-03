@@ -2,17 +2,18 @@
 
 <table>
   <thead>
-    <tr>
-      <th>Nr</th>
-      <th>Type</th>
-      <th>Name</th>
-      <th>Description</th>
-      <th colspan="3"></th>
-    </tr>
+  <tr>
+    <th>Nr</th>
+    <th>Type</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th colspan="3"></th>
+    <th></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @resource_group_tools.each do |resource_group_tool| %>
+  <% @resource_group_tools.each do |resource_group_tool| %>
       <tr>
         <td><%= resource_group_tool.nr %></td>
         <td><%= resource_group_tool.type %></td>
@@ -20,9 +21,12 @@
         <td><%= resource_group_tool.description %></td>
         <td><%= link_to 'Show', resource_group_tool %></td>
         <td><%= link_to 'Edit', edit_resource_group_tool_path(resource_group_tool) %></td>
-        <td><%= link_to 'Destroy', resource_group_tool, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Destroy', resource_group_tool, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <td>
+          <%= link_to 'Add/Delete Part',resource_group_tool_resource_group_parts_path(resource_group_tool) %>
+        </td>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 
