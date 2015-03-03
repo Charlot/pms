@@ -9,7 +9,7 @@
 </div>
 <div>
   <%= render 'form' %>
-  <table class="table table-bordered table-striped table-hover">
+  <table class="table table-bordered table-striped table-hover" style="width: 1350px;text-align:  left">
     <thead>
     <tr>
       <th>W1</th>
@@ -18,33 +18,36 @@
       <th>S1</th>
       <th>S2</th>
       <th>Wd1</th>
+      <th rowspan="2" style="width:50px;"></th>
+    </tr>
+    <tr>
       <th>W2</th>
       <th>T3</th>
       <th>T4</th>
       <th>S3</th>
       <th>S4</th>
       <th>Wd2</th>
-      <th colspan="1"></th>
     </tr>
     </thead>
 
     <tbody>
     <% @machine_combinations.each do |machine_combination| %>
-        <tr>
-          <td><%= machine_combination.w1_display %></td>
-          <td><%= machine_combination.t1_display %></td>
-          <td><%= machine_combination.t2_display %></td>
-          <td><%= machine_combination.s1_display %></td>
-          <td><%= machine_combination.s2_display %></td>
-          <td><%= machine_combination.wd1 %></td>
-          <td><%= machine_combination.w2_display %></td>
-          <td><%= machine_combination.t3_display %></td>
-          <td><%= machine_combination.t4_display %></td>
-          <td><%= machine_combination.s3_display %></td>
-          <td><%= machine_combination.s4_display %></td>
-          <td><%= machine_combination.wd2 %></td>
-          <td><%= link_to 'Destroy', machine_combination.origin, method: :delete, data: {confirm: 'Are you sure?'} %></td>
-        </tr>
+        <!--<tr>-->
+        <!--<td><%= machine_combination.w1_display %></td>-->
+        <!--<td><%= machine_combination.t1_display %></td>-->
+        <!--<td><%= machine_combination.t2_display %></td>-->
+        <!--<td><%= machine_combination.s1_display %></td>-->
+        <!--<td><%= machine_combination.s2_display %></td>-->
+        <!--<td><%= machine_combination.wd1 %></td>-->
+        <!--<td><%= machine_combination.w2_display %></td>-->
+        <!--<td><%= machine_combination.t3_display %></td>-->
+        <!--<td><%= machine_combination.t4_display %></td>-->
+        <!--<td><%= machine_combination.s3_display %></td>-->
+        <!--<td><%= machine_combination.s4_display %></td>-->
+        <!--<td><%= machine_combination.wd2 %></td>-->
+        <!--<td><%= link_to 'Destroy', machine_combination.origin, method: :delete, data: {confirm: 'Are you sure?'} %></td>-->
+        <!--</tr>-->
+        <%= render 'edit_form', {machine: @machine, machine_scope: @machine_scope, machine_combination_presenter:machine_combination,machine_combination: machine_combination.origin} %>
     <% end %>
     </tbody>
   </table>

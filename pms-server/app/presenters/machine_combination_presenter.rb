@@ -13,4 +13,12 @@ class MachineCombinationPresenter<Presenter
       (part=Part.find_by_id(self.send(m))).nil? ? '' : part.nr
     end
   end
+
+  def wd1_display
+    self.wd1
+  end
+
+  def wd2_display
+    self.wd2
+  end
 end
