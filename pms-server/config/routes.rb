@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
-  resources :resource_group_parts
+  resources :tools
+
+  resources :resource_group_parts do
+    collection do
+      get :group_by_part
+    end
+  end
 
   resources :machine_combinations
 
@@ -47,9 +53,6 @@ Rails.application.routes.draw do
 
   resources :kanbans do
     member do
-      get :process_entities
-      post :create_process_entities
-      delete :destroy_process_entities
       get :history
       post :release
       post :lock

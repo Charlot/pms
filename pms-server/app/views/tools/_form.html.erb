@@ -1,0 +1,66 @@
+<%= form_for(@tool) do |f| %>
+    <% if @tool.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@tool.errors.count, "error") %> prohibited this tool from being saved:</h2>
+
+          <ul>
+            <% @tool.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :nr %><br>
+      <%= f.text_field :nr %>
+    </div>
+    <div class="field">
+      <%= f.label :part_nr %><br>
+      <% if @tool.new_record? && @tool.part_id.blank? %>
+          <%= f.text_field :part_nr %>
+      <% else %>
+          <%= f.text_field :part_nr, value: @tool.part.nr if @tool.part %>
+      <% end %>
+    </div>
+    <div class="field">
+      <%= f.label :resource_group_id %><br>
+      <%= f.text_field :resource_group_id, disabled: true %>
+    </div>
+    <div class="field">
+      <%= f.label :mnt %><br>
+      <%= f.number_field :mnt %>
+    </div>
+    <div class="field">
+      <%= f.label :used_days %><br>
+      <%= f.number_field :used_days %>
+    </div>
+    <div class="field">
+      <%= f.label :rql %><br>
+      <%= f.number_field :rql %>
+    </div>
+    <div class="field">
+      <%= f.label :tol %><br>
+      <%= f.number_field :tol %>
+    </div>
+    <div class="field">
+      <%= f.label :rql_date %><br>
+      <%= f.datetime_select :rql_date %>
+    </div>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>
+<script type="text/javascript">
+    $('#tool_part_nr').bind('keyup blur', function (event) {
+        if (is_auto_submit_input_event(event, this)) {
+            $.get('/resource_group_parts/group_by_part', {part: $(this).val()}, function (msg) {
+                if (msg.result) {
+                    $('#tool_resource_group_id').val(msg.content.nr);
+                } else {
+                    alert('not set tool group to this part');
+                }
+            });
+        }
+    })
+</script>

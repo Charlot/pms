@@ -19,7 +19,7 @@
         <td><%= resource_group_tool.type %></td>
         <td><%= resource_group_tool.name %></td>
         <td><%= resource_group_tool.description %></td>
-        <td><%= resource_group_tool.resource_group_part.part.nr %></td>
+        <td><%= resource_group_tool.part.nr %></td>
         <td><%= link_to 'Show', resource_group_tool %></td>
         <td><%= link_to 'Edit', edit_resource_group_tool_path(resource_group_tool) %></td>
         <td><%= link_to 'Destroy', resource_group_tool, method: :delete, data: {confirm: 'Are you sure?'} %></td>

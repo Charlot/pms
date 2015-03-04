@@ -80,7 +80,9 @@
               Routing
             </div>
             <div class="panel-body">
-
+              <% @kanban.process_entities.each do |pe| %>
+              <%= render partial: 'process_entities/simple',locals:{process_entity:pe}%>
+              <% end %>
             </div>
           </div>
         </div>

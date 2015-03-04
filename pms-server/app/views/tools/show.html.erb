@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nr:</strong>
+  <%= @tool.nr %>
+</p>
+
+<p>
+  <strong>Resource group:</strong>
+  <%= @tool.resource_group_tool.nr if @tool.resource_group_tool %>
+</p>
+
+<p>
+  <strong>Part:</strong>
+  <%= @tool.part.nr if @tool.part %>
+</p>
+
+<p>
+  <strong>Mnt:</strong>
+  <%= @tool.mnt %>
+</p>
+
+<p>
+  <strong>Used days:</strong>
+  <%= @tool.used_days %>
+</p>
+
+<p>
+  <strong>Rql:</strong>
+  <%= @tool.rql %>
+</p>
+
+<p>
+  <strong>Tol:</strong>
+  <%= @tool.tol %>
+</p>
+
+<p>
+  <strong>Rql date:</strong>
+  <%= @tool.rql_date %>
+</p>
+
+<%= link_to 'Edit', edit_tool_path(@tool) %> |
+<%= link_to 'Back', tools_path %>

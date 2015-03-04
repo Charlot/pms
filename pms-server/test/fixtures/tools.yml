@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nr: MyString
+  resource_group_id: 
+  part_id: 
+  mnt: 1
+  used_days: 1
+  rql: 1
+  tol: 1
+  rql_date: 2015-03-04 12:05:11
+
+two:
+  nr: MyString
+  resource_group_id: 
+  part_id: 
+  mnt: 1
+  used_days: 1
+  rql: 1
+  tol: 1
+  rql_date: 2015-03-04 12:05:11

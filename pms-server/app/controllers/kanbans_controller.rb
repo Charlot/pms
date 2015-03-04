@@ -64,40 +64,6 @@ class KanbansController < ApplicationController
     end
   end
 
-  # GET /kanbans/1/process_entities
-  # GET /kanbans/1/process_entities.json
-  def process_entities
-  end
-
-  # POST /kanbans/1/create_process_entities
-  # POST /kanbans/1/create_process_entities.json
-  def create_process_entities
-    respond_to do |format|
-      process_entity = ProcessEntity.find_by_nr(params[:process_entity_nr])
-      format.json { render json: {result:false, content: 'Process Entity Not Found.'}} unless process_entity
-      format.json { render json: {reuslt:false, content: 'Kanban Part is in Process Entity Parts'}} if process_entity.parts.select('id').include?(@kanban.part_id)
-      kanban_process_entity = @kanban.kanban_process_entities.build({process_entity_id:process_entity.id})
-      format.json { render json: {result:false, content: 'Created Failed!'}} unless kanban_process_entity
-      format.json { render json: {result:false, content: kanban_process_entity.errors.full_messages}} unless kanban_process_entity.save
-      format.json { render json: {result:true, content: {id: kanban_process_entity.id, nr:kanban_process_entity.process_entity.nr}}}
-    end
-  end
-
-  # DELETE /kanbans/1/destroy_process_entities
-  # DELETE /kanbans/1/destroy_process_entities.json
-  def destroy_process_entities
-    msg = Message.new
-    @kanban_process_entity = KanbanProcessEntity.find_by_id(params[:kanban_process_entity_id])
-    if @kanban_process_entity.nil?
-      msg.content = 'Kanban Process Entity Not Found!'
-    elsif @kanban_process_entity.destroy
-      msg.result = true
-    else
-      msg.content = @kanban_process_entity.errors.full_messages
-    end
-    render :json => msg
-  end
-
   # POST /kanbans/1/finish_production
   # POST /kanbans/1/finish_production.json
   def finish_production
