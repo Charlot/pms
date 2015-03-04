@@ -24,7 +24,11 @@ class ResourceGroupToolsController < ApplicationController
   # POST /resource_group_tools
   # POST /resource_group_tools.json
   def create
-    @resource_group_tool = ResourceGroupTool.new(resource_group_tool_params)
+    @resource_group_tool = ResourceGroupTool.new(resource_group_tool_params.except(:resource_group_part))
+    unless resource_group_tool_params[:resource_group_part].blank?
+      @resource_group_part=@resource_group_tool.build_resource_group_part
+      @resource_group_part.part=Part.find_by_nr(resource_group_tool_params[:resource_group_part])
+    end
 
     respond_to do |format|
       if @resource_group_tool.save
@@ -41,7 +45,12 @@ class ResourceGroupToolsController < ApplicationController
   # PATCH/PUT /resource_group_tools/1.json
   def update
     respond_to do |format|
-      if @resource_group_tool.update(resource_group_tool_params)
+      if @resource_group_tool.update(resource_group_tool_params.except(:resource_group_part))
+        unless resource_group_tool_params[:resource_group_part].blank?
+          @resource_group_part=@resource_group_tool.resource_group_part
+          @resource_group_part.part=Part.find_by_nr(resource_group_tool_params[:resource_group_part])
+          @resource_group_part.save
+        end
         format.html { redirect_to @resource_group_tool, notice: 'Resource group tool was successfully updated.' }
         format.json { render :show, status: :ok, location: @resource_group_tool }
       else
@@ -62,13 +71,14 @@ class ResourceGroupToolsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_resource_group_tool
-      @resource_group_tool = ResourceGroupTool.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_resource_group_tool
+    @resource_group_tool = ResourceGroupTool.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def resource_group_tool_params
-      params.require(:resource_group_tool).permit(:nr, :type, :name, :description)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def resource_group_tool_params
+    # params[:resource_group_tool][:resource_group_part]=Part.find_by_nr(params[:resource_group_tool][:resource_group_part])
+    params.require(:resource_group_tool).permit(:nr, :type, :name, :description, :resource_group_part)
+  end
 end
