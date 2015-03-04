@@ -1,34 +1,36 @@
-<p>
-  <strong>Nr:</strong>
-  <%= process_entity.nr %>
-</p>
+<div class="panel panel-default">
+  <p>
+    <strong>Nr:</strong>
+    <%= process_entity.nr %>
+  </p>
 
-<p>
-  <strong>Name:</strong>
-  <%= process_entity.name %>
-</p>
+  <p>
+    <strong>Name:</strong>
+    <%= process_entity.name %>
+  </p>
 
-<p>
-  <strong>Description:</strong>
-  <%= simple_format(process_entity.description) %>
-</p>
+  <p>
+    <strong>Description:</strong>
+    <%= simple_format(process_entity.description) %>
+  </p>
 
-<p>
-  <strong>Stand time:</strong>
-  <%= process_entity.stand_time %>
-</p>
+  <p>
+    <strong>Stand time:</strong>
+    <%= process_entity.stand_time %>
+  </p>
 
-<p>
-  <strong>Process template:</strong>
-  <%= process_entity.process_template.template_display_text.html_safe if process_entity.process_template.template %>
-</p>
+  <p>
+    <strong>Process template:</strong>
+    <%= process_entity.process_template.template_display_text.html_safe if process_entity.process_template.template %>
+  </p>
 
-<p>
-  <strong>Workstation type:</strong>
-  <%= process_entity.workstation_type %>
-</p>
+  <p>
+    <strong>Workstation type:</strong>
+    <%= process_entity.workstation_type %>
+  </p>
 
-<p>
-  <strong>Cost center:</strong>
-  <%= process_entity.cost_center %>
-</p>
+  <p>
+    <strong>Cost center:</strong>
+    <%= process_entity.cost_center %>
+  </p>
+</div>

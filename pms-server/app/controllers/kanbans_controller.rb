@@ -17,6 +17,7 @@ class KanbansController < ApplicationController
   # GET /kanbans/new
   def new
     @kanban = Kanban.new
+    #1.times { @kanban.kanban_process_entities.build }
   end
 
   # GET /kanbans/1/edit
@@ -235,7 +236,7 @@ class KanbansController < ApplicationController
                                      :source_storage,:des_warehouse,
                                      :des_storage,:print_time,:part_id,
                                      :version,:ktype,:copies,
-                                     :product_id,kanban_process_entities:[:kanban_id,:process_entity_id]
+                                     :product_id,kanban_process_entities_attributes:[:kanban_id,:process_entity_id]
       )
     end
 end

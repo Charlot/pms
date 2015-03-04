@@ -112,17 +112,19 @@
             </div>
             <div class="row">
               <div class="col-md-8" id="routes_List">
-
+                <% @kanban.process_entities.each do |pe|%>
+                    <%= render partial: 'process_entities/simple',locals:{process_entity:pe}%>
+                <% end %>
               </div>
               <div class="col-md-4">
-                <ul id="kpe_List">
-                  <% @kanban.kanban_process_entities.each do |kpe| %>
-                      <li pe_nr="<%= kpe.process_entity.nr %>">
-                        <%= f.fields_for :kanban_process_entities do |ff| %>
-                            <%= ff.text_field :kanban_ids %>
-                            <%= ff.text_field :process_entity_ids %>
-                        <% end %>
-                      </li>
+                <ul id="kpe_List" class="">
+                  <% @kanban.kanban_process_entities.each do |kpe|%>
+                      <%= f.fields_for :kanban_process_entities,kpe do |kpef|%>
+                          <li pe_nr="<%= %>">
+                            <%= kpef.label :process_entity_id%>
+                            <%= kpef.text_field :process_entity_id%>
+                          </li>
+                      <% end %>
                   <% end %>
                 </ul>
               </div>
@@ -174,6 +176,7 @@
 
         $("#search_Route").on("keypress",function(event){
             var route_nr = $(this).val();
+            var count = $("#kpe_List").children().length;
             var kpe=$("#kpe_List").children("[pe_nr="+route_nr+"]");
             if(kpe.length > 0){
                 $("#error-message").removeClass("hidden");
@@ -185,22 +188,17 @@
                 pms.search('process_entities',{attr:'nr',val:route_nr},function(data){
                     if (data.result) {
                         //查询到之后，请求ProcessEntity的Show界面
-                        var list_item = $("<li>").attr("pe_nr",data.content.nr).append("<input id='kanban_kanban_process_entities_kanban_id' " +
-                        "name='kanban[kanban_process_entities][kanban_id]' " +
-                        "type='text' value="+kanban_id+"> " +
-                        "<input id='kanban_kanban_process_entities_process_entity_id' " +
-                        "name='kanban[kanban_process_entities][process_entity_id]'" +
+                        var list_item = $("<li>").attr("pe_nr",data.content.nr).append("<input id='kanban_kanban_process_entities_attributes_"+count+"_process_entity_id' " +
+                        "name='kanban[kanban_process_entities_attributes]["+count+"][process_entity_id]'" +
                         " type='text' value="+data.content.id+">");
                         $("#kpe_List").append(list_item);
-
                         //render partial
                         $.ajax({
                             url:'/process_entities/'+data.content.id+"/simple",
                             dataType:'html',
                             type:'GET',
                             success:function(data){
-                                var div = $("<div>").addClass("panel panel-default").html(data);
-                                $("#routes_List").append(div);
+                                $("#routes_List").append(data);
                             }
                         })
                     } else {

@@ -8,6 +8,8 @@ class Kanban < ActiveRecord::Base
   has_many :process_entities, :through => :kanban_process_entities
   has_many :production_order, as: :orderable
 
+  accepts_nested_attributes_for :kanban_process_entities
+
   has_paper_trail
 
   def can_update?
