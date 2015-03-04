@@ -20,10 +20,8 @@
   <%= render 'show_template', {process_template: @process_template} %>
 </p>
 
-<!--<p>-->
 <strong>Description:</strong>
 <%= simple_format(@process_template.description) %>
-<!--</p>-->
 
 <%= link_to 'Edit', edit_process_template_path(@process_template) %> |
 <%= link_to 'Back', process_templates_path %>

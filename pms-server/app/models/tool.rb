@@ -3,6 +3,7 @@ class Tool < ActiveRecord::Base
 
   belongs_to :resource_group_tool, foreign_key: :resource_group_id
   belongs_to :part
+  attr_accessor :part_nr
 
   validate :part_group_presence
 

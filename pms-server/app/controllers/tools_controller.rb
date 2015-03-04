@@ -24,9 +24,9 @@ class ToolsController < ApplicationController
   # POST /tools
   # POST /tools.json
   def create
-    @tool = Tool.new(tool_params.except(:part_nr))
-    unless tool_params[:part_nr].blank?
-      if part= Part.find_by_nr(tool_params[:part_nr])
+    @tool = Tool.new(tool_params.except(:part))
+    unless tool_params[:part].blank?
+      if part= Part.find_by_nr(tool_params[:part])
         @tool.part=part
         @tool.resource_group_tool=part.resource_group_tool
       end
@@ -46,14 +46,15 @@ class ToolsController < ApplicationController
   # PATCH/PUT /tools/1
   # PATCH/PUT /tools/1.json
   def update
-    unless tool_params[:part_nr].blank?
-      if part= Part.find_by_nr(tool_params[:part_nr])
+    unless tool_params[:part].blank?
+      if part= Part.find_by_nr(tool_params[:part])
         @tool.part=part
         @tool.resource_group_tool=part.resource_group_tool
       end
     end
+
     respond_to do |format|
-      if @tool.update(tool_params.except(:part_nr))
+      if @tool.update(tool_params.except(:part))
         format.html { redirect_to @tool, notice: 'Tool was successfully updated.' }
         format.json { render :show, status: :ok, location: @tool }
       else
@@ -81,6 +82,6 @@ class ToolsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def tool_params
-    params.require(:tool).permit(:nr, :part_nr, :part_id, :mnt, :used_days, :rql, :tol, :rql_date)
+    params.require(:tool).permit(:nr, :part, :part_id, :mnt, :used_days, :rql, :tol, :rql_date)
   end
 end

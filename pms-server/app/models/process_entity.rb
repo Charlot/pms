@@ -40,14 +40,35 @@ class ProcessEntity < ActiveRecord::Base
     @t2_strip_length||=(self.value_t2_strip_length || self.value_t2_default_strip_length)
   end
 
-  # def build_process_parts
-  #   if ProcessType.auto?(self.process_template.type)
-  #     self.custom_values.each do |cv|
-  #       cf=cv.custom_field
-  #       if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
-  #         self.process_parts<<ProcessPart.new(part_id: cv.value, quantity: self.process_part_quantity_by_cf(cf.name))
-  #       end
-  #     end
-  #   end
-  # end
+  def template_text
+    text=''
+    template=self.process_template
+    cfs=template.custom_fields
+    cfvs=self.custom_field_values
+    puts "***#{cfs.to_s}"
+    puts "---#{cfvs.to_s}"
+    text= self.process_template.template.gsub(/{\d+}/).each do |v|
+      puts "#####{v}"
+      if cf=cfs.detect { |f|
+        puts "#{v.to_i}~~~#{f.id.to_i==v.to_i}"
+        f.id.to_i==v.scan(/{(\d+)}/).map(&:first).first.to_i }
+        puts "********************#{cf.to_json}"
+        cfv=cfvs.detect { |v| v.custom_field_id==cf.id }
+        CustomFieldFormatType.part?(cf.field_format) ? Part.find_by_id(cfv.value).nr : cfv.value
+      else
+        ''
+      end
+    end
+    return text
+  end
+# def build_process_parts
+#   if ProcessType.auto?(self.process_template.type)
+#     self.custom_values.each do |cv|
+#       cf=cv.custom_field
+#       if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
+#         self.process_parts<<ProcessPart.new(part_id: cv.value, quantity: self.process_part_quantity_by_cf(cf.name))
+#       end
+#     end
+#   end
+# end
 end

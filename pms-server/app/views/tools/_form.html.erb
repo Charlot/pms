@@ -16,11 +16,11 @@
       <%= f.text_field :nr %>
     </div>
     <div class="field">
-      <%= f.label :part_nr %><br>
-      <% if @tool.new_record? && @tool.part_id.blank? %>
-          <%= f.text_field :part_nr %>
+      <%= f.label :part %><br>
+      <% if @tool.new_record? && @tool.part.blank? %>
+          <%= f.text_field :part %>
       <% else %>
-          <%= f.text_field :part_nr, value: @tool.part.nr if @tool.part %>
+          <%= f.text_field :part, value: @tool.part.nr if @tool.part %>
       <% end %>
     </div>
     <div class="field">
@@ -52,7 +52,7 @@
     </div>
 <% end %>
 <script type="text/javascript">
-    $('#tool_part_nr').bind('keyup blur', function (event) {
+    $('#tool_part').bind('keyup blur', function (event) {
         if (is_auto_submit_input_event(event, this)) {
             $.get('/resource_group_parts/group_by_part', {part: $(this).val()}, function (msg) {
                 if (msg.result) {

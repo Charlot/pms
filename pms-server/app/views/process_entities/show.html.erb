@@ -22,7 +22,7 @@
 
 <p>
   <strong>Process template:</strong>
-  <%= @process_entity.process_template.template_display_text.html_safe if @process_entity.process_template.template %>
+  <%= simple_format(@process_entity.template_text) if @process_entity.process_template.template && ProcessType.semi_auto?(@process_entity.process_template.type)%>
 </p>
 
 <p>
