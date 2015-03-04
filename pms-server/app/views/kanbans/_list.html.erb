@@ -30,7 +30,9 @@
         <td><%= kanban.task_time%></td>
         <td><%= kanban.print_time%></td>
         <td><%= kanban.copies%></td>
-        <td><%= KanbanState.display(kanban.state) %></td>
+        <td>
+          <span class="label <%= kanban_states_class(kanban.state)%>"><%= KanbanState.display(kanban.state)%></span>
+        </td>
         <td><%= kanban.quantity%></td>
         <td><%= kanban.part_id%></td>
         <td></td>
