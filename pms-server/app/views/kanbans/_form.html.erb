@@ -113,19 +113,22 @@
             <div class="row">
               <div class="col-md-10" id="routes_List">
                 <% @kanban.process_entities.each do |pe|%>
-                    <span class="glyphicon glyphicon-remove">asdasd</span>
-                    <%= render partial: 'process_entities/simple',locals:{process_entity:pe}%>
+                    <div>
+                      <h4><span class="glyphicon glyphicon-remove remove-routing" pe_nr="<%= pe.nr%>"></span></h4>
+                      <%= render partial: 'process_entities/simple',locals:{process_entity:pe}%>
+                    </div>
                 <% end %>
               </div>
               <div class="col-md-2">
                 <ul id="kpe_List" class="hidden">
                   <% @kanban.kanban_process_entities.each do |kpe|%>
+                      <li pe_nr="<%= kpe.process_entity.nr%>">
                       <%= f.fields_for :kanban_process_entities,kpe do |kpef|%>
-                          <li pe_nr="<%= kpe.process_entity.id%>">
+                            <%= kpef.check_box :_destroy%>
                             <%= kpef.label :process_entity_id%>
                             <%= kpef.text_field :process_entity_id%>
-                          </li>
                       <% end %>
+                      </li>
                   <% end %>
                 </ul>
               </div>
@@ -208,6 +211,12 @@
                     }
                 });
             }
+        });
+
+        $(".remove-routing").on("click",function(){
+            var pe_nr = $(this).attr("pe_nr");
+            $(this).parent().parent().remove();
+            $("#kpe_List").children("[pe_nr="+pe_nr+"]").remove();
         });
 
         /*$("#select_KanbanType").on("change", function () {

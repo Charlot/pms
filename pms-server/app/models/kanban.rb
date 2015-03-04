@@ -4,7 +4,7 @@ class Kanban < ActiveRecord::Base
 
   belongs_to :part
   belongs_to :product, class_name:'Part'
-  has_many :kanban_process_entities, dependent: :destroy
+  has_many :kanban_process_entities
   has_many :process_entities, :through => :kanban_process_entities
   has_many :production_order, as: :orderable
 
