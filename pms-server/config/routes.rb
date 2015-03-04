@@ -21,7 +21,14 @@ Rails.application.routes.draw do
 
   resources :production_orders
 
-  resources :process_entities
+  resources :process_entities do
+    member do
+      get :simple
+    end
+    collection do
+      get :search
+    end
+  end
 
   resources :custom_values
 

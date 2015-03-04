@@ -165,7 +165,7 @@ class KanbansController < ApplicationController
   def search
     @kanban = Kanban.send("find_by_"+params[:attr],params[:val])
     respond_to do |format|
-      format.json { render json: {result: false, content: "Not Found!"}} unless @part
+      format.json { render json: {result: false, content: "Not Found!"}} unless @kanban
       format.json { render json: {result: true, content: @kanban}}
     end
   end
@@ -230,6 +230,12 @@ class KanbansController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def kanban_params
       #params[:kanban]
-      params.require(:kanban).permit(:id,:nr,:state,:remark,:quantity,:safety_stock,:source_warehouse,:source_storage,:des_warehouse,:des_storage,:print_time,:part_id,:version,:ktype,:copies)
+      params.require(:kanban).permit(:id,:nr,:state,:remark,:quantity,
+                                     :safety_stock,:source_warehouse,
+                                     :source_storage,:des_warehouse,
+                                     :des_storage,:print_time,:part_id,
+                                     :version,:ktype,:copies,
+                                     :product_id,kanban_process_entities:[:kanban_id,:process_entity_id]
+      )
     end
 end
