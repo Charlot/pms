@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150303073126) do
+ActiveRecord::Schema.define(version: 20150304040511) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -35,12 +35,14 @@ ActiveRecord::Schema.define(version: 20150303073126) do
     t.boolean  "multiple",              default: false
     t.text     "format_store"
     t.boolean  "is_query_value",        default: false
+    t.boolean  "is_auto_query_value",   default: false
     t.text     "validate_query"
     t.string   "validate_message"
     t.text     "value_query"
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "out_stock_field"
   end
 
   add_index "custom_fields", ["custom_fieldable_id", "custom_fieldable_type"], name: "custom_fieldable_index", using: :btree
@@ -99,13 +101,13 @@ ActiveRecord::Schema.define(version: 20150303073126) do
     t.integer  "t2"
     t.integer  "s1"
     t.integer  "s2"
-    t.integer  "wd1"
+    t.string   "wd1"
     t.integer  "w2"
     t.integer  "t3"
     t.integer  "t4"
     t.integer  "s3"
     t.integer  "s4"
-    t.integer  "wd2"
+    t.string   "wd2"
     t.integer  "machine_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -256,7 +258,24 @@ ActiveRecord::Schema.define(version: 20150303073126) do
   end
 
   add_index "resource_groups", ["nr"], name: "index_resource_groups_on_nr", using: :btree
-  add_index "resource_groups", ["type"], name: "index_resource_groups_on_type", using: :btree
+  add_index "resource_groups", ["type"], name: "index_resource_groups_on_resource_group_type", using: :btree
+
+  create_table "tools", force: true do |t|
+    t.string   "nr"
+    t.integer  "resource_group_id"
+    t.integer  "part_id"
+    t.integer  "mnt"
+    t.integer  "used_days"
+    t.integer  "rql"
+    t.integer  "tol"
+    t.datetime "rql_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tools", ["nr"], name: "index_tools_on_nr", using: :btree
+  add_index "tools", ["part_id"], name: "index_tools_on_part_id", using: :btree
+  add_index "tools", ["resource_group_id"], name: "index_tools_on_resource_group_id", using: :btree
 
   create_table "versions", force: true do |t|
     t.string   "item_type",  null: false

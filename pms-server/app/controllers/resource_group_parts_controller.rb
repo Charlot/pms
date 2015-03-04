@@ -14,6 +14,15 @@ class ResourceGroupPartsController < ApplicationController
   def show
   end
 
+  def group_by_part
+    @msg=Message.new
+    if (part=Part.find_by_nr(params[:part])) && (rp=part.resource_group_part)
+      @msg.content=rp.resource_group_tool
+      @msg.result=true
+    end
+    render json: @msg
+  end
+
   # GET /resource_group_parts/new
   def new
     @resource_group_part = ResourceGroupPart.new

@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
-  resources :resource_group_parts
+  resources :tools
+
+  resources :resource_group_parts do
+    collection do
+      get :group_by_part
+    end
+  end
 
   resources :machine_combinations
 

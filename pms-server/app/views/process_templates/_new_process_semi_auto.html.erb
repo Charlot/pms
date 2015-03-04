@@ -10,7 +10,7 @@
 <script type="text/javascript">
     $(
             $('.format_part').on('keyup blur', function (event) {
-                        if (is_auto_validate_input_event(event, this)) {
+                        if (is_auto_submit_input_event(event, this)) {
                             var index = $(this).attr('index');
                             var field = $(this).attr('field');
                             var value = $(this).val();

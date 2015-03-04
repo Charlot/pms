@@ -17,7 +17,7 @@
         <td><%= machine.nr %></td>
         <td><%= machine.name %></td>
         <td><%= machine.description %></td>
-        <td><%= machine.resource_group_machine.nr %></td>
+        <td><%= machine.resource_group_machine.nr if machine.resource_group_machine%></td>
         <td><%= link_to 'Show', machine %></td>
         <td><%= link_to 'Edit', edit_machine_path(machine) %></td>
         <td><%= link_to 'Destroy', machine, method: :delete, data: {confirm: 'Are you sure?'} %></td>
