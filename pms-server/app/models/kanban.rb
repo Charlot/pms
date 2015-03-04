@@ -27,7 +27,7 @@ class Kanban < ActiveRecord::Base
   # version of kanban
   def task_time
     #TODO
-    "需要编写"
+    self.quantity * (self.process_entities.inject(0){|sum,pe| sum+=pe.stand_time})
   end
 
   # Get raw materials from kanban's routing
