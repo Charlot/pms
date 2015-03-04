@@ -87,14 +87,12 @@ class KanbansController < ApplicationController
   # POST /kanbans/1/release.json
   def release
     #TODO Release kanban
-    respond_to do |format|
-      format.html { redirect_to kanban_path, notice: 'State Error.'} unless KanbanState.switch_to(@kanban.state,KanbanState::RELEASED)
+    redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state,KanbanState::RELEASED)
 
-      if @kanban.update(state: KanbanState::RELEASED)
-        format.html { redirect_to kanban_path, notice: 'Kanban was successfully released.' }
-      else
-        format.html { redirect_to kanban_path, notice: 'Kanban was failed released.'  }
-      end
+    if @kanban.update(state: KanbanState::RELEASED)
+      redirect_to @kanban, notice: 'Kanban was successfully released.'
+    else
+       redirect_to @kanban, notice: 'Kanban was failed released.'
     end
   end
 
@@ -102,14 +100,12 @@ class KanbansController < ApplicationController
   # POST /kanbans/1/lock.json
   def lock
     #TODO Lock kanban
-    respond_to do |format|
-      format.html { redirect_to kanban_path, notice: 'State Error.'} unless KanbanState.switch_to(@kanban.state,KanbanState::LOCKED)
+    redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state,KanbanState::LOCKED)
 
-      if @kanban.update(state: KanbanState::LOCKED)
-        format.html { redirect_to kanban_path, notice: 'Kanban was successfully released.' }
-      else
-        format.html { redirect_to kanban_path, notice: 'Kanban was failed released.'  }
-      end
+    if @kanban.update(state: KanbanState::LOCKED)
+      redirect_to @kanban, notice: 'Kanban was successfully locked.'
+    else
+      redirect_to @kanban, notice: 'Kanban was failed locked.'
     end
   end
 
@@ -117,14 +113,12 @@ class KanbansController < ApplicationController
   # DELETE /kanbasn/1/discard.json
   def discard
     #TODO Delete kanban
-    respond_to do |format|
-      format.html { redirect_to kanban_path, notice: 'State Error.'} unless KanbanState.switch_to(@kanban.state,KanbanState::DELETED)
+    redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state,KanbanState::DELETED)
 
-      if @kanban.update(state: KanbanState::DELETED)
-        format.html { redirect_to kanban_path, notice: 'Kanban was successfully released.' }
-      else
-        format.html { redirect_to kanban_path, notice: 'Kanban was failed released.'  }
-      end
+    if @kanban.update(state: KanbanState::DELETED)
+      redirect_to @kanban, notice: 'Kanban was successfully discarded.'
+    else
+      redirect_to @kanban, notice: 'Kanban was failed discarded.'
     end
   end
 

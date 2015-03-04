@@ -111,13 +111,13 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-8" id="routes_List">
+              <div class="col-md-10" id="routes_List">
                 <% @kanban.process_entities.each do |pe|%>
                     <%= render partial: 'process_entities/simple',locals:{process_entity:pe}%>
                 <% end %>
               </div>
-              <div class="col-md-4">
-                <ul id="kpe_List" class="">
+              <div class="col-md-2">
+                <ul id="kpe_List" class="hidden">
                   <% @kanban.kanban_process_entities.each do |kpe|%>
                       <%= f.fields_for :kanban_process_entities,kpe do |kpef|%>
                           <li pe_nr="<%= %>">

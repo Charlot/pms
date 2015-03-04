@@ -1,36 +1,38 @@
 <div class="panel panel-default">
-  <p>
-    <strong>Nr:</strong>
-    <%= process_entity.nr %>
-  </p>
-
-  <p>
-    <strong>Name:</strong>
-    <%= process_entity.name %>
-  </p>
-
-  <p>
-    <strong>Description:</strong>
-    <%= simple_format(process_entity.description) %>
-  </p>
-
-  <p>
-    <strong>Stand time:</strong>
-    <%= process_entity.stand_time %>
-  </p>
-
-  <p>
-    <strong>Process template:</strong>
-    <%= process_entity.process_template.template_display_text.html_safe if process_entity.process_template.template %>
-  </p>
-
-  <p>
-    <strong>Workstation type:</strong>
-    <%= process_entity.workstation_type %>
-  </p>
-
-  <p>
-    <strong>Cost center:</strong>
-    <%= process_entity.cost_center %>
-  </p>
+  <div class="row">
+    <div class="col-md-4">
+      <ul class="list-group">
+        <li class="list-group-item">
+          <label>NR:</label><ins><%= process_entity.nr%></ins>
+        </li>
+        <li class="list-group-item">
+          <label>Name:</label><ins><%= process_entity.name%></ins>
+        </li>
+        <li class="list-group-item">
+          <label>Description:</label><ins><%= simple_format(process_entity.description)%></ins>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-4">
+      <li class="list-group-item">
+        <label>Stand time:</label><ins><%= process_entity.stand_time%></ins>
+      </li>
+      <li class="list-group-item">
+        <label>Workstation type:</label><ins><%= process_entity.workstation_type%></ins>
+      </li>
+      <li class="list-group-item">
+        <label>Cost center:</label><ins><%= process_entity.cost_center%></ins>
+      </li>
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Process template:
+        </div>
+        <div class="panel-ody">
+          <ins><%= process_entity.process_template.template_display_text.html_safe if process_entity.process_template.template%></ins>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
