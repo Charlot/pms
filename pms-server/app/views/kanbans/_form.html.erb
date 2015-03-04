@@ -120,7 +120,7 @@
                 <ul id="kpe_List" class="hidden">
                   <% @kanban.kanban_process_entities.each do |kpe|%>
                       <%= f.fields_for :kanban_process_entities,kpe do |kpef|%>
-                          <li pe_nr="<%= %>">
+                          <li pe_nr="<%= kpe.process_entity.id%>">
                             <%= kpef.label :process_entity_id%>
                             <%= kpef.text_field :process_entity_id%>
                           </li>
