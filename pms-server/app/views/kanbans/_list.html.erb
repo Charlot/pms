@@ -15,9 +15,8 @@
     <th><%= KanbanDesc::CUSTOMER_NR%></th>
     <th><%= KanbanDesc::SOURCE_POSITION%></th>
     <th><%= KanbanDesc::DES_POSITION%></th>
-    <th>Routing</th>
     <th>历史</th>
-    <th colspan="4"></th>
+    <th colspan="2"></th>
   </tr>
   </thead>
 
@@ -38,13 +37,9 @@
         <td></td>
         <td><%= "#{kanban.source_warehouse} | #{kanban.source_storage}"%></td>
         <td><%= "#{kanban.des_warehouse} | #{kanban.des_storage}"%></td>
-        <td><%= link_to '关联Routing', process_entities_kanban_path(kanban)%></td>
         <td><%= link_to '修改历史',history_kanban_path(kanban)%></td>
-        <td><%= link_to '生产管理', manage_kanban_path(kanban)%></td>
         <td><%= link_to 'Show', kanban %></td>
         <td><%= link_to 'Edit', edit_kanban_path(kanban) %></td>
-        <td><%= link_to 'Destroy', kanban, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-
       </tr>
   <% end %>
   </tbody>
