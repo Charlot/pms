@@ -1,25 +1,23 @@
 <div class="row">
-  <div class="col-md-2">
+  <div class="col-md-5">
     <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">?</span>
       <input type="text" class="form-control" placeholder="Search for Routing...">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button">Add</button>
-                </span>
     </div>
   </div>
-  <div class="col-md-8">
-    <div class="container-fluid">
-      <ul class="list-group-sm">
-        <% kanban_process_entities.each do |kpe| %>
-            <li class="list-group-item list-group-item-info">
-              <%= form.fields_for :kanban_process_entities, kpe do |ff| %>
-                  <label><%= kpe.process_entity.id %></label>
-                  <%= ff.text_field :kanban_id ,class:'hidden'%>
-                  <%= ff.text_field :process_entity_id,class:'hidden' %>
-              <% end %>
-            </li>
-        <% end %>
-      </ul>
-    </div>
+</div>
+<div class="row">
+  <div class="container-fluid">
+    <ul class="list-group-sm">
+      <% kanban_process_entities.each do |kpe| %>
+          <li class="list-group-item list-group-item-info">
+            <%= form.fields_for :kanban_process_entities, kpe do |ff| %>
+                <label><%= kpe.process_entity.id %></label>
+                <%= ff.text_field :kanban_id ,class:'hidden'%>
+                <%= ff.text_field :process_entity_id,class:'hidden' %>
+            <% end %>
+          </li>
+      <% end %>
+    </ul>
   </div>
 </div>

@@ -18,9 +18,8 @@
       </div>
     </div>
     <div class="row">
-
       <div class="panel panel-default">
-        <div class="panel-heading">
+        <div class="panel-heading" id="kanban" kanban_id="<%= @kanban.id%>">
           基础信息
         </div>
         <div class="panel-body">
@@ -103,7 +102,31 @@
         </div>
         <div class="panel-body">
           <div class="container-fluid" id="addKanbanRoutingTemplate">
-            <%= render partial: 'add_auto_routing',locals: {form: f,kanban_process_entities:@kanban.kanban_process_entities} %>
+            <div class="row">
+              <div class="col-md-5">
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1">?</span>
+                  <input type="text" class="form-control" id="search_Route" placeholder="Search for Routing...">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-8" id="routes_List">
+
+              </div>
+              <div class="col-md-4">
+                <ul id="kpe_List">
+                  <% @kanban.kanban_process_entities.each do |kpe| %>
+                      <li pe_nr="<%= kpe.process_entity.nr %>">
+                        <%= f.fields_for :kanban_process_entities do |ff| %>
+                            <%= ff.text_field :kanban_ids %>
+                            <%= ff.text_field :process_entity_ids %>
+                        <% end %>
+                      </li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -149,7 +172,46 @@
             }
         });
 
-        $("#select_KanbanType").on("change", function () {
+        $("#search_Route").on("keypress",function(event){
+            var route_nr = $(this).val();
+            var kpe=$("#kpe_List").children("[pe_nr="+route_nr+"]");
+            if(kpe.length > 0){
+                $("#error-message").removeClass("hidden");
+                $("#error-message").text("Routing已经存在");
+                return;
+            }
+            var kanban_id = $("#kanban").attr("kanban_id");
+            if(route_nr.length > 0 && event.keyCode == 13){
+                pms.search('process_entities',{attr:'nr',val:route_nr},function(data){
+                    if (data.result) {
+                        //查询到之后，请求ProcessEntity的Show界面
+                        var list_item = $("<li>").attr("pe_nr",data.content.nr).append("<input id='kanban_kanban_process_entities_kanban_id' " +
+                        "name='kanban[kanban_process_entities][kanban_id]' " +
+                        "type='text' value="+kanban_id+"> " +
+                        "<input id='kanban_kanban_process_entities_process_entity_id' " +
+                        "name='kanban[kanban_process_entities][process_entity_id]'" +
+                        " type='text' value="+data.content.id+">");
+                        $("#kpe_List").append(list_item);
+
+                        //render partial
+                        $.ajax({
+                            url:'/process_entities/'+data.content.id+"/simple",
+                            dataType:'html',
+                            type:'GET',
+                            success:function(data){
+                                var div = $("<div>").addClass("panel panel-default").html(data);
+                                $("#routes_List").append(div);
+                            }
+                        })
+                    } else {
+                        $("#error-message").removeClass("hidden");
+                        $("#error-message").text(data.content);
+                    }
+                });
+            }
+        });
+
+        /*$("#select_KanbanType").on("change", function () {
             var type = $(this).children(":Selected").val();
             $.ajax({
                 url: 'kanbans/add_routing_template',
@@ -160,6 +222,6 @@
                     $("#addKanbanRoutingTemplate").html(data);
                 }
             })
-        });
+        });*/
     });
 </script>

@@ -1,5 +1,6 @@
 class ProcessEntitiesController < ApplicationController
-  before_action :set_process_entity, only: [:show, :edit, :update, :destroy]
+  before_action :set_process_entity, only: [:show, :edit, :update, :destroy,
+                                   :simple]
 
   # GET /process_entities
   # GET /process_entities.json
@@ -19,6 +20,20 @@ class ProcessEntitiesController < ApplicationController
 
   # GET /process_entities/1/edit
   def edit
+  end
+
+  # GET /process_entities/search
+  def search
+    @pe = ProcessEntity.send("find_by_"+params[:attr],params[:val])
+    respond_to do |format|
+      format.json { render json: {result: false, content: "Not Found!"}} unless @pe
+      format.json { render json: {result: true, content: @pe}}
+    end
+  end
+
+  # GET /process_entities/1/simple
+  def simple
+    render partial: 'simple',locals:{process_entity:@process_entity}
   end
 
   # POST /process_entities
