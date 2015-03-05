@@ -23,5 +23,15 @@ namespace PmsPrinter
         {
             InitializeComponent();
         }
+
+        private void SetServerBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SetPrinterBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
