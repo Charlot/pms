@@ -1,72 +1,98 @@
 <%= form_for(@kanban) do |f| %>
-  <% if @kanban.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@kanban.errors.count, "error") %> prohibited this kanban from being saved:</h2>
+    <% if @kanban.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@kanban.errors.count, "error") %> prohibited this kanban from being saved:</h2>
 
-      <ul>
-      <% @kanban.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+          <ul>
+            <% @kanban.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <h3>基础信息</h3>
+    <!--验证零件是否存在-->
+    <p>
+      <%= f.label :part_id, "#{KanbanDesc::WIRE_NR}" %>
+      <input type="text", id="search_Part"/>
+      <%= f.text_field :part_id, class: "hidden",id:"search_Part_Res"%>
+    </p>
+
+    <!--验证是否重复-->
+    <p>
+      <%= f.label :nr, "#{KanbanDesc::NR}:" %>
+      <%= f.text_field :nr %>
+    </p>
+
+    <p>
+      <%= f.label :copies, "#{KanbanDesc::COPIES}:" %>
+      <%= f.number_field :copies, {:min => 0} %>
+    </p>
+
+    <p>
+      <%= f.label :quantity, "#{KanbanDesc::QUANTITY}:" %>
+      <%= f.number_field :quantity, {:min => 0} %>
+    </p>
+
+    <p>
+      <%= f.label :safety_stock, "#{KanbanDesc::SAFETY_STOCK}:" %>
+      <%= f.number_field :safety_stock, {:min => 0} %>
+    </p>
+
+    <!--验证取料送料库位是否存在-->
+    <p>
+      <%= f.label :source_warehouse, "#{KanbanDesc::SOURCE_WAREHOUSE}:" %>
+      <%= f.text_field :source_warehouse %>
+    </p>
+
+    <p>
+      <%= f.label :source_storage, "#{KanbanDesc::SOURCE_STORAGE}:" %>
+      <%= f.text_field :source_storage %>
+    </p>
+
+    <p>
+      <%= f.label :des_warehouse, "#{KanbanDesc::DES_WAREHOUSE}:" %>
+      <%= f.text_field :des_warehouse %>
+    </p>
+
+    <p>
+      <%= f.label :des_storage, "#{KanbanDesc::DES_STORAGE}:" %>
+      <%= f.text_field :des_storage %>
+    </p>
+
+    <p>
+      <%= f.label :remark, "#{KanbanDesc::REMARK}:" %>
+      <%= f.text_field :remark %>
+    </p>
+
+    <p>
+      <%= f.label :ktype, "#{KanbanDesc::TYPE}" %>
+      <%= f.select(:ktype, kanban_type_options, {include_blank: false}) %>
+    </p>
+
+    <br/>
+
+    <div class="actions">
+      <%= f.submit %>
     </div>
-  <% end %>
-
-    <p>
-      <%= f.label :nr, "#{KanbanDesc::NR}:"%>
-      <%= f.text_field :nr%>
-    </p>
-
-    <p>
-      <%= f.label :copies, "#{KanbanDesc::COPIES}:"%>
-      <%= f.number_field :copies, {:min => 0}%>
-    </p>
-
-    <p>
-      <%= f.label :ktype, "#{KanbanDesc::TYPE}"%>
-      <%= f.select(:ktype,kanban_type_options,{include_blank: false})%>
-    </p>
-
-    <p>
-      <%= f.label :quantity, "#{KanbanDesc::QUANTITY}:"%>
-      <%= f.number_field :quantity, {:min => 0}%>
-    </p>
-
-    <p>
-      <%= f.label :safety_stock, "#{KanbanDesc::SAFETY_STOCK}:"%>
-      <%= f.number_field :safety_stock, {:min => 0}%>
-    </p>
-
-    <p>
-      <%= f.label :source_warehouse, "#{KanbanDesc::SOURCE_WAREHOUSE}:"%>
-      <%= f.text_field :source_warehouse%>
-    </p>
-
-    <p>
-      <%= f.label :source_storage, "#{KanbanDesc::SOURCE_STORAGE}:"%>
-      <%= f.text_field :source_storage%>
-    </p>
-
-    <p>
-      <%= f.label :des_warehouse, "#{KanbanDesc::DES_WAREHOUSE}:"%>
-      <%= f.text_field :des_warehouse%>
-    </p>
-
-    <p>
-      <%= f.label :des_storage, "#{KanbanDesc::DES_STORAGE}:"%>
-      <%= f.text_field :des_storage%>
-    </p>
-
-    <p>
-      <%= f.label :remark, "#{KanbanDesc::REMARK}:"%>
-      <%= f.text_field :remark%>
-    </p>
-
-    <p>
-      <%= f.label :part_id, "#{KanbanDesc::WIRE_NR}"%>
-      <%= f.text_field :part_id%>
-    </p>
-
-  <div class="actions">
-    <%= f.submit %>
-  </div>
 <% end %>
+
+<% content_for :javascript_includes do %>
+    <%= javascript_include_tag "search" %>
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+      $("#search_Part").on('mouseleave',function(){
+          var tar = $(this);
+          pms.search('parts',{attr:'nr',val:tar.val()},function(data){
+              if(data.result){
+                  $("#search_Part_Res").val(data.content.id);
+              }else{
+                  alert.content(data.content);
+              }
+          });
+      })
+  });
+</script>

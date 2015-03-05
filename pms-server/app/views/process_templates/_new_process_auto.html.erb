@@ -1,5 +1,5 @@
 <h4><%= @process_template.description %></h4>
-<input type="hidden" id="hidden-process_template_id" name="process_entity[process_template_id]" value="<%= @process_template.id %>">
+<input type="hidden" id="process_template_id_hidden" name="process_entity[process_template_id]" value="<%= @process_template.id %>">
 <div>
   <p>Wire:</p>
   <table>
@@ -84,8 +84,7 @@
 <script type="text/javascript">
     $(
             $('.format_part').bind('keyup blur', function (event) {
-                var e = adapt_event(event);
-                if ((e.type == 'keyup' && ( e.keyCode == 13 || e.keyCode == 9)) || (e.type == 'blur')) {
+                if (is_auto_validate_input_event(event, this)) {
                     var input_names = ['t1', 't2'];
                     var input_name = $(this).attr('id');
                     validate_custom_field_part($(this).attr('field'), $(this).val(), function (data) {
@@ -94,6 +93,7 @@
                         }
                         else if ($.inArray(input_name, input_names) > -1) {
                             $("label[id='" + input_name + "_default_strip_length'").text(data.content.strip_length);
+                            $("input[id='" + input_name + "_default_strip_length'").val(data.content.strip_length);
                         }
                     });
                 }

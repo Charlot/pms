@@ -1,0 +1,31 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  w1: false
+  t1: false
+  t2: false
+  s1: false
+  s2: false
+  wd1: false
+  w2: false
+  t3: false
+  t4: false
+  s3: false
+  s4: false
+  wd2: false
+  machine_id: 
+
+two:
+  w1: false
+  t1: false
+  t2: false
+  s1: false
+  s2: false
+  wd1: false
+  w2: false
+  t3: false
+  t4: false
+  s3: false
+  s4: false
+  wd2: false
+  machine_id: 

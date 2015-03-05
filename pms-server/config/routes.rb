@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  resources :machine_scopes
+
+  resources :machines
+
+  resources :resource_groups
+
   resources :process_parts
 
   resources :production_orders
@@ -25,7 +31,13 @@ Rails.application.routes.draw do
       post :create_process_entities
       delete :destroy_process_entities
       get :history
-      get :release
+      post :release
+      #post :scan
+      get :manage
+    end
+
+    collection do
+      post :scan
     end
   end
 
@@ -39,7 +51,11 @@ Rails.application.routes.draw do
   end
 
   resources :measure_units
-  resources :parts
+  resources :parts do
+    collection do
+      get :search
+    end
+  end
   resources :files
 
   # The priority is based upon order of creation: first created -> highest priority.

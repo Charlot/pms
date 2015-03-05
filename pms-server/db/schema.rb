@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20150210093352) do
+=======
+ActiveRecord::Schema.define(version: 20150227063518) do
+>>>>>>> 33292cd357340e37a778a24d2545dac944f832c9
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -35,7 +39,6 @@ ActiveRecord::Schema.define(version: 20150210093352) do
     t.boolean  "multiple",              default: false
     t.text     "format_store"
     t.boolean  "is_query_value",        default: false
-    t.boolean  "is_auto_query_value",   default: false
     t.text     "validate_query"
     t.string   "validate_message"
     t.text     "value_query"
@@ -93,6 +96,38 @@ ActiveRecord::Schema.define(version: 20150210093352) do
 
   add_index "kanbans", ["nr"], name: "index_kanbans_on_nr", using: :btree
   add_index "kanbans", ["part_id"], name: "index_kanbans_on_part_id", using: :btree
+
+  create_table "machine_scopes", force: true do |t|
+    t.boolean  "w1",         default: false
+    t.boolean  "t1",         default: false
+    t.boolean  "t2",         default: false
+    t.boolean  "s1",         default: false
+    t.boolean  "s2",         default: false
+    t.boolean  "wd1",        default: false
+    t.boolean  "w2",         default: false
+    t.boolean  "t3",         default: false
+    t.boolean  "t4",         default: false
+    t.boolean  "s3",         default: false
+    t.boolean  "s4",         default: false
+    t.boolean  "wd2",        default: false
+    t.integer  "machine_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "machine_scopes", ["machine_id"], name: "index_machine_scopes_on_machine_id", using: :btree
+
+  create_table "machines", force: true do |t|
+    t.string   "nr"
+    t.string   "name"
+    t.string   "description"
+    t.integer  "resource_group_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "machines", ["nr"], name: "index_machines_on_nr", using: :btree
+  add_index "machines", ["resource_group_id"], name: "index_machines_on_resource_group_id", using: :btree
 
   create_table "measure_units", force: true do |t|
     t.string   "code"
@@ -182,6 +217,18 @@ ActiveRecord::Schema.define(version: 20150210093352) do
 
   add_index "production_orders", ["nr"], name: "index_production_orders_on_nr", using: :btree
   add_index "production_orders", ["orderable_id"], name: "index_production_orders_on_orderable_id", using: :btree
+
+  create_table "resource_groups", force: true do |t|
+    t.string   "nr"
+    t.integer  "type"
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "resource_groups", ["nr"], name: "index_resource_groups_on_nr", using: :btree
+  add_index "resource_groups", ["type"], name: "index_resource_groups_on_type", using: :btree
 
   create_table "versions", force: true do |t|
     t.string   "item_type",  null: false

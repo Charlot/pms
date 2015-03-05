@@ -3,7 +3,7 @@
   <input type="text" id="process_template_code">
 </div>
 
-<%= form_for(@process_entity,html:{id:'process_entity_form'}) do |f| %>
+<%= form_for(@process_entity, html: {id: 'process_entity_form'}) do |f| %>
     <% if @process_entity.errors.any? %>
         <div id="error_explanation">
           <h2><%= pluralize(@process_entity.errors.count, "error") %> prohibited this part from being saved:</h2>
@@ -63,10 +63,16 @@
                     });
                 }
             })
-    )
+    );
     function submit_process_form() {
         if (confirm('confirm to submit?')) {
-            $('#process_entity_form').submit();
+            if ($(".custom_field_input,.out_stock_qty").filter(function () {
+                        return $.trim($(this).val()).length == 0;
+                    }).length == 0) {
+                $('#process_entity_form').submit();
+            } else {
+                alert('请填写所以空格');
+            }
         }
     }
 </script>

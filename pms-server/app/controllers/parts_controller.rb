@@ -61,14 +61,24 @@ class PartsController < ApplicationController
     end
   end
 
-  private
-  # Use callbacks to share common setup or constraints between actions.
-  def set_part
-    @part = Part.find(params[:id])
+  # GET /parts/search
+  # GET /parts/search
+  def search
+    @part = Part.send("find_by_"+params[:attr],params[:val])
+    respond_to do |format|
+      format.json { render json: {result: false, content: "Not Found!"}} unless @part
+      format.json { render json: {result: true, content: @part}}
+    end
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
-  def part_params
-    params.require(:part).permit(:nr, :custom_nr, :part_type, :measure_unit_id)
-  end
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_part
+      @part = Part.find(params[:id])
+    end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def part_params
+      params.require(:part).permit(:nr, :custom_nr, :type, :strip_length, :resource_group_id, :measure_unit_id)
+    end
 end

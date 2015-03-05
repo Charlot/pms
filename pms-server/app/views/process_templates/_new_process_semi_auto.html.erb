@@ -1,23 +1,71 @@
 <h4><%= @process_template.description %></h4>
-<input type="hidden" id="hidden-process_template_id" name="process_entity[process_template_id]" value="<%= @process_template.id %>">
+<input type="hidden" id="process_template_id_hidden" name="process_entity[process_template_id]" value="<%= @process_template.id %>">
 <div>
   <%= template_to_html(@process_template) %>
+</div>
+<div>
+  <p>Process Part</p>
+  <ul id="process_part_ul"></ul>
 </div>
 <script type="text/javascript">
     $(
             $('.format_part').on('keyup blur', function (event) {
-                var e = adapt_event(event);
-                console.log(e)
-                if ((e.type == 'keyup' && ( e.keyCode == 13 || e.keyCode == 9)) || (e.type == 'blur')) {
-                    validate_custom_field_part($(this).attr('field'), $(this).val(), function (data) {
-                        if (data.result) {
+                        if (is_auto_validate_input_event(event, this)) {
+                            var index = $(this).attr('index');
+                            var field = $(this).attr('field');
+                            var value = $(this).val();
+                            validate_custom_field_part(field, value, function (data) {
+                                        if (data.result) {
+                                            if ($('#li_' + field).length !== 0) {
+                                                console.log(value)
+                                                $('#li_' + field).find('label.part_label').text(value);
+                                            } else {
+                                                var li = $('<li>', {i: index, id: 'li_' + field});
+                                                var part_label = $('<label>', {text: value, class: 'part_label'});
+                                                var checkbox = $("<input>", {
+                                                    type: 'checkbox',
+                                                    checked: true,
+                                                    value: '1',
+                                                    class:'check_out_stock_qty',
+                                                    id: 'check_' + field,
+                                                    name: 'is_for_out_stock[' + field + ']'
+                                                });
+                                                var check_label = $('<label>', {text: 'for process part'});
+                                                var qty_label = $('<label>', {text: ', qty:'});
+                                                var qty_input = $('<input>', {
+                                                    type: 'text',
+                                                    id: 'text_' + field,
+                                                    class: 'out_stock_qty',
+                                                    name: 'out_stock_qty[' + field + ']'
+                                                });
 
+                                                li.append(part_label).append(checkbox).append(check_label).append(qty_label).append(qty_input);
+                                                if ($('#process_part_ul').children().length == 0) {
+                                                    $('#process_part_ul').append(li);
+                                                } else {
+                                                    var children = $('#process_part_ul').children();
+                                                    for (var i = children.length; i > 0; i--) {
+                                                        var child = children[i - 1];
+                                                        var child_index = parseInt($(child).attr('i'));
+                                                        console.log('index:' + index + ' cindex:' + child_index)
+                                                        if (parseInt(index) > child_index) {
+                                                            $(child).after(li);
+                                                            break;
+                                                        } else if (i == 1) {
+                                                            $(child).before(li);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            alert(data.content);
+                                        }
+                                    }
+                            )
+                            ;
                         }
-                        else {
-                            alert(data.content);
-                        }
-                    });
-                }
-            })
+                    }
+            )
     )
 </script>

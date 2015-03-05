@@ -6,7 +6,7 @@
   <% end %>
   <input type="button" value="ADD" id="add_input_to_template_btn"/>
 </div>
-<%= f.text_area :template, cols: 50,rows:8 %>
+<%= f.text_area :template, cols: 50, rows: 8 %>
 
 <input type="hidden" id="process_entity_editor_hidden" name="custom_field_is_for_out"/>
 <script type="text/javascript">
@@ -27,9 +27,9 @@
                         var checked = $('.input_format_rb:checked');
                         var format = checked.attr('value');
                         var key = checked.attr('key');
-                        if (format == custom_field_formats['part']) {
-
-                        }
+//                        if (format == custom_field_formats['part']) {
+//
+//                        }
                         $('#process_template_template').replaceSelectedText('{' + key.toUpperCase() + '}', 'collapseToEnd');
                     }
             )

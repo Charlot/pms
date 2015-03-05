@@ -1,4 +1,4 @@
-<h1>Listing kanbans</h1>
+<h1>KANBAN卡列表</h1>
 
 <table class="table table-bordered table-striped table-hover">
   <thead>
@@ -15,8 +15,8 @@
       <th><%= KanbanDesc::CUSTOMER_NR%></th>
       <th><%= KanbanDesc::SOURCE_POSITION%></th>
       <th><%= KanbanDesc::DES_POSITION%></th>
-      <th>Process Entities</th>
-      <th>History</th>
+      <th>Routing</th>
+      <th>历史</th>
       <th colspan="4"></th>
     </tr>
   </thead>
@@ -36,11 +36,11 @@
         <td></td>
         <td><%= "#{kanban.source_warehouse} | #{kanban.source_storage}"%></td>
         <td><%= "#{kanban.des_warehouse} | #{kanban.des_storage}"%></td>
-        <td><%= link_to 'Process Entites', process_entities_kanban_path(kanban)%></td>
-        <td><%= link_to 'History',history_kanban_path(kanban)%></td>
+        <td><%= link_to '关联Routing', process_entities_kanban_path(kanban)%></td>
+        <td><%= link_to '修改历史',history_kanban_path(kanban)%></td>
+        <td><%= link_to '生产管理', manage_kanban_path(kanban)%></td>
         <td><%= link_to 'Show', kanban %></td>
         <td><%= link_to 'Edit', edit_kanban_path(kanban) %></td>
-        <td><%= link_to 'Release',release_kanban_path(kanban) %></td>
         <td><%= link_to 'Destroy', kanban, method: :delete, data: { confirm: 'Are you sure?' } %></td>
 
       </tr>
@@ -50,4 +50,4 @@
 
 <br>
 
-<%= link_to 'New Kanban', new_kanban_path %>
+<%= link_to '建立KANBAN卡', new_kanban_path %>

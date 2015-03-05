@@ -1,6 +1,19 @@
 class CustomFieldFormatType<BaseType
-  PART=100
-  FLOAT=200
-  INT=300
-  STRING=400
+  PART='part'
+  FLOAT='float'
+  INT='int'
+  STRING='string'
+
+  def self.method_missing(method_name, *args, &block)
+    mn=method_name.to_s.sub(/\?/, '')
+    if /\w+\?/.match(method_name.to_s)
+      begin
+        self.const_get(mn.upcase)==args[0].to_s
+      rescue
+        super
+      end
+    else
+      super
+    end
+  end
 end

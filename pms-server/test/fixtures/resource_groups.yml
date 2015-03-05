@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nr: MyString
+  resource_group_type: 1
+  name: MyString
+  description: MyString
+
+two:
+  nr: MyString
+  resource_group_type: 1
+  name: MyString
+  description: MyString

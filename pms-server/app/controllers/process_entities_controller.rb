@@ -41,12 +41,48 @@ class ProcessEntitiesController < ApplicationController
             if ProcessType.auto?(@process_template.type)
               params[:custom_field].each do |k, v|
                 puts "#{k}:#{v}"
+
                 if cf=CustomField.find_by_id(k)
-                  @process_entity.custom_values<<CustomValue.new(custom_field_id: k, is_for_out_stock: cf.is_for_out_stock, value: cf.get_field_format_value(v))
+                  cv=CustomValue.new(custom_field_id: k, is_for_out_stock: cf.is_for_out_stock, value: cf.get_field_format_value(v))
+                  @process_entity.custom_values<<cv
+                end
+              end
+
+              # puts '-----------------------------------------------'
+              # puts  @process_entity.custom_values.to_json
+              # puts '-----------------------------------------------'
+              # build process part
+              @process_entity.custom_values.each do |cv|
+                cf=cv.custom_field
+                # puts '*************************'
+                # puts cf.to_json
+                # puts '*************************'
+                if CustomFieldFormatType.part?(cf.field_format) #&& cf.is_for_out_stock
+                  puts "*************#{cf.name}"
+                  @process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: @process_entity.process_part_quantity_by_cf(cf.name.to_sym))
+                end
+              end
+            elsif ProcessType.semi_auto?(@process_template.type)
+              params[:custom_field].each do |k, v|
+                puts "#{k}:#{v}"
+
+                if cf=CustomField.find_by_id(k)
+                  cv=CustomValue.new(custom_field_id: k, is_for_out_stock: params[:is_for_out_stock].has_key?(k), value: cf.get_field_format_value(v))
+                  @process_entity.custom_values<<cv
+                end
+              end
+
+              @process_entity.custom_values.each do |cv|
+                cf=cv.custom_field
+                if CustomFieldFormatType.part?(cf.field_format) #&& cf.is_for_out_stock
+                  puts "*************#{ params[:out_stock_qty][cf.id.to_s.to_sym]}"
+                  @process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: params[:out_stock_qty][cf.id.to_s.to_sym])
                 end
               end
             end
+            # raise
           end
+
           format.html { redirect_to @process_entity, notice: 'Process entity was successfully created.' }
           format.json { render :show, status: :created, location: @process_entity }
         else
