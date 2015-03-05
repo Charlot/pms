@@ -3,7 +3,7 @@
 <% elsif ProcessType.auto?(process_template.type) %>
     <div>
       <p>Wire:</p>
-      <table>
+      <table class="table">
         <tr>
           <td colspan="2">
             Default Wire No:
@@ -30,7 +30,7 @@
         </tr>
       </table>
       <p>Terminator:</p>
-      <table>
+      <table class="table">
         <tr>
           <td>T1:
             <%= render 'custom_fields/format/input', {field: process_template.field_t1,display:true} %>
@@ -63,7 +63,7 @@
         </tr>
       </table>
       <p>Seal:</p>
-      <table>
+      <table class="table">
         <tr>
           <td>S1:
             <%= render 'custom_fields/format/input', {field: process_template.field_s1,display:true} %>
