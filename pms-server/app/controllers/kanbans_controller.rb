@@ -28,7 +28,6 @@ class KanbansController < ApplicationController
   # POST /kanbans.json
   def create
     @kanban = Kanban.new(kanban_params)
-
     respond_to do |format|
       if @kanban.save
         format.html { redirect_to @kanban, notice: 'Kanban was successfully created.' }
@@ -164,11 +163,9 @@ class KanbansController < ApplicationController
       #response dependent on Kanban type
       format.json { render json: { result: false, content: "Kanban has been updated,please reprint!" }} if need_update && @kanban.type == KanbanType::BLUE
 
-      #reposne if has producing order
-      #TODO
+      #TODO reposne if has producing order
 
-      #加入到待优化队列
-      #TODO
+      #TODO 加入到待优化队列
 
       if need_update && @kanban.type == KanbanType::WHITE
         format.json { render json: { result:true, content: "Kanban Scaned,Causing! This Kanban was updated!" }}

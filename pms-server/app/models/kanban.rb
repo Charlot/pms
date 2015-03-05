@@ -10,7 +10,23 @@ class Kanban < ActiveRecord::Base
 
   accepts_nested_attributes_for :kanban_process_entities
 
+  after_create :create_part_bom
+  after_destroy :destroy_part_bom
+  after_update :update_part_bom
+
   has_paper_trail
+
+  def create_part_bom
+    #TODO Kanban Create Part Bom
+  end
+
+  def destroy_part_bom
+    #TODO Kanban Destroy Part Bom
+  end
+
+  def update_part_bom
+    #TODO Kanban Update Part Bom
+  end
 
   def can_update?
     if self.state == KanbanState::INIT
@@ -26,7 +42,6 @@ class Kanban < ActiveRecord::Base
 
   # version of kanban
   def task_time
-    #TODO
     self.quantity * (self.process_entities.inject(0){|sum,pe| sum+=pe.stand_time})
   end
 
