@@ -1,27 +1,40 @@
 class Kanban < ActiveRecord::Base
-  validates :nr ,:presence => true, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
+  validates :nr, :presence => true, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
   validates :part_id, :presence => true
 
   belongs_to :part
-  belongs_to :product, class_name:'Part'
-  has_many :kanban_process_entities
+  belongs_to :product, class_name: 'Part'
+  has_many :kanban_process_entities, dependent: :destroy
   has_many :process_entities, :through => :kanban_process_entities
   has_many :production_order, as: :orderable
 
   accepts_nested_attributes_for :kanban_process_entities
 
-  after_create :create_part_bom
-  after_destroy :destroy_part_bom
-  after_update :update_part_bom
+  # after_create :create_part_bom
+  # after_destroy :destroy_part_bom
+  # after_update :update_part_bom
 
   has_paper_trail
 
   def create_part_bom
-    #TODO Kanban Create Part Bom
+    #TODO Kanban Update Part Bom
+    # part=self.part
+    # product=self.product
+    # unless PartBom.where(part_id: product.id, bom_item_id: part.id).first
+    #   PartBom.create(part_id: product.id, bom_item_id: part.id, quantity: 1)
+    # end
   end
 
   def destroy_part_bom
-    #TODO Kanban Destroy Part Bom
+    #TODO Kanban Update Part Bom
+    # 要考虑相同KB的量，如果KB具有多张，则要特殊处理
+    # part=self.part
+    # product=self.product
+    # unless Kanban.where(part_id: part.id, product_id: product.id).where('id<>?', self.id).first
+    #   if pb= PartBom.where(part_id: product.id, bom_item_id: part.id).first
+    #     pb.destroy
+    #   end
+    # end
   end
 
   def update_part_bom
@@ -42,7 +55,7 @@ class Kanban < ActiveRecord::Base
 
   # version of kanban
   def task_time
-    self.quantity * (self.process_entities.inject(0){|sum,pe| sum+=pe.stand_time})
+    self.quantity * (self.process_entities.inject(0) { |sum, pe| sum+=pe.stand_time })
   end
 
   # Get raw materials from kanban's routing
@@ -62,7 +75,7 @@ class Kanban < ActiveRecord::Base
     return false unless (splited_str = code.split('/')).count == 3
 
     {id: splited_str[0],
-     version_nr:splited_str[1],
+     version_nr: splited_str[1],
      printed_nr: splited_str[2]}
   end
 end
