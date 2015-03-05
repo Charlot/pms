@@ -1,15 +1,41 @@
 Rails.application.routes.draw do
+  resources :tools
+
+  resources :resource_group_parts do
+    collection do
+      get :group_by_part
+    end
+  end
+
+  resources :machine_combinations
+
   resources :machine_scopes
 
-  resources :machines
+  resources :machines do
+    resource :machine_scope
+    resources :machine_combinations
+  end
 
   resources :resource_groups
+  resources :resource_group_machines
+
+  resources :resource_group_tools do
+    # resources :resource_group_parts
+    resource :resource_group_part
+  end
 
   resources :process_parts
 
   resources :production_orders
 
-  resources :process_entities
+  resources :process_entities do
+    member do
+      get :simple
+    end
+    collection do
+      get :search
+    end
+  end
 
   resources :custom_values
 
@@ -27,13 +53,14 @@ Rails.application.routes.draw do
 
   resources :kanbans do
     member do
-      get :process_entities
-      post :create_process_entities
-      delete :destroy_process_entities
       get :history
       post :release
+      post :lock
+      delete :discard
       #post :scan
       get :manage
+      get :search
+      get :add_routing_template
     end
 
     collection do

@@ -1,0 +1,14 @@
+<div class="btn-group btn-group-sm" role="group" aria-label="...">
+  <button type="button" class="btn btn-warning">
+    <%= link_to 'Edit',edit_kanban_path%>
+  </button>
+  <button type="button" class="btn btn-default">
+    <%= link_to 'Release',release_kanban_path(kanban),method: :post%>
+  </button>
+  <button type="button" class="btn btn-default">
+    <%= link_to 'Lock',lock_kanban_path(kanban), method: :post%>
+  </button>
+  <button type="button" class="btn btn-default">
+    <%= link_to 'Discard', discard_kanban_path(kanban),method: :delete%>
+  </button>
+</div>

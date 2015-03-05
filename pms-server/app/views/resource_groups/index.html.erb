@@ -1,28 +1,28 @@
 <h1>Listing resource_groups</h1>
 
-<table>
+<table class="table">
   <thead>
-    <tr>
-      <th>Nr</th>
-      <th>Resource group type</th>
-      <th>Name</th>
-      <th>Description</th>
-      <th colspan="3"></th>
-    </tr>
+  <tr>
+    <th>Nr</th>
+    <th>Resource group type</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th colspan="3"></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @resource_groups.each do |resource_group| %>
+  <% @resource_groups.each do |resource_group| %>
       <tr>
         <td><%= resource_group.nr %></td>
-        <td><%= resource_group.type %></td>
+        <td><%= ResourceGroupType.display resource_group.type %></td>
         <td><%= resource_group.name %></td>
         <td><%= resource_group.description %></td>
         <td><%= link_to 'Show', resource_group %></td>
         <td><%= link_to 'Edit', edit_resource_group_path(resource_group) %></td>
-        <td><%= link_to 'Destroy', resource_group, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Destroy', resource_group, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 

@@ -1,0 +1,39 @@
+<h1>Listing machine_combinations</h1>
+<p id="notice"><%= notice %></p>
+<div>
+  <h5>Machine: <%= @machine.nr %></h5>
+</div>
+<div>
+  <span>Machine Scope: </span>
+  <%= render 'machine_scopes/display/inline' %>
+</div>
+<div>
+  <%= render 'form' %>
+  <table class="table table-bordered table-striped table-hover" style="width: 1350px;text-align:  left">
+    <thead>
+    <tr>
+      <th rowspan="2"></th>
+      <th>W1</th>
+      <th>T1</th>
+      <th>T2</th>
+      <th>S1</th>
+      <th>S2</th>
+      <th>Wd1</th>
+      <th rowspan="2" style="width:50px;"></th>
+    </tr>
+    <tr>
+      <th>W2</th>
+      <th>T3</th>
+      <th>T4</th>
+      <th>S3</th>
+      <th>S4</th>
+      <th>Wd2</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @machine_combinations.each_with_index do |machine_combination, i| %>
+        <%= render 'edit_form', {machine: @machine, machine_scope: @machine_scope, machine_combination_presenter: machine_combination, machine_combination: machine_combination.origin, i: i} %>
+    <% end %>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,108 @@
+<%= form_for(@machine_combination) do |f| %>
+    <% if @machine_combination.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@machine_combination.errors.count, "error") %> prohibited this machine_combination from
+            being saved:</h2>
+          <ul>
+            <% @machine_combination.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+    <%= f.hidden_field :machine_id, value: @machine.id %>
+    <table class="table table-bordered" style="width: 1350px;text-align:  left">
+      <tr>
+        <td>
+          W1:
+          <% if @machine_scope.w1 %><%= f.text_field :w1, value: flash[:w1] %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          T1:
+          <% if @machine_scope.t1 %><%= f.text_field :t1, value: flash[:t1] %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          T2:
+          <% if @machine_scope.t2 %><%= f.text_field :t2, value: flash[:t2] %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          S1:
+          <% if @machine_scope.s1 %><%= f.text_field :s1, value: flash[:s1] %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          S2:
+          <% if @machine_scope.s2 %><%= f.text_field :s2, value: flash[:s2] %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          WD1:
+          <% if @machine_scope.wd1 %><%= f.text_field :wd1, value: flash[:wd1] %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          W2:
+          <% if @machine_scope.w2 %><%= f.text_field :w2, value: flash[:w2] %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          T3:
+          <% if @machine_scope.t3 %><%= f.text_field :t3, value: flash[:t3] %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          T4:
+          <% if @machine_scope.t4 %><%= f.text_field :t4, value: flash[:t4] %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          S3:
+          <% if @machine_scope.s3 %><%= f.text_field :s3, value: flash[:s3] %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          S4:
+          <% if @machine_scope.s4 %><%= f.text_field :s4, value: flash[:s4] %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+        <td>
+          WD2:
+          <% if @machine_scope.wd2 %><%= f.text_field :wd2, value: flash[:wd2] %>
+          <% else %>
+              <label>NA</label>
+          <% end %>
+        </td>
+      </tr>
+    </table>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>

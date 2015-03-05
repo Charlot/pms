@@ -3,7 +3,7 @@ function adapt_event(e) {
 }
 
 
-function is_auto_validate_input_event(event, element, can_not_blank) {
+function is_auto_submit_input_event(event, element, can_not_blank) {
     var e = adapt_event(event);
     can_not_blank = can_not_blank === undefined ? true : can_not_blank;
     // 13: ENTER

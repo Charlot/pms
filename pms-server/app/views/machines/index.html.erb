@@ -1,6 +1,6 @@
 <h1>Listing machines</h1>
-
-<table>
+<p id="notice"><%= notice %></p>
+<table class="table">
   <thead>
   <tr>
     <th>Nr</th>
@@ -17,14 +17,15 @@
         <td><%= machine.nr %></td>
         <td><%= machine.name %></td>
         <td><%= machine.description %></td>
-        <td><%= machine.resource_group %></td>
+        <td><%= machine.resource_group_machine.nr if machine.resource_group_machine%></td>
         <td><%= link_to 'Show', machine %></td>
         <td><%= link_to 'Edit', edit_machine_path(machine) %></td>
         <td><%= link_to 'Destroy', machine, method: :delete, data: {confirm: 'Are you sure?'} %></td>
         <% if machine.machine_scope %>
-            <td><%= link_to 'Edit Scope', edit_machine_scope_path(machine.machine_scope) %></td>
+            <td><%= link_to 'Edit Scope', edit_machine_machine_scope_path(machine) %></td>
+            <td><%= link_to 'Create or Edit Combination', machine_machine_combinations_path(machine) %></td>
         <% else %>
-            <td><%= link_to 'Create Scope', new_machine_scope_path(machine: machine) %></td>
+            <td><%= link_to 'Create Scope', new_machine_machine_scope_path(machine) %></td>
         <% end %>
       </tr>
   <% end %>

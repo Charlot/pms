@@ -1,7 +1,12 @@
 <% if field %>
-    <input type="text" name="custom_field[<%= field.id %>]" id="<%= field.name %>" class="format_<%= field.field_format %> custom_field custom_field_input" field="<%= field.id %>" index="<%=local_assigns[:index]%>"/>
-    <% if field.field_format=='label' %>
-        <input type="hidden" name="custom_field[<%= field.id %>]" id="<%= field.name %>" class="format_label custom_field" field="<%= field.id %>"  index="<%=local_assigns[:index]%>"/>
+    <% if local_assigns[:display] %>
+        <span>_________________</span>
+    <% else %>
+        <input type="text" name="custom_field[<%= field.id %>]" id="<%= field.name %>" class="format_<%= field.field_format %>
+         custom_field custom_field_input" field="<%= field.id %>" index="<%= local_assigns[:index] %>" value="<%= local_assigns[:value] %>"/>
+        <% if field.field_format=='label' %>
+            <input type="hidden" name="custom_field[<%= field.id %>]" id="<%= field.name %>" class="format_label custom_field" field="<%= field.id %>" index="<%= local_assigns[:index] %>" value="<%= local_assigns[:value] %>"/>
+        <% end %>
     <% end %>
 <% else %>
     <span style="color: blue">NO INPUT HERE</span>

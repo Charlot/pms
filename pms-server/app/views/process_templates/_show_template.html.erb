@@ -1,0 +1,85 @@
+<% if ProcessType.semi_auto?(process_template.type) %>
+    <%= simple_format(process_template.template_display_text) if process_template.template %>
+<% elsif ProcessType.auto?(process_template.type) %>
+    <div>
+      <p>Wire:</p>
+      <table class="table">
+        <tr>
+          <td colspan="2">
+            Default Wire No:
+            <%= render 'custom_fields/format/input', {field: process_template.field_default_wire_nr,display:true} %>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            Component:
+            <%= render 'custom_fields/format/input', {field: process_template.field_wire_nr,display:true} %>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            Qty factor:
+            <%= render 'custom_fields/format/input', {field: process_template.field_wire_qty_factor,display:true} %>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            Bundle Qty:
+            <%= render 'custom_fields/format/input', {field: process_template.field_default_bundle_qty,display:true} %>
+          </td>
+        </tr>
+      </table>
+      <p>Terminator:</p>
+      <table class="table">
+        <tr>
+          <td>T1:
+            <%= render 'custom_fields/format/input', {field: process_template.field_t1,display:true} %>
+          </td>
+          <td>T2:
+            <%= render 'custom_fields/format/input', {field: process_template.field_t2,display:true} %>
+          </td>
+        </tr>
+        <tr>
+          <td>T1 Qty factor:
+            <%= render 'custom_fields/format/input', {field: process_template.field_t1_qty_factor,display:true} %>
+          </td>
+          <td>T2 Qty factor:
+            <%= render 'custom_fields/format/input', {field: process_template.field_t2_qty_factor,display:true} %>
+          </td>
+        </tr>
+        <tr>
+          <td>T1 Default Strip Length:
+            <%= render 'custom_fields/format/input', {field: process_template.field_t1_default_strip_length,display:true} %>
+          </td>
+          <td>T1 Strip Length:
+            <%= render 'custom_fields/format/input', {field: process_template.field_t1_strip_length,display:true} %>
+          </td>
+          <td>T2 Default Strip Length:
+            <%= render 'custom_fields/format/input', {field: process_template.field_t2_default_strip_length,display:true} %>
+          </td>
+          <td>T2 Strip Length:
+            <%= render 'custom_fields/format/input', {field: process_template.field_t2_strip_length,display:true} %>
+          </td>
+        </tr>
+      </table>
+      <p>Seal:</p>
+      <table class="table">
+        <tr>
+          <td>S1:
+            <%= render 'custom_fields/format/input', {field: process_template.field_s1,display:true} %>
+          </td>
+          <td>S2:
+            <%= render 'custom_fields/format/input', {field: process_template.field_s2,display:true} %>
+          </td>
+        </tr>
+        <tr>
+          <td>S1 Qty factor:
+            <%= render 'custom_fields/format/input', {field: process_template.field_s1_qty_factor,display:true} %>
+          </td>
+          <td>S2 Qty factor:
+            <%= render 'custom_fields/format/input', {field: process_template.field_s2_qty_factor,display:true} %>
+          </td>
+        </tr>
+      </table>
+    </div>
+<% end %>

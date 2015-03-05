@@ -3,11 +3,30 @@ class Kanban < ActiveRecord::Base
   validates :part_id, :presence => true
 
   belongs_to :part
-  has_many :kanban_process_entities, dependent: :destroy
+  belongs_to :product, class_name:'Part'
+  has_many :kanban_process_entities
   has_many :process_entities, :through => :kanban_process_entities
   has_many :production_order, as: :orderable
 
+  accepts_nested_attributes_for :kanban_process_entities
+
+  after_create :create_part_bom
+  after_destroy :destroy_part_bom
+  after_update :update_part_bom
+
   has_paper_trail
+
+  def create_part_bom
+    #TODO Kanban Create Part Bom
+  end
+
+  def destroy_part_bom
+    #TODO Kanban Destroy Part Bom
+  end
+
+  def update_part_bom
+    #TODO Kanban Update Part Bom
+  end
 
   def can_update?
     if self.state == KanbanState::INIT
@@ -15,6 +34,15 @@ class Kanban < ActiveRecord::Base
     else
       false
     end
+  end
+
+  def version_now
+    self.versions.count
+  end
+
+  # version of kanban
+  def task_time
+    self.quantity * (self.process_entities.inject(0){|sum,pe| sum+=pe.stand_time})
   end
 
   # Get raw materials from kanban's routing

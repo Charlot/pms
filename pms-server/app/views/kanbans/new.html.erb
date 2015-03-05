@@ -1,5 +1,16 @@
-<h1>新建KANBAN卡</h1>
-
-<%= render 'form' %>
-
-<%= link_to 'Back', kanbans_path %>
+<div class="panel panel-success">
+  <div class="panel-heading ">
+    <h1>建立KANBAN卡</h1>
+  </div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-10">
+        <%= render 'form' %>
+      </div>
+      <div class="col-md-2">
+        <h4>说明</h4>
+        <p class="text-warning"> 创建KANBAN卡，并且为KANBAN卡关联Routing</p>
+      </div>
+    </div>
+  </div>
+</div>

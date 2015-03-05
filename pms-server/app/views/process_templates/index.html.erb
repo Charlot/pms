@@ -1,6 +1,6 @@
 <h1>Listing process_templates</h1>
 
-<table>
+<table class="table">
   <thead>
   <tr>
     <th>Code</th>
@@ -18,7 +18,9 @@
         <td><%= process_template.code %></td>
         <td><%= ProcessType.display process_template.type %></td>
         <td><%= process_template.name %></td>
-        <td><%= process_template.template %></td>
+        <td>
+          <%= render('show_template', {process_template: process_template}) if ProcessType.semi_auto?(process_template.type) %>
+        </td>
         <td><%= process_template.description %></td>
         <td><%= link_to 'Show', process_template %></td>
         <td><%= link_to 'Edit', edit_process_template_path(process_template) %></td>

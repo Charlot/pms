@@ -1,7 +1,7 @@
 class KanbansController < ApplicationController
   before_action :set_kanban, only: [:show, :edit, :update, :destroy, :process_entities,
                                     :create_process_entities,:destroy_process_entities,
-                                    :finish_production,:history,:release,:manage]
+                                    :finish_production,:history,:release,:lock,:discard,:manage]
 
   # GET /kanbans
   # GET /kanbans.json
@@ -17,6 +17,7 @@ class KanbansController < ApplicationController
   # GET /kanbans/new
   def new
     @kanban = Kanban.new
+    #1.times { @kanban.kanban_process_entities.build }
   end
 
   # GET /kanbans/1/edit
@@ -27,7 +28,6 @@ class KanbansController < ApplicationController
   # POST /kanbans.json
   def create
     @kanban = Kanban.new(kanban_params)
-
     respond_to do |format|
       if @kanban.save
         format.html { redirect_to @kanban, notice: 'Kanban was successfully created.' }
@@ -63,41 +63,6 @@ class KanbansController < ApplicationController
     end
   end
 
-  # GET /kanbans/1/process_entities
-  # GET /kanbans/1/process_entities.json
-  def process_entities
-
-  end
-
-  # POST /kanbans/1/create_process_entities
-  # POST /kanbans/1/create_process_entities.json
-  def create_process_entities
-    respond_to do |format|
-      process_entity = ProcessEntity.find_by_nr(params[:process_entity_nr])
-      format.json { render json: {result:false, content: 'Process Entity Not Found.'}} unless process_entity
-      format.json { render json: {reuslt:false, content: 'Kanban Part is in Process Entity Parts'}} if process_entity.parts.select('id').include?(@kanban.part_id)
-      kanban_process_entity = @kanban.kanban_process_entities.build({process_entity_id:process_entity.id})
-      format.json { render json: {result:false, content: 'Created Failed!'}} unless kanban_process_entity
-      format.json { render json: {result:false, content: kanban_process_entity.errors.full_messages}} unless kanban_process_entity.save
-      format.json { render json: {result:true, content: {id: kanban_process_entity.id, nr:kanban_process_entity.process_entity.nr}}}
-    end
-  end
-
-  # DELETE /kanbans/1/destroy_process_entities
-  # DELETE /kanbans/1/destroy_process_entities.json
-  def destroy_process_entities
-    msg = Message.new
-    @kanban_process_entity = KanbanProcessEntity.find_by_id(params[:kanban_process_entity_id])
-    if @kanban_process_entity.nil?
-      msg.content = 'Kanban Process Entity Not Found!'
-    elsif @kanban_process_entity.destroy
-      msg.result = true
-    else
-      msg.content = @kanban_process_entity.errors.full_messages
-    end
-    render :json => msg
-  end
-
   # POST /kanbans/1/finish_production
   # POST /kanbans/1/finish_production.json
   def finish_production
@@ -121,14 +86,59 @@ class KanbansController < ApplicationController
   # POST /kanbans/1/release.json
   def release
     #TODO Release kanban
-    respond_to do |format|
-      format.html { redirect_to kanban_path, notice: 'State Error.'} unless KanbanState.switch_to(@kanban.state,KanbanState::RELEASED)
+    redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state,KanbanState::RELEASED)
 
-      if @kanban.update(state: KanbanState::RELEASED)
-        format.html { redirect_to kanban_path, notice: 'Kanban was successfully released.' }
-      else
-        format.html { redirect_to kanban_path, notice: 'Kanban was failed released.'  }
-      end
+    if @kanban.update(state: KanbanState::RELEASED)
+      redirect_to @kanban, notice: 'Kanban was successfully released.'
+    else
+       redirect_to @kanban, notice: 'Kanban was failed released.'
+    end
+  end
+
+  # POST /kanbans/1/lock
+  # POST /kanbans/1/lock.json
+  def lock
+    #TODO Lock kanban
+    redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state,KanbanState::LOCKED)
+
+    if @kanban.update(state: KanbanState::LOCKED)
+      redirect_to @kanban, notice: 'Kanban was successfully locked.'
+    else
+      redirect_to @kanban, notice: 'Kanban was failed locked.'
+    end
+  end
+
+  # DELETE /kanbans/1/discard
+  # DELETE /kanbasn/1/discard.json
+  def discard
+    #TODO Delete kanban
+    redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state,KanbanState::DELETED)
+
+    if @kanban.update(state: KanbanState::DELETED)
+      redirect_to @kanban, notice: 'Kanban was successfully discarded.'
+    else
+      redirect_to @kanban, notice: 'Kanban was failed discarded.'
+    end
+  end
+
+  # GET /kanbans/search.json
+  def search
+    @kanban = Kanban.send("find_by_"+params[:attr],params[:val])
+    respond_to do |format|
+      format.json { render json: {result: false, content: "Not Found!"}} unless @kanban
+      format.json { render json: {result: true, content: @kanban}}
+    end
+  end
+
+  # GET /kanbans/add_routing_template
+  def add_routing_template
+    case params[:type].to_i
+    when KanbanType::WHITE
+      render partial:'add_auto_routing'
+    when KanbanType::BLUE
+      render partial:'add_semi_auto_routing'
+    else
+      render partial:'add_auto_routing'
     end
   end
 
@@ -153,11 +163,9 @@ class KanbansController < ApplicationController
       #response dependent on Kanban type
       format.json { render json: { result: false, content: "Kanban has been updated,please reprint!" }} if need_update && @kanban.type == KanbanType::BLUE
 
-      #reposne if has producing order
-      #TODO
+      #TODO reposne if has producing order
 
-      #加入到待优化队列
-      #TODO
+      #TODO 加入到待优化队列
 
       if need_update && @kanban.type == KanbanType::WHITE
         format.json { render json: { result:true, content: "Kanban Scaned,Causing! This Kanban was updated!" }}
@@ -180,6 +188,12 @@ class KanbansController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def kanban_params
       #params[:kanban]
-      params.require(:kanban).permit(:id,:nr,:state,:remark,:quantity,:safety_stock,:source_warehouse,:source_storage,:des_warehouse,:des_storage,:print_time,:part_id,:version,:ktype,:copies)
+      params.require(:kanban).permit(:id,:nr,:state,:remark,:quantity,
+                                     :safety_stock,:source_warehouse,
+                                     :source_storage,:des_warehouse,
+                                     :des_storage,:print_time,:part_id,
+                                     :version,:ktype,:copies,
+                                     :product_id,kanban_process_entities_attributes:[:kanban_id,:process_entity_id,:id,:_destroy]
+      )
     end
 end
