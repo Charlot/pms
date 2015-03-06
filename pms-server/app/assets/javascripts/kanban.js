@@ -5,30 +5,37 @@ var pms = pms || {};
 
 pms.kanban = pms.kanban || {};
 
-pms.kanban.addRouting = function(kanban_id,process_entity_nr,callback){
+pms.kanban.addRouting = function(part_id,process_entity_ids,callback){
     $.ajax({
-        url: '/kanbans/'+kanban_id+"/create_process_entities",
-        data :{process_entity_nr:process_entity_nr},
-        dataType:'json',
+        url:'/parts/'+part_id+'/add_process_entities',
+        data:{process_entities:process_entity_ids},
         type:'POST',
-        success: function(data){
-            if(callback){
-                callback(data);
-            }
+        dataType:'json',
+        success:function(data){
+            if(callback){callback(data)}
+        }
+    });
+};
+
+pms.kanban.delRouting = function(part_id,process_entity_ids,callback){
+    $.ajax({
+        url:"/parts/"+part_id+"/delete_process_entities",
+        data:{process_entities:process_entity_ids},
+        dataType:'json',
+        type:'delete',
+        success:function(data){
+            if(callback){callback(data)}
         }
     })
 };
 
-pms.kanban.delRouting = function(kanban_id,id,callback){
+pms.kanban.routeSimple = function(process_entity_id,callback) {
     $.ajax({
-        url: '/kanbans/'+kanban_id+"/destroy_process_entities",
-        data :{kanban_process_entity_id:id},
-        dataType:'json',
-        type:'DELETE',
-        success: function(data){
-            if(callback){
-                callback(data);
-            }
+        url: '/process_entities/' + process_entity_id + "/simple",
+        dataType: 'html',
+        type: 'GET',
+        success: function (data) {
+            if(callback) {callback(data)}
         }
     })
 };

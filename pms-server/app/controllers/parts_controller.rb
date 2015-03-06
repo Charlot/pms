@@ -91,11 +91,7 @@ class PartsController < ApplicationController
     msg.result = true
     ActiveRecord::Base.transaction do
       begin
-      params[:process_entities].each {|pe_id|
-        if !@part.part_process_entities.destroy(process_entity_id:pe_id)
-          raise
-        end
-      }
+        @part.part_process_entities.where(process_entity_id:params[:process_entities]).each{|x|x.destroy}
       rescue
         msg.result = false
       end

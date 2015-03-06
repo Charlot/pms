@@ -34,7 +34,7 @@
               <!--验证零件是否存在-->
               <div class="form-group">
                 <%= f.label :part_id, "#{KanbanDesc::WIRE_NR}:" %>
-                <input type="text" id="search_Part" class="form-control"/>
+                <input type="text" id="search_Part" class="form-control" value="<%= @kanban.part.nr if @kanban.part%>"/>
                 <%= f.text_field :part_id, class: "hidden", id: "search_Part_Res" %>
               </div>
 
@@ -111,15 +111,12 @@
               </div>
             </div>
             <div class="row" id="routes_List">
-              <%= @kanban.process_entities.each do |pe| %>
-                  <div>
-                    <h4><span class="remove-routing" id="<%= pe.id%>">Remove</span></h4>
+              <% @kanban.process_entities.each do |pe| %>
                     <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
-                  </div>
               <% end if @kanban.part %>
             </div>
             <ul id="kpe_List" class="hidden">
-              <%= @kanban.process_entities.each do |pe| %>
+              <% @kanban.process_entities.each do |pe| %>
               <li pe_nr="<%= pe.nr%>"></li>
               <% end if @kanban.part %>
             </ul>
@@ -136,6 +133,7 @@
 <% content_for :javascript_includes do %>
     <%= javascript_include_tag "search" %>
     <%= javascript_include_tag "fix" %>
+    <%= javascript_include_tag "kanban" %>
 <% end %>
 
 <script type="text/javascript">
@@ -152,20 +150,14 @@
                             return;
                         }
                         $("#routes_List").empty();
+
                         data.content.process_entities.forEach(function(value){
                             var list_item = $("<li>").attr("pe_nr", value.nr);
                             $("#kpe_List").append(list_item);
                             //get template
-                            $.ajax({
-                                url: '/process_entities/' + value.id + "/simple",
-                                dataType: 'html',
-                                type: 'GET',
-                                success: function (data) {
-
-                                    var div = $("<div>").append("<h4><span class='remove-routing' id="+value.id+">Remove</span></h4>").append(data);
-                                    $("#routes_List").append(div);
-                                }
-                            })
+                            pms.kanban.routeSimple(value.id,function(data){
+                                $("#routes_List").append(data);
+                            });
                         });
                     } else {
                         $("#error-message").removeClass("hidden");
@@ -213,27 +205,27 @@
                     if (data.result) {
                         var object = data.content;
                         //Add Process Entity to Part
-                        $.ajax({
-                            url:'/parts/'+part_id+'/add_process_entities',
-                            data:{process_entities:[data.content.id]},
-                            type:'POST',
-                            dataType:'json',
-                            success:function(data){
-                                if(data.result){
-                                    //append li
-                                    var list_item = $("<li>").attr("pe_nr", object.nr);
-                                    $("#kpe_List").append(list_item);
-                                    //get template
-                                    $.ajax({
-                                        url: '/process_entities/' + object.id + "/simple",
-                                        dataType: 'html',
-                                        type: 'GET',
-                                        success: function (data) {
-                                            var div = $("<div>").append("<h4><span class=' remove-routing' id="+object.id+">Remove</span></h4>").append(data);
-                                            $("#routes_List").append(div);
-                                        }
+                        pms.kanban.addRouting(part_id,[data.content.id],function(data){
+                            if(data.result){
+                                //append li
+                                var list_item = $("<li>").attr("pe_nr", object.nr);
+                                $("#kpe_List").append(list_item);
+                                //get template
+                                pms.kanban.routeSimple(object.id,function(data){
+                                    $("#routes_List").append(data);
+                                    $("button#"+object.id).click(function(){
+                                        var pe_nr = $(this).attr("pe_nr");
+                                        var id = $(this).attr("id");
+                                        var part_id = $("#search_Part_Res").val();
+                                        var target = $(this);
+                                        pms.kanban.delRouting(part_id,[id],function(data){
+                                            if(data.result){
+                                                target.parent().remove();
+                                                $("#kpe_List").children("[pe_nr=" + pe_nr + "]").remove();
+                                            }
+                                        });
                                     })
-                                }
+                                });
                             }
                         });
                     } else {
@@ -249,32 +241,12 @@
             var id = $(this).attr("id");
             var part_id = $("#search_Part_Res").val();
             var target = $(this);
-            //TODO
-            $.ajax({
-                url:"/parts/"+part_id+"/delete_process_entities",
-                data:{process_entities:[id]},
-                dataType:'json',
-                type:'delete',
-                success:function(data){
-                    if(data.result){
-                        target.parent().parent().remove();
-                        $("#kpe_List").children("[pe_nr=" + pe_nr + "]").remove();
-                    }
+            pms.kanban.delRouting(part_id,[id],function(data){
+                if(data.result){
+                    target.parent().remove();
+                    $("#kpe_List").children("[pe_nr=" + pe_nr + "]").remove();
                 }
-            })
+            });
         });
-
-        /*$("#select_KanbanType").on("change", function () {
-         var type = $(this).children(":Selected").val();
-         $.ajax({
-         url: 'kanbans/add_routing_template',
-         data: {type: type},
-         dataType: 'html',
-         type: 'GET',
-         success: function (data) {
-         $("#addKanbanRoutingTemplate").html(data);
-         }
-         })
-         });*/
     });
 </script>
