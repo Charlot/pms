@@ -74,12 +74,34 @@ class PartsController < ApplicationController
 
   # POST /parts/1/add_process_entitties
   def add_process_entities
+    params[:process_entities].each {|pe_id|
+      @part.part_process_entities<<PartProcessEntity.create(process_entity_id:pe_id)
+    }
 
+    if @part.save
+      render json: {result:true,content:{}}
+    else
+      render json: {result:false,content:{}}
+    end
   end
 
   # DELETE /parts/1/delete_process_entities
   def delete_process_entities
+    msg = Message.new
+    msg.result = true
+    ActiveRecord::Base.transaction do
+      begin
+      params[:process_entities].each {|pe_id|
+        if !@part.part_process_entities.destroy(process_entity_id:pe_id)
+          raise
+        end
+      }
+      rescue
+        msg.result = false
+      end
+    end
 
+    render json: msg
   end
 
   private

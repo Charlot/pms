@@ -110,18 +110,18 @@
                 </div>
               </div>
             </div>
-            <div class="row">
+            <div class="row" id="routes_List">
               <%= @kanban.process_entities.each do |pe| %>
                   <div>
-                    <h4><span class="glyphicon glyhicon-remove remove-routing"></span></h4>
-                    <%= render partial: 'process_entities/simple', locals: {process_entities: pe} %>
+                    <h4><span class="remove-routing" id="<%= pe.id%>">Remove</span></h4>
+                    <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
                   </div>
               <% end if @kanban.part %>
             </div>
-            <ul id="kpe_List">
+            <ul id="kpe_List" class="hidden">
               <%= @kanban.process_entities.each do |pe| %>
               <li pe_nr="<%= pe.nr%>"></li>
-              <% end %>
+              <% end if @kanban.part %>
             </ul>
           </div>
         </div>
@@ -143,18 +143,29 @@
         //线号
         $('#search_Part').on('keypress blur', function (event) {
             var tar = $(this);
-            if(tar.val().length == 0){
-                $("#error-message").removeClass("hidden");
-                $("#error-message").text("请输入线号");
-                return;
-            }
             if (tar.val().length > 0 && (event.keyCode == undefined || event.keyCode == 13)) {
                 pms.search('parts', {attr: 'nr', val: tar.val()}, function (data) {
                     if (data.result) {
                         $("#search_Part_Res").val(data.content.id);
-                        //TODO show part routing
-                        data.content.process_entities.each(function(){
-                            
+                        //
+                        if($("routes_List").children().length > 0){
+                            return;
+                        }
+                        $("#routes_List").empty();
+                        data.content.process_entities.forEach(function(value){
+                            var list_item = $("<li>").attr("pe_nr", value.nr);
+                            $("#kpe_List").append(list_item);
+                            //get template
+                            $.ajax({
+                                url: '/process_entities/' + value.id + "/simple",
+                                dataType: 'html',
+                                type: 'GET',
+                                success: function (data) {
+
+                                    var div = $("<div>").append("<h4><span class='remove-routing' id="+value.id+">Remove</span></h4>").append(data);
+                                    $("#routes_List").append(div);
+                                }
+                            })
                         });
                     } else {
                         $("#error-message").removeClass("hidden");
@@ -182,35 +193,49 @@
         //搜索Routing
         $("#search_Route").on("keypress", function (event) {
             var route_nr = $(this).val();
-            var count = $("#kpe_List").children().length;
             var kpe = $("#kpe_List").children("[pe_nr=" + route_nr + "]");
             if (kpe.length > 0) {
                 $("#error-message").removeClass("hidden");
                 $("#error-message").text("Routing已经存在");
                 return;
             }
+
             var part_id = $("#search_Part_Res").val();
             if(part_id.length == 0){
                 $("#error-message").removeClass("hidden");
                 $("#error-message").text("请先输入线号");
                 return;
             }
+
             var kanban_id = $("#kanban").attr("kanban_id");
             if (route_nr.length > 0 && event.keyCode == 13) {
                 pms.search('process_entities', {attr: 'nr', val: route_nr}, function (data) {
                     if (data.result) {
-                        //查询到之后，请求ProcessEntity的Show界面
-                        var list_item = $("<li>").attr("pe_nr", data.content.nr);
-                        $("#kpe_List").append(list_item);
-                        //render partial
+                        var object = data.content;
+                        //Add Process Entity to Part
                         $.ajax({
-                            url: '/process_entities/' + data.content.id + "/simple",
-                            dataType: 'html',
-                            type: 'GET',
-                            success: function (data) {
-                                $("#routes_List").append(data);
+                            url:'/parts/'+part_id+'/add_process_entities',
+                            data:{process_entities:[data.content.id]},
+                            type:'POST',
+                            dataType:'json',
+                            success:function(data){
+                                if(data.result){
+                                    //append li
+                                    var list_item = $("<li>").attr("pe_nr", object.nr);
+                                    $("#kpe_List").append(list_item);
+                                    //get template
+                                    $.ajax({
+                                        url: '/process_entities/' + object.id + "/simple",
+                                        dataType: 'html',
+                                        type: 'GET',
+                                        success: function (data) {
+                                            var div = $("<div>").append("<h4><span class=' remove-routing' id="+object.id+">Remove</span></h4>").append(data);
+                                            $("#routes_List").append(div);
+                                        }
+                                    })
+                                }
                             }
-                        })
+                        });
                     } else {
                         $("#error-message").removeClass("hidden");
                         $("#error-message").text(data.content);
@@ -221,8 +246,22 @@
 
         $(".remove-routing").on("click", function () {
             var pe_nr = $(this).attr("pe_nr");
-            $(this).parent().parent().remove();
-            $("#kpe_List").children("[pe_nr=" + pe_nr + "]").remove();
+            var id = $(this).attr("id");
+            var part_id = $("#search_Part_Res").val();
+            var target = $(this);
+            //TODO
+            $.ajax({
+                url:"/parts/"+part_id+"/delete_process_entities",
+                data:{process_entities:[id]},
+                dataType:'json',
+                type:'delete',
+                success:function(data){
+                    if(data.result){
+                        target.parent().parent().remove();
+                        $("#kpe_List").children("[pe_nr=" + pe_nr + "]").remove();
+                    }
+                }
+            })
         });
 
         /*$("#select_KanbanType").on("change", function () {
