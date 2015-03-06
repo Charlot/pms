@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Brilliantech.Framwork.Utils.LogUtil;
+using PmsPrinter.Service;
 
 namespace PmsPrinter
 {
@@ -24,14 +26,32 @@ namespace PmsPrinter
             InitializeComponent();
         }
 
+
+
+        private void PrintBtn_Click(object sender, RoutedEventArgs e)
+        {
+            string kanbanNr = KanbanNrTB.Text.Trim();
+
+            if (kanbanNr.Length > 0)
+            {
+                new PrintService().Print("P002", kanbanNr);
+            }
+            else
+            {
+                KanbanNrTB.Text = String.Empty;
+                MessageBox.Show("请输入需要打印的Kanban号");
+                KanbanNrTB.Focus();
+            }
+        }
+
         private void SetServerBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            new ServerSetting().ShowDialog();
         }
 
         private void SetPrinterBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            new PrinterSetting().ShowDialog();
         }
     }
 }
