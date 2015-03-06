@@ -35,12 +35,11 @@ module Printer
       }
       heads=[]
       HEAD.each do |k|
-        heads<<{Key:k,value:head[k]}
+        heads<<{Key:k,Value:head[k]}
       end
 
-
-
       self.data_set<<heads
+
     end
   end
 end
