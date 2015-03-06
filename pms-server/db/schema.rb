@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150304040511) do
+ActiveRecord::Schema.define(version: 20150306062441) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -166,6 +166,16 @@ ActiveRecord::Schema.define(version: 20150304040511) do
 
   add_index "part_boms", ["bom_item_id"], name: "index_part_boms_on_bom_item_id", using: :btree
   add_index "part_boms", ["part_id"], name: "index_part_boms_on_part_id", using: :btree
+
+  create_table "part_process_entities", force: true do |t|
+    t.integer  "part_id"
+    t.integer  "process_entity_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "part_process_entities", ["part_id"], name: "index_part_process_entities_on_part_id", using: :btree
+  add_index "part_process_entities", ["process_entity_id"], name: "index_part_process_entities_on_process_entity_id", using: :btree
 
   create_table "parts", force: true do |t|
     t.string   "nr"

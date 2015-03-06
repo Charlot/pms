@@ -1,8 +1,8 @@
 class KanbanProcessEntity < ActiveRecord::Base
   validates_uniqueness_of :kanban_id, scope: :process_entity_id
 
-  belongs_to :kanban, dependent: :destroy
-  belongs_to :process_entity, dependent: :destroy
+  belongs_to :kanban
+  belongs_to :process_entity
 
   # after_create :create_part_bom
   # after_destroy :destroy_part_bom
@@ -13,6 +13,5 @@ class KanbanProcessEntity < ActiveRecord::Base
   # def create_part_bom
   #   kb=self.kanban
   #   part=kb.part
-  #
   # end
 end

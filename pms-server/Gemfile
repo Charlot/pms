@@ -53,3 +53,7 @@ gem 'paper_trail'
 gem 'therubyracer'
 gem 'less-rails'
 gem 'twitter-bootstrap-rails'
+
+# For API
+gem 'grape'
+gem 'rack-oauth2'

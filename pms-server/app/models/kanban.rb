@@ -4,11 +4,8 @@ class Kanban < ActiveRecord::Base
 
   belongs_to :part
   belongs_to :product, class_name: 'Part'
-  has_many :kanban_process_entities, dependent: :destroy
-  has_many :process_entities, :through => :kanban_process_entities
+  delegate :process_entities,to: :part
   has_many :production_order, as: :orderable
-
-  accepts_nested_attributes_for :kanban_process_entities
 
   # after_create :create_part_bom
   # after_destroy :destroy_part_bom
