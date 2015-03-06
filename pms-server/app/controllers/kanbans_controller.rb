@@ -193,7 +193,7 @@ class KanbansController < ApplicationController
                                      :source_storage,:des_warehouse,
                                      :des_storage,:print_time,:part_id,
                                      :version,:ktype,:copies,
-                                     :product_id,kanban_process_entities_attributes:[:kanban_id,:process_entity_id,:id,:_destroy]
+                                     :product_id
       )
     end
 end

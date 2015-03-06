@@ -19,7 +19,7 @@
     </div>
     <div class="row">
       <div class="panel panel-default">
-        <div class="panel-heading" id="kanban" kanban_id="<%= @kanban.id%>">
+        <div class="panel-heading" id="kanban" kanban_id="<%= @kanban.id %>">
           基础信息
         </div>
         <div class="panel-body">
@@ -111,28 +111,18 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-10" id="routes_List">
-                <% @kanban.process_entities.each do |pe|%>
-                    <div>
-                      <h4><span class="glyphicon glyphicon-remove remove-routing" pe_nr="<%= pe.nr%>"></span></h4>
-                      <%= render partial: 'process_entities/simple',locals:{process_entity:pe}%>
-                    </div>
-                <% end %>
-              </div>
-              <div class="col-md-2">
-                <ul id="kpe_List" class="hidden">
-                  <% @kanban.kanban_process_entities.each do |kpe|%>
-                      <li pe_nr="<%= kpe.process_entity.nr%>">
-                      <%= f.fields_for :kanban_process_entities,kpe do |kpef|%>
-                            <%= kpef.check_box :_destroy%>
-                            <%= kpef.label :process_entity_id%>
-                            <%= kpef.text_field :process_entity_id%>
-                      <% end %>
-                      </li>
-                  <% end %>
-                </ul>
-              </div>
+              <%= @kanban.process_entities.each do |pe| %>
+                  <div>
+                    <h4><span class="glyphicon glyhicon-remove remove-routing"></span></h4>
+                    <%= render partial: 'process_entities/simple', locals: {process_entities: pe} %>
+                  </div>
+              <% end if @kanban.part %>
             </div>
+            <ul id="kpe_List">
+              <%= @kanban.process_entities.each do |pe| %>
+              <li pe_nr="<%= pe.nr%>"></li>
+              <% end %>
+            </ul>
           </div>
         </div>
       </div>
@@ -150,12 +140,22 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        //线号
         $('#search_Part').on('keypress blur', function (event) {
             var tar = $(this);
+            if(tar.val().length == 0){
+                $("#error-message").removeClass("hidden");
+                $("#error-message").text("请输入线号");
+                return;
+            }
             if (tar.val().length > 0 && (event.keyCode == undefined || event.keyCode == 13)) {
                 pms.search('parts', {attr: 'nr', val: tar.val()}, function (data) {
                     if (data.result) {
                         $("#search_Part_Res").val(data.content.id);
+                        //TODO show part routing
+                        data.content.process_entities.each(function(){
+                            
+                        });
                     } else {
                         $("#error-message").removeClass("hidden");
                         $("#error-message").text(data.content);
@@ -164,6 +164,7 @@
             }
         });
 
+        //总成号
         $("#search_ProductNR").on("keypress blur", function (event) {
             var tar = $(this);
             if (tar.val().length > 0 && (event.keyCode == undefined || event.keyCode == 13)) {
@@ -178,30 +179,35 @@
             }
         });
 
-        $("#search_Route").on("keypress",function(event){
+        //搜索Routing
+        $("#search_Route").on("keypress", function (event) {
             var route_nr = $(this).val();
             var count = $("#kpe_List").children().length;
-            var kpe=$("#kpe_List").children("[pe_nr="+route_nr+"]");
-            if(kpe.length > 0){
+            var kpe = $("#kpe_List").children("[pe_nr=" + route_nr + "]");
+            if (kpe.length > 0) {
                 $("#error-message").removeClass("hidden");
                 $("#error-message").text("Routing已经存在");
                 return;
             }
+            var part_id = $("#search_Part_Res").val();
+            if(part_id.length == 0){
+                $("#error-message").removeClass("hidden");
+                $("#error-message").text("请先输入线号");
+                return;
+            }
             var kanban_id = $("#kanban").attr("kanban_id");
-            if(route_nr.length > 0 && event.keyCode == 13){
-                pms.search('process_entities',{attr:'nr',val:route_nr},function(data){
+            if (route_nr.length > 0 && event.keyCode == 13) {
+                pms.search('process_entities', {attr: 'nr', val: route_nr}, function (data) {
                     if (data.result) {
                         //查询到之后，请求ProcessEntity的Show界面
-                        var list_item = $("<li>").attr("pe_nr",data.content.nr).append("<input id='kanban_kanban_process_entities_attributes_"+count+"_process_entity_id' " +
-                        "name='kanban[kanban_process_entities_attributes]["+count+"][process_entity_id]'" +
-                        " type='text' value="+data.content.id+">");
+                        var list_item = $("<li>").attr("pe_nr", data.content.nr);
                         $("#kpe_List").append(list_item);
                         //render partial
                         $.ajax({
-                            url:'/process_entities/'+data.content.id+"/simple",
-                            dataType:'html',
-                            type:'GET',
-                            success:function(data){
+                            url: '/process_entities/' + data.content.id + "/simple",
+                            dataType: 'html',
+                            type: 'GET',
+                            success: function (data) {
                                 $("#routes_List").append(data);
                             }
                         })
@@ -213,23 +219,23 @@
             }
         });
 
-        $(".remove-routing").on("click",function(){
+        $(".remove-routing").on("click", function () {
             var pe_nr = $(this).attr("pe_nr");
             $(this).parent().parent().remove();
-            $("#kpe_List").children("[pe_nr="+pe_nr+"]").remove();
+            $("#kpe_List").children("[pe_nr=" + pe_nr + "]").remove();
         });
 
         /*$("#select_KanbanType").on("change", function () {
-            var type = $(this).children(":Selected").val();
-            $.ajax({
-                url: 'kanbans/add_routing_template',
-                data: {type: type},
-                dataType: 'html',
-                type: 'GET',
-                success: function (data) {
-                    $("#addKanbanRoutingTemplate").html(data);
-                }
-            })
-        });*/
+         var type = $(this).children(":Selected").val();
+         $.ajax({
+         url: 'kanbans/add_routing_template',
+         data: {type: type},
+         dataType: 'html',
+         type: 'GET',
+         success: function (data) {
+         $("#addKanbanRoutingTemplate").html(data);
+         }
+         })
+         });*/
     });
 </script>

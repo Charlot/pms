@@ -13,6 +13,5 @@ class KanbanProcessEntity < ActiveRecord::Base
   # def create_part_bom
   #   kb=self.kanban
   #   part=kb.part
-  #
   # end
 end

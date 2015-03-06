@@ -11,3 +11,8 @@ $tmp_file_path='uploadfiles/tmp'
   file_path=File.join(path,'.keep')
   FileUtils.touch(file_path) unless File.exists?(file_path)
 end
+
+config=YAML.load(File.open("#{Rails.root}/config/config.yml"))
+# api default auth user and password
+auth=config['api']['auth']
+$API_AUTH_USER={user: auth['user'], passwd: auth['password']}

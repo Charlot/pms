@@ -7,6 +7,8 @@ Rails.application.routes.draw do
     end
   end
 
+  mount ApplicationAPI => '/api'
+
   resources :machine_combinations
 
   resources :machine_scopes
@@ -79,6 +81,10 @@ Rails.application.routes.draw do
 
   resources :measure_units
   resources :parts do
+    member do
+      post :add_process_entities
+      delete :delete_process_entities
+    end
     collection do
       get :search
     end

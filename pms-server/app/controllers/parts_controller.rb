@@ -1,5 +1,6 @@
 class PartsController < ApplicationController
-  before_action :set_part, only: [:show, :edit, :update, :destroy]
+  before_action :set_part, only: [:show, :edit, :update, :destroy,
+                         :add_process_entities,:delete_process_entities]
 
   # GET /parts
   # GET /parts.json
@@ -67,8 +68,18 @@ class PartsController < ApplicationController
     @part = Part.send("find_by_"+params[:attr],params[:val])
     respond_to do |format|
       format.json { render json: {result: false, content: "Not Found!"}} unless @part
-      format.json { render json: {result: true, content: @part}}
+      format.json { render json: {result: true, content: @part.as_json(include: :process_entities)}}
     end
+  end
+
+  # POST /parts/1/add_process_entitties
+  def add_process_entities
+
+  end
+
+  # DELETE /parts/1/delete_process_entities
+  def delete_process_entities
+
   end
 
   private
