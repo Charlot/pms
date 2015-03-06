@@ -23,15 +23,15 @@ module APIGuard
 
     def authenticate!
       unless warden.authenticate?
-        return error!({retult:0},401)
+        return error!({result: 0}, 401)
       end
     end
+  end
 
-    module ClassMethods
-      def guard_all!
-        before do
-          guard!
-        end
+  module ClassMethods
+    def guard_all!
+      before do
+        guard!
       end
     end
   end

@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     end
   end
 
-  mount ApplicationAPI => '/api'
+  mount ApplicationAPI => '/'
 
   resources :machine_combinations
 

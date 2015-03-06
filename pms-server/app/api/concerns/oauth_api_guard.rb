@@ -11,9 +11,10 @@ module OauthAPIGuard
     install_error_responders(base)
   end
 
+# Helper Methods for Grape Endpoint
   module HelperMethods
     def guard!
-      if request.env['HTTP_AUTHORICATION'].split(' ')[0] == 'Bearer'
+      if request.env['HTTP_AUTHORIZATION'].split(' ')[0]=='Bearer'
         guard_by_token
       else
 
@@ -22,18 +23,19 @@ module OauthAPIGuard
 
     private
     def guard_by_token
-      token_string=get_token_string
-      raise BasicAuthError unless '3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d'==token_string
+      token_string = get_token_string
+      #raise BasicAuthError unless  ApiToken.find_by_token(token_string)
+      raise BasicAuthError unless  '3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d'==token_string
     end
 
     def guard_by_basic
       auth_header=env['HTTP_AUTHORIZATION'].split(' ')
-      user,password=Base64.decode64(auth_header[1].split(':'))
-      raise BasicAuthError unless user==$API_AUTH_USER[:user] && password==$API_AUTH_USER[:password]
+      user, passwd=Base64.decode64(auth_header[1]).split(':')
+      raise BasicAuthError unless user==$API_AUTH_USER[:user] && passwd==$API_AUTH_USER[:password]
     end
 
     def get_token_string
-      request.env[Rack::OAuth2::Server::Rosource::ACCESS_TOKEN]
+      request.env[Rack::OAuth2::Server::Resource::ACCESS_TOKEN]
     end
   end
 
@@ -51,16 +53,17 @@ module OauthAPIGuard
     end
 
     def oauth2_bearer_token_error_handler
-      Proc.new {|e|
-        respose = case e
-                  when BasicAuthError
-                    Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
-                                                                            :invalid_token,
-                                                                            'Invalid Token.'
-                    )
-                  end
+      Proc.new { |e|
+        response = case e
+                   when BasicAuthError
+                     Rack::OAuth2::Server::Resource::Bearer::Unauthorized.new(
+                         :invalid_token,
+                         'Invalid Token.')
+                   end
+        response.finish
       }
     end
   end
-  class BasicAuthError<StandardError;end
+  class BasicAuthError<StandardError;
+  end
 end
