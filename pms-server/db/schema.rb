@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150306062441) do
+ActiveRecord::Schema.define(version: 20150308091051) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -99,13 +99,13 @@ ActiveRecord::Schema.define(version: 20150306062441) do
     t.integer  "t2"
     t.integer  "s1"
     t.integer  "s2"
-    t.string   "wd1"
+    t.integer  "wd1"
     t.integer  "w2"
     t.integer  "t3"
     t.integer  "t4"
     t.integer  "s3"
     t.integer  "s4"
-    t.string   "wd2"
+    t.integer  "wd2"
     t.integer  "machine_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -236,15 +236,13 @@ ActiveRecord::Schema.define(version: 20150306062441) do
   add_index "process_templates", ["type"], name: "index_process_templates_on_type", using: :btree
 
   create_table "production_orders", force: true do |t|
-    t.string   "nr",             null: false
-    t.integer  "orderable_id"
-    t.string   "orderable_type"
+    t.integer  "kanban_id"
+    t.integer  "state",      default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "production_orders", ["nr"], name: "index_production_orders_on_nr", using: :btree
-  add_index "production_orders", ["orderable_id"], name: "index_production_orders_on_orderable_id", using: :btree
+  add_index "production_orders", ["kanban_id"], name: "index_production_orders_on_kanban_id", using: :btree
 
   create_table "resource_group_parts", force: true do |t|
     t.integer  "part_id"

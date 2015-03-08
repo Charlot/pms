@@ -28,8 +28,6 @@ Rails.application.routes.draw do
 
   resources :process_parts
 
-  resources :production_orders
-
   resources :process_entities do
     member do
       get :simple
@@ -59,14 +57,13 @@ Rails.application.routes.draw do
       post :release
       post :lock
       delete :discard
-      #post :scan
-      get :manage
       get :search
       get :add_routing_template
     end
 
     collection do
       post :scan
+      get :panel
     end
   end
 
