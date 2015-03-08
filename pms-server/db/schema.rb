@@ -238,6 +238,7 @@ ActiveRecord::Schema.define(version: 20150308091051) do
   create_table "production_orders", force: true do |t|
     t.integer  "kanban_id"
     t.integer  "state",      default: 0
+    t.string   "code"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

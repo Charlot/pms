@@ -3,6 +3,7 @@ class CreateProductionOrders < ActiveRecord::Migration
     create_table :production_orders do |t|
       t.references :kanban, index: true
       t.integer :state, default: 0
+      t.string :code
 
       t.timestamps
     end
