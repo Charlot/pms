@@ -146,6 +146,7 @@ ActiveRecord::Schema.define(version: 20150309012610) do
     t.float    "seal_time",         default: 0.0
     t.float    "terminal_time",     default: 0.0
     t.float    "wire_time",         default: 0.0
+    t.integer  "status",            default: 0
   end
 
   add_index "machines", ["nr"], name: "index_machines_on_nr", using: :btree
