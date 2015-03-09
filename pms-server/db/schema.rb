@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150309083144) do
+ActiveRecord::Schema.define(version: 20150309091309) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -272,6 +272,14 @@ ActiveRecord::Schema.define(version: 20150309083144) do
 
   add_index "resource_groups", ["nr"], name: "index_resource_groups_on_nr", using: :btree
   add_index "resource_groups", ["type"], name: "index_resource_groups_on_type", using: :btree
+
+  create_table "settings", force: true do |t|
+    t.string   "name"
+    t.string   "value"
+    t.integer  "stype"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "tools", force: true do |t|
     t.string   "nr"

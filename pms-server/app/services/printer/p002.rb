@@ -10,7 +10,7 @@ module Printer
       @kanban = Kanban.find_by_id(self.id)
       #Now the Automatic KANBAN onlu has 1 process entity
       @process_entity = @kanban.process_entities.first
-
+      #应该是固定的，消耗的原材料，填入
       head={
           kanban_nr:@kanban.nr,
           part_nr:@kanban.product.nr,
