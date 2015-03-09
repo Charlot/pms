@@ -100,13 +100,13 @@ ActiveRecord::Schema.define(version: 20150309091309) do
     t.integer  "t2"
     t.integer  "s1"
     t.integer  "s2"
-    t.integer  "wd1"
+    t.string   "wd1"
     t.integer  "w2"
     t.integer  "t3"
     t.integer  "t4"
     t.integer  "s3"
     t.integer  "s4"
-    t.integer  "wd2"
+    t.string   "wd2"
     t.integer  "machine_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -275,8 +275,6 @@ ActiveRecord::Schema.define(version: 20150309091309) do
 
   add_index "resource_groups", ["nr"], name: "index_resource_groups_on_nr", using: :btree
   add_index "resource_groups", ["type"], name: "index_resource_groups_on_type", using: :btree
-<<<<<<< HEAD
-=======
 
   create_table "settings", force: true do |t|
     t.string   "name"
@@ -285,7 +283,6 @@ ActiveRecord::Schema.define(version: 20150309091309) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
->>>>>>> 0306e9119e0f9332c1871a39105dd460c6d362da
 
   create_table "tools", force: true do |t|
     t.string   "nr"
