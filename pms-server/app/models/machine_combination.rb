@@ -78,10 +78,10 @@ class MachineCombinationList< BaseClass
   attr_accessor :nodes
 
   def match(node)
-    self.nodes.each do |n|
+    self.nodes.each_with_index do |n,j|
       match_start_index =(node.match_start_index>n.match_start_index) ? node.match_start_index : n.match_start_index
-      match_end_index =(node.match_end_index<n.match_end_index) ? node.match_end_index : n.match_end_index
-      puts "#{match_start_index}:#{match_end_index}"
+      match_end_index =(node.match_end_index>n.match_end_index) ? node.match_end_index : n.match_end_index
+      puts "&&&.#{j}.#{n.key}.start compare:#{match_start_index}:#{match_end_index}"
       (match_start_index..match_end_index).each { |i|
         puts "**#{i}---#{node.items[i]}:#{n.items[i]}"
         if !node.items[i].nil? && !n.items[i].nil?
@@ -89,15 +89,16 @@ class MachineCombinationList< BaseClass
             puts "break------#{node.items[i]}:#{n.items[i]}---------#{node.items[i].class}:#{n.items[i].class}----------------"
             break
           elsif i< match_end_index
-            puts 'false-------------------------------'
-            return false
-          else
+            puts "EQUAL:#{i}-------------------------------"
+            # return false
+          elsif i==match_end_index
             puts "#{n.key}--key-------------------------"
             return n.key
           end
         end
       }
     end
+    return nil
   end
 end
 
