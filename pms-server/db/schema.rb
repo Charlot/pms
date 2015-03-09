@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150309081739) do
+ActiveRecord::Schema.define(version: 20150309091309) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(version: 20150309081739) do
     t.datetime "updated_at"
     t.integer  "ktype"
     t.integer  "product_id"
+    t.integer  "bundle",           default: 0
   end
 
   add_index "kanbans", ["nr"], name: "index_kanbans_on_nr", using: :btree
@@ -99,13 +100,13 @@ ActiveRecord::Schema.define(version: 20150309081739) do
     t.integer  "t2"
     t.integer  "s1"
     t.integer  "s2"
-    t.string   "wd1"
+    t.integer  "wd1"
     t.integer  "w2"
     t.integer  "t3"
     t.integer  "t4"
     t.integer  "s3"
     t.integer  "s4"
-    t.string   "wd2"
+    t.integer  "wd2"
     t.integer  "machine_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -274,6 +275,17 @@ ActiveRecord::Schema.define(version: 20150309081739) do
 
   add_index "resource_groups", ["nr"], name: "index_resource_groups_on_nr", using: :btree
   add_index "resource_groups", ["type"], name: "index_resource_groups_on_type", using: :btree
+<<<<<<< HEAD
+=======
+
+  create_table "settings", force: true do |t|
+    t.string   "name"
+    t.string   "value"
+    t.integer  "stype"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+>>>>>>> 0306e9119e0f9332c1871a39105dd460c6d362da
 
   create_table "tools", force: true do |t|
     t.string   "nr"
