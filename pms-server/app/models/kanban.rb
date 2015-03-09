@@ -55,6 +55,14 @@ class Kanban < ActiveRecord::Base
     self.quantity * (self.process_entities.inject(0) { |sum, pe| sum+=pe.stand_time })
   end
 
+  def source_position
+    "#{self.source_warehouse} #{self.source_storage}"
+  end
+
+  def desc_position
+    "#{self.des_warehouse} #{self.des_storage}"
+  end
+
   # Get raw materials from kanban's routing
   def get_raw_materials
     #TODO Get raw materials of Routing

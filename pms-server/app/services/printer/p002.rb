@@ -7,17 +7,19 @@ module Printer
           :apab_description,:remark]
 
     def generate_data
+      @kanban = Kanban.find_by_id(self.id)
+
       head={
-          kanban_nr:self.id,
-          part_nr:'91G0001',
-          wire_nr:'wire_3456',
-          customer_nr:'CN0001',
-          card_quantity:200,
-          safe_quantity:100,
-          card_number:2,
-          work_time:78.98,
-          send_position:'POSITION01',
-          wire_description:'this is a heartbroke time',
+          kanban_nr:'@kanban.nr',
+          part_nr:'@kanban.product.nr',
+          wire_nr:'@kanban.part.nr',
+          customer_nr: '@kanban.product.customer_nr',
+          card_quantity:'@kanban.quantity',
+          safe_quantity:'@kanban.safety_stock',
+          card_number:'@kanban.copies',
+          work_time:'@kanban.task_time',
+          send_position:'@kanban.source_position',
+          wire_description:'Dscription',
           wire_length:100,
           bundle_number:50,
           strip_length1:3.5,
