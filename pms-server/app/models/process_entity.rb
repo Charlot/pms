@@ -41,25 +41,23 @@ class ProcessEntity < ActiveRecord::Base
   end
 
   def template_text
-    text=''
     template=self.process_template
     cfs=template.custom_fields
     cfvs=self.custom_field_values
     puts "***#{cfs.to_s}"
     puts "---#{cfvs.to_s}"
-    text= self.process_template.template.gsub(/{\d+}/).each do |v|
+    self.process_template.template.gsub(/{\d+}/).each do |v|
       puts "#####{v}"
       if cf=cfs.detect { |f|
         puts "#{v.to_i}~~~#{f.id.to_i==v.to_i}"
         f.id.to_i==v.scan(/{(\d+)}/).map(&:first).first.to_i }
         puts "********************#{cf.to_json}"
         cfv=cfvs.detect { |v| v.custom_field_id==cf.id }
-        CustomFieldFormatType.part?(cf.field_format) ? Part.find_by_id(cfv.value).nr : cfv.value
+        CustomFieldFormatType.part?(cf.field_format) ? ((part=Part.find_by_id(cfv.value)).nil? ? 'N/A' : part.nr) : (cfv.value.nil? ? 'N/A' : cfv.value)
       else
-        ''
+        'ERROR'
       end
     end
-    return text
   end
 # def build_process_parts
 #   if ProcessType.auto?(self.process_template.type)

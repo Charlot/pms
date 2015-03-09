@@ -13,6 +13,7 @@ class CreateMachineCombinations < ActiveRecord::Migration
       t.integer :s3
       t.integer :s4
       t.string :wd2
+
       t.references :machine, index: true
 
       t.timestamps
