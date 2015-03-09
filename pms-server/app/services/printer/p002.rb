@@ -8,20 +8,22 @@ module Printer
 
     def generate_data
       @kanban = Kanban.find_by_id(self.id)
+      #Now the Automatic KANBAN onlu has 1 process entity
+      @process_entity = @kanban.process_entities.first
 
       head={
-          kanban_nr:'@kanban.nr',
-          part_nr:'@kanban.product.nr',
-          wire_nr:'@kanban.part.nr',
-          customer_nr: '@kanban.product.customer_nr',
-          card_quantity:'@kanban.quantity',
-          safe_quantity:'@kanban.safety_stock',
-          card_number:'@kanban.copies',
-          work_time:'@kanban.task_time',
-          send_position:'@kanban.source_position',
-          wire_description:'Dscription',
+          kanban_nr:@kanban.nr,
+          part_nr:@kanban.product.nr,
+          wire_nr:@kanban.part.nr,
+          customer_nr: @kanban.product.customer_nr,
+          card_quantity:@kanban.quantity,
+          safe_quantity:@kanban.safety_stock,
+          card_number:@kanban.copies,
+          work_time:@kanban.task_time,
+          send_position:@kanban.source_position,
+          wire_description:@kanban.part.custom_nr,
           wire_length:100,
-          bundle_number:50,
+          bundle_number:@kanban.bundle,
           strip_length1:3.5,
           terminal_custom_nr1:'ct001',
           terminal_nr1:'t001',
