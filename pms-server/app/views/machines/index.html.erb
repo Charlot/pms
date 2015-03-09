@@ -7,6 +7,10 @@
     <th>Name</th>
     <th>Description</th>
     <th>Resource group</th>
+    <th>Print Time</th>
+    <th>Seal Time</th>
+    <th>Terminal Time</th>
+    <th>Wire Time</th>
     <th colspan="4"></th>
   </tr>
   </thead>
@@ -17,7 +21,11 @@
         <td><%= machine.nr %></td>
         <td><%= machine.name %></td>
         <td><%= machine.description %></td>
-        <td><%= machine.resource_group_machine.nr if machine.resource_group_machine%></td>
+        <td><%= machine.resource_group_machine.nr if machine.resource_group_machine %></td>
+        <td><%= machine.print_time %></td>
+        <td><%= machine.seal_time %></td>
+        <td><%= machine.terminal_time %></td>
+        <td><%= machine.wire_time %></td>
         <td><%= link_to 'Show', machine %></td>
         <td><%= link_to 'Edit', edit_machine_path(machine) %></td>
         <td><%= link_to 'Destroy', machine, method: :delete, data: {confirm: 'Are you sure?'} %></td>
