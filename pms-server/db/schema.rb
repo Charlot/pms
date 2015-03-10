@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150306062441) do
+ActiveRecord::Schema.define(version: 20150309091309) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(version: 20150306062441) do
     t.datetime "updated_at"
     t.integer  "ktype"
     t.integer  "product_id"
+    t.integer  "bundle",           default: 0
   end
 
   add_index "kanbans", ["nr"], name: "index_kanbans_on_nr", using: :btree
@@ -109,6 +110,9 @@ ActiveRecord::Schema.define(version: 20150306062441) do
     t.integer  "machine_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "complexity",        default: 0
+    t.integer  "match_start_index", default: 0
+    t.integer  "match_end_index",   default: 0
   end
 
   add_index "machine_combinations", ["machine_id"], name: "index_machine_combinations_on_machine_id", using: :btree
@@ -140,6 +144,11 @@ ActiveRecord::Schema.define(version: 20150306062441) do
     t.integer  "resource_group_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.float    "print_time",        default: 0.0
+    t.float    "seal_time",         default: 0.0
+    t.float    "terminal_time",     default: 0.0
+    t.float    "wire_time",         default: 0.0
+    t.integer  "status",            default: 0
   end
 
   add_index "machines", ["nr"], name: "index_machines_on_nr", using: :btree
@@ -236,15 +245,14 @@ ActiveRecord::Schema.define(version: 20150306062441) do
   add_index "process_templates", ["type"], name: "index_process_templates_on_type", using: :btree
 
   create_table "production_orders", force: true do |t|
-    t.string   "nr",             null: false
-    t.integer  "orderable_id"
-    t.string   "orderable_type"
+    t.integer  "kanban_id"
+    t.integer  "state",      default: 0
+    t.string   "code"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "production_orders", ["nr"], name: "index_production_orders_on_nr", using: :btree
-  add_index "production_orders", ["orderable_id"], name: "index_production_orders_on_orderable_id", using: :btree
+  add_index "production_orders", ["kanban_id"], name: "index_production_orders_on_kanban_id", using: :btree
 
   create_table "resource_group_parts", force: true do |t|
     t.integer  "part_id"
@@ -267,6 +275,14 @@ ActiveRecord::Schema.define(version: 20150306062441) do
 
   add_index "resource_groups", ["nr"], name: "index_resource_groups_on_nr", using: :btree
   add_index "resource_groups", ["type"], name: "index_resource_groups_on_type", using: :btree
+
+  create_table "settings", force: true do |t|
+    t.string   "name"
+    t.string   "value"
+    t.integer  "stype"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "tools", force: true do |t|
     t.string   "nr"

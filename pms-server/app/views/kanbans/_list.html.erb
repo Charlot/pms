@@ -4,15 +4,16 @@
     <th>#</th>
     <th><%= KanbanDesc::NR %></th>
     <th><%= KanbanDesc::TYPE%></th>
+    <th><%= KanbanDesc::WIRE_NR%></th>
+    <th><%= KanbanDesc::PRODUCT_NR%></th>
+    <th><%= KanbanDesc::CUSTOMER_NR%></th>
     <th><%= KanbanDesc::VERSION %></th>
     <th><%= KanbanDesc::TASK_TIME%></th>
+    <th>二维码信息</th>
     <th><%= KanbanDesc::PRINT_DATE%></th>
     <th><%= KanbanDesc::COPIES%></th>
     <th><%= KanbanDesc::STATE%></th>
     <th><%= KanbanDesc::QUANTITY%></th>
-    <th><%= KanbanDesc::WIRE_NR%></th>
-    <th><%= KanbanDesc::PRODUCT_NR%></th>
-    <th><%= KanbanDesc::CUSTOMER_NR%></th>
     <th><%= KanbanDesc::SOURCE_POSITION%></th>
     <th><%= KanbanDesc::DES_POSITION%></th>
     <th>历史</th>
@@ -26,17 +27,19 @@
         <td><%= index + 1%></td>
         <td><%= kanban.nr %></td>
         <td><%= KanbanType.display(kanban.ktype) %></td>
+        <td><%= kanban.part_nr%></td>
+        <td><%= kanban.product_nr %></td>
+        <td><%= kanban.product_custom_nr %></td>
         <td><%= kanban.version_now%></td>
         <td><%= kanban.task_time%></td>
+        <td><%= kanban.printed_2DCode%></td>
         <td><%= kanban.print_time%></td>
         <td><%= kanban.copies%></td>
         <td>
           <span class="label <%= kanban_states_class(kanban.state)%>"><%= KanbanState.display(kanban.state)%></span>
         </td>
         <td><%= kanban.quantity%></td>
-        <td><%= kanban.part_id%></td>
-        <td></td>
-        <td></td>
+
         <td><%= "#{kanban.source_warehouse} | #{kanban.source_storage}"%></td>
         <td><%= "#{kanban.des_warehouse} | #{kanban.des_storage}"%></td>
         <td><%= link_to '修改历史',history_kanban_path(kanban)%></td>

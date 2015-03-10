@@ -1,11 +1,17 @@
 class Kanban < ActiveRecord::Base
-  validates :nr, :presence => true, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
+  validates :nr, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
   validates :part_id, :presence => true
 
   belongs_to :part
   belongs_to :product, class_name: 'Part'
   delegate :process_entities,to: :part
+  delegate :nr, to: :part,prefix: true, allow_nil: true
+  delegate :nr, to: :product,prefix: true, allow_nil: true
+  delegate :custom_nr, to: :product,prefix: true,allow_nil: true
+  delegate :custom_nr, to: :part, prefix: true,allow_nil: true
   has_many :production_order, as: :orderable
+
+  before_create :generate_id
 
   # after_create :create_part_bom
   # after_destroy :destroy_part_bom
@@ -39,20 +45,44 @@ class Kanban < ActiveRecord::Base
   end
 
   def can_update?
-    if self.state == KanbanState::INIT
+    if [KanbanState::INIT,KanbanState::LOCKED].include?(state)
       true
     else
       false
     end
   end
 
+  def can_destroy?
+    if [KanbanState::INIT,KanbanState::LOCKED,KanbanState::DELETED].include?(state)
+      true
+    else
+      false
+    end
+  end
+
+  def print_time
+    self[:print_time].localtime.strftime("%Y-%m-%d %H:%M:%S") if self[:print_time]
+  end
+
   def version_now
     self.versions.count
+  end
+
+  def printed_2DCode
+    "#{id}/#{version_now}"
   end
 
   # version of kanban
   def task_time
     self.quantity * (self.process_entities.inject(0) { |sum, pe| sum+=pe.stand_time })
+  end
+
+  def source_position
+    "#{self.source_warehouse} #{self.source_storage}"
+  end
+
+  def desc_position
+    "#{self.des_warehouse} #{self.des_storage}"
   end
 
   # Get raw materials from kanban's routing
@@ -66,13 +96,23 @@ class Kanban < ActiveRecord::Base
   # {id:1,
   #  version_nr:1,
   #  printed_nr:2}
-
   def self.parse_printed_2DCode(code)
     return false unless code =~ Regex::KANBAN_LABEL
     return false unless (splited_str = code.split('/')).count == 3
 
     {id: splited_str[0],
-     version_nr: splited_str[1],
-     printed_nr: splited_str[2]}
+     version_nr: splited_str[1]
+    }
+  end
+
+  # part_nr,product_nr
+  def self.search(part_nr="",product_nr="")
+    joins(:part,:product).where('parts.nr LIKE ? and products_kanbans.nr LIKE ?',"%#{part_nr}%","%#{product_nr}%")
+  end
+
+  #
+  private
+  def generate_id
+    self.nr = "KB#{Time.now.to_milli}"
   end
 end

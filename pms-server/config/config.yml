@@ -1,3 +1,7 @@
+printer:
+ lanka:
+  route_part_count: 3
+
 api:
  auth:
   user: 'UPDATE'

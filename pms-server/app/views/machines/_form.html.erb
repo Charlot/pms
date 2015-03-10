@@ -15,17 +15,40 @@
       <%= f.label :nr %><br>
       <%= f.text_field :nr %>
     </div>
+
     <div class="field">
       <%= f.label :name %><br>
       <%= f.text_field :name %>
     </div>
+
     <div class="field">
       <%= f.label :description %><br>
       <%= f.text_field :description %>
     </div>
+
     <div class="field">
       <%= f.label :resource_group_id %><br>
       <%= f.select(:resource_group_id, machine_resource_group_options, {include_blank: false}) %>
+    </div>
+
+    <div class="field">
+      <%= f.label :print_time %><br>
+      <%= f.number_field :print_time %>
+    </div>
+
+    <div class="field">
+      <%= f.label :seal_time %><br>
+      <%= f.number_field :seal_time %>
+    </div>
+
+    <div class="field">
+      <%= f.label :terminal_time %><br>
+      <%= f.number_field :terminal_time %>
+    </div>
+
+    <div class="field">
+      <%= f.label :wire_time %><br>
+      <%= f.number_field :wire_time %>
     </div>
     <div class="actions">
       <%= f.submit %>

@@ -7,19 +7,23 @@ module Printer
           :apab_description,:remark]
 
     def generate_data
+      @kanban = Kanban.find_by_id(self.id)
+      #Now the Automatic KANBAN onlu has 1 process entity
+      @process_entity = @kanban.process_entities.first
+      #应该是固定的，消耗的原材料，填入
       head={
-          kanban_nr:self.id,
-          part_nr:'91G0001',
-          wire_nr:'wire_3456',
-          customer_nr:'CN0001',
-          card_quantity:200,
-          safe_quantity:100,
-          card_number:2,
-          work_time:78.98,
-          send_position:'POSITION01',
-          wire_description:'this is a heartbroke time',
+          kanban_nr:@kanban.nr,
+          part_nr:@kanban.product_nr,
+          wire_nr:@kanban.part_nr,
+          customer_nr: @kanban.product_customer_nr,
+          card_quantity:@kanban.quantity,
+          safe_quantity:@kanban.safety_stock,
+          card_number:@kanban.copies,
+          work_time:@kanban.task_time,
+          send_position:@kanban.source_position,
+          wire_description:@kanban.part_custom_nr,
           wire_length:100,
-          bundle_number:50,
+          bundle_number:@kanban.bundle,
           strip_length1:3.5,
           terminal_custom_nr1:'ct001',
           terminal_nr1:'t001',

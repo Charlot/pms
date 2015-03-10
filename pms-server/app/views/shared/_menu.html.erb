@@ -21,43 +21,9 @@
         <li class="<%= 'active' if current_controller?({controller: 'tools'})%>"><a href="<%= tools_path %>">Tool</a></li>
         <li class="<%= 'active' if current_controller?({controller: 'process_templates'})%>"><a href="<%= process_templates_path %>">ProcessTemplate</a></li>
         <li class="<%= 'active' if current_controller?({controller: 'process_entities'})%>"><a href="<%= process_entities_path %>">ProcessEntity</a></li>
-        <li class="<%= 'active' if current_controller?({controller: 'kanbans'})%>"><a href="<%= new_kanban_path %>">KANBAN</a></li>
-        <li class="<%= 'active' if current_controller?({controller: 'production_orders'})%>"><a href="<%= production_orders_path%>">Production Orders</a></li>
+        <li class="<%= 'active' if current_controller?({controller: 'kanbans'})%>"><a href="<%= panel_kanbans_path %>">KANBAN</a></li>
+        <li class="<%= 'active' if current_controller?({controller: 'settings'})%>"><a href="<%= settings_path%>">设置</a></li>
       </ul>
     </div>
   </div>
 </nav>
-<!--
-<nav class="navbar navbar-default navbar-static-top">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="<%= root_path%>">P.M.S.</a>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li class="<%= 'active' if current_controller?({controller: 'kanbans'})%>"><a href="<%= new_kanban_path %>">KANBAN</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li class="<%= 'active' if current_controller?({controller: 'measure_units'})%>"><a href="<%= measure_units_path %>">MeasureUnit</a></li>
-            <li class="<%= 'active' if current_controller?({controller: 'resource_group_machines'})%>"><a href="<%= resource_group_machines_path %>">ResourceGroupMachine</a></li>
-            <li class="<%= 'active' if current_controller?({controller: 'resource_group_tools'})%>"><a href="<%= resource_group_tools_path %>">ResourceGroupTool</a></li>
-            <li class="<%= 'active' if current_controller?({controller: 'parts'})%>"><a href="<%= parts_path %>">Part</a></li>
-            <li class="<%= 'active' if current_controller?({controller: 'part_boms'})%>"><a href="<%= part_boms_path %>">PartBOM</a></li>
-            <li class="<%= 'active' if current_controller?({controller: 'machines'})%>"><a href="<%= machines_path %>">Machine</a></li>
-            <li class="<%= 'active' if current_controller?({controller: 'machine_scopes'})%>"><a href="<%= machine_scopes_path %>">Machine Scope</a></li>
-            <li class="<%= 'active' if current_controller?({controller: 'process_templates'})%>"><a href="<%= process_templates_path %>">ProcessTemplate</a></li>
-            <li class="<%= 'active' if current_controller?({controller: 'process_entities'})%>"><a href="<%= process_entities_path %>">ProcessEntity</a></li>
-            <li class="<%= 'active' if current_controller?({controller: 'production_orders'})%>"><a href="<%= production_orders_path%>">Production Orders</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>&lt;!&ndash;/.nav-collapse &ndash;&gt;
-  </div>
-</nav>-->

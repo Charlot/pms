@@ -1,3 +1,3 @@
 class ProductionOrder < ActiveRecord::Base
-  belongs_to :orderable, polymorphic: true
+  belongs_to :kanban
 end
