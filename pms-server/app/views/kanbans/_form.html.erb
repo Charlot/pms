@@ -40,7 +40,7 @@
 
               <div class="form-group">
                 <%= f.label :product_id, "#{KanbanDesc::PRODUCT_NR}:" %>
-                <input type="text" id="search_ProductNR" class="form-control"/>
+                <input type="text" id="search_ProductNR" class="form-control" value="<%= @kanban.product.nr if @kanban.product%>"/>
                 <%= f.text_field :product_id, class: "form-control hidden", id: "search_ProductNR_Res" %>
               </div>
 

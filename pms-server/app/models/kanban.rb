@@ -74,7 +74,6 @@ class Kanban < ActiveRecord::Base
   # {id:1,
   #  version_nr:1,
   #  printed_nr:2}
-
   def self.parse_printed_2DCode(code)
     return false unless code =~ Regex::KANBAN_LABEL
     return false unless (splited_str = code.split('/')).count == 3
@@ -82,5 +81,10 @@ class Kanban < ActiveRecord::Base
     {id: splited_str[0],
      version_nr: splited_str[1],
      printed_nr: splited_str[2]}
+  end
+
+  # part_nr,product_nr
+  def self.search(part_nr,production_nr)
+    joins('parts').where("parts.part_nr LIKE ? OR")
   end
 end

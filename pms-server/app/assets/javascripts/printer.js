@@ -29,7 +29,7 @@ var printer = {
                 }
             }).always(function () {
                     hide_handle_dialog();
-                });
+            });
         }
     },
     id: null
