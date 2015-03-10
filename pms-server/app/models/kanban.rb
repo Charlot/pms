@@ -1,17 +1,27 @@
 class Kanban < ActiveRecord::Base
-  validates :nr, :presence => true, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
+  validates :nr, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
   validates :part_id, :presence => true
 
   belongs_to :part
   belongs_to :product, class_name: 'Part'
   delegate :process_entities,to: :part
+  delegate :nr, to: :part,prefix: true, allow_nil: true
+  delegate :nr, to: :product,prefix: true, allow_nil: true
+  delegate :custom_nr, to: :product,prefix: true,allow_nil: true
+  delegate :custom_nr, to: :part, prefix: true,allow_nil: true
   has_many :production_order, as: :orderable
+
+  before_create :generate_id
 
   # after_create :create_part_bom
   # after_destroy :destroy_part_bom
   # after_update :update_part_bom
 
   has_paper_trail
+
+  def print_time
+    read_attribute(:print_time).localtime.strftime("%Y-%m-%d %H:%M:%S")
+  end
 
   def create_part_bom
     #TODO Kanban Update Part Bom
@@ -86,5 +96,11 @@ class Kanban < ActiveRecord::Base
   # part_nr,product_nr
   def self.search(part_nr="",product_nr="")
     joins(:part,:product).where('parts.nr LIKE ? and products_kanbans.nr LIKE ?',"%#{part_nr}%","%#{product_nr}%")
+  end
+
+  #
+  private
+  def generate_id
+    self.nr = "KB#{Time.now.to_milli}"
   end
 end

@@ -34,9 +34,9 @@
           <span class="label <%= kanban_states_class(kanban.state)%>"><%= KanbanState.display(kanban.state)%></span>
         </td>
         <td><%= kanban.quantity%></td>
-        <td><%= kanban.part_id%></td>
-        <td></td>
-        <td></td>
+        <td><%= kanban.part_nr%></td>
+        <td><%= kanban.product_nr %></td>
+        <td><%= kanban.product_custom_nr %></td>
         <td><%= "#{kanban.source_warehouse} | #{kanban.source_storage}"%></td>
         <td><%= "#{kanban.des_warehouse} | #{kanban.des_storage}"%></td>
         <td><%= link_to '修改历史',history_kanban_path(kanban)%></td>

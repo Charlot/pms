@@ -17,9 +17,9 @@ module Printer
       #TODO还要加一个条形码字段，条形码中不只是KANBAN NR
       head={
           kanban_nr: @kanban.nr,
-          part_nr: @kanban.part.nr,
-          print_date:@kanban.print_time.localtime.strftime("%Y-%m-%d %H:%M:%S"),
-          customer_nr:@kanban.part.custom_nr,
+          part_nr: @kanban.part_nr,
+          print_date:@kanban.print_time,
+          customer_nr:@kanban.part_custom_nr,
           wire_position:@kanban.desc_position,
           card_number:@kanban.copies,
           card_quantity:@kanban.quantity,
