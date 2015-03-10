@@ -34,7 +34,7 @@ namespace PmsPrinter
 
             if (kanbanNr.Length > 0)
             {
-                new PrintService().Print("P002", kanbanNr);
+                new PrintService().Print("P001", kanbanNr);
             }
             else
             {
