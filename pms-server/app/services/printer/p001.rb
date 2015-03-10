@@ -1,18 +1,19 @@
 # Print KANBAN
 module Printer
   class P001<Base
-    HEAD=[:kanban_nr,:part_nr,:customer_nr,:wire_position,:card_number,:card_quantity,:print_date,:remark1,:remark2]
-
+    HEAD=[:kanban_nr,:part_nr,:customer_nr,:wire_position,:card_number,:card_quantity,:print_date,:remark1,:remark2,:kanban_2dcode]
     BODY=[:route_nr,:route_name,:route_desc,:work_time_of_route,:consume_date]
+
     $ROUTE_PART_COUNT.times {|i|
       BODY<<"wire_nr#{i+1}_of_route".to_sym
       BODY<<"wiredesc#{i+1}_of_route".to_sym
       BODY<<"wire_quantity#{i+1}_of_route".to_sym
       BODY<<"unit_of_wire#{i+1}".to_sym
     }
+
     #注意，与KANBAN模板一直，一个Routing中最多包含的parts只能有5种
     def generate_data
-      @kanban = Kanban.find_by_id(self.id)
+      @kanban = Kanban.first#find_by_id(self.id)
       @kanban.update(print_time:Time.now)
       #TODO还要加一个条形码字段，条形码中不只是KANBAN NR
       head={
@@ -23,6 +24,7 @@ module Printer
           wire_position:@kanban.desc_position,
           card_number:@kanban.copies,
           card_quantity:@kanban.quantity,
+          kanban_2dcode:@kanban.printed_2DCode,
           #TODO kanban remark
           remark1:'remark1',
           remark2:'remark2'
