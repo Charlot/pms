@@ -41,3 +41,19 @@ function print_blue() {
 function print_white() {
     printer.print('P002');
 }
+
+// init file
+$(document).ready(function(){
+    $('body').on('click',".print",function () {
+        var target = $(this);
+        printer.id = function(){
+            return target.attr("id");
+        };
+        var type = $(this).attr("kanban_type");
+        if(type == 0){
+            printer.print("POO2");
+        }else{
+            printer.print("P001");
+        }
+    })
+})
