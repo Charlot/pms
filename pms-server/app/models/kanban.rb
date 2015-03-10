@@ -84,7 +84,7 @@ class Kanban < ActiveRecord::Base
   end
 
   # part_nr,product_nr
-  def self.search(part_nr,production_nr)
-    joins('parts').where("parts.part_nr LIKE ? OR")
+  def self.search(part_nr="",product_nr="")
+    joins(:part,:product).where('parts.nr LIKE ? and products_kanbans.nr LIKE ?',"%#{part_nr}%","%#{product_nr}%")
   end
 end

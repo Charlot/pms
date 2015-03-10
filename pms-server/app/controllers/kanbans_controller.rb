@@ -122,12 +122,14 @@ class KanbansController < ApplicationController
   end
 
   # GET /kanbans/search.json
+  # Search by part_nr and product_nr
   def search
-    @kanban = Kanban.send("find_by_"+params[:attr], params[:val])
-    respond_to do |format|
-      format.json { render json: {result: false, content: "Not Found!"} } unless @kanban
-      format.json { render json: {result: true, content: @kanban} }
-    end
+    msg = Message.new
+    @kanbans = Kanban.search(params[:part_nr],params[:product_nr])
+    msg.result = true
+    msg.content = @kanbans
+
+    render json: msg
   end
 
   # GET /kanbans/add_routing_template

@@ -7,24 +7,30 @@
       <div class="col-md-10">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <div class="row">
-              <div class="col-md-5">
-                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Search for Kanban by Part Number...">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button">Search</button>
-                </span>
+            <div class="input-group">
+              <div class="row">
+                <div class="col-md-4">
+                  <input type="text" class="form-control" placeholder="请输入线号...">
+                </div>
+                <div class="col-md-4">
+                  <input type="text" class="form-control" placeholder="请输入总成号...">
+                </div>
+                <div class="col-md-4">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">Search</button>
+                  </span>
                 </div>
               </div>
             </div>
           </div>
           <div class="panel-body" id="search_Kanban_Res">
-            <%= render partial: 'list'%>
+            <%= render partial: 'list' %>
           </div>
         </div>
       </div>
       <div class="col-md-2">
         <h4>说明</h4>
+
         <p class="text-warning">发达方法哦igunclkaukdiun；ladf</p>
       </div>
     </div>
