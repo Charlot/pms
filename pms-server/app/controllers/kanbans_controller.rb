@@ -43,11 +43,11 @@ class KanbansController < ApplicationController
   # PATCH/PUT /kanbans/1.json
   def update
     respond_to do |format|
-      if @kanban.update(kanban_params)
+      if @kanban.can_update? && @kanban.update(kanban_params)
         format.html { redirect_to @kanban, notice: 'Kanban was successfully updated.' }
         format.json { render :show, status: :ok, location: @kanban }
       else
-        format.html { render :edit }
+        format.html { render :edit ,notice: 'State Error'}
         format.json { render json: @kanban.errors, status: :unprocessable_entity }
       end
     end
@@ -56,6 +56,8 @@ class KanbansController < ApplicationController
   # DELETE /kanbans/1
   # DELETE /kanbans/1.json
   def destroy
+    redirect_to kanbans_url, notice: 'State Error.' and return if @kanban.can_destroy?
+
     @kanban.destroy
     respond_to do |format|
       format.html { redirect_to kanbans_url, notice: 'Kanban was successfully destroyed.' }

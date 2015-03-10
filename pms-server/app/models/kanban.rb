@@ -19,8 +19,6 @@ class Kanban < ActiveRecord::Base
 
   has_paper_trail
 
-
-
   def create_part_bom
     #TODO Kanban Update Part Bom
     # part=self.part
@@ -47,7 +45,15 @@ class Kanban < ActiveRecord::Base
   end
 
   def can_update?
-    if self.state == KanbanState::INIT
+    if [KanbanState::INIT,KanbanState::LOCKED].include?(state)
+      true
+    else
+      false
+    end
+  end
+
+  def can_destroy?
+    if [KanbanState::INIT,KanbanState::LOCKED,KanbanState::DELETED].include?(state)
       true
     else
       false
@@ -98,8 +104,6 @@ class Kanban < ActiveRecord::Base
      version_nr: splited_str[1]
     }
   end
-
-
 
   # part_nr,product_nr
   def self.search(part_nr="",product_nr="")
