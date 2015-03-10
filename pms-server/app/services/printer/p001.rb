@@ -13,7 +13,7 @@ module Printer
 
     #注意，与KANBAN模板一直，一个Routing中最多包含的parts只能有5种
     def generate_data
-      @kanban = Kanban.first#find_by_id(self.id)
+      @kanban = Kanban.find_by_id(self.id)
       @kanban.update(print_time:Time.now)
       #TODO还要加一个条形码字段，条形码中不只是KANBAN NR
       head={
