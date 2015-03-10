@@ -19,9 +19,7 @@ class Kanban < ActiveRecord::Base
 
   has_paper_trail
 
-  def print_time
-    read_attribute(:print_time).localtime.strftime("%Y-%m-%d %H:%M:%S")
-  end
+
 
   def create_part_bom
     #TODO Kanban Update Part Bom
@@ -56,8 +54,16 @@ class Kanban < ActiveRecord::Base
     end
   end
 
+  def print_time
+    self[:print_time].localtime.strftime("%Y-%m-%d %H:%M:%S") if self[:print_time]
+  end
+
   def version_now
     self.versions.count
+  end
+
+  def printed_2DCode
+    "#{id}/#{version_now}"
   end
 
   # version of kanban
@@ -89,9 +95,11 @@ class Kanban < ActiveRecord::Base
     return false unless (splited_str = code.split('/')).count == 3
 
     {id: splited_str[0],
-     version_nr: splited_str[1],
-     printed_nr: splited_str[2]}
+     version_nr: splited_str[1]
+    }
   end
+
+
 
   # part_nr,product_nr
   def self.search(part_nr="",product_nr="")

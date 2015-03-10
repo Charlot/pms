@@ -164,10 +164,15 @@ class KanbansController < ApplicationController
     #response dependent on Kanban type
     render json: {result: false, content: "Kanban has been updated,please reprint!"} if need_update && @kanban.type == KanbanType::BLUE
 
+    #2015-3-10 李其
+    #不做扫描之后验证是否已经扫入，由工作人员控制
+    #注释了这段代码，暂时不实现标注唯一的一张纸质看板卡
+=begin
     if ProductionOrder.where(kanban_id: @kanban.id, state: ProductionOrderState::INIT, code:params[:code]).count > 0
       #TODO ProductionOrder 应该与一张KANBAN卡的纸相关联，而不是KANBAN卡
       render json: {result: false, content: "Kanban Order has been released"}
     end
+=end
 
     #TODO 加入到待优化队列
     unless (@order = ProductionOrder.create(kanban_id: @kanban.id,code:params[:code]))

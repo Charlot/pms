@@ -21,10 +21,10 @@
                       <label><%= KanbanDesc::NR%>:</label><ins><%= @kanban.nr%></ins>
                     </li>
                     <li class="list-group-item">
-                      <label><%= KanbanDesc::WIRE_NR%>:</label><ins><%= @kanban.part.nr if @kanban.part%></ins>
+                      <label><%= KanbanDesc::WIRE_NR%>:</label><ins><%= @kanban.part_nr%></ins>
                     </li>
                     <li class="list-group-item">
-                      <label><%= KanbanDesc::PRODUCT_NR%>:</label><ins><%= @kanban.product.nr if @kanban.product%></ins>
+                      <label><%= KanbanDesc::PRODUCT_NR%>:</label><ins><%= @kanban.product_nr%></ins>
                     </li>
                     <li class="list-group-item">
                       <label><%= KanbanDesc::COPIES%>:</label><ins><%= @kanban.copies%></ins>
@@ -67,7 +67,9 @@
                     <li class="list-group-item">
                       <label><%= KanbanDesc::STATE%>:</label><span class="label <%= kanban_states_class(@kanban.state)%>"><%= KanbanState.display(@kanban.state)%></span></ins>
                     </li>
-
+                    <li class="list-group-item">
+                      <label>二维码信息:</label><ins><%= @kanban.printed_2DCode%></ins>
+                    </li>
                   </ul>
                 </div>
               </div>
