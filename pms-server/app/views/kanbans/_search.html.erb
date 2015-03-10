@@ -27,13 +27,15 @@
               $("#search_Kanban_Res").html(data);
           })
       })
-              .on('keypress','#search_PartNR, #search_ProductNR',function(event){
+              .on('keydown','#search_PartNR, #search_ProductNR',function(event){
                   var part_nr = $("#search_PartNR").val();
                   var product_nr = $("#search_ProductNR").val();
+
                   if(event.keyCode == 13) {
                       pms.kanban.search({part_nr: part_nr, product_nr: product_nr}, function (data) {
                           $("#search_Kanban_Res").html(data);
-                      })
+                      });
+                      return;
                   }
               })
   })
