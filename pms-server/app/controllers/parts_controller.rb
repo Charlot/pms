@@ -74,6 +74,10 @@ class PartsController < ApplicationController
 
   # POST /parts/1/add_process_entitties
   def add_process_entities
+    if (@part.kanbans.select { |k| k.can_update? == false}).count>0
+      render json:{ result: false,content:"不能修改Routing，因为有关联该Part的KANBAN正在生产!"} and return
+    end
+
     params[:process_entities].each {|pe_id|
       @part.part_process_entities<<PartProcessEntity.create(process_entity_id:pe_id)
     }
@@ -89,6 +93,12 @@ class PartsController < ApplicationController
   def delete_process_entities
     msg = Message.new
     msg.result = true
+
+    if (@part.kanbans.select { |k| k.can_update? == false }).count>0
+      msg.result = false
+      msg.content = "不能修改Routing，因为有关联该Part的KANBAN正在生产!"
+      render json: msg and return
+    end
     ActiveRecord::Base.transaction do
       begin
         @part.part_process_entities.where(process_entity_id:params[:process_entities]).each{|x|x.destroy}

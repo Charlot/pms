@@ -88,11 +88,12 @@
           </div>
         </div>
       </div>
+
     </div>
     <div class="row">
       <div class="panel panel-default">
         <div class="panel-heading">
-          关联Routing
+          关联Routing,此Routing是KANBAN生产的线号的Routing
         </div>
         <div class="panel-body">
           <div class="container-fluid" id="addKanbanRoutingTemplate">
@@ -217,6 +218,10 @@
                                                 target.parent().remove();
                                                 $("#kpe_List").children("[pe_nr=" + pe_nr + "]").remove();
                                             }
+                                            else{
+                                                $("#error-message").removeClass("hidden");
+                                                $("#error-message").text(data.content);
+                                            }
                                         });
                                     })
                                 });
@@ -239,6 +244,10 @@
                 if(data.result){
                     target.parent().remove();
                     $("#kpe_List").children("[pe_nr=" + pe_nr + "]").remove();
+                }
+                else{
+                    $("#error-message").removeClass("hidden");
+                    $("#error-message").text(data.content);
                 }
             });
         });
