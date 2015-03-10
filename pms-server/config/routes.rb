@@ -59,13 +59,13 @@ Rails.application.routes.draw do
       post :release
       post :lock
       delete :discard
-      get :search
       get :add_routing_template
     end
 
     collection do
       post :scan
       get :panel
+      get :search
     end
   end
 

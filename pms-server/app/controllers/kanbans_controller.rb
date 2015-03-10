@@ -129,7 +129,7 @@ class KanbansController < ApplicationController
     msg.result = true
     msg.content = @kanbans
 
-    render json: msg
+    render partial: 'list'
   end
 
   # GET /kanbans/add_routing_template

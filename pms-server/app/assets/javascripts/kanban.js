@@ -53,3 +53,15 @@ pms.kanban.scan = function(code,callback){
         }
     })
 };
+
+pms.kanban.search = function(params,callback){
+    $.ajax({
+        url: '/kanbans/search',
+        data:{part_nr:params.part_nr,product_nr:params.product_nr},
+        dataType:'html',
+        type:'GET',
+        success: function (data) {
+            if(callback){callback(data)}
+        }
+    })
+}
