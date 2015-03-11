@@ -90,10 +90,12 @@ class KanbansController < ApplicationController
     #TODO Release kanban
     redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state, KanbanState::RELEASED)
 
-    if @kanban.update(state: KanbanState::RELEASED)
-      redirect_to @kanban, notice: 'Kanban was successfully released.'
-    else
-      redirect_to @kanban, notice: 'Kanban was failed released.'
+    @kanban.without_versioning do
+      if @kanban.update(state: KanbanState::RELEASED)
+        redirect_to @kanban, notice: 'Kanban was successfully released.'
+      else
+        redirect_to @kanban, notice: 'Kanban was failed released.'
+      end
     end
   end
 
@@ -102,11 +104,12 @@ class KanbansController < ApplicationController
   def lock
     #TODO Lock kanban
     redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state, KanbanState::LOCKED)
-
-    if @kanban.update(state: KanbanState::LOCKED)
-      redirect_to @kanban, notice: 'Kanban was successfully locked.'
-    else
-      redirect_to @kanban, notice: 'Kanban was failed locked.'
+    @kanban.without_versioning do
+      if @kanban.update(state: KanbanState::LOCKED)
+        redirect_to @kanban, notice: 'Kanban was successfully locked.'
+      else
+        redirect_to @kanban, notice: 'Kanban was failed locked.'
+      end
     end
   end
 
@@ -115,11 +118,12 @@ class KanbansController < ApplicationController
   def discard
     #TODO Delete kanban
     redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state, KanbanState::DELETED)
-
-    if @kanban.update(state: KanbanState::DELETED)
-      redirect_to @kanban, notice: 'Kanban was successfully discarded.'
-    else
-      redirect_to @kanban, notice: 'Kanban was failed discarded.'
+    @kanban.without_versioning do
+      if @kanban.update(state: KanbanState::DELETED)
+        redirect_to @kanban, notice: 'Kanban was successfully discarded.'
+      else
+        redirect_to @kanban, notice: 'Kanban was failed discarded.'
+      end
     end
   end
 
