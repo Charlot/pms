@@ -245,7 +245,7 @@ ActiveRecord::Schema.define(version: 20150311034803) do
   add_index "process_templates", ["type"], name: "index_process_templates_on_type", using: :btree
 
   create_table "production_orders", force: true do |t|
-    t.integer  "state"
+    t.integer  "state",      default: 0
     t.string   "code"
     t.integer  "kanban_id"
     t.datetime "created_at"

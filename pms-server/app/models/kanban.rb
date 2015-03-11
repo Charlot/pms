@@ -98,7 +98,7 @@ class Kanban < ActiveRecord::Base
   #  printed_nr:2}
   def self.parse_printed_2DCode(code)
     return false unless code =~ Regex::KANBAN_LABEL
-    return false unless (splited_str = code.split('/')).count == 3
+    return false unless (splited_str = code.split('/')).count == 2
 
     {id: splited_str[0],
      version_nr: splited_str[1]

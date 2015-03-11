@@ -26,7 +26,7 @@ module Printer
           card_quantity:@kanban.quantity,
           kanban_2dcode:@kanban.printed_2DCode,
           #TODO kanban remark
-          remark1:'remark1',
+          remark1:@kanban.remark,
           remark2:'remark2'
       }
 
