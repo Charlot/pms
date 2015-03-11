@@ -1,8 +1,8 @@
 class ResourceGroupPartsController < ApplicationController
-  before_action :set_resource_group_part, only: [:edit, :update, :destroy]
+  before_action :set_resource_group_part, only: [:edit, :destroy]
   before_action :set_resource_group_tool, only: [:index, :new]
   before_action :set_resource_group_parts, only: [:index]
-  before_action :prepare_resource_group_part_params, only: [:create, :update]
+  before_action :prepare_resource_group_part_params, only: [:create]
 
   # GET /resource_group_parts
   # GET /resource_group_parts.json
@@ -51,19 +51,19 @@ class ResourceGroupPartsController < ApplicationController
 
   # PATCH/PUT /resource_group_parts/1
   # PATCH/PUT /resource_group_parts/1.json
-  def update
-    respond_to do |format|
-      if @resource_group_part.errors.blank? && @resource_group_part.save
-        flash.clear
-        format.html { redirect_to resource_group_tool_resource_group_parts_path(@resource_group_tool), notice: 'Resource group part was successfully updated.' }
-        format.json { render :show, status: :ok, location: @resource_group_part }
-      else
-        # format.html { render :edit }
-        format.html { redirect_to resource_group_tool_resource_group_parts_path(@resource_group_tool), notice: @resource_group_part.errors.to_json }
-        format.json { render json: @resource_group_part.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  # def update
+  #   respond_to do |format|
+  #     if @resource_group_part.errors.blank? && @resource_group_part.save
+  #       flash.clear
+  #       format.html { redirect_to resource_group_tool_resource_group_parts_path(@resource_group_tool), notice: 'Resource group part was successfully updated.' }
+  #       format.json { render :show, status: :ok, location: @resource_group_part }
+  #     else
+  #       # format.html { render :edit }
+  #       format.html { redirect_to resource_group_tool_resource_group_parts_path(@resource_group_tool), notice: @resource_group_part.errors.to_json }
+  #       format.json { render json: @resource_group_part.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
 
   # DELETE /resource_group_parts/1
   # DELETE /resource_group_parts/1.json
@@ -109,10 +109,14 @@ class ResourceGroupPartsController < ApplicationController
     end
 
     if part=Part.find_by_nr(mp[:part_id])
-      unless @resource_group_tool.resource_group_parts.where(part_id: part.id).first
-        @resource_group_part.part=part
+      if part.resource_group_tool.nil?
+        unless @resource_group_tool.resource_group_parts.where(part_id: part.id).first
+          @resource_group_part.part=part
+        else
+          @resource_group_part.errors.add(:part, "part #{mp[:part_id]}, has been added")
+        end
       else
-        @resource_group_part.errors.add(:part, "part #{mp[:part_id]}, has been added")
+        @resource_group_part.errors.add(:part, "part #{mp[:part_id]}, has been add to group #{part.resource_group_tool.nr}")
       end
     else
       @resource_group_part.errors.add(:part, "part #{mp[:part_id]}, not exists")
