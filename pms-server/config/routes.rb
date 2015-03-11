@@ -27,7 +27,7 @@ Rails.application.routes.draw do
 
   resources :resource_group_tools do
     # resources :resource_group_parts
-    resource :resource_group_part
+    resources :resource_group_parts
   end
 
   resources :process_parts

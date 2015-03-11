@@ -8,6 +8,7 @@
     <th>Name</th>
     <th>Description</th>
     <th>Part</th>
+    <th></th>
     <th colspan="3"></th>
   </tr>
   </thead>
@@ -19,7 +20,7 @@
         <td><%= resource_group_tool.type %></td>
         <td><%= resource_group_tool.name %></td>
         <td><%= resource_group_tool.description %></td>
-        <td><%= resource_group_tool.part.nr %></td>
+        <td><%= link_to 'Create or Edit Group Part', resource_group_tool_resource_group_parts_path(resource_group_tool) %></td>
         <td><%= link_to 'Show', resource_group_tool %></td>
         <td><%= link_to 'Edit', edit_resource_group_tool_path(resource_group_tool) %></td>
         <td><%= link_to 'Destroy', resource_group_tool, method: :delete, data: {confirm: 'Are you sure?'} %></td>
