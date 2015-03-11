@@ -1,9 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  kanban_id: 
   state: 1
+  code: MyString
+  kanban_id: 
 
 two:
-  kanban_id: 
   state: 1
+  code: MyString
+  kanban_id: 

@@ -1,3 +1,3 @@
 class Regex<BaseClass
-  KANBAN_LABEL=/.+\/\d+\/\d+/
+  KANBAN_LABEL=/.+\/\d+/
 end

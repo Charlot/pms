@@ -150,7 +150,7 @@ class KanbansController < ApplicationController
   def scan
     #parse code
     parsed_code = Kanban.parse_printed_2DCode(params[:code])
-    render json: {result: false, content: "Input Error"} unless parsed_code
+    render json: {result: false, content: "Input Error"} and return unless parsed_code
 
     @kanban = Kanban.find_by_id(parsed_code[:id])
 
