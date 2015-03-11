@@ -155,36 +155,36 @@ class KanbansController < ApplicationController
     @kanban = Kanban.find_by_id(parsed_code[:id])
 
     #check Kanban State
-    render json: {result: false, content: "Kanban is not released"} unless @kanban.state == KanbanState::RELEASED
+    render json: {result: false, content: "Kanban is not released"} and return unless @kanban.state == KanbanState::RELEASED
 
     #check version of Kanban
-    render json: {result: false, content: "Kanban not fount for#{parsed_code.to_json}" }  unless @kanban
-    render json: {result: false, content: "Kanban version error.#{parsed_code[:version_nr]}"} unless (version = @kanban.versions.where(id: parsed_code[version_nr]))
-    last_version = @kanban.versions.last
-    need_update = last_version.created_at > version.created_at
+    render json: {result: false, content: "Kanban not fount for#{parsed_code.to_json}" } and return unless @kanban
+    render json: {result: false, content: "Kanban version error.#{parsed_code[:version_nr]}"} and return unless (version = @kanban.versions.where(id: parsed_code[:version_nr]))
+    #last_version = @kanban.versions.last
+    #need_update = last_version.created_at > version.created_at
+    need_update = @kanban.versions.count > parsed_code[:version_nr].to_i
 
     #response dependent on Kanban type
-    render json: {result: false, content: "Kanban has been updated,please reprint!"} if need_update && @kanban.type == KanbanType::BLUE
+    render json: {result: false, content: "Kanban has been updated,please reprint!"} and return if need_update #&& @kanban.type == KanbanType::BLUE
 
     #2015-3-10 李其
     #不做扫描之后验证是否已经扫入，由工作人员控制
     #注释了这段代码，暂时不实现标注唯一的一张纸质看板卡
-=begin
-    if ProductionOrder.where(kanban_id: @kanban.id, state: ProductionOrderState::INIT, code:params[:code]).count > 0
+    if ProductionOrder.where(kanban_id: @kanban.id, state: ProductionOrderState::INIT).count > 0
       #TODO ProductionOrder 应该与一张KANBAN卡的纸相关联，而不是KANBAN卡
-      render json: {result: false, content: "Kanban Order has been released"}
+      render json: {result: false, content: "Kanban Order has been released"} and return
     end
-=end
 
     #TODO 加入到待优化队列
     unless (@order = ProductionOrder.create(kanban_id: @kanban.id,code:params[:code]))
-      render json: {result: false, content: "Production Order Created Failed"}
+      render json: {result: false, content: "Production Order Created Failed"} and return
     end
 
     if need_update && @kanban.type == KanbanType::WHITE
       render json: {result: true, content: @order}
+    else
+      render json: {result: true, contnet: @order}
     end
-    render json: {result: true, contnet: @order}
   end
 
   # GET /kanbans/panel
