@@ -88,6 +88,7 @@ Rails.application.routes.draw do
     end
     collection do
       get :search
+      post :import
     end
   end
   resources :files

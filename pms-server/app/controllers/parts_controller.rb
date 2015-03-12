@@ -109,6 +109,11 @@ class PartsController < ApplicationController
 
     render json: msg
   end
+  
+  def import
+    Part.import(params[:file])
+    redirect_to parts_url, notice: 'Part was successfully imported.'
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
