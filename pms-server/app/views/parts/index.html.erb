@@ -1,10 +1,13 @@
 <h1>Listing parts</h1>
 <p>
-Import Data
+
+<%= link_to "download CSV Template", parts_path(format: "csv") %>
+<br />
 <%= form_tag import_parts_path, multipart:true do %>
 	<%= file_field_tag :file %>
-	<%= submit_tag "Import" %>
+	<%= submit_tag "Import Parts" %>
 <% end %>
+
 </p>
 <table class="table">
   <thead>

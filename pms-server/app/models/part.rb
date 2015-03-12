@@ -1,4 +1,5 @@
 require 'roo'
+require 'csv'
 
 class Part < ActiveRecord::Base
   belongs_to :resource_group
@@ -14,6 +15,12 @@ class Part < ActiveRecord::Base
   validates :nr, presence: true, uniqueness: {message: 'part nr should be uniq'}
 
   after_save :update_cv_strip_length
+
+  def self.to_csv(options = {})
+    CSV.generate(options) do |csv|
+      csv << column_names
+    end
+  end
 
   def self.import(file)
     spreadsheet = open_spreadsheet(file)

@@ -6,6 +6,10 @@ class PartsController < ApplicationController
   # GET /parts.json
   def index
     @parts = Part.all
+    respond_to do |format|
+      format.html
+      format.csv { send_data @parts.to_csv }
+    end
   end
 
   # GET /parts/1
