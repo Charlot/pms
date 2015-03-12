@@ -1,5 +1,7 @@
 require File.expand_path('../boot', __FILE__)
 
+require 'csv'
+require 'iconv'
 require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
@@ -18,7 +20,7 @@ module PmsServer
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    config.paths['config/database']='config/database_mac.yml' if ['liqi'].include?(ENV['USER'])
+    config.paths['config/database']='config/database_mac.yml' if (ENV['USER']=='liqi' || ENV['USER']=='apple')
     # config.i18n.default_locale = :de
     config.autoload_paths += %W(#{config.root}/lib)
     %w{models api services presenters caches}.each do |namespace|
