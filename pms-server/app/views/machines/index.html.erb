@@ -5,6 +5,7 @@
   <tr>
     <th>Nr</th>
     <th>Name</th>
+    <th>IP</th>
     <th>Description</th>
     <th>Resource group</th>
     <th>Print Time</th>
@@ -20,6 +21,7 @@
       <tr>
         <td><%= machine.nr %></td>
         <td><%= machine.name %></td>
+        <td><%= machine.ip %></td>
         <td><%= machine.description %></td>
         <td><%= machine.resource_group_machine.nr if machine.resource_group_machine %></td>
         <td><%= machine.print_time %></td>

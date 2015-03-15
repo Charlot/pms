@@ -6,6 +6,7 @@ module V1
               :using => :path
       namespace :service do
         mount PrintServiceAPI
+        mount MachineServiceAPI
       end
     end
   end

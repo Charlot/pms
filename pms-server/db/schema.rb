@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150311034803) do
+ActiveRecord::Schema.define(version: 20150312173035) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -149,6 +149,7 @@ ActiveRecord::Schema.define(version: 20150311034803) do
     t.float    "terminal_time",     default: 0.0
     t.float    "wire_time",         default: 0.0
     t.integer  "status",            default: 0
+    t.string   "ip"
   end
 
   add_index "machines", ["nr"], name: "index_machines_on_nr", using: :btree
@@ -244,15 +245,32 @@ ActiveRecord::Schema.define(version: 20150311034803) do
   add_index "process_templates", ["code"], name: "index_process_templates_on_code", using: :btree
   add_index "process_templates", ["type"], name: "index_process_templates_on_type", using: :btree
 
-  create_table "production_orders", force: true do |t|
-    t.integer  "state",      default: 0
+  create_table "production_order_items", force: true do |t|
+    t.string   "nr"
+    t.integer  "state",               default: 100
     t.string   "code"
     t.integer  "kanban_id"
+    t.integer  "production_order_id"
+    t.integer  "machine_id"
+    t.integer  "optimise_index",      default: 0
+    t.datetime "optimise_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "production_orders", ["kanban_id"], name: "index_production_orders_on_kanban_id", using: :btree
+  add_index "production_order_items", ["kanban_id"], name: "index_production_order_items_on_kanban_id", using: :btree
+  add_index "production_order_items", ["machine_id"], name: "index_production_order_items_on_machine_id", using: :btree
+  add_index "production_order_items", ["nr"], name: "index_production_order_items_on_nr", using: :btree
+  add_index "production_order_items", ["production_order_id"], name: "index_production_order_items_on_production_order_id", using: :btree
+
+  create_table "production_orders", force: true do |t|
+    t.string   "nr"
+    t.integer  "state",      default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "production_orders", ["nr"], name: "index_production_orders_on_nr", using: :btree
 
   create_table "resource_group_parts", force: true do |t|
     t.integer  "part_id"

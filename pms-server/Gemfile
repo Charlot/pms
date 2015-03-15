@@ -57,3 +57,13 @@ gem 'twitter-bootstrap-rails'
 # For API
 gem 'grape'
 gem 'rack-oauth2'
+
+# For Redis
+gem 'redis'
+gem 'redis-namespace'
+
+# For log
+gem 'colorize'
+
+# For REST API Call
+gem 'rest_client'

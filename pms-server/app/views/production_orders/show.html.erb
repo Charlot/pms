@@ -1,18 +1,13 @@
 <p id="notice"><%= notice %></p>
 
 <p>
+  <strong>Nr:</strong>
+  <%= @production_order.nr %>
+</p>
+
+<p>
   <strong>State:</strong>
   <%= @production_order.state %>
-</p>
-
-<p>
-  <strong>Code:</strong>
-  <%= @production_order.code %>
-</p>
-
-<p>
-  <strong>Kanban:</strong>
-  <%= @production_order.kanban %>
 </p>
 
 <%= link_to 'Edit', edit_production_order_path(@production_order) %> |

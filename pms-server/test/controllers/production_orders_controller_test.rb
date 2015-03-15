@@ -18,7 +18,7 @@ class ProductionOrdersControllerTest < ActionController::TestCase
 
   test "should create production_order" do
     assert_difference('ProductionOrder.count') do
-      post :create, production_order: { code: @production_order.code, kanban_id: @production_order.kanban_id, state: @production_order.state }
+      post :create, production_order: { nr: @production_order.nr, state: @production_order.state }
     end
 
     assert_redirected_to production_order_path(assigns(:production_order))
@@ -35,7 +35,7 @@ class ProductionOrdersControllerTest < ActionController::TestCase
   end
 
   test "should update production_order" do
-    patch :update, id: @production_order, production_order: { code: @production_order.code, kanban_id: @production_order.kanban_id, state: @production_order.state }
+    patch :update, id: @production_order, production_order: { nr: @production_order.nr, state: @production_order.state }
     assert_redirected_to production_order_path(assigns(:production_order))
   end
 

@@ -3,7 +3,13 @@
 one:
   nr: MyString
   state: 1
+  code: MyString
+  kanban_id: 
+  production_order: 
 
 two:
   nr: MyString
   state: 1
+  code: MyString
+  kanban_id: 
+  production_order: 
