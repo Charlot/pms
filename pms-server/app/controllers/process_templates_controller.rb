@@ -37,9 +37,7 @@ class ProcessTemplatesController < ApplicationController
           end
         end
       elsif ProcessType.semi_auto?(params[:type])
-
       end
-
       respond_to do |format|
         if @process_template.save
           format.html { redirect_to @process_template, notice: 'Process template was successfully created.' }
@@ -90,9 +88,16 @@ class ProcessTemplatesController < ApplicationController
   end
 
 
-  def import
+  def autoimport
     ProcessTemplate.import(params[:file])
     redirect_to process_templates_url, notice: 'ProcessTemplate was successfully imported.'
+  end
+  
+  def semiautoimport
+  end 
+  
+  def manu
+    
   end
   
 

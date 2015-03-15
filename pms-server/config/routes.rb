@@ -52,7 +52,9 @@ Rails.application.routes.draw do
   resources :process_templates do
     collection do
       get :template
-      post :import
+      post :autoimport
+      post :semiautoimport
+      post :manualimport
     end
   end
 
