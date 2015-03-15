@@ -1,3 +1,4 @@
 class ProductionOrder < ActiveRecord::Base
-  belongs_to :kanban
+  include AutoKey
+  has_many :production_order_items
 end

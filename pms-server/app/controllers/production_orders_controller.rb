@@ -4,7 +4,7 @@ class ProductionOrdersController < ApplicationController
   # GET /production_orders
   # GET /production_orders.json
   def index
-    @production_orders = ProductionOrder.where(state: ProductionOrderState::INIT).all
+    @production_orders = ProductionOrder.all
   end
 
   # GET /production_orders/1
@@ -69,6 +69,6 @@ class ProductionOrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def production_order_params
-      params.require(:production_order).permit(:state, :code, :kanban_id)
+      params.require(:production_order).permit(:nr, :state)
     end
 end

@@ -5,5 +5,6 @@ class AddFieldsToMachines < ActiveRecord::Migration
     add_column :machines, :terminal_time, :float, default: 0
     add_column :machines, :wire_time, :float, default: 0
     add_column :machines, :status, :integer, default: 0
+    add_column :machines, :ip, :string
   end
 end

@@ -174,14 +174,14 @@ class KanbansController < ApplicationController
     #2015-3-10 李其
     #不做扫描之后验证是否已经扫入，由工作人员控制
     #注释了这段代码，暂时不实现标注唯一的一张纸质看板卡
-    if ProductionOrder.where(kanban_id: @kanban.id, state: ProductionOrderState::INIT).count > 0
+    if ProductionOrderItem.where(kanban_id: @kanban.id, state: ProductionOrderState::INIT).count > 0
       #TODO ProductionOrder 应该与一张KANBAN卡的纸相关联，而不是KANBAN卡
       render json: {result: false, content: "Kanban Order has been released"} and return
     end
 
     #TODO 加入到待优化队列
-    unless (@order = ProductionOrder.create(kanban_id: @kanban.id,code:params[:code]))
-      render json: {result: false, content: "Production Order Created Failed"} and return
+    unless (@order = ProductionOrderItem.create(kanban_id: @kanban.id,code:params[:code]))
+      render json: {result: false, content: "Production Order Item Created Failed"} and return
     end
 
     if need_update && @kanban.type == KanbanType::WHITE
