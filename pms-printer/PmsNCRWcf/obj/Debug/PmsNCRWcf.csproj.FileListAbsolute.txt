@@ -8,3 +8,4 @@ C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\bin\Debug\log4net.dl
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\bin\Debug\Nini.dll
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\bin\Debug\Brilliantech.Framwork.pdb
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.csprojResolveAssemblyReference.cache
+C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\bin\Debug\Newtonsoft.Json.dll

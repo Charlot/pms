@@ -43,5 +43,9 @@ namespace PmsNCRWcf.Config
         {
             get { return WPCSConfig.dataDir; }
         }
+
+        public static string GetFullPath(string fileName) {
+            return Path.Combine(WPCSConfig.OrderDir, fileName);
+        }
     }
 }
