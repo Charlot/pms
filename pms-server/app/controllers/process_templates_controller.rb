@@ -89,6 +89,14 @@ class ProcessTemplatesController < ApplicationController
     end
   end
 
+
+  def import
+    ProcessTemplate.import(params[:file])
+    redirect_to process_templates_url, notice: 'ProcessTemplate was successfully imported.'
+  end
+  
+
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_process_template

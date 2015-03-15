@@ -33,3 +33,21 @@
 <br>
 
 <%= link_to 'New Process template', new_process_template_path %>
+
+<hr >
+<%= form_tag import_process_templates_path, multipart:true do %>
+	<%= file_field_tag :file %>
+	<%= submit_tag "导入 Auto ProcessTemplat" %>
+<% end %>
+
+<hr >
+<%= form_tag import_parts_path, multipart:true do %>
+	<%= file_field_tag :file %>
+	<%= submit_tag "导入 SEMI_AUTO ProcessTemplat" %>
+<% end %>
+
+<hr >
+<%= form_tag import_parts_path, multipart:true do %>
+	<%= file_field_tag :file %>
+	<%= submit_tag "导入 MANUAL ProcessTemplat" %>
+<% end %>
