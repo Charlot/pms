@@ -91,7 +91,8 @@ Rails.application.routes.draw do
     end
     collection do
       get :search
-      post :import
+      match :import, to: :import, via: [:get,:post]
+      #post :import
     end
   end
   resources :files

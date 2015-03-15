@@ -5,4 +5,10 @@ class PartType<BaseType
   MATERIAL_OTHER=3
   PRODUCT_SEMIFINISHED=4 #半成品
   PRODUCT=5 #成品
+
+  def self.list_value
+  	self.constants.collect{|c|
+  		self.const_get(c)
+  	}
+  end
 end
