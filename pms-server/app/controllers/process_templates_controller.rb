@@ -89,15 +89,16 @@ class ProcessTemplatesController < ApplicationController
 
 
   def autoimport
-    ProcessTemplate.import(params[:file])
+    ProcessTemplate.import(params[:file], 'auto')
     redirect_to process_templates_url, notice: 'ProcessTemplate was successfully imported.'
   end
   
   def semiautoimport
   end 
   
-  def manu
-    
+  def manual_import
+    ProcessTemplate.import(params[:file], 'manual')
+    redirect_to process_templates_url, notice: 'ProcessTemplate was successfully imported.'
   end
   
 

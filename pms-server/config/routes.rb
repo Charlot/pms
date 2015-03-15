@@ -54,7 +54,7 @@ Rails.application.routes.draw do
       get :template
       post :autoimport
       post :semiautoimport
-      post :manualimport
+      post :manual_import
     end
   end
 

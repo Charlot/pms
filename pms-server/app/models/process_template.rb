@@ -58,7 +58,7 @@ class ProcessTemplate < ActiveRecord::Base
   
   # 导入自动模版
   
-  def self.import(file)
+  def self.import(file,import_type)
     spreadsheet = open_spreadsheet(file)
     header = spreadsheet.row(1)
     (2..spreadsheet.last_row).each do |i|
@@ -66,18 +66,30 @@ class ProcessTemplate < ActiveRecord::Base
       allowed_attributes = [ "code","name","template","description"]
       process_template = find_by_code(row["code"]) || new
       process_template.attributes = row.to_hash.select { |k,v| allowed_attributes.include? k}
-      process_template.type = 100
       
       ProcessTemplate.transaction do
-        auto_attributes = ["default_wire_nr","wire_nr","wire_qty_factor","default_bundle_qty","t1","t1_default_strip_length","t1_qty_factor","t1_strip_length","t2","t2_qty_factor","t2_default_strip_length","t2_strip_length","s1","s1_qty_factor","s2","s2_qty_factor"]
-        custom_fields = {}
-        custom_fields = row.to_hash.select { |k1,v1| auto_attributes.include? k1 }
         
-        ProcessTemplateAuto.build_custom_fields(custom_fields.select { |k, v| !v.nil? }.keys, process_template).each do |cf|
-          # cf.save
-          process_template.custom_fields<<cf
+        case import_type
+          when 'auto'
+            process_template.type = 100
+            auto_attributes = ["default_wire_nr","wire_nr","wire_qty_factor","default_bundle_qty","t1","t1_default_strip_length","t1_qty_factor","t1_strip_length","t2","t2_qty_factor","t2_default_strip_length","t2_strip_length","s1","s1_qty_factor","s2","s2_qty_factor"]
+            custom_fields = {}
+            custom_fields = row.to_hash.select { |k1,v1| auto_attributes.include? k1 }
+        
+            ProcessTemplateAuto.build_custom_fields(custom_fields.select { |k, v| !v.nil? }.keys, process_template).each do |cf|
+              # cf.save
+              process_template.custom_fields<<cf
+            end
+            process_template.save!
+            
+          when 'semi'
+            
+          when 'manual'
+            process_template.type = 300
+            process_template.save!
+          else
+            raise ' No such process template'
         end
-        process_template.save!
       
       end
     end
