@@ -70,6 +70,7 @@ GEM
     httpclient (2.6.0.1)
     i18n (0.6.11)
     ice_nine (0.11.1)
+    iconv (1.0.4)
     jbuilder (2.2.4)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
@@ -198,6 +199,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   colorize
   grape
+  iconv (~> 1.0.3)
   jbuilder (~> 2.0)
   jquery-rails
   less-rails

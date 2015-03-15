@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(version: 20150312173035) do
     t.integer  "ktype"
     t.integer  "product_id"
     t.integer  "bundle",           default: 0
+    t.float    "wire_length",      default: 0.0
   end
 
   add_index "kanbans", ["nr"], name: "index_kanbans_on_nr", using: :btree

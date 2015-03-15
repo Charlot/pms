@@ -13,7 +13,7 @@ class CreateKanbans < ActiveRecord::Migration
       t.string :source_storage
       t.string :des_warehouse
       t.string :des_storage
-      t.references :part
+      t.references :part,:null => false
       t.datetime :print_time
       t.timestamps
     end

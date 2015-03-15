@@ -37,9 +37,7 @@ class ProcessTemplatesController < ApplicationController
           end
         end
       elsif ProcessType.semi_auto?(params[:type])
-
       end
-
       respond_to do |format|
         if @process_template.save
           format.html { redirect_to @process_template, notice: 'Process template was successfully created.' }
@@ -88,6 +86,22 @@ class ProcessTemplatesController < ApplicationController
       render partial: 'shared/messages/no_found'
     end
   end
+
+
+  def autoimport
+    ProcessTemplate.import(params[:file], 'auto')
+    redirect_to process_templates_url, notice: 'ProcessTemplate was successfully imported.'
+  end
+  
+  def semiautoimport
+  end 
+  
+  def manual_import
+    ProcessTemplate.import(params[:file], 'manual')
+    redirect_to process_templates_url, notice: 'ProcessTemplate was successfully imported.'
+  end
+  
+
 
   private
   # Use callbacks to share common setup or constraints between actions.
