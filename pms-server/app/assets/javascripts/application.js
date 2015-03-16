@@ -14,6 +14,6 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require jquery.ui/jquery-ui-1.9.1.custom.min
-//= require turbolinks
 //= require jquery.file.upload/jquery.fileupload
+//= require turbolinks
 //= require_tree .

@@ -13,9 +13,6 @@ module FileHandler
       			Part.transaction do
       				CSV.foreach(file.file_path,headers: file.headers,col_sep: file.col_sep,encoding: file.encoding) do |row|
       					part = Part.find_by_nr(row['Part Nr'])
-      					unless PartType.list_value.include? row['Type'].to_i
-      						raise '零件类型错误'
-      					end
 
       					unless part
       						Part.create({part_nr:row['Part Nr'],custom_nr: row['Custom Nr'],type:row['Type'],strip_length:row['Strip Length']})
@@ -58,8 +55,14 @@ module FileHandler
       end
 
       def self.validate_row(row)
-      	msg=Message.new(contents: [])
-      	msg.result = true
+        msg=Message.new(contents: [])
+        unless PartType.list_value.include? row['Type'].to_i
+          msg.contents<<"Type:#{row['Type']}不正确"
+        end
+
+        unless msg.result=(msg.contents.size==0)
+          msg.content=msg.contents.join('/')
+        end
         return msg
       end
     end
