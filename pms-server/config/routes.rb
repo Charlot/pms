@@ -55,6 +55,7 @@ Rails.application.routes.draw do
       post :autoimport
       post :semiautoimport
       post :manual_import
+      match :import,to: :import,via: [:get,:post]
     end
   end
 
