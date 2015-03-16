@@ -37,7 +37,7 @@ namespace PmsNCR
 
         private void startService()
         {
-            //OrderDDSConverter.ConvertJsonOrderToDDS("order_example.json");
+           OrderDDSConverter.ConvertJsonOrderToDDS("order_example.json");
             try
             {
                 if (host == null)

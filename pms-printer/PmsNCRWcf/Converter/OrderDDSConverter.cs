@@ -14,21 +14,21 @@ namespace PmsNCRWcf.Converter
         public static void ConvertJsonOrderToDDS(string fileName)
         {
             JObject obj = JObject.Parse(File.ReadAllText(WPCSConfig.GetFullPath(fileName)));
-         
+
             // JOB
-            GenDDSFile(obj, "Job.dds", "[NewJob]", "job");
+            GenDDSFile(obj, "Job.dds", "job");
 
             // Article            
-            GenDDSFile(obj, "Article.dds", "[NewArticle]", "article");
+            GenDDSFile(obj, "Article.dds", "article");
 
             // Terminal
-            GenDDSFile(obj, "Terminal.dds", "[NewTerminal]", "terminal1","terminal2");
+            GenDDSFile(obj, "Terminal.dds", "terminal1", "terminal2");
 
             //Seal
-            GenDDSFile(obj, "Seal.dds", "[NewSeal]", "seal1", "seal2");
+            GenDDSFile(obj, "Seal.dds", "seal1", "seal2");
         }
 
-        public static void GenDDSFile(JObject obj,string fileName, string title,params string[] tokenNames) {            
+        public static void GenDDSFile(JObject obj,string fileName, params string[] tokenNames) {            
             JToken token=obj[tokenNames[0]];
             if (token != null)
             { 
@@ -39,14 +39,21 @@ namespace PmsNCRWcf.Converter
                     {
                         foreach (string tokenName in tokenNames)
                         {
-                            token = obj[tokenName]; if (token != null)
+                            token = obj[tokenName];
+                            if (token != null)
                             {
                                 List<JToken> l = token.ToList();
-                                sw.WriteLine(title);
                                 foreach (JToken t in l)
                                 {
                                     JProperty p = (JProperty)t;
-                                    sw.WriteLine(p.Name + " = " + p.Value);
+                                    sw.WriteLine("[" + p.Name + "]");
+                                    List<JToken> v = p.Value.ToList();
+                                    foreach (JToken vv in v)
+                                    {
+
+                                        JProperty pvv = (JProperty)vv;
+                                        sw.WriteLine(pvv.Name + " = " + pvv.Value);
+                                    }
                                 }
                             }
                         }
@@ -54,6 +61,5 @@ namespace PmsNCRWcf.Converter
                 }
             }
         }
-          
     }
 }
