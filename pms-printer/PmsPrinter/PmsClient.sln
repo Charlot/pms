@@ -9,7 +9,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PmsNCR", "..\PmsNCR\PmsNCR.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PmsNCRWcf", "..\PmsNCRWcf\PmsNCRWcf.csproj", "{DCC92F99-680C-4703-BF54-8E6C81F06753}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PmsTestProject", "PmsTestProject\PmsTestProject.csproj", "{601729C7-7412-4DB3-A8E7-DA70AF5026D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7782081D-1528-4ABD-B792-87E3D68B9CF5}"
+	ProjectSection(SolutionItems) = preProject
+		Local.testsettings = Local.testsettings
+		PmsClient.vsmdi = PmsClient.vsmdi
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = PmsClient.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -59,6 +71,16 @@ Global
 		{DCC92F99-680C-4703-BF54-8E6C81F06753}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{DCC92F99-680C-4703-BF54-8E6C81F06753}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DCC92F99-680C-4703-BF54-8E6C81F06753}.Release|x86.ActiveCfg = Release|Any CPU
+		{601729C7-7412-4DB3-A8E7-DA70AF5026D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{601729C7-7412-4DB3-A8E7-DA70AF5026D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{601729C7-7412-4DB3-A8E7-DA70AF5026D9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{601729C7-7412-4DB3-A8E7-DA70AF5026D9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{601729C7-7412-4DB3-A8E7-DA70AF5026D9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{601729C7-7412-4DB3-A8E7-DA70AF5026D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{601729C7-7412-4DB3-A8E7-DA70AF5026D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{601729C7-7412-4DB3-A8E7-DA70AF5026D9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{601729C7-7412-4DB3-A8E7-DA70AF5026D9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{601729C7-7412-4DB3-A8E7-DA70AF5026D9}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

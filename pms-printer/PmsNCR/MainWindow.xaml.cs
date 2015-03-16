@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using System.ServiceModel.Web;
 using PmsNCRWcf;
 using Brilliantech.Framwork.Utils.LogUtil;
+using PmsNCRWcf.Converter;
 
 namespace PmsNCR
 {
@@ -36,6 +37,7 @@ namespace PmsNCR
 
         private void startService()
         {
+            //OrderDDSConverter.ConvertJsonOrderToDDS("order_example.json");
             try
             {
                 if (host == null)

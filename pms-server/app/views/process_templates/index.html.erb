@@ -1,5 +1,7 @@
 <h1>Listing process_templates</h1>
 
+<%= link_to 'Import Process Template', import_process_templates_path %>
+
 <table class="table">
   <thead>
   <tr>
@@ -34,7 +36,7 @@
 
 <%= link_to 'New Process template', new_process_template_path %>
 
-<hr >
+<!--<hr >
 <%= form_tag autoimport_process_templates_path, multipart:true do %>
 	<%= file_field_tag :file %>
 	<%= submit_tag "导入 Auto ProcessTemplat" %>
@@ -50,4 +52,4 @@
 <%= form_tag manual_import_process_templates_path, multipart:true do %>
 	<%= file_field_tag :file %>
 	<%= submit_tag "导入 MANUAL ProcessTemplat" %>
-<% end %>
+<% end %>-->
