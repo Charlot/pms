@@ -12,8 +12,7 @@ module FileHandler
       		if validate_msg.result
       			ProcessTemplate.transaction do 
       				CSV.foreach(file.file_path,headers: file.headers,col_sep: file.col_sep,encoding: file.encoding) do |row|
-      					template = ProcessTemplate.find_by_code(row['Code'])
-      					unless template
+
       						type = row['Type'].to_i
       						process_template = ProcessTemplate.build({code:row['Code'],type:row['Type'],template:row['Template'],description:row['Description']})
       						case type
@@ -30,9 +29,6 @@ module FileHandler
       							#
       						end
       						process_template.save
-      					else
-      						#不能更新
-      					end
       				end
       			end
       			msg.result = true
@@ -49,6 +45,12 @@ module FileHandler
 
       def self.validate_row(row)
       	msg = Message.new(contents:[])
+
+        template = ProcessTemplate.find_by_code(row['Code'])
+        if template
+          msg.contents << "Code:#{row['Code']}已经存在"
+        end
+
       	unless type = ProcessType.has_value? row['Type']
       		msg.contents << "Type:#{row['Type']}不正确"
       	end
@@ -91,6 +93,7 @@ module FileHandler
       		['s2','s2_qty_factor']
       	else
       		[]
+        end
       end
     end
   end
