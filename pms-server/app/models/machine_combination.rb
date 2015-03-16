@@ -13,7 +13,7 @@ class MachineCombination < ActiveRecord::Base
       MATCH_INDEX.each do |k, v|
         items[v]=c.send(k)
       end
-      list.nodes<<MachineCombinationNode.new(key: c.id, match_start_index: c.match_start_index, match_end_index: c.match_end_index, items: items)
+      list.nodes<<MachineCombinationNode.new(key: c.id, machine_id: c.machine_id, match_start_index: c.match_start_index, match_end_index: c.match_end_index, items: items)
     end
     return list
   end
@@ -78,10 +78,10 @@ class MachineCombinationList< BaseClass
   attr_accessor :nodes
 
   def match(node)
-    self.nodes.each_with_index do |n,j|
+    self.nodes.each_with_index do |n, j|
       match_start_index =(node.match_start_index>n.match_start_index) ? node.match_start_index : n.match_start_index
       match_end_index =(node.match_end_index>n.match_end_index) ? node.match_end_index : n.match_end_index
-      puts "&&&.#{j}.#{n.key}.start compare:#{match_start_index}:#{match_end_index}"
+      puts "&&&.#{j}.#{n.key}.start compare:#{match_start_index}:#{match_end_index}".colorize(:blue)
       (match_start_index..match_end_index).each { |i|
         puts "**#{i}---#{node.items[i]}:#{n.items[i]}"
         if !node.items[i].nil? && !n.items[i].nil?
@@ -92,18 +92,20 @@ class MachineCombinationList< BaseClass
             puts "EQUAL:#{i}-------------------------------"
             # return false
           elsif i==match_end_index
-            puts "#{n.key}--key-------------------------"
-            return n.key
+            puts "success : #{n.key}--key-------------------------".colorize(:yellow)
+            return n
           end
         end
       }
     end
+    puts 'fail :  -------------------------'.colorize(:red)
+
     return nil
   end
 end
 
 class MachineCombinationNode<BaseClass
-  attr_accessor :key, :match_start_index, :match_end_index, :items
+  attr_accessor :key, :machine_id, :match_start_index, :match_end_index, :items
 
   def default
     {match_start_index: 0, match_end_index: 5}

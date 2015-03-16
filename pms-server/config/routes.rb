@@ -1,5 +1,14 @@
 Rails.application.routes.draw do
-  resources :production_orders
+  resources :production_order_items do
+    collection do
+      post :optimise
+      post :distribute
+    end
+  end
+
+  resources :production_orders do
+    resources :production_order_items
+  end
 
   resources :settings
 
