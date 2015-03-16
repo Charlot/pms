@@ -113,64 +113,94 @@ module Ncr
 
       # job
       json[:job]={
-          Job: "J_#{self.production_order.nr}_#{item.nr}",
-          ArticleKey: "A_#{self.production_order.nr}_#{item.nr}",
-          TotalPieces: kanban.quantity,
-          BatchSize: kanban.bundle,
-          Name: "J_#{self.production_order.nr}_#{item.nr}",
-          Hint: "Cutting Order: #{self.production_order.nr}. Cutting Position: #{item.nr}. Bundle quantity: #{kanban.bundle}. Total quantity: #{kanban.quantity}."
+          NewJob: {
+              Job: "J_#{self.production_order.nr}_#{item.nr}",
+              ArticleKey: "A_#{self.production_order.nr}_#{item.nr}",
+              TotalPieces: kanban.quantity,
+              BatchSize: kanban.bundle,
+              Name: "J_#{self.production_order.nr}_#{item.nr}",
+              Hint: "Cutting Order: #{self.production_order.nr}. Cutting Position: #{item.nr}. Bundle quantity: #{kanban.bundle}. Total quantity: #{kanban.quantity}."
+          }
       }
 
       # article
       json[:article]={
-          ArticleKey: "A_#{self.production_order.nr}_#{item.nr}",
-          ArticleGroup: 'Group0',
-          Name: "A_#{self.production_order.nr}_#{item.nr}",
-          Hint: "A_#{self.production_order.nr}_#{item.nr}"
+          NewArticle: {
+              ArticleKey: "A_#{self.production_order.nr}_#{item.nr}",
+              ArticleGroup: 'Group0',
+              Name: "A_#{self.production_order.nr}_#{item.nr}",
+              Hint: "A_#{self.production_order.nr}_#{item.nr}"
+          },
+          NewLeadSet1: {
+              WireKey: wire.nr,
+              WireLength: process_entity.value_wire_qty_factor,
+              StrippingLength: "#{process_entity.t1_strip_length}, #{process_entity.t2_strip_length}",
+              PulloffLength: "#{process_entity.t1_strip_length}, #{process_entity.t2_strip_length}",
+              SealKey: "#{s1.nil? ? '' : s1.nr}, #{s2.nil? ? '' : s2.nr}",
+              TerminalKey: "#{t1.nil? ? '' : t1.nr}, #{t2.nil? ? '' : t2.nr}"
+          }
       }
 
       # wire
       json[:wire]={
-          WireKey: wire.nr,
-          WireGroup: 'Group0',
-          ElectricalSizeMM2: process_entity.value_wire_qty_factor,
-          Color: 'RD',
-          Name: wire.nr,
-          Hint: wire.nr
+          NewWire: {
+              WireKey: wire.nr,
+              WireGroup: 'Group0',
+              ElectricalSizeMM2: '0.50', #process_entity.value_wire_qty_factor,
+              Color: 'RD',
+              Name: wire.nr,
+              Hint: wire.nr
+          }
       }
 
       # terminal
       unless t1.nil?
-        json[:terminal1]={TerminalKey: t1.nr,
-                          TerminalGroup: 'Group0',
-                          StrippingLength: process_entity.t1_strip_length,
-                          Name: t1.nr,
-                          Hint: 't1 description'}
+        json[:terminal1]={
+            NewTerminal: {
+                TerminalKey: t1.nr,
+                TerminalGroup: 'Group0',
+                StrippingLength: process_entity.t1_strip_length,
+                Name: t1.nr,
+                Hint: 't1 description'
+            }
+        }
       end
 
       unless t2.nil?
-        json[:terminal2]={TerminalKey: t2.nr,
-                          TerminalGroup: 'Group0',
-                          StrippingLength: process_entity.t2_strip_length,
-                          Name: t2.nr,
-                          Hint: 't2 description'}
+        json[:terminal2]={
+            NewTerminal: {
+                TerminalKey: t2.nr,
+                TerminalGroup: 'Group0',
+                StrippingLength: process_entity.t2_strip_length,
+                Name: t2.nr,
+                Hint: 't2 description'
+            }
+        }
       end
 
       # seal
       unless s1.nil?
-        json[:seal1]={TerminalKey: s1.nr,
-                          TerminalGroup: 'Group0',
-                          Color: 'YE',
-                          Name: s1.nr,
-                          Hint: 's1 description'}
+        json[:seal1]={
+            NewSeal: {
+                SealKey: s1.nr,
+                SealGroup: 'Group0',
+                Color: 'YE',
+                Name: s1.nr,
+                Hint: 's1 description'
+            }
+        }
       end
 
       unless s2.nil?
-        json[:seal2]={TerminalKey: s2.nr,
-                          TerminalGroup: 'Group0',
-                          Color: 'YE',
-                          Name: s2.nr,
-                          Hint: 's2 description'}
+        json[:seal2]={
+            NewSeal: {
+                SealKey: s2.nr,
+                SealGroup: 'Group0',
+                Color: 'YE',
+                Name: s2.nr,
+                Hint: 's2 description'
+            }
+        }
       end
 
       puts "---------------------"
