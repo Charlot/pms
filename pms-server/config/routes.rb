@@ -47,6 +47,8 @@ Rails.application.routes.draw do
     end
     collection do
       get :search
+      match :import_auto, to: :import_auto,via:[:get,:post]
+      match :import_semi_auto,to: :import_semi_auto,via:[:get,:post]
     end
   end
 
@@ -64,6 +66,7 @@ Rails.application.routes.draw do
       post :autoimport
       post :semiautoimport
       post :manual_import
+      match :import,to: :import,via: [:get,:post]
     end
   end
 

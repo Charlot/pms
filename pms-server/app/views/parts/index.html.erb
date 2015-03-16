@@ -24,7 +24,7 @@
         <td><%= part.custom_nr %></td>
         <td><%= part.type %></td>
         <td><%= part.strip_length %></td>
-        <td><%= part.resource_group %></td>
+        <td><%= part.resource_group_tool.nr if part.resource_group_tool %></td>
         <td><%= part.measure_unit %></td>
         <td><%= link_to 'Show', part %></td>
         <td><%= link_to 'Edit', edit_part_path(part) %></td>
