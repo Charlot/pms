@@ -2,7 +2,7 @@ require 'csv'
 module FileHandler
   module Csv
     class Kanban<Base
-      IMPORT_HEADERS=['Nr','Quantity','Safety Stock','Copies','Remark',
+      IMPORT_HEADERS=['Quantity','Safety Stock','Copies','Remark',
                       'Wire Nr','Product Nr','Type','Product','Wire Length','Bundle',
       'Source Warehouse','Source Storage','Destination Warehouse','Destination Storage']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
