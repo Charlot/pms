@@ -14,7 +14,7 @@ module FileHandler
       				CSV.foreach(file.file_path,headers: file.headers,col_sep: file.col_sep,encoding: file.encoding) do |row|
 
       						type = row['Type'].to_i
-      						process_template = ProcessTemplate.new({code:row['Code'],type:row['Type'],template:row['Template'],description:row['Description']})
+      						process_template = ProcessTemplate.new({code:row['Code'],type:row['Type'],template:row['Template'],description:row['Description'],name:row['Name']})
       						case type
       						when ProcessType::AUTO
       							custom_fields = []

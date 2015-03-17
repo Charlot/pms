@@ -1,5 +1,5 @@
 require 'csv'
-module FileHanlder
+module FileHandler
   module Csv
     class ProcessEntityAutoHandler<Base
       IMPORT_HEADERS=['Nr','Name','Description','Stand Time','Template Code','WorkStation Type','Cost Center',
@@ -19,7 +19,7 @@ module FileHanlder
               CSV.foreach(file.file_path,headers: file.headers,col_sep: file.col_sep,encoding: file.encoding) do |row|
                 process_template = ProcessTemplate.find_by_code(row['Template Code'])
                 params = {}
-                params.merge({nr:row['NR'],name:row['Name'],description:row['Description'],stand_time:row['Stand Time'],process_template_id:process_template.id})
+                params = params.merge({nr:row['Nr'],name:row['Name'],description:row['Description'],stand_time:row['Stand Time'],process_template_id:process_template.id})
                 #TODO add WorkStation Type and Cost Center
                 process_entity = ProcessEntity.new(params)
                 process_entity.process_template = process_template
@@ -27,7 +27,7 @@ module FileHanlder
 
                 custom_fields = {}
                 ['Wire NO','Component','Qty Factor','Bundle Qty', 'T1','T1 Qty Factor','T1 Strip Length', 'T2','T2 Qty Factor','T2 Strip Length', 'S1','S1 Qty Factor', 'S2','S2 Qty Factor'].each{|header|
-                  custom_fields.merge(header_to_custom_fields(header,row[header])) if row[header]
+                  custom_fields = custom_fields.merge(header_to_custom_fields(header,row[header])) if row[header]
                 }
                 custom_fields.each do |k,v|
                   cf = process_entity.custom_fields.find{|cf| cf.name == k.to_s}
@@ -53,6 +53,7 @@ module FileHanlder
           puts e.backtrace
           msg.content = e.message
         end
+        return msg
       end
 
       def self.validate_import(file)
@@ -77,8 +78,10 @@ module FileHanlder
       end
 
       def self.validate_row(row)
+        msg = Message.new({result:true})
         #TODO Add validation
         #TODO validate custom field for template
+        return msg
       end
 
       def self.header_to_custom_fields(header,value)
