@@ -2,6 +2,7 @@ require 'roo'
 require 'csv'
 
 class Part < ActiveRecord::Base
+  self.inheritance_column = :_type_disabled
   belongs_to :resource_group
   belongs_to :measure_unit
   has_many :part_boms
