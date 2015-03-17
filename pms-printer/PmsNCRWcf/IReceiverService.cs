@@ -19,7 +19,8 @@ namespace PmsNCRWcf
         //    ResponseFormat = WebMessageFormat.Json,
         //    RequestFormat = WebMessageFormat.Json,
         //    BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json,RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+       //[WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+       [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
         //[OperationContractAttribute(Name = "Order")]
         Msg<string> WriteOrder(string file_name, string order_nr, string item_nr, string file_json_content);
     }
