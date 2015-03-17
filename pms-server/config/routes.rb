@@ -83,6 +83,7 @@ Rails.application.routes.draw do
       post :scan
       get :panel
       get :search
+      match :import ,to: :import,via: [:get,:post]
     end
   end
 
