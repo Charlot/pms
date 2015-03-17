@@ -1,7 +1,7 @@
 require 'csv'
 module FileHandler
   module Csv
-    class Bom<Base
+    class PartBomHandler<Base
       IMPORT_HEADERS=['Part Nr', 'Component Nr', 'Quantity']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
       # import bom by file

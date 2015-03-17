@@ -1,18 +1,14 @@
+require 'csv'
 module FileHandler
   module Csv
-    class Base<FileHandler::Base
-      SEPARATOR=$csv_separator
+    class KanbanHandler<Base
+      IMPORT_HEADERS=['Quantity','Safety Stock','Copies','Remark',
+                      'Wire Nr','Product Nr','Type','Product','Wire Length','Bundle',
+      'Source Warehouse','Source Storage','Destination Warehouse','Destination Storage']
+      INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
-      def self.get_encoding(user_agent)
-        os=System::Base.os_by_user_agent(user_agent)
-        case os
-          when 'windows'
-            return 'GB18030:UTF-8'
-          when 'linux', 'macintosh'
-            return 'UTF-8:UTF-8'
-          else
-            return 'UTF-8:UTF-8'
-        end
+      def self.import(file)
+
       end
 
       def self.validate_import(file)
@@ -34,6 +30,10 @@ module FileHandler
           end
         end
         return msg
+      end
+
+      def self.validate_row(row)
+        #TODO Validate kanban
       end
     end
   end

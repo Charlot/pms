@@ -42,10 +42,10 @@ class ProcessEntitiesController < ApplicationController
       msg = Message.new
       begin
         file=params[:files][0]
-        fd = FileData.new(data: file,original_filename:file.original_filename,path:$upload_data_file_path,path_name:"#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd = FileData.new(data: file,original_name:file.original_filename,path:$upload_data_file_path,path_name:"#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
         fd.save
         file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase,file_path: fd.full_path,file_name: file.original_filename)
-        msg = FileHandler::Csv::ProcessEntityAuto.import(file)
+        msg = FileHandler::Csv::ProcessEntityAutoHandler.import(file)
       rescue => e
         msg.content = e.message
       end
@@ -59,10 +59,10 @@ class ProcessEntitiesController < ApplicationController
       msg = Message.new
       begin
         file=params[:files][0]
-        fd = FileData.new(data: file,original_filename:file.original_filename,path:$upload_data_file_path,path_name:"#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd = FileData.new(data: file,original_name:file.original_filename,path:$upload_data_file_path,path_name:"#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
         fd.save
         file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase,file_path: fd.full_path,file_name: file.original_filename)
-        msg = FileHandler::Csv::ProcessEntitySemiAuto.import(file)
+        msg = FileHandler::Csv::ProcessEntitySemiAutoHandler.import(file)
       rescue => e
         msg.content = e.message
       end

@@ -1,7 +1,7 @@
 require 'csv'
 module FileHanlder
   module Csv
-    class ProcessEntityAuto<Base
+    class ProcessEntityAutoHandler<Base
       IMPORT_HEADERS=['Nr','Name','Description','Stand Time','Template Code','WorkStation Type','Cost Center',
                       'Wire NO','Component','Qty Factor','Bundle Qty',
                       'T1','T1 Qty Factor','T1 Strip Length',
@@ -53,6 +53,27 @@ module FileHanlder
           puts e.backtrace
           msg.content = e.message
         end
+      end
+
+      def self.validate_import(file)
+        tmp_file=full_tmp_path(file.file_name)
+        msg=Message.new(result: true)
+        CSV.open(tmp_file, 'wb', write_headers: true,
+                 headers: INVALID_CSV_HEADERS, col_sep: file.col_sep, encoding: file.encoding) do |csv|
+          CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+            mmsg = validate_row(row)
+            if mmsg.result
+              csv<<row.fields
+            else
+              if msg.result
+                msg.result=false
+                msg.content = "请下载错误文件<a href='/files/#{Base64.urlsafe_encode64(tmp_file)}'>#{::File.basename(tmp_file)}</a>"
+              end
+              csv<<(row.fields<<mmsg.content)
+            end
+          end
+        end
+        return msg
       end
 
       def self.validate_row(row)
