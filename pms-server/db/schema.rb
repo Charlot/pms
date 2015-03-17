@@ -81,12 +81,12 @@ ActiveRecord::Schema.define(version: 20150315125224) do
     t.string   "source_storage"
     t.string   "des_warehouse"
     t.string   "des_storage"
-    t.integer  "part_id"
+    t.integer  "part_id",                        null: false
     t.datetime "print_time"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "ktype"
-    t.integer  "product_id"
+    t.integer  "product_id",                     null: false
     t.integer  "bundle",           default: 0
     t.float    "wire_length",      default: 0.0
   end
@@ -250,6 +250,7 @@ ActiveRecord::Schema.define(version: 20150315125224) do
     t.string   "nr"
     t.integer  "state",               default: 100
     t.string   "code"
+    t.text     "message"
     t.integer  "kanban_id"
     t.integer  "production_order_id"
     t.integer  "machine_id"
@@ -257,7 +258,6 @@ ActiveRecord::Schema.define(version: 20150315125224) do
     t.datetime "optimise_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "message"
   end
 
   add_index "production_order_items", ["kanban_id"], name: "index_production_order_items_on_kanban_id", using: :btree
