@@ -4,7 +4,7 @@ module FileHandler
     class KanbanHandler<Base
       IMPORT_HEADERS=['Quantity','Safety Stock','Copies','Remark',
                       'Wire Nr','Product Nr','Type','Wire Length','Bundle',
-      'Source Warehouse','Source Storage','Destination Warehouse','Destination Storage']
+      'Source Warehouse','Source Storage','Destination Warehouse','Destination Storage','Process List']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
       def self.import(file)
@@ -15,13 +15,17 @@ module FileHandler
           if validate_msg.result
             Kanban.transaction do
               CSV.foreach(file.file_path,headers: file.headers,col_sep: file.col_sep,encoding: file.encoding) do |row|
-                part = Part.find_by_nr(row['Wore Nr'])
+                part = Part.find_by_nr(row['Wire Nr'])
                 product = Part.find_by_nr(row['Product Nr'])
 
                 kanban = Kanban.new({quantity:row['Quantity'],safety_stock:row['Safety Stock'],copies:row['Copies'],remark:row['Remark'],
-                                    part_id:part.id,product_id:product.id,type:row['Type'],wire_length:row['Wire Length'],bundle:row['Bundle'],
+                                    part_id:part.id,product_id:product.id,ktype:row['Type'],wire_length:row['Wire Length'],bundle:row['Bundle'],
                                     source_warehouse:row['Source Warehouse'],source_storage:row['Source Storage'],des_warehouse:row['Destination Warehouse'],
                                     des_storage:row['Destination Storage']})
+                process_nrs = row['Process List'].split(',')
+                part_process_entities = ProcessEntity.where(nr:process_nrs).collect{|pe| PartProcessEntity.new({part_id:part.id,process_entity_id:pe.id})}
+                part.part_process_entities=part_process_entities
+                part.save
                 kanban.save
               end
             end
@@ -44,7 +48,7 @@ module FileHandler
         CSV.open(tmp_file, 'wb', write_headers: true,
                  headers: INVALID_CSV_HEADERS, col_sep: file.col_sep, encoding: file.encoding) do |csv|
           CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
-            puts "validate row"
+            mmsg = validate_row(row)
             if mmsg.result
               csv<<row.fields
             else
@@ -61,6 +65,7 @@ module FileHandler
 
       def self.validate_row(row)
         msg = Message.new({result:true})
+        #TODO 注意验证，同一个零件只能有一种工艺组合
         #TODO Validate kanban
         return msg
       end
