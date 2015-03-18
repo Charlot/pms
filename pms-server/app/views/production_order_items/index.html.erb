@@ -40,7 +40,7 @@
   </tbody>
 </table>
 <br>
-<% if @optimised %>
+<% if @optimised && has_distribute_items(@production_order) %>
     <%= form_tag('/production_order_items/distribute', method: 'post') do %>
         <%= hidden_field_tag :production_order_id, @production_order.id %>
         <input type="button" value="DISTRIBUTE" onclick="if(confirm('distribute?')){form.submit();}"/>

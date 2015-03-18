@@ -16,7 +16,8 @@ module Ncr
             # puts item.to_json
             begin
               puts "$$$$$#{write_order_api(item)}"
-              response=RestClient.post(write_order_api(item), content_type: :json, accept: :json)
+              response=RestClient.post(write_order_api(item), {params: post_params(item).to_json},
+                                       accept: :json)
             rescue => e
               puts "#{e.class}---#{e.message}-----------------------------"
               # raise(e)
@@ -35,6 +36,7 @@ module Ncr
             end
             puts JSON.parse(response.body)['Result'].class
           end
+          # raise
         end
       rescue => e
         puts "#{e.class}--------------------------------"
@@ -45,12 +47,21 @@ module Ncr
       msg
     end
 
+    def post_params(item)
+      {
+          file_name: json_file_name(item)+'.json',
+          order_nr: self.production_order.nr,
+          item_nr: item.nr,
+          file_json_content: json_order_item_content(item)
+      }
+    end
+
     def write_order_api(item)
-      URI.encode "http://#{item.machine.ip}:9000/ncr/write_order/#{json_file_name(item)}/#{self.production_order.nr}/#{item.nr}/#{json_order_item_content(item)}"
+      URI.encode "http://#{item.machine.ip}:9000/ncr/receive_order"
     end
 
     def json_file_name(item)
-      "#{self.production_order.nr}_#{item.nr}"
+      "#{item.nr}"
     end
 
     def json_order_item_content(item)
@@ -71,7 +82,7 @@ module Ncr
           item_nr: item.nr,
           wire_nr: wire.nr,
           wire_custom_nr: wire.custom_nr,
-          wire_desc: 'wire default description',
+          wire_desc: wire.description,
           wire_length: process_entity.value_wire_qty_factor
       }
 
@@ -114,11 +125,11 @@ module Ncr
       # job
       json[:job]={
           NewJob: {
-              Job: "J_#{self.production_order.nr}_#{item.nr}",
-              ArticleKey: "A_#{self.production_order.nr}_#{item.nr}",
+              Job: "J_#{item.nr}",
+              ArticleKey: "A_#{item.nr}",
               TotalPieces: kanban.quantity,
               BatchSize: kanban.bundle,
-              Name: "J_#{self.production_order.nr}_#{item.nr}",
+              Name: "J_#{item.nr}",
               Hint: "Cutting Order: #{self.production_order.nr}. Cutting Position: #{item.nr}. Bundle quantity: #{kanban.bundle}. Total quantity: #{kanban.quantity}."
           }
       }
@@ -126,10 +137,10 @@ module Ncr
       # article
       json[:article]={
           NewArticle: {
-              ArticleKey: "A_#{self.production_order.nr}_#{item.nr}",
+              ArticleKey: "A_#{item.nr}",
               ArticleGroup: 'Group0',
-              Name: "A_#{self.production_order.nr}_#{item.nr}",
-              Hint: "A_#{self.production_order.nr}_#{item.nr}"
+              Name: "A_#{item.nr}",
+              Hint: "A_#{item.nr}"
           },
           NewLeadSet1: {
               WireKey: wire.nr,
@@ -206,7 +217,7 @@ module Ncr
       puts "---------------------"
       puts json.to_json
       puts "------------------------"
-      json.to_json
+      json
     end
   end
 end

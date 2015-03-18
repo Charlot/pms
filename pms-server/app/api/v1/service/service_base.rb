@@ -7,6 +7,7 @@ module V1
       namespace :service do
         mount PrintServiceAPI
         mount MachineServiceAPI
+        mount NcrServiceAPI
       end
     end
   end
