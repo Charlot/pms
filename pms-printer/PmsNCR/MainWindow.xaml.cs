@@ -15,6 +15,7 @@ using System.ServiceModel.Web;
 using PmsNCRWcf;
 using Brilliantech.Framwork.Utils.LogUtil;
 using PmsNCRWcf.Converter;
+using PmsNCRWcf.Model;
 
 namespace PmsNCR
 {
@@ -52,6 +53,12 @@ namespace PmsNCR
                 MessageBox.Show(ex.Message);
                 LogUtil.Logger.Error(ex.Message);
             }
+        }
+        
+
+        private void MaterialCheckBtn_Click(object sender, RoutedEventArgs e)
+        {
+            new MaterialCheck().Show();
         }
 
     }

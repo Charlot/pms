@@ -9,8 +9,7 @@ using PmsNCRWcf.Config;
 namespace PmsNCRWcf.Converter
 {
     public class OrderDDSConverter
-    {
-
+    { 
         public static void ConvertJsonOrderToDDS(string fileName)
         {
             JObject obj = JObject.Parse(File.ReadAllText(WPCSConfig.GetFullPath(fileName)));
@@ -49,8 +48,7 @@ namespace PmsNCRWcf.Converter
                                     sw.WriteLine("[" + p.Name + "]");
                                     List<JToken> v = p.Value.ToList();
                                     foreach (JToken vv in v)
-                                    {
-
+                                    { 
                                         JProperty pvv = (JProperty)vv;
                                         sw.WriteLine(pvv.Name + " = " + pvv.Value);
                                     }
