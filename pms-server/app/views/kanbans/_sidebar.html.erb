@@ -1,8 +1,5 @@
 <nav class="navbar navbar-default navbar-static-top">
   <ul class="nav navbar-nav">
-  	<li class="<%= 'active' if current_page?({controller:'kanbans',action:'panel'})%>">
-  		<a href="<%= panel_kanbans_path%>">KANBAN扫描</a>
-  	</li>
     <li class="<%= 'active' if current_page?({controller:'kanbans',action:'new'})%>">
       <a  href="<%= new_kanban_path%>">建立KANBAN卡</a>
     </li>

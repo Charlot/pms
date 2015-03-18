@@ -211,6 +211,7 @@ class KanbansController < ApplicationController
   # GET /kanbans/panel
   # GET /kanbans/panel.json
   def panel
+    @hide_sidebar= true
   end
 
   private

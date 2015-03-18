@@ -25,6 +25,7 @@ module FileHandler
                 process_entity.process_template = process_template
                 process_entity.save
 
+
                 custom_fields = {}
                 ['Wire NO','Component','Qty Factor','Bundle Qty', 'T1','T1 Qty Factor','T1 Strip Length', 'T2','T2 Qty Factor','T2 Strip Length', 'S1','S1 Qty Factor', 'S2','S2 Qty Factor'].each{|header|
                   custom_fields = custom_fields.merge(header_to_custom_fields(header,row[header])) if row[header]
@@ -96,7 +97,9 @@ module FileHandler
           {default_bundle_qty:value}
         when 'T1'
           default_strip_length = 0
-          default_strip_length = part.strip_length if part = Part.find_by_nr(value)
+          if part = Part.find_by_nr(value)
+            default_strip_length = part.strip_length
+          end
           {t1:value,t1_default_strip_length:default_strip_length}
         when 'T1 Qty Factor'
           {t1_qty_factor:value}

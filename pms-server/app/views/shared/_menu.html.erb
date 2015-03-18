@@ -12,28 +12,24 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="<%= 'active' if current_controller?({controller: 'kanbans'})%>"><a href="<%= panel_kanbans_path %>">KANBAN</a></li>
+        <li class="<%= 'active' if current_controller?({controller: 'kanbans'})%>"><a href="<%= panel_kanbans_path%>">KANBAN扫描</a></li>
         <li class="<%= 'active' if current_controller?({controller: 'production_order_items'})%>"><a href="<%= production_order_items_path %>">生产任务</a></li>
         <li class="<%= 'active' if current_controller?({controller: 'production_orders'})%>"><a href="<%= production_orders_path %>">生产订单</a></li>
 
         <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">工艺<span class="caret"></span></a>
-          <ul class="dropdown-menu" role="manage">
-            <li class="<%= 'active' if current_controller?({controller: 'process_templates'})%>"><a href="<%= process_templates_path %>">步骤模板</a></li>
-            <li class="<%= 'active' if current_controller?({controller: 'process_entities'})%>"><a href="<%= process_entities_path %>">步骤</a></li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">零件<span class="caret"></span></a>
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">基础数据<span class="caret"></span></a>
           <ul class="dropdown-menu" role="manage">
             <li class="<%= 'active' if current_controller?({controller: 'measure_units'})%>"><a href="<%= measure_units_path %>">单位</a></li>
             <li class="<%= 'active' if current_controller?({controller: 'parts'})%>"><a href="<%= parts_path %>">零件</a></li>
             <li class="<%= 'active' if current_controller?({controller: 'part_boms'})%>"><a href="<%= part_boms_path %>">BOM表</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'process_templates'})%>"><a href="<%= process_templates_path %>">步骤模板</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'process_entities'})%>"><a href="<%= process_entities_path %>">步骤</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'kanbans'})%>"><a href="<%= kanbans_path %>">KANBAN</a></li>
           </ul>
         </li>
 
         <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">生产<span class="caret"></span></a>
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">机器与模具<span class="caret"></span></a>
           <ul class="dropdown-menu" role="manage">
             <li class="<%= 'active' if current_controller?({controller: 'resource_group_machines'})%>"><a href="<%= resource_group_machines_path %>">机器组</a></li>
             <li class="<%= 'active' if current_controller?({controller: 'resource_group_tools'})%>"><a href="<%= resource_group_tools_path %>">模具组</a></li>

@@ -14,7 +14,7 @@ module FileHandler
       				CSV.foreach(file.file_path,headers: file.headers,col_sep: file.col_sep,encoding: file.encoding) do |row|
       					part = Part.find_by_nr(row['Part Nr'])
       					unless part
-      						Part.create({part_nr:row['Part Nr'],custom_nr: row['Custom Nr'],type:row['Type'],strip_length:row['Strip Length']})
+      						Part.create({nr:row['Part Nr'],custom_nr: row['Custom Nr'],type:row['Type'],strip_length:row['Strip Length']})
       					else
       						part.update_attributes({custom_nr:row['Custom Nr'],type:row['Type'],strip_length:row['Strip Length']})
       					end

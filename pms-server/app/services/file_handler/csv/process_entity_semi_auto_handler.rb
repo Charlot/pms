@@ -21,28 +21,28 @@ module FileHandler
                 process_entity.save
 
                 custom_fields_val = row['Template Fields'].split(',')
-                custom_fields_splited = {}
-                custom_fields_val.each_with_index { |val, index|
-                  if val =~ /\//
-                    vals = val.split('/')
-                    custom_fields_splited[index] = vals[1]
-                    custom_fields_val[index] = vals[0]
-                  end
-                }
-                puts custom_fields_val
-                puts custom_fields_splited
+                #custom_fields_splited = {}
+                #custom_fields_val.each_with_index { |val, index|
+                #  if val =~ /\//
+                #    vals = val.split('/')
+                #    custom_fields_splited[index] = vals[1]
+                #    custom_fields_val[index] = vals[0]
+                #  end
+                #}
 
                 process_entity.custom_fields.each_with_index do |cf, index|
                   #TODO is_for_out_stock怎么来的？
-                  cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: custom_fields_splited.has_key?(index), value: cf.get_field_format_value(custom_fields_val[index]))
+                  cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
                   process_entity.custom_values<<cv
                 end
 
                 process_entity.custom_values.each_with_index do |cv, index|
                   cf=cv.custom_field
                   if CustomFieldFormatType.part?(cf.field_format)
-                    #TODO quantity是如何计算的
-                    process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: custom_fields_splited[index])
+                    #2015-3-18，李其
+                    #我和他们确认过，在全自动模板中，零件只消耗一个，为了简化上传，我这里硬编码写成了一个
+                    #后续可以修改
+                    process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: 1)
                   end
                 end
               end
