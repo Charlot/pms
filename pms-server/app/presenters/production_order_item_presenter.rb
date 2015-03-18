@@ -24,6 +24,7 @@ class ProductionOrderItemPresenter<Presenter
         Id: @production_order_item.id,
         ItemNr: @production_order_item.nr,
         OrderNr: @production_order_item.production_order.nr,
+        FileName: "#{@production_order_item.nr}.json",
         WireNr: wire.nr,
         WireCusNr: wire.custom_nr||'',
         WireLength: process_entity.value_wire_qty_factor.to_f,
