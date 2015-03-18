@@ -13,6 +13,8 @@ using System.Windows.Shapes;
 using PmsNCRWcf.Model;
 using PmsNCRWcf;
 using PmsNCRWcf.Config;
+using PmsNCRWcf.Converter;
+using Brilliantech.Framwork.Utils.LogUtil;
 
 namespace PmsNCR
 {
@@ -26,7 +28,8 @@ namespace PmsNCR
         public MaterialCheck()
         {
             InitializeComponent();
-            if (LoadOrderItemCheck()) {
+            if (LoadOrderItemCheck())
+            {
                 InitCheckGraph();
             }
             ScanCodeTB.Focus();
@@ -47,13 +50,15 @@ namespace PmsNCR
             return msg.Result;
         }
 
-        private void InitCheckGraph() {
+        private void InitCheckGraph()
+        {
             OrderNrLab.Content = orderItem.ItemNr;
-            WireNrTB.Text=orderItem.WireNr;
+            WireNrTB.Text = orderItem.WireNr;
             WireCusNrTB.Text = orderItem.WireCusNr;
             WireLenghLab.Content = orderItem.WireLength;
 
-            if (orderItem.Terminal1StripLength!=null) {
+            if (orderItem.Terminal1StripLength != null)
+            {
                 StripLength1Lab.Content = orderItem.Terminal1StripLength.ToString();
             }
 
@@ -62,11 +67,12 @@ namespace PmsNCR
                 StripLength2Lab.Content = orderItem.Terminal2StripLength.ToString();
             }
 
-            if (orderItem.Terminal1Nr != null) {
+            if (orderItem.Terminal1Nr != null)
+            {
                 WorkArea1.Visibility = Visibility.Visible;
                 TerminalNr1TB.Text = orderItem.Terminal1Nr;
                 TerminalCusNr1TB.Text = orderItem.Terminal1CusNr;
-                Tool1Nr.Text = orderItem.Tool1Nr;
+                Tool1NrTB.Text = orderItem.Tool1Nr;
                 Terminal1GraphLab.Visibility = Visibility.Visible;
             }
 
@@ -75,7 +81,7 @@ namespace PmsNCR
                 WorkArea2.Visibility = Visibility.Visible;
                 TerminalNr2TB.Text = orderItem.Terminal2Nr;
                 TerminalCusNr2TB.Text = orderItem.Terminal2CusNr;
-                Tool2Nr.Text = orderItem.Tool2Nr;
+                Tool2NrTB.Text = orderItem.Tool2Nr;
                 Terminal2GraphLab.Visibility = Visibility.Visible;
             }
         }
@@ -103,7 +109,7 @@ namespace PmsNCR
                         {
                             Terminal1CB.IsChecked = TerminalNr1TB.Text.Equals(content);
                         }
-                        else if (prefix.Equals(MaterialCheckConfig.Area2))
+                        else if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area2))
                         {
                             Terminal2CB.IsChecked = TerminalNr2TB.Text.Equals(content);
                         }
@@ -116,23 +122,71 @@ namespace PmsNCR
                         {
                             Tool1CB.IsChecked = Tool1NrTB.Text.Equals(content);
                         }
-                        else if (prefix.Equals(MaterialCheckConfig.Area2))
+                        else if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area2))
                         {
                             Tool2CB.IsChecked = Tool2NrTB.Text.Equals(content);
                         }
                     }
+
+                    if (CanStartProduce())
+                    {
+                        StartProduceBtn.IsEnabled = true;
+                    }
+                }
+
+                if (AutoCleanScanCB.IsChecked.Value)
+                {
+                    ScanCodeTB.Text = String.Empty;
                 }
             }
-            if (AutoCleanScanCB.IsChecked.Value)
-            {
-                ScanCodeTB.Text = String.Empty;
-            }
+
         }
 
         private void CleanScanBtn_Click(object sender, RoutedEventArgs e)
         {
             ScanCodeTB.Text = String.Empty;
             ScanCodeTB.Focus();
+        }
+
+        private bool CanStartProduce()
+        {
+            bool wireCan = WireCB.IsChecked.Value;
+            bool area1Can = true;
+            bool area2Can = true;
+
+            if (WorkArea1.IsVisible)
+            {
+                area1Can = Terminal1CB.IsChecked.Value && Tool1CB.IsChecked.Value;
+            }
+            if (WorkArea2.IsVisible)
+            {
+                area2Can = Terminal2CB.IsChecked.Value && Tool2CB.IsChecked.Value;
+            }
+            return wireCan && area1Can && area2Can;
+        }
+        private void StartProduceBtn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                OrderService s = new OrderService();
+                Msg<string> msg = s.GetOrderItemForProduce(orderItem.Id);
+                if (msg.Result)
+                {
+                    if (OrderItem.WirteToFile(orderItem.FileName, msg.Object))
+                    {
+                        OrderDDSConverter.ConvertJsonOrderToDDS(orderItem.FileName);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(msg.Content);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                LogUtil.Logger.Error(ex.Message);
+            }
         }
     }
 }

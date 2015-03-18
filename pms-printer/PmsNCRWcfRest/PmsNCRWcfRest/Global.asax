@@ -1,1 +1,0 @@
-<%@ Application Codebehind="Global.asax.cs" Inherits="PmsNCRWcfRest.Global" Language="C#" %>

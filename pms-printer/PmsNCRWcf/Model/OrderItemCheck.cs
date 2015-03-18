@@ -35,5 +35,7 @@ namespace PmsNCRWcf.Model
         public float Terminal2StripLength { get; set; }
         [DataMember]
         public string Tool2Nr { get; set; }
+        [DataMember]
+        public string FileName { get; set; }
     }
 }

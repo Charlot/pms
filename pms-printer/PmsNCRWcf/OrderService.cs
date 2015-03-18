@@ -18,7 +18,7 @@ namespace PmsNCRWcf
             Msg<OrderItemCheck> msg = new Msg<OrderItemCheck>();
             try
             {
-                var req = new RestRequest(ApiConfig.OrderFirstForProduceAction, Method.GET);
+                var req = new RestRequest(ApiConfig.OrderFirstForCheckAction, Method.GET);
                 req.RequestFormat = DataFormat.Json;
                 req.AddParameter("machine_nr", machineNr);
                 var res = new ApiClient().Execute(req);
@@ -41,6 +41,25 @@ namespace PmsNCRWcf
             return msg;
         }
 
+        public Msg<string> GetOrderItemForProduce(int orderId)
+        {
+            Msg<string> msg = new Msg<string>();
+            var req = new RestRequest(ApiConfig.OrderItemForProduceAction, Method.GET);
+            req.RequestFormat = DataFormat.Json;
+            req.AddParameter("order_id", orderId);
+            var res = new ApiClient().Execute(req);
+            var data = res.Content;
+            if (data != null)
+            {
+                msg.Result = true;
+                msg.Object = data;
+            }
+            else
+            {
+                msg.Content = "不存在需要生产的订单，请联系相关人员";
+            }
+            return msg;
+        }
 
         private bool setHead()
         {

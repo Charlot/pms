@@ -28,7 +28,8 @@ namespace PmsNCRWcf.Config
                     BaseUri = Protocal + "://" + host + ":" + port + ApiUri;
                 Token = config.Get("Token");
                 PrintDataAction = config.Get("PrintDataAction");
-                OrderFirstForProduceAction = config.Get("OrderFirstForProduceAction");
+                OrderFirstForCheckAction = config.Get("OrderFirstForCheckAction");
+                OrderItemForProduceAction = config.Get("OrderItemForProduceAction");
             }
             catch (Exception e)
             {
@@ -63,7 +64,7 @@ namespace PmsNCRWcf.Config
         public static string BaseUri { get; set; }
         public static string Token { get; set; }
         public static string PrintDataAction { get; set; }
-        public static string OrderFirstForProduceAction { get; set; }
-
+        public static string OrderFirstForCheckAction { get; set; }
+        public static string OrderItemForProduceAction { get; set; }
     }
 }

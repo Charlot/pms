@@ -10,21 +10,28 @@ namespace PmsNCRWcf.Converter
 {
     public class OrderDDSConverter
     { 
-        public static void ConvertJsonOrderToDDS(string fileName)
+        public static bool ConvertJsonOrderToDDS(string fileName)
         {
-            JObject obj = JObject.Parse(File.ReadAllText(WPCSConfig.GetFullPath(fileName)));
+            try
+            {
+                JObject obj = JObject.Parse(File.ReadAllText(WPCSConfig.GetFullPath(fileName)));
 
-            // JOB
-            GenDDSFile(obj, "Job.dds", "job");
+                // JOB
+                GenDDSFile(obj, "Job.dds", "job");
 
-            // Article            
-            GenDDSFile(obj, "Article.dds", "article");
+                // Article            
+                GenDDSFile(obj, "Article.dds", "article");
 
-            // Terminal
-            GenDDSFile(obj, "Terminal.dds", "terminal1", "terminal2");
+                // Terminal
+                GenDDSFile(obj, "Terminal.dds", "terminal1", "terminal2");
 
-            //Seal
-            GenDDSFile(obj, "Seal.dds", "seal1", "seal2");
+                //Seal
+                GenDDSFile(obj, "Seal.dds", "seal1", "seal2");
+                return true;
+            }
+            catch (Exception e) {
+                throw e;
+            }
         }
 
         public static void GenDDSFile(JObject obj,string fileName, params string[] tokenNames) {            

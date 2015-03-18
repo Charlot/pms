@@ -19,22 +19,28 @@ namespace PmsNCRWcf.Model
         {
             try
             {
-                if (FileInfoHelper.CheckDir(WPCSConfig.OrderDir))
-                {
-                    using (FileStream fs = new FileStream(Path.Combine(WPCSConfig.OrderDir, this.FileName),
-                          FileMode.Create, FileAccess.Write))
-                    {
-                        using (StreamWriter sw = new StreamWriter(fs))
-                        {
-                            sw.Write(this.FileContent);
-                        }
-                    }
-                }
-                return true;
+                return OrderItem.WirteToFile(this.FileName, this.FileContent);
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 throw e;
             }
+        }
+
+        public static bool WirteToFile(string fileName, string fileContent)
+        {
+            if (FileInfoHelper.CheckDir(WPCSConfig.OrderDir))
+            {
+                using (FileStream fs = new FileStream(Path.Combine(WPCSConfig.OrderDir, fileName),
+                      FileMode.Create, FileAccess.Write))
+                {
+                    using (StreamWriter sw = new StreamWriter(fs))
+                    {
+                        sw.Write(fileContent);
+                    }
+                }
+            }
+            return true;
         }
     }
 }

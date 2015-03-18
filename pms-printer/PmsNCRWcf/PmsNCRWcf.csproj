@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\ApiConfig.cs" />
+    <Compile Include="Config\MaterialCheckConfig.cs" />
     <Compile Include="Config\WPCSConfig.cs" />
     <Compile Include="Converter\OrderDDSConverter.cs" />
     <Compile Include="Helper\FileInfoHelper.cs" />
