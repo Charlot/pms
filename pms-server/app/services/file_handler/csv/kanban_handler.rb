@@ -8,6 +8,7 @@ module FileHandler
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
       def self.import(file)
+        #TODO Test import kanban
         msg = Message.new
         begin
           validate_msg = validate_import(file)
