@@ -129,6 +129,9 @@
     <None Include="Ini\printers.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Ini\material_check.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Order\order_example.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -28,7 +28,8 @@ namespace PmsNCR
         public MaterialCheck()
         {
             InitializeComponent();
-            if (LoadOrderItemCheck()) {
+            if (LoadOrderItemCheck())
+            {
                 InitCheckGraph();
             }
             ScanCodeTB.Focus();
@@ -49,13 +50,15 @@ namespace PmsNCR
             return msg.Result;
         }
 
-        private void InitCheckGraph() {
+        private void InitCheckGraph()
+        {
             OrderNrLab.Content = orderItem.ItemNr;
-            WireNrTB.Text=orderItem.WireNr;
+            WireNrTB.Text = orderItem.WireNr;
             WireCusNrTB.Text = orderItem.WireCusNr;
             WireLenghLab.Content = orderItem.WireLength;
 
-            if (orderItem.Terminal1StripLength!=null) {
+            if (orderItem.Terminal1StripLength != null)
+            {
                 StripLength1Lab.Content = orderItem.Terminal1StripLength.ToString();
             }
 
@@ -64,7 +67,8 @@ namespace PmsNCR
                 StripLength2Lab.Content = orderItem.Terminal2StripLength.ToString();
             }
 
-            if (orderItem.Terminal1Nr != null) {
+            if (orderItem.Terminal1Nr != null)
+            {
                 WorkArea1.Visibility = Visibility.Visible;
                 TerminalNr1TB.Text = orderItem.Terminal1Nr;
                 TerminalCusNr1TB.Text = orderItem.Terminal1CusNr;
@@ -105,7 +109,7 @@ namespace PmsNCR
                         {
                             Terminal1CB.IsChecked = TerminalNr1TB.Text.Equals(content);
                         }
-                        else if (prefix.Equals(MaterialCheckConfig.Area2))
+                        else if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area2))
                         {
                             Terminal2CB.IsChecked = TerminalNr2TB.Text.Equals(content);
                         }
@@ -118,20 +122,22 @@ namespace PmsNCR
                         {
                             Tool1CB.IsChecked = Tool1NrTB.Text.Equals(content);
                         }
-                        else if (prefix.Equals(MaterialCheckConfig.Area2))
+                        else if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area2))
                         {
                             Tool2CB.IsChecked = Tool2NrTB.Text.Equals(content);
                         }
                     }
 
-                    if (CanStartProduce()) {
+                    if (CanStartProduce())
+                    {
                         StartProduceBtn.IsEnabled = true;
                     }
                 }
-            }
-            if (AutoCleanScanCB.IsChecked.Value)
-            {
-                ScanCodeTB.Text = String.Empty;
+
+                if (AutoCleanScanCB.IsChecked.Value)
+                {
+                    ScanCodeTB.Text = String.Empty;
+                }
             }
 
         }
@@ -162,9 +168,22 @@ namespace PmsNCR
         {
             try
             {
-                OrderDDSConverter.ConvertJsonOrderToDDS(orderItem.FileName);
+                OrderService s = new OrderService();
+                Msg<string> msg = s.GetOrderItemForProduce(orderItem.Id);
+                if (msg.Result)
+                {
+                    if (OrderItem.WirteToFile(orderItem.FileName, msg.Object))
+                    {
+                        OrderDDSConverter.ConvertJsonOrderToDDS(orderItem.FileName);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(msg.Content);
+                }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 MessageBox.Show(ex.Message);
                 LogUtil.Logger.Error(ex.Message);
             }
