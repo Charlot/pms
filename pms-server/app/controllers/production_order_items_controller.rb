@@ -9,7 +9,7 @@ class ProductionOrderItemsController < ApplicationController
       @production_order_items=@production_order.production_order_items
       @optimised=true
     else
-      @production_order_items = ProductionOrderItem.all
+      @production_order_items = ProductionOrderItem.for_optimise
     end
   end
 
@@ -76,6 +76,7 @@ class ProductionOrderItemsController < ApplicationController
         if order= ProductionOrderItem.optimise
           redirect_to production_order_production_order_items_path(order), notice: 'Optimise Success'
         else
+          # raise
           redirect_to production_order_items_path, notice: 'Optimise Fail'
         end
       else

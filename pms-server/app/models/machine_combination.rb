@@ -78,9 +78,12 @@ class MachineCombinationList< BaseClass
   attr_accessor :nodes
 
   def match(node)
+
     self.nodes.each_with_index do |n, j|
       match_start_index =(node.match_start_index>n.match_start_index) ? node.match_start_index : n.match_start_index
-      match_end_index =(node.match_end_index>n.match_end_index) ? node.match_end_index : n.match_end_index
+      match_end_index =(node.match_end_index<n.match_end_index) ? node.match_end_index : n.match_end_index
+      puts "%%%%#{node.to_json}"
+      puts "#####{n.to_json}"
       puts "&&&.#{j}.#{n.key}.start compare:#{match_start_index}:#{match_end_index}".colorize(:blue)
       (match_start_index..match_end_index).each { |i|
         puts "**#{i}---#{node.items[i]}:#{n.items[i]}"

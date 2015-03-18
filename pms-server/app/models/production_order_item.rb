@@ -9,16 +9,21 @@ class ProductionOrderItem < ActiveRecord::Base
   end
 
   def self.for_distribute(production_order=nil)
-  #  puts "~~~~~~~~~~~~~~~~~~~~~#{production_order.to_json}"
+    #  puts "~~~~~~~~~~~~~~~~~~~~~#{production_order.to_json}"
     q=where(state: ProductionOrderItemState.distribute_states)
     q=q.where(production_order_id: production_order.id) unless production_order.nil?
     q
+  end
+
+  def self.first_wait_produce(machine)
+    where(state: ProductionOrderItemState.wait_produce_states, machine_id: machine.id).order(optimise_index: :asc).first
   end
 
   def self.optimise
     ProductionOrderItem.transaction do
       optimise_at=Time.now
       items=for_optimise
+      success_count=0
       if items.count>0
         order= ProductionOrder.new
         combinations=MachineCombination.load_combinations
@@ -29,12 +34,15 @@ class ProductionOrderItem < ActiveRecord::Base
                         optimise_at: optimise_at,
                         state: ProductionOrderItemState::OPTIMISE_SUCCEED)
             order.production_order_items<<item
+            success_count+=1
           else
             item.update(state: ProductionOrderItemState::OPTIMISE_FAIL)
           end
         end
-        order.save
-        return order
+        if success_count>0
+          order.save
+          return order
+        end
       end
     end
   end

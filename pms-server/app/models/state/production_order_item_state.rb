@@ -41,4 +41,8 @@ class ProductionOrderItemState
   def self.distribute_states
     [OPTIMISE_SUCCEED,DISTRIBUTE_FAIL]
   end
+
+  def self.wait_produce_states
+    DISTRIBUTE_SUCCEED
+  end
 end
