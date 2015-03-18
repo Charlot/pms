@@ -28,7 +28,7 @@ class PartBomsController < ApplicationController
         fd=FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}-#{file.original_filename}")
         fd.save
         file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
-        msg=FileHandler::Csv::Bom.import(file)
+        msg=FileHandler::Csv::PartBomHandler.import(file)
       rescue => e
         msg.content = e.message
       end

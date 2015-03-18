@@ -10,31 +10,45 @@ using PmsNCRWcf.Config;
 using System.IO;
 using Brilliantech.Framwork.Utils.LogUtil;
 using System.ServiceModel.Activation;
+using System.ServiceModel.Channels;
+using System.ServiceModel.Web;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.Web;
+using PmsNCRWcf.Converter;
 
 namespace PmsNCRWcf
 {
-    // 注意: 使用“重构”菜单上的“重命名”命令，可以同时更改代码和配置文件中的类名“Service1”。
-    [AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
+
     public class ReceiverService : IReceiverService
-    {
-        public Msg<string> WriteOrder(string file_name, string order_nr, string item_nr, string file_json_content)
+    {  
+        public Msg<string> ReceiveOrder()
         {
             Msg<string> msg = new Msg<string>();
             try
             {
-
-                LogUtil.Logger.Info(file_name);
-                LogUtil.Logger.Info(file_json_content);
-
-                if (FileInfoHelper.CheckDir(WPCSConfig.OrderDir))
+                string postJson = string.Empty;
+                using (var reader = OperationContext.Current.RequestContext.RequestMessage.GetReaderAtBodyContents())
                 {
-                    using (FileStream fs = new FileStream(Path.Combine(WPCSConfig.OrderDir, file_name + ".json"), FileMode.Create, FileAccess.Write))
+                    if (reader.Read())
                     {
-                        using (StreamWriter sw = new StreamWriter(fs))
+                        postJson = new string(Encoding.UTF8.GetChars(reader.ReadContentAsBase64()));
+
+                        LogUtil.Logger.Info("【RECEIVE】 ORDER");
+                        LogUtil.Logger.Info(HttpUtility.UrlDecode(postJson.Split('=')[1]));
+
+                        JObject o = JObject.Parse(HttpUtility.UrlDecode(postJson.Split('=')[1]));
+                        Dictionary<string, object> v = o.ToObject<Dictionary<string, object>>();
+
+                        OrderItem order = new OrderItem()
                         {
-                            msg.Result = true;
-                            sw.Write(file_json_content);
-                        }
+                            OrderNr = v["order_nr"].ToString(),
+                            ItemNr = v["item_nr"].ToString(),
+                            FileName = v["file_name"].ToString(),
+                            FileContent = v["file_json_content"].ToString()
+                        };
+
+                        msg.Result = order.WriteToFile();
                     }
                 }
             }

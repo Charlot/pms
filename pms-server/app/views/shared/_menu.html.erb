@@ -1,5 +1,5 @@
 <nav class="navbar navbar-default navbar-static-top" xmlns="http://www.w3.org/1999/html">
-  <div class="container-fluid">
+  <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapse" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" aria-controls="navbar">
         <span class="sr-only">Toggle navigation</span>
@@ -12,18 +12,33 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="<%= 'active' if current_controller?({controller: 'measure_units'})%>"><a href="<%= measure_units_path %>">MeasureUnit</a></li>
-        <li class="<%= 'active' if current_controller?({controller: 'resource_group_machines'})%>"><a href="<%= resource_group_machines_path %>">ResourceGroupMachine</a></li>
-        <li class="<%= 'active' if current_controller?({controller: 'resource_group_tools'})%>"><a href="<%= resource_group_tools_path %>">ResourceGroupTool</a></li>
-        <li class="<%= 'active' if current_controller?({controller: 'parts'})%>"><a href="<%= parts_path %>">Part</a></li>
-        <li class="<%= 'active' if current_controller?({controller: 'part_boms'})%>"><a href="<%= part_boms_path %>">PartBOM</a></li>
-        <li class="<%= 'active' if current_controller?({controller: 'machines'})%>"><a href="<%= machines_path %>">Machine</a></li>
-        <li class="<%= 'active' if current_controller?({controller: 'tools'})%>"><a href="<%= tools_path %>">Tool</a></li>
-        <li class="<%= 'active' if current_controller?({controller: 'process_templates'})%>"><a href="<%= process_templates_path %>">ProcessTemplate</a></li>
-        <li class="<%= 'active' if current_controller?({controller: 'process_entities'})%>"><a href="<%= process_entities_path %>">ProcessEntity</a></li>
-        <li class="<%= 'active' if current_controller?({controller: 'kanbans'})%>"><a href="<%= panel_kanbans_path %>">KANBAN</a></li>
-        <li class="<%= 'active' if current_controller?({controller: 'production_order_items'})%>"><a href="<%= production_order_items_path %>">ProductionOrderItem</a></li>
-        <li class="<%= 'active' if current_controller?({controller: 'production_orders'})%>"><a href="<%= production_orders_path %>">ProductionOrder</a></li>
+        <li class="<%= 'active' if current_controller?({controller: 'kanbans'})%>"><a href="<%= panel_kanbans_path%>">KANBAN扫描</a></li>
+        <li class="<%= 'active' if current_controller?({controller: 'production_order_items'})%>"><a href="<%= production_order_items_path %>">生产任务</a></li>
+        <li class="<%= 'active' if current_controller?({controller: 'production_orders'})%>"><a href="<%= production_orders_path %>">生产订单</a></li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">基础数据<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="manage">
+            <li class="<%= 'active' if current_controller?({controller: 'measure_units'})%>"><a href="<%= measure_units_path %>">单位</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'parts'})%>"><a href="<%= parts_path %>">零件</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'part_boms'})%>"><a href="<%= part_boms_path %>">BOM表</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'process_templates'})%>"><a href="<%= process_templates_path %>">步骤模板</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'process_entities'})%>"><a href="<%= process_entities_path %>">步骤</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'kanbans'})%>"><a href="<%= new_kanban_path %>">KANBAN</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">机器与模具<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="manage">
+            <li class="<%= 'active' if current_controller?({controller: 'resource_group_machines'})%>"><a href="<%= resource_group_machines_path %>">机器组</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'resource_group_tools'})%>"><a href="<%= resource_group_tools_path %>">模具组</a></li>
+
+            <li class="<%= 'active' if current_controller?({controller: 'machines'})%>"><a href="<%= machines_path %>">机器</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'tools'})%>"><a href="<%= tools_path %>">模具</a></li>
+          </ul>
+        </li>
+
         <li class="<%= 'active' if current_controller?({controller: 'settings'})%>"><a href="<%= settings_path%>">设置</a></li>
       </ul>
     </div>

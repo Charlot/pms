@@ -21,7 +21,7 @@ module FileHandler
         CSV.open(tmp_file, 'wb', write_headers: true,
                  headers: INVALID_CSV_HEADERS, col_sep: file.col_sep, encoding: file.encoding) do |csv|
           CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
-            mmsg=validate_row(row)
+            puts "validate row"
             if mmsg.result
               csv<<row.fields
             else

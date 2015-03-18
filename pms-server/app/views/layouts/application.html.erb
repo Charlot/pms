@@ -11,7 +11,7 @@
   <%= render 'shared/menu' %>
   <div class="row">
     <div class="col-md-2">
-      <%= render partial: 'sidebar' rescue nil%>
+      <%= render partial: 'sidebar' rescue nil if @hide_sidebar.nil? %>
     </div>
     <div class="col-md-10">
         <div class="row" id="result">
