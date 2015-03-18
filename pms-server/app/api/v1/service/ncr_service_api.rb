@@ -28,6 +28,11 @@ module V1
             end
           end
 
+          get :produce_order_content do
+            if item=ProductionOrderItem.find_by_id(params[:order_id])
+              return ProductionOrderItemPresenter.new(item).to_produce_order
+            end
+          end
         end
       end
     end

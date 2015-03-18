@@ -2,7 +2,7 @@ module Ncr
   class Order
     attr_accessor :production_order
 
-    def initialize(production_order)
+    def initialize(production_order=nil)
       self.production_order=production_order
       puts "#{production_order.class}--------------------------------"
     end
@@ -73,7 +73,9 @@ module Ncr
       t2=Part.find_by_id(process_entity.value_t2)
       s1=Part.find_by_id(process_entity.value_s1)
       s2=Part.find_by_id(process_entity.value_s2)
-
+      if self.production_order.nil?
+        self.production_order=item.production_order
+      end
 
       json={
           production_order_id: self.production_order.id,
