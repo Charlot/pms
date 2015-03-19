@@ -60,6 +60,10 @@ class Kanban < ActiveRecord::Base
     end
   end
 
+  def wire_nr
+    self.part_nr.split("~").last
+  end
+
   def print_time
     self[:print_time].localtime.strftime("%Y-%m-%d %H:%M:%S") if self[:print_time]
   end
