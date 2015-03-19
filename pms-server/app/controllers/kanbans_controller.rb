@@ -27,7 +27,10 @@ class KanbansController < ApplicationController
   # POST /kanbans
   # POST /kanbans.json
   def create
-    @kanban = Kanban.new(kanban_params)
+    ActiveRecord::Base.transaction do
+      @kanban = Kanban.new(kanban_params)
+
+    end
     respond_to do |format|
       if @kanban.save
         format.html { redirect_to @kanban, notice: 'Kanban was successfully created.' }
