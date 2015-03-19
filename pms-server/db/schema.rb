@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150318075217) do
+ActiveRecord::Schema.define(version: 20150319064654) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -81,12 +81,12 @@ ActiveRecord::Schema.define(version: 20150318075217) do
     t.string   "source_storage"
     t.string   "des_warehouse"
     t.string   "des_storage"
-    t.integer  "part_id",                        null: false
+    t.integer  "part_id"
     t.datetime "print_time"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "ktype"
-    t.integer  "product_id",                     null: false
+    t.integer  "product_id"
     t.integer  "bundle",           default: 0
     t.float    "wire_length",      default: 0.0
   end
@@ -251,7 +251,6 @@ ActiveRecord::Schema.define(version: 20150318075217) do
     t.string   "nr"
     t.integer  "state",               default: 100
     t.string   "code"
-    t.text     "message"
     t.integer  "kanban_id"
     t.integer  "production_order_id"
     t.integer  "machine_id"
@@ -259,6 +258,8 @@ ActiveRecord::Schema.define(version: 20150318075217) do
     t.datetime "optimise_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "message"
+    t.integer  "produced_qty"
   end
 
   add_index "production_order_items", ["kanban_id"], name: "index_production_order_items_on_kanban_id", using: :btree
