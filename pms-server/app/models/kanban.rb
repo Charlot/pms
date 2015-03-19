@@ -61,7 +61,11 @@ class Kanban < ActiveRecord::Base
   end
 
   def wire_nr
-    self.part_nr.split("~").last
+    if self.part_nr
+      self.part_nr.split("~").last
+    else
+      nil
+    end
   end
 
   def print_time
