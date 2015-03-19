@@ -82,7 +82,9 @@ class Kanban < ActiveRecord::Base
 
   # version of kanban
   def task_time
-    self.quantity * (self.process_entities.inject(0) { |sum, pe| sum+=pe.stand_time })
+    sum = 0
+    sum = (self.process_entities.inject(0) { |sum, pe| sum+=pe.stand_time if pe.stand_time })
+    self.quantity * sum
   end
 
   def source_position
