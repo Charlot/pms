@@ -30,12 +30,16 @@ class ProductionOrderItemPresenter<Presenter
         WireLength: process_entity.value_wire_qty_factor.to_f,
         Terminal1Nr: t1.nil? ? nil : t1.nr,
         Terminal1CusNr: t1.nil? ? nil : t1.custom_nr,
-        Terminal1StripLength: process_entity.t1_strip_length.nil? ? nil: process_entity.t1_strip_length.to_f,
+        Terminal1StripLength: process_entity.t1_strip_length.nil? ? nil : process_entity.t1_strip_length.to_f,
         Tool1Nr: tool1.nil? ? nil : tool1.nr,
         Terminal2Nr: t2.nil? ? nil : t2.nr,
         Terminal2CusNr: t2.nil? ? nil : t2.custom_nr,
-        Terminal2StripLength: process_entity.t2_strip_length.nil? ? nil: process_entity.t2_strip_length.to_f,
+        Terminal2StripLength: process_entity.t2_strip_length.nil? ? nil : process_entity.t2_strip_length.to_f,
         Tool2Nr: tool2.nil? ? nil : tool2.nr
     }
+  end
+
+  def to_produce_order
+    Ncr::Order.new.json_order_item_content(@production_order_item)
   end
 end
