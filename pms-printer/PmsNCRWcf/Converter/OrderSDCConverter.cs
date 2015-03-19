@@ -18,7 +18,7 @@ namespace PmsNCRWcf.Converter
                 switch (node)
                 {
                     case "JobStarted":
-                        service.ChangeOrderItemState(config.Get("Job",node).Split(',')[0], OrderItemState.STARTED);
+                        service.ChangeOrderItemState(config.Get("Job", node).Split(',')[0], OrderItemState.STARTED);
                         break;
                     case "JobRestarted":
                         service.ChangeOrderItemState(config.Get("Job", node).Split(',')[0], OrderItemState.RESTARTED);
@@ -34,9 +34,12 @@ namespace PmsNCRWcf.Converter
                         break;
                     case "JobTerminated":
                         // PrintKanban();
-                        service.ChangeOrderItemState(config.Get("Job", node).Split(',')[0], OrderItemState.TERMINATED);
+                        string orderNr = config.Get("Job", node).Split(',')[0];
+                        new PrintService().PrintKB("P002", orderNr);
+                        service.ChangeOrderItemState(orderNr, OrderItemState.TERMINATED);
                         break;
                 }
+
 
             }
             return false;

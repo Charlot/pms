@@ -8,6 +8,7 @@ namespace PmsNCRWcf
 {
     public interface IPrintService
     {
-        public Msg<string> Print(string code, string id);
+          Msg<string> Print(string code, string id);
+          Msg<string> PrintKB(string code, string order_nr);
     }
 }
