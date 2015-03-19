@@ -1,0 +1,25 @@
+<%= form_for(@kanban_process_entity) do |f| %>
+  <% if @kanban_process_entity.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@kanban_process_entity.errors.count, "error") %> prohibited this kanban_process_entity from being saved:</h2>
+
+      <ul>
+      <% @kanban_process_entity.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :Kanban_id %><br>
+    <%= f.text_field :Kanban_id %>
+  </div>
+  <div class="field">
+    <%= f.label :ProcessEntity_id %><br>
+    <%= f.text_field :ProcessEntity_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

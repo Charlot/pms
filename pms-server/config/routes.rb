@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :kanban_process_entities
+
   resources :production_order_items do
     collection do
       post :optimise

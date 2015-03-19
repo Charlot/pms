@@ -1,6 +1,7 @@
 class Kanban < ActiveRecord::Base
   validates :nr, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
-  validates :part_id, :presence => true
+  validates :product_id, :presence => true
+
 
   belongs_to :part
   belongs_to :product, class_name: 'Part'

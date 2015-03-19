@@ -27,7 +27,7 @@ module Printer
       head={
           kanban_nr:@kanban.nr,
           part_nr:@kanban.product_nr,
-          wire_nr:@kanban.part_nr,
+          wire_nr:@kanban.wire_nr,
           customer_nr: @kanban.product_custom_nr,
           card_quantity:@kanban.quantity,
           safe_quantity:@kanban.safety_stock,
