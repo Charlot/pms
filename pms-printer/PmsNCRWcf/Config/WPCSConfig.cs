@@ -29,6 +29,11 @@ namespace PmsNCRWcf.Config
         private static string scanedFileClientFolder;    
         private static string scanedFileClientDir;
 
+        private static string processsedFileClientFolder;
+        private static string processsedFileClientDir;
+
+      
+
         static WPCSConfig()
         {
             config = new ConfigUtil("WPCS", "Ini/wpcs.ini");
@@ -57,6 +62,10 @@ namespace PmsNCRWcf.Config
 
             scanedFileClientFolder = config.Get("ScanedFileClientFolder");
             scanedFileClientDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, scanedFileClientFolder);
+
+
+            processsedFileClientFolder = config.Get("ProcesssedFileClientFolder");
+            processsedFileClientDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, processsedFileClientFolder);
         }
 
 
@@ -138,6 +147,15 @@ namespace PmsNCRWcf.Config
             set { WPCSConfig.scanedFileClientDir = value; }
         }
 
-
+        public static string ProcesssedFileClientFolder
+        {
+            get { return WPCSConfig.processsedFileClientFolder; }
+            set { WPCSConfig.processsedFileClientFolder = value; }
+        }
+        public static string ProcesssedFileClientDir
+        {
+            get { return WPCSConfig.processsedFileClientDir; }
+            set { WPCSConfig.processsedFileClientDir = value; }
+        }
     }
 }

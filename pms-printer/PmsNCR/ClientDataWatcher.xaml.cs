@@ -14,6 +14,7 @@ using PmsNCRWcf.Config;
 using System.Timers;
 using System.IO;
 using Brilliantech.Framwork.Utils.LogUtil;
+using PmsNCRWcf.Converter;
 
 namespace PmsNCR
 {
@@ -33,6 +34,7 @@ namespace PmsNCR
         {
             InitializeComponent();
             this.WindowState = WindowState.Minimized;
+            InitTimer();
         }
 
 
@@ -59,7 +61,7 @@ namespace PmsNCR
         private void scanTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             scanTimer.Stop();
-            List<string> files = GetAllFilesFromDirectory(WPCSConfig.ClientDataDir);
+            List<string> files = GetAllFilesFromDirectory(WPCSConfig.ClientDataDir,"*.sdc");
             foreach (string file in files)
             {
                 if (IsFileClosed(file))
@@ -74,33 +76,32 @@ namespace PmsNCR
         /// <summary>
         /// Process File
         /// </summary>
-        /// <param name="fullPath"></param>
+        /// <param name="fullPath"></pairam>
         private void Process(string fullPath)
         {
-            bool canRemoveErrorFile = true;
-
-            string nextDir = System.IO.Path.Combine(WPCSConfig.ScanedFileClientFolder, DateTime.Today.ToString("yyyy-MM-dd"));
+            bool canMoveFile = true;            
+            string toScanDir = System.IO.Path.Combine(WPCSConfig.ScanedFileClientDir, DateTime.Today.ToString("yyyy-MM-dd"));
+            string processedDir = System.IO.Path.Combine(WPCSConfig.ProcesssedFileClientDir, DateTime.Today.ToString("yyyy-MM-dd"));
             try
             {
                 if (IsFileClosed(fullPath))
                 {
-                    using (FileStream fs = File.Open(fullPath, FileMode.Open, FileAccess.Read))
+                    CheckDirectory(toScanDir);
+                    fullPath = MoveFile(fullPath, System.IO.Path.Combine(toScanDir, System.IO.Path.GetFileName(fullPath)));
+                    if (fullPath != null)
                     {
-                        using (StreamReader reader = new StreamReader(fs))
-                        {
-                             
-                        }
+                        canMoveFile = OrderSDCConverter.ParseSDCToServer(fullPath);
                     }
                 }
             }
             catch (Exception e)
             {
-                LogUtil.Logger.Error(e.GetType()); 
-                canRemoveErrorFile = false;
+                LogUtil.Logger.Error(e.GetType());
+                canMoveFile = false;
                 LogUtil.Logger.Error(e.Message);
             }
             // 是否可以访问服务 不可以访问时保持文件不处理
-            if (canRemoveErrorFile)
+            if (canMoveFile)
             {
                 // 是否删除文件
                 if (WPCSConfig.DeleteFileAfterRead)
@@ -115,8 +116,8 @@ namespace PmsNCR
                 else
                 {
                     // 移动文件
-                    CheckDirectory(nextDir);
-                    MoveFile(fullPath, System.IO.Path.Combine(nextDir, System.IO.Path.GetFileName(fullPath)));
+                    CheckDirectory(processedDir);
+                    MoveFile(fullPath, System.IO.Path.Combine(processedDir, System.IO.Path.GetFileName(fullPath)),false);
                 }
             }
         }
@@ -126,11 +127,18 @@ namespace PmsNCR
         /// </summary>
         /// <param name="direcctory"></param>
         /// <returns></returns>
-        private List<string> GetAllFilesFromDirectory(string directory)
+        private List<string> GetAllFilesFromDirectory(string directory,string extenstion=null)
         {
             try
             {
-                return Directory.GetFiles(directory.Trim()).ToList();
+                if (extenstion == null)
+                {
+                    return Directory.GetFiles(directory.Trim()).ToList();
+                }
+                else {
+                    return Directory.GetFiles(directory.Trim(),extenstion).ToList();
+                }
+
             }
             catch (Exception e)
             {
@@ -145,7 +153,7 @@ namespace PmsNCR
         /// <param name="sourceFileName"></param>
         /// <param name="destFileName"></param>
         /// <param name="autoRename"></param>
-        private static void MoveFile(string sourceFileName, string destFileName, bool autoRename = true)
+        private static string MoveFile(string sourceFileName, string destFileName, bool autoRename = true)
         {
             try
             {
@@ -156,23 +164,32 @@ namespace PmsNCR
                         if (autoRename)
                         {
                             destFileName = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(destFileName),
-                                DateTime.Now.ToString("HHmmSSS") + "_" 
-                                +System.IO.Path.GetFileNameWithoutExtension(sourceFileName) 
+                                DateTime.Now.ToString("HHmmsss") + "_"
+                                + System.IO.Path.GetFileNameWithoutExtension(sourceFileName)
                                 + "_" + Guid.NewGuid().ToString() + System.IO.Path.GetExtension(sourceFileName));
                         }
-                        else
+                        if (File.Exists(destFileName))
                         {
                             throw new IOException("目标文件已经存在");
                         }
+                        else
+                        {
+                            File.Move(sourceFileName, destFileName);
+                            LogUtil.Logger.Info("【文件移动】【自】" + sourceFileName + "【至】" + destFileName);
+                            return destFileName;
+                        }
                     }
-                    File.Move(sourceFileName, destFileName);
-                    LogUtil.Logger.Info("【文件移动】【自】" + sourceFileName + "【至】" + destFileName);
+                    else
+                    {
+                        throw new IOException("源文件不存在");
+                    }                   
                 }
             }
             catch (Exception e)
             {
                 LogUtil.Logger.Error("【文件移动】【自】" + sourceFileName + "【至】" + destFileName + "【错误】" + e.Message);
             }
+            return null;
         }
 
         /// <summary>
@@ -228,7 +245,5 @@ namespace PmsNCR
             e.Cancel = true;
             this.WindowState = WindowState.Minimized;
         }
-
-
     }
 }

@@ -12,7 +12,6 @@ namespace PmsNCRWcf.Config
         private static string host;
         private static string port;
 
-
         static ApiConfig()
         {
             try
@@ -30,6 +29,8 @@ namespace PmsNCRWcf.Config
                 PrintDataAction = config.Get("PrintDataAction");
                 OrderFirstForCheckAction = config.Get("OrderFirstForCheckAction");
                 OrderItemForProduceAction = config.Get("OrderItemForProduceAction");
+
+                OrderItemUpdateStateAction = config.Get("OrderItemUpdateStateAction");
             }
             catch (Exception e)
             {
@@ -66,5 +67,7 @@ namespace PmsNCRWcf.Config
         public static string PrintDataAction { get; set; }
         public static string OrderFirstForCheckAction { get; set; }
         public static string OrderItemForProduceAction { get; set; }
+        public static string OrderItemUpdateStateAction { get; set; }
+
     }
 }

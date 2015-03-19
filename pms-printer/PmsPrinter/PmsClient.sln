@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PmsTestConsole", "PmsTestConsole\PmsTestConsole.csproj", "{23AB4A94-D686-4316-BACA-40656DF4C718}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = PmsClient.vsmdi
@@ -69,6 +71,16 @@ Global
 		{DCC92F99-680C-4703-BF54-8E6C81F06753}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{DCC92F99-680C-4703-BF54-8E6C81F06753}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DCC92F99-680C-4703-BF54-8E6C81F06753}.Release|x86.ActiveCfg = Release|Any CPU
+		{23AB4A94-D686-4316-BACA-40656DF4C718}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{23AB4A94-D686-4316-BACA-40656DF4C718}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{23AB4A94-D686-4316-BACA-40656DF4C718}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{23AB4A94-D686-4316-BACA-40656DF4C718}.Debug|x86.ActiveCfg = Debug|x86
+		{23AB4A94-D686-4316-BACA-40656DF4C718}.Debug|x86.Build.0 = Debug|x86
+		{23AB4A94-D686-4316-BACA-40656DF4C718}.Release|Any CPU.ActiveCfg = Release|x86
+		{23AB4A94-D686-4316-BACA-40656DF4C718}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{23AB4A94-D686-4316-BACA-40656DF4C718}.Release|Mixed Platforms.Build.0 = Release|x86
+		{23AB4A94-D686-4316-BACA-40656DF4C718}.Release|x86.ActiveCfg = Release|x86
+		{23AB4A94-D686-4316-BACA-40656DF4C718}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
