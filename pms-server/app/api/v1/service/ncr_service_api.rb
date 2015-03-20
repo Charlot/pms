@@ -28,12 +28,30 @@ module V1
             end
           end
 
-          get :produce_order_content do
+          get :produce_content do
             if item=ProductionOrderItem.find_by_id(params[:order_id])
               return ProductionOrderItemPresenter.new(item).to_produce_order
             end
           end
+
+          put :update_state do
+            if item=ProductionOrderItem.find_by_nr(params[:order_nr])
+              return item.update(state:params[:state])
+            end
+          end
+
+
         end
+
+        namespace :printer do
+          get :kanban_by_order_item do
+            if item=ProductionOrderItem.find_by_nr(params[:order_nr])
+              printer=Printer::Client.new(params[:code], item.kanban_id)
+              printer.gen_data
+            end
+          end
+        end
+        
       end
     end
   end

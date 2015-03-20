@@ -6,8 +6,12 @@ class ProductionOrderItemState
   DISTRIBUTE_FAIL=140
   DISTRIBUTE_SUCCEED=150
   STARTED=200
-  ABORTED=300
-  FINISHED=400
+  RESTARTED=300
+  TERMINATED=400
+  ABORTED=500
+  INTERRUPTED=600
+  PAUSED=700
+
 
   def self.display(state)
     case state
@@ -25,10 +29,16 @@ class ProductionOrderItemState
         '已分发'
       when STARTED
         '进行中'
+      when RESTARTED
+        '已重启'
+      when TERMINATED
+        '已结束'
       when ABORTED
         '已终止'
-      when FINISHED
-        '已结束'
+      when INTERRUPTED
+        '已中断'
+      when PAUSED
+        '已暂停'
       else
         'Init'
     end
