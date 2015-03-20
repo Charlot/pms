@@ -14,7 +14,7 @@ namespace PmsNCRWcf.Converter
         {
             try
             {
-                JObject obj = JObject.Parse(File.ReadAllText(WPCSConfig.GetFullPath(fileName)));
+                JObject obj = JObject.Parse(File.ReadAllText(WPCSConfig.GetServerOrderFullPath(fileName)));
 
                 // JOB
                 GenDDSFile(obj, "Job.dds", "job");
@@ -38,7 +38,7 @@ namespace PmsNCRWcf.Converter
             JToken token=obj[tokenNames[0]];
             if (token != null)
             { 
-                using (FileStream fs = new FileStream(Path.Combine(WPCSConfig.DataDir, fileName),
+                using (FileStream fs = new FileStream(Path.Combine(WPCSConfig.ServerDataDir, fileName),
                     FileMode.Create, FileAccess.Write))
                 {
                     using (StreamWriter sw = new StreamWriter(fs))

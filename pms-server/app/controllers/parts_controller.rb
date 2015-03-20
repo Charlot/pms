@@ -29,15 +29,20 @@ class PartsController < ApplicationController
   # POST /parts
   # POST /parts.json
   def create
+    msg = Message.new
     @part = Part.new(part_params)
 
     respond_to do |format|
       if @part.save
+        msg.result = true
+        msg.content = @part
         format.html { redirect_to @part, notice: 'Part was successfully created.' }
-        format.json { render :show, status: :created, location: @part }
+        format.json { render json: msg }
       else
+        msg.result = false
+        msg.content = @part.errors
         format.html { render :new }
-        format.json { render json: @part.errors, status: :unprocessable_entity }
+        format.json { render json: msg, status: :unprocessable_entity }
       end
     end
   end
@@ -140,6 +145,6 @@ class PartsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def part_params
-      params.require(:part).permit(:nr, :custom_nr, :type, :strip_length, :resource_group_id, :measure_unit_id)
+      params.require(:part).permit(:nr, :custom_nr, :type, :strip_length, :resource_group_id, :measure_unit_id,:description)
     end
 end

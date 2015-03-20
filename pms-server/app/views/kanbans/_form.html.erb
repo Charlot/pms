@@ -11,13 +11,6 @@
         </div>
     <% end %>
     <div class="row">
-      <div class="col-md-12">
-        <div class="alert alert-danger hidden" role="alert" id="error-message">
-
-        </div>
-      </div>
-    </div>
-    <div class="row">
       <div class="panel panel-default">
         <div class="panel-heading" id="kanban" kanban_id="<%= @kanban.id %>">
           基础信息
@@ -25,17 +18,17 @@
         <div class="panel-body">
           <div class="row">
             <div class="col-md-6">
-              <!--验证零件是否存在-->
-              <div class="form-group">
-                <%= f.label :part_id, "#{KanbanDesc::WIRE_NR}:" %>
-                <input type="text" id="search_Part" class="form-control" value="<%= @kanban.part_nr%>"/>
-                <%= f.text_field :part_id, class: "hidden", id: "search_Part_Res" %>
-              </div>
-
               <div class="form-group">
                 <%= f.label :product_id, "#{KanbanDesc::PRODUCT_NR}:" %>
                 <input type="text" id="search_ProductNR" class="form-control" value="<%= @kanban.product_nr%>"/>
                 <%= f.text_field :product_id, class: "form-control hidden", id: "search_ProductNR_Res" %>
+              </div>
+
+              <!--验证零件是否存在-->
+              <div class="form-group">
+                <%= f.label :part_id, "#{KanbanDesc::WIRE_NR}:" %>
+                <input type="text" id="search_Part" class="form-control" value="<%= @kanban.wire_nr%>"/>
+                <%= f.text_field :part_id, class: "hidden", id: "search_Part_Res" %>
               </div>
 
               <div class="form-group">
@@ -141,8 +134,17 @@
         //线号
         $('#search_Part').on('keypress blur', function (event) {
             var tar = $(this);
-            if (tar.val().length > 0 && (event.keyCode == undefined || event.keyCode == 13)) {
-                pms.search('parts', {attr: 'nr', val: tar.val()}, function (data) {
+            if (tar.val().length > 0 &&(event.keyCode == undefined || event.keyCode == 13)) {
+
+                var product = $("#search_ProductNR");
+                if(product.val().length <= 0){
+                    sweetAlert("请输入总成号");
+                    return;
+                }
+
+                var part_nr = product.val()+"~"+tar.val()
+
+                pms.search('parts', {attr: 'nr', val: part_nr}, function (data) {
                     if (data.result) {
                         $("#search_Part_Res").val(data.content.id);
                         //
@@ -150,7 +152,6 @@
                             return;
                         }
                         $("#routes_List").empty();
-
                         data.content.process_entities.forEach(function(value){
                             var list_item = $("<li>").attr("pe_nr", value.nr);
                             $("#kpe_List").append(list_item);
@@ -160,8 +161,18 @@
                             });
                         });
                     } else {
-                        $("#error-message").removeClass("hidden");
-                        $("#error-message").text(data.content);
+                        //不存在，则新建零件
+                        $.ajax({
+                            url:"/parts",
+                            data:{part:{nr:part_nr,type:4,custom_nr:part_nr,description:"半成品线"}},
+                            type:'POST',
+                            dataType:'json',
+                            success: function(data){
+                                if(data.result){
+                                    $("#search_Part_Res").val(data.content.id);
+                                }
+                            }
+                        })
                     }
                 });
             }
@@ -175,8 +186,7 @@
                     if (data.result) {
                         $("#search_ProductNR_Res").val(data.content.id);
                     } else {
-                        $("#error-message").removeClass("hidden");
-                        $("#error-message").text(data.content);
+                        sweetAlert("Oops...", data.content, "error");
                     }
                 });
             }
@@ -187,15 +197,13 @@
             var route_nr = $(this).val();
             var kpe = $("#kpe_List").children("[pe_nr=" + route_nr + "]");
             if (kpe.length > 0) {
-                $("#error-message").removeClass("hidden");
-                $("#error-message").text("Routing已经存在");
+                sweetAlert("Oops...", "Routing已经存在", "error");
                 return;
             }
 
             var part_id = $("#search_Part_Res").val();
             if(part_id.length == 0){
-                $("#error-message").removeClass("hidden");
-                $("#error-message").text("请先输入线号");
+                sweetAlert("Oops...","请输入信啊好", "error");
                 return;
             }
 
@@ -224,8 +232,7 @@
                                                 $("#kpe_List").children("[pe_nr=" + pe_nr + "]").remove();
                                             }
                                             else{
-                                                $("#error-message").removeClass("hidden");
-                                                $("#error-message").text(data.content);
+                                                sweetAlert("Opps...",data.content,"error");
                                             }
                                         });
                                     })
@@ -233,8 +240,7 @@
                             }
                         });
                     } else {
-                        $("#error-message").removeClass("hidden");
-                        $("#error-message").text(data.content);
+                        sweetAlert("Opps...",data.content,"error");
                     }
                 });
             }
@@ -251,8 +257,7 @@
                     $("#kpe_List").children("[pe_nr=" + pe_nr + "]").remove();
                 }
                 else{
-                    $("#error-message").removeClass("hidden");
-                    $("#error-message").text(data.content);
+                    sweetAlert("Oops...", data.content, "error");
                 }
             });
         });

@@ -60,6 +60,14 @@ class Kanban < ActiveRecord::Base
     end
   end
 
+  def wire_nr
+    if self.part_nr
+      self.part_nr.split("~").last
+    else
+      nil
+    end
+  end
+
   def print_time
     self[:print_time].localtime.strftime("%Y-%m-%d %H:%M:%S") if self[:print_time]
   end
@@ -74,7 +82,8 @@ class Kanban < ActiveRecord::Base
 
   # version of kanban
   def task_time
-    self.quantity * (self.process_entities.inject(0) { |sum, pe| sum+=pe.stand_time })
+    sum = (self.process_entities.inject(0) { |sum, pe| sum+=pe.stand_time if pe.stand_time })
+    self.quantity * (sum.nil? ? 0 : sum)
   end
 
   def source_position

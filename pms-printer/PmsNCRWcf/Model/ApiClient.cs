@@ -35,7 +35,7 @@ namespace PmsNCRWcf.Model
 
         private IRestResponse responseHandler(IRestResponse res)
         {
-            if (res.StatusCode != HttpStatusCode.OK)
+             if (res.StatusCode != HttpStatusCode.OK)
             {
                 WebOperationContext.Current.OutgoingResponse.StatusCode = res.StatusCode;
                 WebOperationContext.Current.OutgoingResponse.StatusDescription = res.StatusDescription;

@@ -8,11 +8,17 @@ using System.ServiceModel.Web;
 using PmsNCRWcf.Config;
 using RestSharp;
 using PmsNCRWcf.Helper;
+using PmsNCRWcf.Enmu;
 
 namespace PmsNCRWcf
 {
     public class OrderService:IOrderService
     { 
+        /// <summary>
+        /// get item for check
+        /// </summary>
+        /// <param name="machineNr"></param>
+        /// <returns></returns>
         public Msg<OrderItemCheck> GetOrderItemForCheck(string machineNr)
         {
             Msg<OrderItemCheck> msg = new Msg<OrderItemCheck>();
@@ -41,12 +47,39 @@ namespace PmsNCRWcf
             return msg;
         }
 
+        /// <summary>
+        /// get item for produce
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
         public Msg<string> GetOrderItemForProduce(int orderId)
         {
             Msg<string> msg = new Msg<string>();
             var req = new RestRequest(ApiConfig.OrderItemForProduceAction, Method.GET);
             req.RequestFormat = DataFormat.Json;
             req.AddParameter("order_id", orderId);
+            var res = new ApiClient().Execute(req);
+            var data = res.Content;
+            if (data != null)
+            {
+                msg.Result = true;
+                msg.Object = data;
+            }
+            else
+            {
+                msg.Content = "不存在需要生产的订单，请联系相关人员";
+            }
+            return msg;
+        }
+
+        public Msg<string> ChangeOrderItemState(string orderNr, OrderItemState state)
+        {
+
+            Msg<string> msg = new Msg<string>();
+            var req = new RestRequest(ApiConfig.OrderItemUpdateStateAction, Method.PUT);
+            req.RequestFormat = DataFormat.Json;
+            req.AddParameter("order_nr", orderNr);
+            req.AddParameter("state", (int)state);
             var res = new ApiClient().Execute(req);
             var data = res.Content;
             if (data != null)

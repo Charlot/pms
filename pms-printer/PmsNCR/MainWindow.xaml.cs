@@ -33,12 +33,13 @@ namespace PmsNCR
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            startService();
+            if (startService()) {
+                new ClientDataWatcher().Show();
+            }
         }
 
-        private void startService()
-        {
-           OrderDDSConverter.ConvertJsonOrderToDDS("order_example.json");
+        private bool startService()
+        { 
             try
             {
                 if (host == null)
@@ -47,18 +48,27 @@ namespace PmsNCR
                 }
                 host.Open();
                 LogUtil.Logger.Info("NCR接受服务启动:"+host.Description.Endpoints[0].Address);
+                return true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                LogUtil.Logger.Error(ex.Message);
+                LogUtil.Logger.Error(ex.Message);              
             }
+            return false;
         }
         
 
         private void MaterialCheckBtn_Click(object sender, RoutedEventArgs e)
         {
             new MaterialCheck().Show();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (MessageBox.Show("确认关闭?") == MessageBoxResult.OK) {
+                Application.Current.Shutdown();
+            }
         }
 
     }

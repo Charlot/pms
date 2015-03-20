@@ -29,9 +29,9 @@ namespace PmsNCRWcf.Model
 
         public static bool WirteToFile(string fileName, string fileContent)
         {
-            if (FileInfoHelper.CheckDir(WPCSConfig.OrderDir))
+            if (FileInfoHelper.CheckDir(WPCSConfig.ServerOrderDir))
             {
-                using (FileStream fs = new FileStream(Path.Combine(WPCSConfig.OrderDir, fileName),
+                using (FileStream fs = new FileStream(Path.Combine(WPCSConfig.ServerOrderDir, fileName),
                       FileMode.Create, FileAccess.Write))
                 {
                     using (StreamWriter sw = new StreamWriter(fs))
