@@ -1,6 +1,6 @@
 class KanbansController < ApplicationController
-  before_action :set_kanban, only: [:show, :edit, :update, :destroy, :process_entities,
-                                    :create_process_entities, :destroy_process_entities,
+  before_action :set_kanban, only: [:show, :edit, :update, :destroy,
+                                    :add_process_entities, :delete_process_entities,
                                     :finish_production, :history, :release, :lock, :discard, :manage]
 
   # GET /kanbans
@@ -42,9 +42,45 @@ class KanbansController < ApplicationController
     end
   end
 
+  #POST /kanbans/1/add_process_entities
+  def add_process_entities
+    msg = Message.new
+    msg.result = false
+    if @kanban.process_entities.ids.include?(params[:process_entities])
+      msg.content = "Routing已经存在！"
+      render json: msg and return
+    end
+
+    process_entities = []
+    if (process_entities = ProcessEntity.where(id:params[:process_entities])).count != params[:process_entities].count
+      msg.content = "Routing未找到"
+      render json: msg and return
+    end
+
+    create_params = process_entities.collect{|pe| {process_entity_id:pe.id}}
+
+    unless kpes = @kanban.kanban_process_entities.create(create_params)
+      msg.content = @kanban.errors.full_messages
+      render json: msg
+    end
+
+    msg.result = true
+    msg.content = kpes
+    render json: msg
+  end
+
+  # DELETE /kanbans/1/delete_process_entities
   def delete_process_entities
     msg = Message.new
     msg.result = true
+
+    unless (kpes = @kanban.kanban_process_entities.where(process_entity_id:params[:process_entities])).count == params[:process_entities].count
+      msg.result = false
+      render json: msg and return
+    end
+
+    kpes.each {|kpe| kpe.destroy}
+
     render json: msg
   end
 
@@ -52,6 +88,8 @@ class KanbansController < ApplicationController
   # PATCH/PUT /kanbans/1.json
   def update
     respond_to do |format|
+      puts "======="
+      puts kanban_params.to_json
       if @kanban.can_update? && @kanban.update(kanban_params)
         format.html { redirect_to @kanban, notice: 'Kanban was successfully updated.' }
         format.json { render :show, status: :ok, location: @kanban }
@@ -236,8 +274,7 @@ class KanbansController < ApplicationController
                                    :safety_stock, :source_warehouse,
                                    :source_storage, :des_warehouse,
                                    :des_storage, :print_time, :part_id,
-                                   :version, :ktype, :copies,
-                                   :product_id
+                                   :version, :ktype, :copies
     )
   end
 end

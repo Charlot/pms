@@ -47,8 +47,8 @@
               </div>
 
               <div class="form-group">
-                <%= f.label :wire_length, "线长:" %>
-                <%= f.number_field :wire_length, {min: 0, class: "form-control"} %>
+                <%= f.label :remark, "#{KanbanDesc::REMARK}:" %>
+                <%= f.text_field :remark, class: "form-control" %>
               </div>
             </div>
             <div class="col-md-6">
@@ -71,11 +71,6 @@
               <div class="form-group">
                 <%= f.label :des_storage, "#{KanbanDesc::DES_STORAGE}:" %>
                 <%= f.text_field :des_storage, class: "form-control" %>
-              </div>
-
-              <div class="form-group">
-                <%= f.label :remark, "#{KanbanDesc::REMARK}:" %>
-                <%= f.text_field :remark, class: "form-control" %>
               </div>
 
               <div class="form-group">
@@ -109,11 +104,8 @@
               <% end if @kanban.part %>
             </div>
             <ul id="kpe_List" class="hidden">
-              <%=f.fields_for :kanban_process_entities do |kpe_form| %>
-              <li>
-                <%= kpe_form.text_field :kanban_id%>
-                <%= kpe_form.text_field :process_entity_id%>
-              </li>
+              <% @kanban.kanban_process_entities.each do |kpe| %>
+              <li id="<%= kpe.process_entity_id %>"><%= kpe.process_entity_id %></li>
               <% end%>
             </ul>
           </div>
@@ -206,10 +198,30 @@
         //搜索Routing
         $("#search_Route").on("keypress", function (event) {
             var tar = $(this);
+            var kanban_id = $("#kanban").attr("kanban_id");
             if (tar.val().length > 0 && (event.keyCode == undefined || event.keyCode == 13)) {
                 pms.search("process_entities",{attr:"nr",val:tar.val()},function(data){
                    if(data.result){
-
+                       //TODO add kanban routing
+                       pms.kanban.addRouting(kanban_id,[data.content.id],function(data){
+                           if(data.result){
+                               //是否已经存在
+                               data.content.forEach(function(kanban_process_entity){
+                                   if($("#kpe_List").children("#"+kanban_process_entity.process_entity_id).length > 0){
+                                       swal("Routing已经存在","KANBAN不能添加相同的Routing","error");
+                                       return;
+                                   }
+                                   //不是
+                                   pms.kanban.routeSimple(kanban_process_entity.process_entity_id,function(data){
+                                       $("#routes_List").append(data);
+                                   });
+                                   //add to route list
+                                   var index = $("#kpe_List").children().length;
+                                   var li = $("<li>").attr("id",kanban_process_entity.process_entity_id).text(data.content.process_entity_id);
+                                   $("#kpe_List").append(li);
+                               });
+                           }
+                       });
                    } else{
 
                    }
@@ -224,9 +236,10 @@
             var target = $(this);
             pms.kanban.delRouting(kanban_id,[id], function (data) {
                 if(data.result){
-
+                    target.parent().remove();
+                    $("#kpe_List").children("#"+id).remove();
                 }else{
-
+                    swal("删除Routing失败！","未知原因","error");
                 }
             });
         });

@@ -80,6 +80,7 @@ Rails.application.routes.draw do
       delete :discard
       get :add_routing_template
       delete :delete_process_entities
+      post :add_process_entities
     end
 
     collection do
@@ -102,8 +103,8 @@ Rails.application.routes.draw do
   resources :measure_units
   resources :parts do
     member do
-      post :add_process_entities
-      delete :delete_process_entities
+      #post :add_process_entities
+      #delete :delete_process_entities
     end
     collection do
       get :search
