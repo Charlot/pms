@@ -14,17 +14,17 @@ var printer = {
                 crossDomain: true,
                 success: function (data) {
                     if (data) {
-                        sweetAlert(data.content);
+                        swal(data.content);
                     } else {
-                        sweetAlert("Oops...", "打印失败，请开启打印服务器或重新配置", "error");
+                        swal("Oops...", "打印失败，请开启打印服务器或重新配置", "error");
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log(XMLHttpRequest.status);
                     if (XMLHttpRequest.status == 500) {
-                        sweetAlert("Oops...", "打印打印服务程序内部错误，请联系系统管理员或服务商", "error");
+                        swal("Oops...", "打印打印服务程序内部错误，请联系系统管理员或服务商", "error");
                     } else {
-                        sweetAlert("Oops...", "无法连接打印服务器，请开启打印服务器或重新配置 或 打印被取消", "error");
+                        swal("Oops...", "无法连接打印服务器，请开启打印服务器或重新配置 或 打印被取消", "error");
                     }
                 }
             }).always(function () {

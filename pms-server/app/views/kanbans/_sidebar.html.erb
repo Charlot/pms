@@ -3,6 +3,9 @@
     <li class="<%= 'active' if current_page?({controller:'kanbans',action:'new'})%>">
       <a  href="<%= new_kanban_path%>">建立KANBAN卡</a>
     </li>
+    <li class="<%= 'active' if current_page?({controller:'kanbans',action:'import'})%>">
+      <a href="<%= import_kanbans_path%>">导入KANBAN卡</a>
+    </li>
     <li class="<%= 'active' if current_page?({controller:'kanbans',action:'index'})%>">
       <a href="<%= kanbans_path%>">KANBAN卡列表</a>
     </li>

@@ -7,10 +7,41 @@
       <div class="col-md-12">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <%= link_to 'Import Part', import_parts_path %>
           </div>
           <div class="panel-body" id="search_Kanban_Res">
-            <%= render partial: 'list' %>
+            <table class="table">
+              <thead>
+              <tr>
+                <th>Nr</th>
+                <th>Custom nr</th>
+                <th>Type</th>
+                <th>Strip length</th>
+                <th>Resource group</th>
+                <th>Measure unit</th>
+                <th colspan="4"></th>
+              </tr>
+              </thead>
+
+              <tbody>
+              <% @parts.each do |part| %>
+                  <tr>
+                    <td><%= part.nr %></td>
+                    <td><%= part.custom_nr %></td>
+                    <td><%= part.type %></td>
+                    <td><%= part.strip_length %></td>
+                    <td><%= part.resource_group_tool.nr if part.resource_group_tool %></td>
+                    <td><%= part.measure_unit %></td>
+                    <td><%= link_to 'Show', part %></td>
+                    <td><%= link_to 'Edit', edit_part_path(part) %></td>
+                    <td><%= link_to 'Destroy', part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                    <td>
+                      <%= link_to 'BOM', part_bom_path(part.id) %>
+                    </td>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+
           </div>
         </div>
       </div>
@@ -18,7 +49,7 @@
   </div>
 </div>
 
-<%= link_to 'New Part', new_part_path %>
+
 
 
 

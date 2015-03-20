@@ -1,0 +1,14 @@
+<nav class="navbar navbar-default navbar-static-top">
+  <ul class="nav navbar-nav">
+    <li class="<%= 'active' if current_page?({controller:'parts',action:'new'})%>">
+      <a  href="<%= new_part_path%>">建立零件</a>
+    </li>
+
+    <li class="<%= 'active' if current_page?({controller:'parts',action:'import'})%>">
+      <a href="<%= import_parts_path%>">导入零件</a>
+    </li>
+    <li class="<%= 'active' if current_page?({controller:'parts',action:'index'})%>">
+      <a href="<%= parts_path%>">零件列表</a>
+    </li>
+  </ul>
+</nav>

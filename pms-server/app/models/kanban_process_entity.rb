@@ -1,4 +1,4 @@
 class KanbanProcessEntity < ActiveRecord::Base
-  belongs_to :Kanban
-  belongs_to :ProcessEntity
+  belongs_to :kanban
+  belongs_to :process_entity
 end

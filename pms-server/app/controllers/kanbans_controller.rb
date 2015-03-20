@@ -17,7 +17,7 @@ class KanbansController < ApplicationController
   # GET /kanbans/new
   def new
     @kanban = Kanban.new
-    #1.times { @kanban.kanban_process_entities.build }
+    2.times { @kanban.kanban_process_entities.build }
   end
 
   # GET /kanbans/1/edit
@@ -40,6 +40,12 @@ class KanbansController < ApplicationController
         format.json { render json: @kanban.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def delete_process_entities
+    msg = Message.new
+    msg.result = true
+    render json: msg
   end
 
   # PATCH/PUT /kanbans/1

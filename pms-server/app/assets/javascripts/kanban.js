@@ -17,8 +17,20 @@ pms.kanban.addRouting = function(part_id,process_entity_ids,callback){
     });
 };
 
-pms.kanban.delRouting = function(part_id,process_entity_ids,callback){
+pms.kanban.delRouting = function(kanban_id,process_entity_ids,callback){
     $.ajax({
+        url:"/kanabns/"+kanban_id+"/delete_process_entities",
+        data:{process_entities:process_entity_ids},
+        type:"DELETE",
+        dataType:'json',
+        success:function(data){
+            if(callback){
+                callback(data);
+            }
+        }
+    });
+
+    /*$.ajax({
         url:"/parts/"+part_id+"/delete_process_entities",
         data:{process_entities:process_entity_ids},
         dataType:'json',
@@ -26,7 +38,7 @@ pms.kanban.delRouting = function(part_id,process_entity_ids,callback){
         success:function(data){
             if(callback){callback(data)}
         }
-    })
+    })*/
 };
 
 pms.kanban.routeSimple = function(process_entity_id,callback) {
