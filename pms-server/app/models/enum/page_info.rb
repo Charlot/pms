@@ -6,7 +6,7 @@ module Enum
                 RESOURCE_GROUP_TOOL:"模具租",TOOL:"模具",SETTING:"设置"
     }
 
-    @@actions = ["new","index","show","edit","import"]
+    @@actions = ["new","index","show","edit","import","panel"]
 
     class<<self
       @@models.each { |k,v|
@@ -16,6 +16,7 @@ module Enum
         }
         @@actions.each { |action|
           m = k.to_s.split("_").map(&:capitalize).join
+          puts "#{m}_#{action}"
           define_method("#{m}_#{action}".to_sym){
             model = self.send(m.downcase)
             action_content(model,action)
@@ -36,6 +37,8 @@ module Enum
          "编辑#{model}"
        when "import"
          "导入#{model}"
+       when "panel"
+         "#{model}控制面板"
        else
          "N/A"
        end

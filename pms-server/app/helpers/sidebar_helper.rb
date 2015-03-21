@@ -8,8 +8,11 @@ module SidebarHelper
   end
 
   def page_title(model,action)
+    puts "#{model}_#{action}"
     if Enum::PageInfo.respond_to? "#{model}_#{action}"
       Enum::PageInfo.send("#{model}_#{action}")
+    else
+      nil
     end
   end
 end
