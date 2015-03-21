@@ -7,8 +7,8 @@ class PartType<BaseType
   PRODUCT=5 #成品
 
   def self.list_value
-  	self.constants.collect{|c|
-  		self.const_get(c)
-  	}
+    self.constants.collect { |c|
+      self.const_get(c)
+    }
   end
 end

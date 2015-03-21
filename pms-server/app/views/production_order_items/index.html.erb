@@ -1,5 +1,9 @@
-<h1>Listing production_order_items</h1>
-<p id="notice"><%= notice %></p>
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h1>生产任务列表</h1>
+  </div>
+  <div class="panel-body">
+    <p id="notice"><%= notice %></p>
 
 <% if has_optimise_items %>
     <%= form_tag('/production_order_items/optimise', method: 'post') do %>
@@ -46,4 +50,6 @@
         <input type="button" value="DISTRIBUTE" onclick="if(confirm('distribute?')){form.submit();}"/>
     <% end %>
 <% end %>
-<%= link_to 'New Production order item', new_production_order_item_path %>
+  </div>
+</div>
+
