@@ -21,4 +21,14 @@ module EnhancedUrlHelper
 
     params[:controller].classify
   end
+
+  def current_action
+    unless request
+      raise "You cannot use helpers that need to determine the current"        "page unlsee your view context provides a Request object"        "in a #request method"
+    end
+
+    return false unless request.get? || request.header?
+
+    params[:action]
+  end
 end
