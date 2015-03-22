@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nr:</strong>
+  <%= @production_order_item.nr %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @production_order_item.state %>
+</p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @production_order_item.code %>
+</p>
+
+<p>
+  <strong>Kanban:</strong>
+  <%= @production_order_item.kanban %>
+</p>
+
+<p>
+  <strong>Production order:</strong>
+  <%= @production_order_item.production_order %>
+</p>
+
+<%= link_to 'Edit', edit_production_order_item_path(@production_order_item) %> |
+<%= link_to 'Back', production_order_items_path %>

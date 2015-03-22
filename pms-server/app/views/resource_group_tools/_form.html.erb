@@ -24,14 +24,6 @@
       <%= f.label :description %><br>
       <%= f.text_field :description %>
     </div>
-    <div>
-      <%= f.label :resource_group_part %><br>
-      <% if @resource_group_tool.new_record? && @resource_group_tool.resource_group_part.blank? %>
-          <%= f.text_field :resource_group_part %>
-      <% else %>
-          <%= f.text_field :resource_group_part, value: @resource_group_tool.resource_group_part.part.nr %>
-      <% end %>
-    </div>
     <div class="actions">
       <%= f.submit %>
     </div>

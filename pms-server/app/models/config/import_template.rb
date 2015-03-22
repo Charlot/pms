@@ -1,5 +1,10 @@
 class ImportTemplate
-  BOM_CSV_TEMPLATE='bom新建模板.csv'
+  BOM_CSV_TEMPLATE='bom.csv'
+  PART_CSV_TEMPLATE='part.csv'
+  PROCESS_TEMPLATE_CSV_TEMPLATE='process_template.csv'
+  PROCESS_ENTITY_AUTO_CSV_TEMPLATE='process_entity_auto.csv'
+  PROCESS_ENTITY_SEMI_AUTO_CSV_TEMPLATE='process_entity_semi_auto.csv'
+  KANBAN_CSV_TEMPLATE='kanban.csv'
 
   def self.method_missing(method_name, *args, &block)
     if method_name.to_s.include?('_template')

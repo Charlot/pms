@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Kanban:</strong>
+  <%= @kanban_process_entity.Kanban %>
+</p>
+
+<p>
+  <strong>Processentity:</strong>
+  <%= @kanban_process_entity.ProcessEntity %>
+</p>
+
+<%= link_to 'Edit', edit_kanban_process_entity_path(@kanban_process_entity) %> |
+<%= link_to 'Back', kanban_process_entities_path %>

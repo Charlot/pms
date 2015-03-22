@@ -1,24 +1,32 @@
 # Print KANBAN
 module Printer
   class P001<Base
-    HEAD=[:kanban_nr,:part_nr,:customer_nr,:wire_position,:card_number,:card_quantity,:print_date,:remark1,:remark2]
+    HEAD=[:kanban_nr,:part_nr,:customer_nr,:wire_position,:card_number,:card_quantity,:print_date,:remark1,:remark2,:kanban_2dcode]
+    BODY=[:route_nr,:route_name,:route_desc,:work_time_of_route,:consume_date]
 
-    BODY=[:route_nr,:route_name,:route_desc,:wire_nr1_of_route,:wire_nr2_of_route,:wire_nr3_of_route,
-    :wiredesc1_of_route,:wiredesc2_of_route,:wiredesc3_of_route,
-    :wire_quantity1_of_route,:wire_quantity2_of_route,:wire_quantity3_of_route,
-    :unit_of_wire1,:unit_of_wire2,:unit_of_wire3,
-    :work_time_of_route,:consume_date]
+    $ROUTE_PART_COUNT.times {|i|
+      BODY<<"wire_nr#{i+1}_of_route".to_sym
+      BODY<<"wiredesc#{i+1}_of_route".to_sym
+      BODY<<"wire_quantity#{i+1}_of_route".to_sym
+      BODY<<"unit_of_wire#{i+1}".to_sym
+    }
 
+    #注意，与KANBAN模板一直，一个Routing中最多包含的parts只能有5种
     def generate_data
+      @kanban = Kanban.find_by_id(self.id)
+      @kanban.update(print_time:Time.now)
+      #TODO还要加一个条形码字段，条形码中不只是KANBAN NR
       head={
-          kanban_nr:self.id,
-          part_nr:'part nr',
-          print_date:Time.now,
-          customer_nr:'customer nr',
-          wire_position:'01 02 04',
-          card_number:3,
-          card_quantity:100,
-          remark1:'remark1',
+          kanban_nr: @kanban.nr,
+          part_nr: @kanban.wire_nr,
+          print_date:@kanban.print_time,
+          customer_nr:@kanban.part_custom_nr,
+          wire_position:@kanban.desc_position,
+          card_number:@kanban.copies,
+          card_quantity:@kanban.quantity,
+          kanban_2dcode:@kanban.printed_2DCode,
+          #TODO kanban remark
+          remark1:@kanban.remark,
           remark2:'remark2'
       }
 
@@ -27,27 +35,22 @@ module Printer
         heads<<{Key:k,Value:head[k]}
       end
 
-      #Route Info
-      1.times{
+      @kanban.process_entities.each do |pe|
         bodies =[]
         body = {
-            route_nr:'route nr',
-            route_name:'route name',
-            route_desc:'route desc',
-            wire_nr1_of_route:'wire nr 1',
-            wiredesc1_of_route:'wire desc 1',
-            wire_quantity1_of_route:'wire quantity 1',
-            unit_of_wire1:'unit of wire 1',
-            wire_nr2_of_route:'wire nr 2',
-            wiredesc2_of_route:'wire desc 2',
-            wire_quantity2_of_route:'wire quantity 2',
-            unit_of_wire2:'unit of wire 2',
-            wire_nr3_of_route:'wire nr 3',
-            wiredesc3_of_route:'wire desc 3',
-            wire_quantity3_of_route:'wire quantity 3',
-            unit_of_wire3:'unit of wire 3',
-            work_time_of_route:'work time of route',
+            route_nr:pe.nr,
+            route_name:pe.name,
+            route_desc:pe.description,
+            work_time_of_route:pe.stand_time,
+            #Consume Date是什么东西？
             consume_date:'consume date'
+        }
+
+        pe.process_parts.first($ROUTE_PART_COUNT).each_with_index { |pp,index |
+          body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr
+          body["wiredesc#{index+1}_of_route".to_sym] = pp.part.custom_nr
+          body["wire_quantity#{index+1}_of_route".to_sym] = pp.quantity
+          body["unit_of_wire#{index+1}".to_sym] = pp.unit
         }
 
         BODY.each do |k|
@@ -55,8 +58,7 @@ module Printer
         end
 
         self.data_set<<(heads+bodies)
-        #end Route info
-      }
+      end
     end
   end
 end

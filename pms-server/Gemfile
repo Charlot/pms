@@ -41,6 +41,7 @@ gem 'spring',        group: :development
 # Excel
 gem 'roo'
 gem 'axlsx'
+gem "iconv", "~> 1.0.3"
 
 # ElasticSearch
 #gem 'elasticsearch-model'
@@ -57,3 +58,13 @@ gem 'twitter-bootstrap-rails'
 # For API
 gem 'grape'
 gem 'rack-oauth2'
+
+# For Redis
+gem 'redis'
+gem 'redis-namespace'
+
+# For log
+gem 'colorize'
+
+# For REST API Call
+gem 'rest_client'

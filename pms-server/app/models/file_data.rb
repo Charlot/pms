@@ -19,7 +19,8 @@ class FileData<BaseClass
         @type=FileData.get_type(@full_path)
       end
       return @path_name
-    rescue
+    rescue => e
+      puts e
       return false
     end
   end

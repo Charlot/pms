@@ -11,13 +11,6 @@
         </div>
     <% end %>
     <div class="row">
-      <div class="col-md-12">
-        <div class="alert alert-danger hidden" role="alert" id="error-message">
-
-        </div>
-      </div>
-    </div>
-    <div class="row">
       <div class="panel panel-default">
         <div class="panel-heading" id="kanban" kanban_id="<%= @kanban.id %>">
           基础信息
@@ -25,23 +18,17 @@
         <div class="panel-body">
           <div class="row">
             <div class="col-md-6">
-              <!--验证是否重复-->
               <div class="form-group">
-                <%= f.label :nr, "#{KanbanDesc::NR}:" %>
-                <%= f.text_field :nr, class: "form-control" %>
+                <%= f.label :product_id, "#{KanbanDesc::PRODUCT_NR}:" %>
+                <input type="text" id="search_ProductNR" class="form-control" value="<%= @kanban.product_nr %>"/>
+                <%= f.text_field :product_id, class: "form-control hidden", id: "search_ProductNR_Res" %>
               </div>
 
               <!--验证零件是否存在-->
               <div class="form-group">
                 <%= f.label :part_id, "#{KanbanDesc::WIRE_NR}:" %>
-                <input type="text" id="search_Part" class="form-control" value="<%= @kanban.part.nr if @kanban.part%>"/>
+                <input type="text" id="search_Part" class="form-control" value="<%= @kanban.wire_nr %>"/>
                 <%= f.text_field :part_id, class: "hidden", id: "search_Part_Res" %>
-              </div>
-
-              <div class="form-group">
-                <%= f.label :product_id, "#{KanbanDesc::PRODUCT_NR}:" %>
-                <input type="text" id="search_ProductNR" class="form-control"/>
-                <%= f.text_field :product_id, class: "form-control hidden", id: "search_ProductNR_Res" %>
               </div>
 
               <div class="form-group">
@@ -57,6 +44,11 @@
               <div class="form-group">
                 <%= f.label :safety_stock, "#{KanbanDesc::SAFETY_STOCK}:" %>
                 <%= f.number_field :safety_stock, {min: 0, class: "form-control"} %>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :remark, "#{KanbanDesc::REMARK}:" %>
+                <%= f.text_field :remark, class: "form-control" %>
               </div>
             </div>
             <div class="col-md-6">
@@ -82,11 +74,6 @@
               </div>
 
               <div class="form-group">
-                <%= f.label :remark, "#{KanbanDesc::REMARK}:" %>
-                <%= f.text_field :remark, class: "form-control" %>
-              </div>
-
-              <div class="form-group">
                 <%= f.label :ktype, "#{KanbanDesc::TYPE}" %>
                 <%= f.select(:ktype, kanban_type_options, {include_blank: false}, {class: "form-control", id: "select_KanbanType"}) %>
               </div>
@@ -94,11 +81,12 @@
           </div>
         </div>
       </div>
+
     </div>
     <div class="row">
       <div class="panel panel-default">
         <div class="panel-heading">
-          关联Routing
+          关联Routing,此Routing是KANBAN生产的线号的Routing
         </div>
         <div class="panel-body">
           <div class="container-fluid" id="addKanbanRoutingTemplate">
@@ -112,13 +100,13 @@
             </div>
             <div class="row" id="routes_List">
               <% @kanban.process_entities.each do |pe| %>
-                    <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
+                  <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
               <% end if @kanban.part %>
             </div>
             <ul id="kpe_List" class="hidden">
-              <% @kanban.process_entities.each do |pe| %>
-              <li pe_nr="<%= pe.nr%>"></li>
-              <% end if @kanban.part %>
+              <% @kanban.kanban_process_entities.each do |kpe| %>
+                  <li id="<%= kpe.process_entity_id %>"><%= kpe.process_entity_id %></li>
+              <% end %>
             </ul>
           </div>
         </div>
@@ -138,99 +126,102 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        //线号
-        $('#search_Part').on('keypress blur', function (event) {
-            var tar = $(this);
-            if (tar.val().length > 0 && (event.keyCode == undefined || event.keyCode == 13)) {
-                pms.search('parts', {attr: 'nr', val: tar.val()}, function (data) {
-                    if (data.result) {
-                        $("#search_Part_Res").val(data.content.id);
-                        //
-                        if($("routes_List").children().length > 0){
-                            return;
+        //线号和总称号
+        $('#search_Part,#search_ProductNR').on('keypress blur', function (event) {
+            var wire = $("#search_Part");
+            var product = $("#search_ProductNR");
+            if ((event.keyCode == undefined || event.keyCode == 13)) {
+                if (product.val().length > 0 && $(this).attr("id") == "search_ProductNR") {
+                    //Search Product
+                    pms.search("parts", {attr: "nr", val: product.val()}, function (data) {
+                        if (data.result) {
+                            $("#search_ProductNR_Res").val(data.content.id);
                         }
-                        $("#routes_List").empty();
+                        else {
+                            swal("成品未找到", "请确认零件中是否存在成品的零件号", "error");
+                        }
+                    })
+                }
 
-                        data.content.process_entities.forEach(function(value){
-                            var list_item = $("<li>").attr("pe_nr", value.nr);
-                            $("#kpe_List").append(list_item);
-                            //get template
-                            pms.kanban.routeSimple(value.id,function(data){
-                                $("#routes_List").append(data);
-                            });
-                        });
-                    } else {
-                        $("#error-message").removeClass("hidden");
-                        $("#error-message").text(data.content);
+                if (wire.val().length > 0 && $(this).attr("id") == "search_Part") {
+                    //Search Part
+                    if (product.val().length == 0) {
+                        swal("请先输入成品号！");
+                        return;
                     }
-                });
-            }
-        });
-
-        //总成号
-        $("#search_ProductNR").on("keypress blur", function (event) {
-            var tar = $(this);
-            if (tar.val().length > 0 && (event.keyCode == undefined || event.keyCode == 13)) {
-                pms.search('parts', {attr: 'nr', val: tar.val()}, function (data) {
-                    if (data.result) {
-                        $("#search_ProductNR_Res").val(data.content.id);
-                    } else {
-                        $("#error-message").removeClass("hidden");
-                        $("#error-message").text(data.content);
-                    }
-                });
+                    //
+                    pms.search("parts", {attr: "nr", val: product.val() + "~" + wire.val()}, function (data) {
+                        if (data.result) {
+                            //找到了
+                            $("#search_Part_Res").val(data.content.id);
+                        }
+                        else {
+                            //未找到，要不要创建
+                            swal({
+                                        title: "是否创建线号",
+                                        text: "系统会自动创建一个半自动零件",
+                                        type: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonColor: "#DD6B55",
+                                        confirmButtonText: "创建!",
+                                        cancelButtonText: "取消?",
+                                        closeOnConfirm: false
+                                    },
+                                    function (isConfirm) {
+                                        if (isConfirm) {
+                                            $.ajax({
+                                                url: "/parts",
+                                                data: {part: {nr: product.val() + "~" + wire.val(), type: 4}},
+                                                type: "POST",
+                                                dataType: 'json',
+                                                success: function (data) {
+                                                    if (data.result) {
+                                                        $("#search_Part_Res").val(data.content.id);
+                                                        swal("创建成功", "创建了一个半自动零件", "success");
+                                                    }
+                                                    else {
+                                                        swal(data.content);
+                                                    }
+                                                }
+                                            })
+                                        }
+                                    }
+                            );
+                        }
+                    })
+                }
             }
         });
 
         //搜索Routing
         $("#search_Route").on("keypress", function (event) {
-            var route_nr = $(this).val();
-            var kpe = $("#kpe_List").children("[pe_nr=" + route_nr + "]");
-            if (kpe.length > 0) {
-                $("#error-message").removeClass("hidden");
-                $("#error-message").text("Routing已经存在");
-                return;
-            }
-
-            var part_id = $("#search_Part_Res").val();
-            if(part_id.length == 0){
-                $("#error-message").removeClass("hidden");
-                $("#error-message").text("请先输入线号");
-                return;
-            }
-
+            var tar = $(this);
             var kanban_id = $("#kanban").attr("kanban_id");
-            if (route_nr.length > 0 && event.keyCode == 13) {
-                pms.search('process_entities', {attr: 'nr', val: route_nr}, function (data) {
+            if (tar.val().length > 0 && (event.keyCode == undefined || event.keyCode == 13)) {
+                pms.search("process_entities", {attr: "nr", val: tar.val()}, function (data) {
                     if (data.result) {
-                        var object = data.content;
-                        //Add Process Entity to Part
-                        pms.kanban.addRouting(part_id,[data.content.id],function(data){
-                            if(data.result){
-                                //append li
-                                var list_item = $("<li>").attr("pe_nr", object.nr);
-                                $("#kpe_List").append(list_item);
-                                //get template
-                                pms.kanban.routeSimple(object.id,function(data){
-                                    $("#routes_List").append(data);
-                                    $("button#"+object.id).click(function(){
-                                        var pe_nr = $(this).attr("pe_nr");
-                                        var id = $(this).attr("id");
-                                        var part_id = $("#search_Part_Res").val();
-                                        var target = $(this);
-                                        pms.kanban.delRouting(part_id,[id],function(data){
-                                            if(data.result){
-                                                target.parent().remove();
-                                                $("#kpe_List").children("[pe_nr=" + pe_nr + "]").remove();
-                                            }
-                                        });
-                                    })
+                        //TODO add kanban routing
+                        pms.kanban.addRouting(kanban_id, [data.content.id], function (data) {
+                            if (data.result) {
+                                //是否已经存在
+                                data.content.forEach(function (kanban_process_entity) {
+                                    if ($("#kpe_List").children("#" + kanban_process_entity.process_entity_id).length > 0) {
+                                        swal("Routing已经存在", "KANBAN不能添加相同的Routing", "error");
+                                        return;
+                                    }
+                                    //不是
+                                    pms.kanban.routeSimple(kanban_process_entity.process_entity_id, function (data) {
+                                        $("#routes_List").append(data);
+                                    });
+                                    //add to route list
+                                    var index = $("#kpe_List").children().length;
+                                    var li = $("<li>").attr("id", kanban_process_entity.process_entity_id).text(data.content.process_entity_id);
+                                    $("#kpe_List").append(li);
                                 });
                             }
                         });
                     } else {
-                        $("#error-message").removeClass("hidden");
-                        $("#error-message").text(data.content);
+
                     }
                 });
             }
@@ -239,12 +230,14 @@
         $(".remove-routing").on("click", function () {
             var pe_nr = $(this).attr("pe_nr");
             var id = $(this).attr("id");
-            var part_id = $("#search_Part_Res").val();
+            var kanban_id = $("#kanban").attr("kanban_id");
             var target = $(this);
-            pms.kanban.delRouting(part_id,[id],function(data){
-                if(data.result){
+            pms.kanban.delRouting(kanban_id, [id], function (data) {
+                if (data.result) {
                     target.parent().remove();
-                    $("#kpe_List").children("[pe_nr=" + pe_nr + "]").remove();
+                    $("#kpe_List").children("#" + id).remove();
+                } else {
+                    swal("删除Routing失败！", "未知原因", "error");
                 }
             });
         });

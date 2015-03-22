@@ -37,9 +37,7 @@ class ProcessTemplatesController < ApplicationController
           end
         end
       elsif ProcessType.semi_auto?(params[:type])
-
       end
-
       respond_to do |format|
         if @process_template.save
           format.html { redirect_to @process_template, notice: 'Process template was successfully created.' }
@@ -88,6 +86,38 @@ class ProcessTemplatesController < ApplicationController
       render partial: 'shared/messages/no_found'
     end
   end
+
+  def import
+    if request.post?
+      msg = Message.new
+      begin
+        file=params[:files][0]
+        fd = FileData.new(data: file,original_name:file.original_filename,path:$upload_data_file_path,path_name:"#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd.save
+        file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase,file_path: fd.full_path,file_name: file.original_filename)
+        msg = FileHandler::Csv::ProcessTemplateHandler.import(file)
+      rescue => e
+        msg.content = e.message
+      end
+      render json: msg
+    end
+  end
+
+
+  def autoimport
+    ProcessTemplate.import(params[:file], 'auto')
+    redirect_to process_templates_url, notice: 'ProcessTemplate was successfully imported.'
+  end
+  
+  def semiautoimport
+  end 
+  
+  def manual_import
+    ProcessTemplate.import(params[:file], 'manual')
+    redirect_to process_templates_url, notice: 'ProcessTemplate was successfully imported.'
+  end
+  
+
 
   private
   # Use callbacks to share common setup or constraints between actions.

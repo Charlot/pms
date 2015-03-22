@@ -1,32 +1,8 @@
-<div class="panel panel-success">
-  <div class="panel-heading ">
-    <h1>KANBAN卡列表</h1>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <%= render partial: 'search' %>
   </div>
-  <div class="panel-body">
-    <div class="row">
-      <div class="col-md-10">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <div class="row">
-              <div class="col-md-5">
-                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Search for Kanban by Part Number...">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button">Search</button>
-                </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="panel-body" id="search_Kanban_Res">
-            <%= render partial: 'list'%>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-2">
-        <h4>说明</h4>
-        <p class="text-warning">发达方法哦igunclkaukdiun；ladf</p>
-      </div>
-    </div>
+  <div class="panel-body" id="search_Kanban_Res">
+    <%= render partial: 'list' %>
   </div>
 </div>

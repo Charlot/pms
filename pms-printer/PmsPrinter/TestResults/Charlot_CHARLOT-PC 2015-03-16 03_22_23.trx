@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="313587ba-0c7f-4933-9019-0b50a6413003" name="Charlot@CHARLOT-PC 2015-03-16 03:22:23" runUser="Charlot-PC\Charlot" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="本地" id="154ceee7-61f5-4cac-9855-08b743224dac">
+    <Description>这些设置为本地测试运行的默认测试设置。</Description>
+    <Deployment enabled="false" runDeploymentRoot="Charlot_CHARLOT-PC 2015-03-16 03_22_23">
+      <DeploymentItem filename="C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\bin\Debug\PmsNCRWcf.dll" />
+      <DeploymentItem filename="C:\Users\Charlot\Documents\GitHub\pms\pms-printer\Brilliantech.Framwork\bin\Debug\Brilliantech.Framwork.dll" />
+      <DeploymentItem filename="C:\Users\Charlot\Documents\GitHub\pms\pms-printer\ThirdPart\log4net.dll" />
+      <DeploymentItem filename="C:\Users\Charlot\Documents\GitHub\pms\pms-printer\ThirdPart\Newtonsoft.Json.dll" />
+    </Deployment>
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2015-03-16T03:22:23.1067964+08:00" queuing="2015-03-16T03:22:24.7188886+08:00" start="2015-03-16T03:22:24.7968930+08:00" finish="2015-03-16T03:22:25.7189458+08:00" />
+  <ResultSummary outcome="Inconclusive">
+    <Counters total="1" executed="1" error="0" failed="0" timeout="0" aborted="0" inconclusive="1" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" passed="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="ConvertJsonOrderToDDSTest" storage="c:\users\charlot\documents\github\pms\pms-printer\pmsprinter\pmstestproject\bin\debug\pmstestproject.dll" id="ef7d0fde-83b0-12af-cbde-73dba9411b97">
+      <Execution id="33de4b81-c44b-4d88-b18a-21c983c078fd" />
+      <TestMethod codeBase="C:/Users/Charlot/Documents/GitHub/pms/pms-printer/PmsPrinter/PmsTestProject/bin/Debug/PmsTestProject.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="PmsTestProject.OrderDDSConverterTest, PmsTestProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="ConvertJsonOrderToDDSTest" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="列表中未列出的结果" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="所有已加载的结果" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="ef7d0fde-83b0-12af-cbde-73dba9411b97" executionId="33de4b81-c44b-4d88-b18a-21c983c078fd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="33de4b81-c44b-4d88-b18a-21c983c078fd" testId="ef7d0fde-83b0-12af-cbde-73dba9411b97" testName="ConvertJsonOrderToDDSTest" computerName="CHARLOT-PC" duration="00:00:00.2041345" startTime="2015-03-16T03:22:24.8118939+08:00" endTime="2015-03-16T03:22:25.6289406+08:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Inconclusive" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="33de4b81-c44b-4d88-b18a-21c983c078fd">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Inconclusive 失败。无法验证不返回值的方法。</Message>
+          <StackTrace>   在 PmsTestProject.OrderDDSConverterTest.ConvertJsonOrderToDDSTest() 位置 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsPrinter\PmsTestProject\OrderDDSConverterTest.cs:行号 75
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+</TestRun>

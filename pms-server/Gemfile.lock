@@ -47,6 +47,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.8.0)
+    colorize (0.7.5)
     commonjs (0.2.7)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
@@ -69,6 +70,7 @@ GEM
     httpclient (2.6.0.1)
     i18n (0.6.11)
     ice_nine (0.11.1)
+    iconv (1.0.4)
     jbuilder (2.2.4)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
@@ -91,6 +93,7 @@ GEM
     multi_json (1.10.1)
     multi_xml (0.5.5)
     mysql2 (0.3.16)
+    netrc (0.7.9)
     nokogiri (1.6.4)
       mini_portile (~> 0.6.0)
     paper_trail (3.0.6)
@@ -128,7 +131,12 @@ GEM
     rake (10.4.2)
     rdoc (4.1.2)
       json (~> 1.4)
+    redis (3.2.1)
+    redis-namespace (1.5.1)
+      redis (~> 3.0, >= 3.0.4)
     ref (1.0.5)
+    rest_client (1.8.1)
+      netrc (~> 0.7.7)
     roo (1.13.2)
       nokogiri
       rubyzip
@@ -189,7 +197,9 @@ PLATFORMS
 DEPENDENCIES
   axlsx
   coffee-rails (~> 4.0.0)
+  colorize
   grape
+  iconv (~> 1.0.3)
   jbuilder (~> 2.0)
   jquery-rails
   less-rails
@@ -197,6 +207,9 @@ DEPENDENCIES
   paper_trail
   rack-oauth2
   rails (= 4.1.0)
+  redis
+  redis-namespace
+  rest_client
   roo
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)

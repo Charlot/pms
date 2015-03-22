@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150309012610) do
+ActiveRecord::Schema.define(version: 20150322094007) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -81,12 +81,13 @@ ActiveRecord::Schema.define(version: 20150309012610) do
     t.string   "source_storage"
     t.string   "des_warehouse"
     t.string   "des_storage"
-    t.integer  "part_id"
+    t.integer  "part_id",                        null: false
     t.datetime "print_time"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "ktype"
-    t.integer  "product_id"
+    t.integer  "product_id",                     null: false
+    t.integer  "bundle",           default: 0
   end
 
   add_index "kanbans", ["nr"], name: "index_kanbans_on_nr", using: :btree
@@ -109,6 +110,9 @@ ActiveRecord::Schema.define(version: 20150309012610) do
     t.integer  "machine_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "complexity",        default: 0
+    t.integer  "match_start_index", default: 0
+    t.integer  "match_end_index",   default: 0
   end
 
   add_index "machine_combinations", ["machine_id"], name: "index_machine_combinations_on_machine_id", using: :btree
@@ -145,6 +149,7 @@ ActiveRecord::Schema.define(version: 20150309012610) do
     t.float    "terminal_time",     default: 0.0
     t.float    "wire_time",         default: 0.0
     t.integer  "status",            default: 0
+    t.string   "ip"
   end
 
   add_index "machines", ["nr"], name: "index_machines_on_nr", using: :btree
@@ -191,6 +196,7 @@ ActiveRecord::Schema.define(version: 20150309012610) do
     t.integer  "measure_unit_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "description"
   end
 
   add_index "parts", ["custom_nr"], name: "index_parts_on_custom_nr", using: :btree
@@ -240,15 +246,34 @@ ActiveRecord::Schema.define(version: 20150309012610) do
   add_index "process_templates", ["code"], name: "index_process_templates_on_code", using: :btree
   add_index "process_templates", ["type"], name: "index_process_templates_on_type", using: :btree
 
-  create_table "production_orders", force: true do |t|
-    t.integer  "kanban_id"
-    t.integer  "state",      default: 0
+  create_table "production_order_items", force: true do |t|
+    t.string   "nr"
+    t.integer  "state",               default: 100
     t.string   "code"
+    t.text     "message"
+    t.integer  "kanban_id"
+    t.integer  "production_order_id"
+    t.integer  "machine_id"
+    t.integer  "optimise_index",      default: 0
+    t.datetime "optimise_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "produced_qty"
+  end
+
+  add_index "production_order_items", ["kanban_id"], name: "index_production_order_items_on_kanban_id", using: :btree
+  add_index "production_order_items", ["machine_id"], name: "index_production_order_items_on_machine_id", using: :btree
+  add_index "production_order_items", ["nr"], name: "index_production_order_items_on_nr", using: :btree
+  add_index "production_order_items", ["production_order_id"], name: "index_production_order_items_on_production_order_id", using: :btree
+
+  create_table "production_orders", force: true do |t|
+    t.string   "nr"
+    t.integer  "state",      default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "production_orders", ["kanban_id"], name: "index_production_orders_on_kanban_id", using: :btree
+  add_index "production_orders", ["nr"], name: "index_production_orders_on_nr", using: :btree
 
   create_table "resource_group_parts", force: true do |t|
     t.integer  "part_id"
@@ -271,6 +296,14 @@ ActiveRecord::Schema.define(version: 20150309012610) do
 
   add_index "resource_groups", ["nr"], name: "index_resource_groups_on_nr", using: :btree
   add_index "resource_groups", ["type"], name: "index_resource_groups_on_type", using: :btree
+
+  create_table "settings", force: true do |t|
+    t.string   "name"
+    t.string   "value"
+    t.integer  "stype"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "tools", force: true do |t|
     t.string   "nr"

@@ -31,7 +31,7 @@ function data_upload(idStr, format, callback) {
                 if (reg) {
                     if (!reg.test(file.name)) {
                         msg = '格式错误';
-                        alert(msg);
+                        swal(msg);
                         valid = false;
                         return;
                     }

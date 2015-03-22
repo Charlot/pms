@@ -53,3 +53,9 @@ production:
   username: pmser
   password: pmser@
   #  password: <%= ENV['PMS-SERVER_DATABASE_PASSWORD'] %>
+
+data:
+  <<: *default
+  database: pmsdb_data
+  username: pmser
+  password: pmser@

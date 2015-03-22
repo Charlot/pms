@@ -164,6 +164,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <Content Include="Template\LanKa.tff">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Template\read.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

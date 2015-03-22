@@ -1,29 +1,33 @@
 <h1>Listing resource_group_parts</h1>
+<p id="notice"><%= notice %></p>
+
 <div>
   <h5>ResourceGroupTool: <%= @resource_group_tool.nr %></h5>
 </div>
-<table class="table">
-  <thead>
+
+<div>
+  <%= render 'form' %>
+
+  <table class="table">
+    <thead>
     <tr>
       <th>Part</th>
       <th>Resource group</th>
       <th colspan="3"></th>
     </tr>
-  </thead>
+    </thead>
 
-  <tbody>
+    <tbody>
     <% @resource_group_parts.each do |resource_group_part| %>
-      <tr>
-        <td><%= resource_group_part.part %></td>
-        <td><%= resource_group_part.resource_group %></td>
-        <td><%= link_to 'Show', resource_group_part %></td>
-        <td><%= link_to 'Edit', edit_resource_group_part_path(resource_group_part) %></td>
-        <td><%= link_to 'Destroy', resource_group_part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+        <tr>
+          <td><%= resource_group_part.part.nr if resource_group_part.part %></td>
+          <td><%= resource_group_part.resource_group.nr if resource_group_part.resource_group %></td>
+          <td><%= link_to 'Destroy', resource_group_part, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        </tr>
     <% end %>
-  </tbody>
-</table>
-
+    </tbody>
+  </table>
+</div>
 <br>
 
 <%= link_to 'New Resource group part', new_resource_group_part_path %>

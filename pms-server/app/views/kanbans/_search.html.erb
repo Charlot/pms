@@ -1,0 +1,42 @@
+<div class="input-group">
+  <div class="row">
+    <div class="col-md-4">
+      <input type="text" class="form-control" id="search_PartNR" placeholder="请输入线号...">
+    </div>
+    <div class="col-md-4">
+      <input type="text" class="form-control" id="search_ProductNR" placeholder="请输入总成号...">
+    </div>
+    <div class="col-md-4">
+      <span class="input-group-btn">
+        <button class="btn btn-success" type="button" id="search_Kanban">Search</button>
+      </span>
+    </div>
+  </div>
+</div>
+
+<% content_for :javascript_includes do %>
+    <%= javascript_include_tag "kanban" %>
+<% end %>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('body').on('click', '#search_Kanban', function () {
+            var part_nr = $("#search_PartNR").val();
+            var product_nr = $("#search_ProductNR").val();
+            pms.kanban.search({part_nr: part_nr, product_nr: product_nr}, function (data) {
+                $("#search_Kanban_Res").html(data);
+            })
+        })
+                .on('keydown', '#search_PartNR, #search_ProductNR', function (event) {
+                    var part_nr = $("#search_PartNR").val();
+                    var product_nr = $("#search_ProductNR").val();
+
+                    if (event.keyCode == 13) {
+                        pms.kanban.search({part_nr: part_nr, product_nr: product_nr}, function (data) {
+                            $("#search_Kanban_Res").html(data);
+                        });
+                        return;
+                    }
+                })
+    })
+</script>
