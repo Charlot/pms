@@ -58,7 +58,12 @@ class Kanban < ActiveRecord::Base
   end
 
   def wire_length
-    self.process_entities.first
+    pe = self.process_entities.first
+    if pe && pe.respond_to?("value_of_wire_qty_factor")
+      pe.send("value_of_wire_qty_factor")
+    else
+      0
+    end
   end
 
   def can_destroy?

@@ -2,7 +2,7 @@ require 'csv'
 module FileHandler
   module Csv
     class ProcessEntitySemiAutoHandler<Base
-      IMPORT_HEADERS=['Nr', 'Name', 'Description', 'Stand Time', 'Template Code', 'WorkStation Type', 'Cost Center', 'Template Fields']
+      IMPORT_HEADERS=['Nr', 'Name', 'Description', 'Stand Time','Product Nr' ,'Template Code', 'WorkStation Type', 'Cost Center', 'Template Fields']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
       def self.import(file)
@@ -13,8 +13,9 @@ module FileHandler
             ProcessEntity.transaction do
               CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
                 process_template = ProcessTemplate.find_by_code(row['Template Code'])
+                product = Part.find_by_nr(row['Product Nr'])
                 params = {}
-                params =  params.merge({nr: row['Nr'], name: row['Name'], description: row['Description'], stand_time: row['Stand Time'], process_template_id: process_template.id})
+                params =  params.merge({nr: row['Nr'], name: row['Name'], description: row['Description'], stand_time: row['Stand Time'],product_id:product.id, process_template_id: process_template.id})
                 #TODO add WorkStation Type and Cost Center
                 process_entity = ProcessEntity.new(params)
                 process_entity.process_template = process_template
