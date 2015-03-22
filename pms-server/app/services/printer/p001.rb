@@ -38,7 +38,7 @@ module Printer
       @kanban.process_entities.each do |pe|
         bodies =[]
         body = {
-            route_nr:pe.nr,
+            route_nr:pe.process_template.code,
             route_name:pe.name,
             route_desc:pe.description,
             work_time_of_route:pe.stand_time,
