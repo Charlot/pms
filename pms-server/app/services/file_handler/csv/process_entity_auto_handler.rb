@@ -20,8 +20,9 @@ module FileHandler
               CSV.foreach(file.file_path,headers: file.headers,col_sep: file.col_sep,encoding: file.encoding) do |row|
                 process_template = ProcessTemplate.find_by_code(row['Template Code'])
                 product = Part.find_by_nr(row['Product Nr'])
+                part = Part.find_by_nr(row['Wire Nr'])
                 params = {}
-                params = params.merge({nr:row['Nr'],name:row['Name'],description:row['Description'],stand_time:row['Stand Time'],product_id:product.id,process_template_id:process_template.id})
+                params = params.merge({nr:row['Nr'],name:row['Name'],description:row['Description'],stand_time:row['Stand Time'],product_id:product.id,part_id:part.id,process_template_id:process_template.id})
                 #TODO add WorkStation Type and Cost Center
                 process_entity = ProcessEntity.new(params)
                 process_entity.process_template = process_template
@@ -31,10 +32,14 @@ module FileHandler
                 ['Component','Qty Factor','Bundle Qty', 'T1','T1 Qty Factor','T1 Strip Length', 'T2','T2 Qty Factor','T2 Strip Length', 'S1','S1 Qty Factor', 'S2','S2 Qty Factor'].each{|header|
                   custom_fields = custom_fields.merge(header_to_custom_fields(header,row[header])) if row[header]
                 }
+                puts "============"
+                puts custom_fields
+                puts process_entity.custom_fields
                 custom_fields.each do |k,v|
-                  cf = process_entity.custom_fields.find{|cf| cf.name == k.to_s}
+                 if  cf = process_entity.custom_fields.find{|cf| cf.name == k.to_s}
                   cv = CustomValue.new(custom_field_id:cf.id,is_for_out_stock: cf.is_for_out_stock,value:cf.get_field_format_value(v))
                   process_entity.custom_values<<cv
+                 end
                 end
 
                 process_entity.custom_values.each do |cv|
@@ -106,14 +111,11 @@ module FileHandler
         #验证步骤属性
         ['T1','T2','S1','S2','Component'].each{|header|
           material = Part.find_by_nr(row[header])
-          if material.nil?
+          if material.nil? && row[header]
             msg.contents << "#{header}: #{row[header]}不存在"
           end
 
-          if material && PartType.is_material?(material.type)
-            puts "============"
-            puts msg.contents.nil?
-            puts "#{header}: #{row[header]}零件类型错误"
+          if material && !PartType.is_material?(material.type)
             msg.contents << "#{header}: #{row[header]}零件类型错误"
           end
         }

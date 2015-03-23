@@ -70,12 +70,12 @@ module FileHandler
       end
 
       def self.validate_row(row)
-        msg = Message.new({result:true})
+        msg = Message.new({result:true,contents:[]})
 
         kanban = Kanban.find_by_nr(row['Nr'])
 
         #如果存在Nr，表示更新，需要验证是否存在
-        if row['Nr'] && kanban.nil?>
+        if row['Nr'] && kanban.nil?
           msg.contents << "Nr: row['Nr'] 不存在"
         end
 
