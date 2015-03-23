@@ -2,7 +2,7 @@ require 'csv'
 module FileHandler
   module Csv
     class ProcessEntitySemiAutoHandler<Base
-      IMPORT_HEADERS=['Nr', 'Name', 'Description', 'Stand Time','Product Nr' ,'Template Code', 'WorkStation Type', 'Cost Center', 'Template Fields']
+      IMPORT_HEADERS=['Nr', 'Name', 'Description', 'Stand Time','Product Nr' ,'Wire Nr','Template Code', 'WorkStation Type', 'Cost Center', 'Template Fields']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
       def self.import(file)
@@ -14,25 +14,17 @@ module FileHandler
               CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
                 process_template = ProcessTemplate.find_by_code(row['Template Code'])
                 product = Part.find_by_nr(row['Product Nr'])
+                part = Part.find_by_nr(row['Wire Nr'])
                 params = {}
-                params =  params.merge({nr: row['Nr'], name: row['Name'], description: row['Description'], stand_time: row['Stand Time'],product_id:product.id, process_template_id: process_template.id})
+                params =  params.merge({nr: row['Nr'], name: row['Name'], description: row['Description'], stand_time: row['Stand Time'],product_id:product.id,part_id:part.id, process_template_id: process_template.id})
                 #TODO add WorkStation Type and Cost Center
                 process_entity = ProcessEntity.new(params)
                 process_entity.process_template = process_template
                 process_entity.save
 
                 custom_fields_val = row['Template Fields'].split(',')
-                #custom_fields_splited = {}
-                #custom_fields_val.each_with_index { |val, index|
-                #  if val =~ /\//
-                #    vals = val.split('/')
-                #    custom_fields_splited[index] = vals[1]
-                #    custom_fields_val[index] = vals[0]
-                #  end
-                #}
 
                 process_entity.custom_fields.each_with_index do |cf, index|
-                  #TODO is_for_out_stock怎么来的？
                   cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
                   process_entity.custom_values<<cv
                 end
@@ -83,8 +75,40 @@ module FileHandler
 
       def self.validate_row(row)
         msg = Message.new({result:true})
-        #TODO Validation
-        #TODO Validate Template Fields with CustomField.instance.validate_format_field(value)
+        #验证步骤号
+        if ProcessEntity.find_by_nr(row['Nr'])
+          msg.contents<<"Nr: #{row['Nr']}，已经存在"
+        end
+
+        #验证零件
+        product = Part.where({nr:row['Product Nr'],type:PartType::PRODUCT}).first
+        wire = Part.where({nr:"#{row['Product Nr']}~#{row['Wire Nr']}"},type:PartType::PRODUCT_SEMIFINISHED)
+        if product.nil?
+          msg.contents << "Product Nr: #{row['Product Nr']}不存在"
+        end
+
+        if wire.nil?
+          msg.contents << "Wire Nr: #{row['Wire Nr']}不存在"
+        end
+
+        #验证模板
+        template = ProcessTemplate.find_by_code(row['Template Code'])
+        if template.nil?
+          msg.contents << "Template Code: #{row['Template Code']}不存在"
+        end
+
+        #TODO 验证半自动属性
+        custom_fields_val = row['Template Fields'].split(',')
+        template.custom_fields.each_with_index do |cf, index|
+          if CustomFieldFormatType.part? cf.field_format && cf.get_field_format_value(custom_fields_val[index]).nil?
+
+          end
+        end
+
+        unless msg.result=(msg.contents.size==0)
+          msg.content=msg.contents.join('/')
+        end
+
         return msg
       end
     end
