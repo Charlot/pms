@@ -80,7 +80,7 @@ module FileHandler
       end
 
       def self.validate_row(row)
-        msg = Message.new({result:true})
+        msg = Message.new({result:true,contents:[]})
         #验证步骤号
         if ProcessEntity.find_by_nr(row['Nr'])
           msg.contents<<"Nr: #{row['Nr']}，已经存在"
@@ -111,6 +111,9 @@ module FileHandler
           end
 
           if material && PartType.is_material?(material.type)
+            puts "============"
+            puts msg.contents.nil?
+            puts "#{header}: #{row[header]}零件类型错误"
             msg.contents << "#{header}: #{row[header]}零件类型错误"
           end
         }

@@ -18,8 +18,9 @@ module FileHandler
       						when ProcessType::AUTO
       							custom_fields = []
       							['Wire NO','Component','Qty Factor','Bundle Qty','T1','T1 Strip Length','T2','T2 Strip Length','S1','S2'].each{|header|
-      								custom_fields = custom_fields + header_to_custom_fields(header) if row[header] && row[header] != 0
+      								custom_fields = custom_fields + header_to_custom_fields(header) if row[header] && row[header].to_i != 0
       							}
+                    puts custom_fields
       							ProcessTemplateAuto.build_custom_fields(custom_fields,process_template).each do |cf|
       								process_template.custom_fields << cf
       							end
