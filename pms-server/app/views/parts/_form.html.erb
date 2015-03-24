@@ -21,7 +21,7 @@
   </div>
   <div class="field">
     <%= f.label :type %><br>
-    <%= f.number_field :type %>
+    <%= f.select(:type, part_type_select_options,{include_blank: false}) %>
   </div>
   <div class="field">
     <%= f.label :strip_length %><br>

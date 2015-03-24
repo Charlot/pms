@@ -63,14 +63,4 @@ class ProcessEntity < ActiveRecord::Base
       end
     end
   end
-# def build_process_parts
-#   if ProcessType.auto?(self.process_template.type)
-#     self.custom_values.each do |cv|
-#       cf=cv.custom_field
-#       if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
-#         self.process_parts<<ProcessPart.new(part_id: cv.value, quantity: self.process_part_quantity_by_cf(cf.name))
-#       end
-#     end
-#   end
-# end
 end

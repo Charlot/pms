@@ -21,7 +21,7 @@
                   <tr>
                     <td><%= part.nr %></td>
                     <td><%= part.custom_nr %></td>
-                    <td><%= part.type %></td>
+                    <td><%= PartType.display(part.type) %></td>
                     <td><%= part.strip_length %></td>
                     <td><%= part.resource_group_tool.nr if part.resource_group_tool %></td>
                     <td><%= part.measure_unit %></td>

@@ -85,8 +85,9 @@ module FileHandler
         end
 
         #验证工艺
-        process_entities = ProcessEntity.where(nr:row['Process List'])
-        unless process_entities.count == row['Process List'].split(',').count
+        process_nrs = row['Process List'].split(',').collect { |penr| penr.strip }
+        process_entities = ProcessEntity.where(nr:process_nrs)
+        unless process_entities.count == process_entities.count
           msg.contents << "Process List: #{row['Process List']}，工艺不存在!"
         end
 

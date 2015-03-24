@@ -2,7 +2,7 @@ require 'csv'
 module FileHandler
   module Csv
     class ProcessEntitySemiAutoHandler<Base
-      IMPORT_HEADERS=['Nr', 'Name', 'Description', 'Stand Time','Product Nr','Template Code', 'WorkStation Type', 'Cost Center', 'Template Fields']
+      IMPORT_HEADERS=['Nr', 'Name', 'Description', 'Stand Time','Product Nr','Template Code', 'WorkStation Type', 'Cost Center', 'Template Fields','Wire Nr']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
       def self.import(file)
@@ -21,15 +21,22 @@ module FileHandler
                 process_entity.process_template = process_template
                 process_entity.save
 
+                part = Part.create({nr:"#{product.nr}_#{row['Wire Nr']}",type:PartType::PRODUCT_SEMIFINISHED})
+
+                wire = Part.find_by_nr("#{product.nr}_#{row['Wire Nr']}")
                 custom_fields_val = row['Template Fields'].split(',')
 
                 process_entity.custom_fields.each_with_index do |cf, index|
                   cv = nil
                   if CustomFieldFormatType.part?(cf.field_format)
-                    if  Part.find_by_nr(custom_fields_val[index])
-                      cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
-                    else
+                    if cf.name == "default_wire_nr"
                       cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index]}"))
+                    else
+                      if  Part.find_by_nr(custom_fields_val[index])
+                        cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
+                      else
+                        cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index]}"))
+                      end
                     end
                   else
                     cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
@@ -102,17 +109,26 @@ module FileHandler
           msg.contents << "Template Code: #{row['Template Code']}不存在"
         end
 
-        custom_fields_val = row['Template Fields'].split(',')
+        #验证属性
+        custom_fields_val = row['Template Fields'].split(',').collect{|cfv|cfv.strip}
         template.custom_fields.each_with_index do |cf, index|
           if CustomFieldFormatType.part?(cf.field_format)
             if Part.find_by_nr(custom_fields_val[index])
               next
             elsif  Part.find_by_nr("#{product.nr}_#{custom_fields_val[index]}")
               next
+            elsif cf.name == "default_wire_nr"
+              next
             else
               msg.contents << "Template Fildes: #{custom_fields_val[index]} 未找到"
             end
           end
+        end
+
+        #验证生成的线号
+        wire = Part.find_by_nr("#{product.nr}_#{row['Wire Nr']}")
+        if wire
+          msg.contents << "Wire Nr: #{row['Wire Nr']} 已经存在"
         end
 
         unless msg.result=(msg.contents.size==0)

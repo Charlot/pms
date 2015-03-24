@@ -25,7 +25,7 @@ module FileHandler
       								process_template.custom_fields << cf
       							end
       							#
-      						when ProcessType::SEMI_AUTO
+                  when ProcessType::SEMI_AUTO
       							#
       						end
       						process_template.save
