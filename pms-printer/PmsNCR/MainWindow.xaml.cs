@@ -16,6 +16,7 @@ using PmsNCRWcf;
 using Brilliantech.Framwork.Utils.LogUtil;
 using PmsNCRWcf.Converter;
 using PmsNCRWcf.Model;
+using PmsNCRWcf.Config;
 
 namespace PmsNCR
 {
@@ -74,6 +75,11 @@ namespace PmsNCR
         private void PrinterSettingBtn_Click(object sender, RoutedEventArgs e)
         {
             new PrinterSetting().ShowDialog();
+        }
+
+        private void OrderPreviewBtn_Click(object sender, RoutedEventArgs e)
+        {
+            new OrderPreviewWindow().Show();
         }
 
     }

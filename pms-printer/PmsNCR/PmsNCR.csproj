@@ -101,6 +101,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="OrderPreviewWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PrinterSetting.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -109,6 +113,9 @@
   <ItemGroup>
     <Compile Include="MaterialCheck.xaml.cs">
       <DependentUpon>MaterialCheck.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OrderPreviewWindow.xaml.cs">
+      <DependentUpon>OrderPreviewWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="PrinterSetting.xaml.cs">
       <DependentUpon>PrinterSetting.xaml</DependentUpon>

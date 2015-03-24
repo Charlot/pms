@@ -139,6 +139,35 @@ namespace PmsNCRWcf
  
         }
 
+
+        public Msg<List<OrderItemCheck>> GetOrderPreviewList(string machineNr)
+        {
+            Msg<List<OrderItemCheck>> msg = new Msg<List<OrderItemCheck>>();
+            try
+            {
+                var req = new RestRequest(ApiConfig.OrderListPreviewAction, Method.GET);
+                req.RequestFormat = DataFormat.Json;
+                req.AddParameter("machine_nr", machineNr);
+                var res = new ApiClient().Execute(req);
+                var data = JSONHelper.parse<List<OrderItemCheck>>(res.Content);
+                if (data != null)
+                {
+                    msg.Result = true;
+                    msg.Object = data;
+                }
+                else
+                {
+                    msg.Content = "API 返回数据错误，请联系相关人员";
+                }
+            }
+            catch (Exception e)
+            {
+                msg.Result = false;
+                msg.Content = e.Message;
+                LogUtil.Logger.Error(e.Message);
+            }
+            return msg;
+        }
         private bool setHead()
         {
             WebOperationContext.Current.OutgoingResponse.Headers.Add("Access-Control-Allow-Origin", "*");
@@ -153,7 +182,7 @@ namespace PmsNCRWcf
             }
             return true;
         }
-         
-       
+
+
     }
 }
