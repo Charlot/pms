@@ -5,9 +5,10 @@ module V1
         guard_all!
 
         get :data do
-          printer=Printer::Client.new(params[:code],params[:id])
+          printer=Printer::Client.new({code:params[:code],id: params[:id]})
           printer.gen_data
         end
+
       end
     end
   end

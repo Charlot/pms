@@ -8,17 +8,8 @@
 </head>
 <body>
 <input class="hidden" id="print-server-hidden" value="<%= Setting.printer_url%>">
-  <%= render 'shared/menu' %>
-  <div class="row">
-    <div class="col-md-2">
-      <%= render partial: 'sidebar' rescue nil if @hide_sidebar.nil? %>
-    </div>
-    <div class="col-md-10">
-        <div class="row" id="result">
-          <%= yield %>
-        </div>
-    </div>
-  </div>
+<%= render 'shared/menu' %>
+<%= render 'shared/body' %>
 </body>
 <%= render partial: 'shared/handling_msg_box', locals: {handle_message: '处理中...'} %>
 </html>

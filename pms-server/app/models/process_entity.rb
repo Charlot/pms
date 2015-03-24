@@ -4,10 +4,14 @@ class ProcessEntity < ActiveRecord::Base
   belongs_to :process_template
   belongs_to :workstation_type
   belongs_to :cost_center
-  #has_many :kanban_process_entities, dependent: :destroy
+  belongs_to :product, class_name: 'Part'
+  has_many :kanban_process_entities, dependent: :destroy
   has_many :process_parts
   has_many :parts, through: :process_parts
   delegate :custom_fields, to: :process_template
+  delegate :nr,to: :product,prefix: true, allow_nil: true
+  delegate :code, to: :process_template, prefix: true, allow_nil: true
+  delegate :type, to: :process_template, prefix: true, allow_nil: true
 
   acts_as_customizable
 
@@ -59,14 +63,4 @@ class ProcessEntity < ActiveRecord::Base
       end
     end
   end
-# def build_process_parts
-#   if ProcessType.auto?(self.process_template.type)
-#     self.custom_values.each do |cv|
-#       cf=cv.custom_field
-#       if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
-#         self.process_parts<<ProcessPart.new(part_id: cv.value, quantity: self.process_part_quantity_by_cf(cf.name))
-#       end
-#     end
-#   end
-# end
 end

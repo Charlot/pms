@@ -1,17 +1,23 @@
 class Kanban < ActiveRecord::Base
+  include AutoKey
   validates :nr, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
-  validates :part_id, :presence => true
+  validates :product_id, :presence => true
+
 
   belongs_to :part
   belongs_to :product, class_name: 'Part'
-  delegate :process_entities,to: :part
+  #delegate :process_entities,to: :part
+  has_many :kanban_process_entities ,dependent: :destroy
+  has_many :process_entities, through: :kanban_process_entities
   delegate :nr, to: :part,prefix: true, allow_nil: true
   delegate :nr, to: :product,prefix: true, allow_nil: true
   delegate :custom_nr, to: :product,prefix: true,allow_nil: true
   delegate :custom_nr, to: :part, prefix: true,allow_nil: true
   has_many :production_order, as: :orderable
 
-  before_create :generate_id
+  accepts_nested_attributes_for :kanban_process_entities, allow_destroy: true
+
+  #before_create :generate_id
 
   # after_create :create_part_bom
   # after_destroy :destroy_part_bom
@@ -52,6 +58,15 @@ class Kanban < ActiveRecord::Base
     end
   end
 
+  def wire_length
+    pe = self.process_entities.first
+    if pe && pe.respond_to?("value_of_wire_qty_factor")
+      pe.send("value_of_wire_qty_factor")
+    else
+      0
+    end
+  end
+
   def can_destroy?
     if [KanbanState::INIT,KanbanState::LOCKED,KanbanState::DELETED].include?(state)
       true
@@ -62,7 +77,7 @@ class Kanban < ActiveRecord::Base
 
   def wire_nr
     if self.part_nr
-      self.part_nr.split("~").last
+      self.part_nr.split("_").last
     else
       nil
     end

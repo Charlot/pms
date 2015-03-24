@@ -6,7 +6,7 @@ module Printer
                                                         :strip_length2,:terminal_custom_nr2,:terminal_nr2,:seal_custom_nr2,:seal_nr2,
           :apab_description,:remark,:kanban_2dcode]
 
-    def generate_data
+    def generate_data(args=nil)
       @kanban = Kanban.find_by_id(self.id)
       #Now the Automatic KANBAN onlu has 1 process entity
       @process_entity = @kanban.process_entities.first
@@ -27,7 +27,7 @@ module Printer
       head={
           kanban_nr:@kanban.nr,
           part_nr:@kanban.product_nr,
-          wire_nr:@kanban.part_nr,
+          wire_nr:@kanban.wire_nr,
           customer_nr: @kanban.product_custom_nr,
           card_quantity:@kanban.quantity,
           safe_quantity:@kanban.safety_stock,
@@ -36,7 +36,6 @@ module Printer
           send_position:@kanban.source_position,
           wire_description:@kanban.part_custom_nr,
           kanban_2dcode: @kanban.printed_2DCode,
-
           wire_length:@kanban.wire_length,
           bundle_number:@kanban.bundle,
 

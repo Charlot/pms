@@ -1,23 +1,5 @@
-<div class="panel panel-success">
-  <div class="panel-heading ">
-    <h1>建立KANBAN卡</h1>
-  </div>
+<div class="panel panel-default">
   <div class="panel-body">
-    <div class="row">
-      <div class="col-md-10">
-        <div class="panel panel-default">
-          <div class="panel-body">
-
-            <%= link_to '导入KANBAN',import_kanbans_path,class:"btn btn-default"%>
-
-            <%= render 'form' %>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-2">
-        <h4>说明</h4>
-        <p class="text-warning"> 创建KANBAN卡，并且为KANBAN卡关联Routing</p>
-      </div>
-    </div>
+    <%= render 'form' %>
   </div>
 </div>

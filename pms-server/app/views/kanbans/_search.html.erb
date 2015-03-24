@@ -19,24 +19,24 @@
 <% end %>
 
 <script type="text/javascript">
-  $(document).ready(function(){
-      $('body').on('click','#search_Kanban', function () {
-          var part_nr = $("#search_PartNR").val();
-          var product_nr = $("#search_ProductNR").val();
-          pms.kanban.search({part_nr:part_nr,product_nr:product_nr},function(data){
-              $("#search_Kanban_Res").html(data);
-          })
-      })
-              .on('keydown','#search_PartNR, #search_ProductNR',function(event){
-                  var part_nr = $("#search_PartNR").val();
-                  var product_nr = $("#search_ProductNR").val();
+    $(document).ready(function () {
+        $('body').on('click', '#search_Kanban', function () {
+            var part_nr = $("#search_PartNR").val();
+            var product_nr = $("#search_ProductNR").val();
+            pms.kanban.search({part_nr: part_nr, product_nr: product_nr}, function (data) {
+                $("#search_Kanban_Res").html(data);
+            })
+        })
+                .on('keydown', '#search_PartNR, #search_ProductNR', function (event) {
+                    var part_nr = $("#search_PartNR").val();
+                    var product_nr = $("#search_ProductNR").val();
 
-                  if(event.keyCode == 13) {
-                      pms.kanban.search({part_nr: part_nr, product_nr: product_nr}, function (data) {
-                          $("#search_Kanban_Res").html(data);
-                      });
-                      return;
-                  }
-              })
-  })
+                    if (event.keyCode == 13) {
+                        pms.kanban.search({part_nr: part_nr, product_nr: product_nr}, function (data) {
+                            $("#search_Kanban_Res").html(data);
+                        });
+                        return;
+                    }
+                })
+    })
 </script>

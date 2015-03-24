@@ -13,8 +13,8 @@
           <li class="list-group-item list-group-item-info">
             <%= form.fields_for :kanban_process_entities, kpe do |ff| %>
                 <label><%= kpe.process_entity.id %></label>
-                <%= ff.text_field :kanban_id ,class:'hidden'%>
-                <%= ff.text_field :process_entity_id,class:'hidden' %>
+                <%= ff.text_field :kanban_id, class: 'hidden' %>
+                <%= ff.text_field :process_entity_id, class: 'hidden' %>
             <% end %>
           </li>
       <% end %>

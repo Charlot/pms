@@ -12,13 +12,13 @@ module Printer
     }
 
     #注意，与KANBAN模板一直，一个Routing中最多包含的parts只能有5种
-    def generate_data
+    def generate_data(args=nil)
       @kanban = Kanban.find_by_id(self.id)
       @kanban.update(print_time:Time.now)
       #TODO还要加一个条形码字段，条形码中不只是KANBAN NR
       head={
           kanban_nr: @kanban.nr,
-          part_nr: @kanban.part_nr,
+          part_nr: @kanban.wire_nr,
           print_date:@kanban.print_time,
           customer_nr:@kanban.part_custom_nr,
           wire_position:@kanban.desc_position,
@@ -38,7 +38,7 @@ module Printer
       @kanban.process_entities.each do |pe|
         bodies =[]
         body = {
-            route_nr:pe.nr,
+            route_nr:pe.process_template.code,
             route_name:pe.name,
             route_desc:pe.description,
             work_time_of_route:pe.stand_time,

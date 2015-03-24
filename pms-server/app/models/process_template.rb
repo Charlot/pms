@@ -19,6 +19,7 @@ class ProcessTemplate < ActiveRecord::Base
     puts "#{self.new_record?}-----------------------"
     puts self.template
     index=Hash.new(0)
+    count=0
     self.template.scan(/{(\w+)}/).map(&:first).map(&:downcase).each_with_index do |format, i|
       puts "**********************#{format}"
       format_key=format.to_sym
@@ -29,7 +30,9 @@ class ProcessTemplate < ActiveRecord::Base
       # cf.save
       puts '----------------'
       index[format_key] +=1
+      count=i
     end
+    self.custom_fields << CustomField.build_by_format("part","default_wire_nr",self.custom_field_type,count+1)
     puts '*************************'
     puts self.template
     puts '*************************'

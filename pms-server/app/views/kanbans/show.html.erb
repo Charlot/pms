@@ -1,102 +1,102 @@
 <p id="notice"><%= notice %></p>
 
-<div class="panel panel-success">
-  <div class="panel-heading ">
-    <h1><%= @kanban.nr %></h1>
+<div class="row">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      基础信息
+      <%= render partial: 'manage', locals: {kanban: @kanban} %>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-4">
+          <ul class="list-group">
+            <li class="list-group-item">
+              <label><%= KanbanDesc::NR %>:</label>
+              <ins><%= @kanban.nr %></ins>
+            </li>
+            <li class="list-group-item">
+              <label><%= KanbanDesc::WIRE_NR %>:</label>
+              <ins><%= @kanban.wire_nr %></ins>
+            </li>
+            <li class="list-group-item">
+              <label><%= KanbanDesc::PRODUCT_NR %>:</label>
+              <ins><%= @kanban.product_nr %></ins>
+            </li>
+            <li class="list-group-item">
+              <label><%= KanbanDesc::COPIES %>:</label>
+              <ins><%= @kanban.copies %></ins>
+            </li>
+            <li class="list-group-item">
+              <label><%= KanbanDesc::QUANTITY %>:</label>
+              <ins><%= @kanban.quantity %></ins>
+            </li>
+            <li class="list-group-item">
+              <label><%= KanbanDesc::TYPE %>:</label>
+              <ins><%= KanbanType.display(@kanban.ktype) %></ins>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <ul class="list-group">
+            <li class="list-group-item">
+              <label><%= KanbanDesc::SAFETY_STOCK %>:</label>
+              <ins><%= @kanban.safety_stock %></ins>
+            </li>
+            <li class="list-group-item">
+              <label><%= KanbanDesc::SOURCE_WAREHOUSE %>:</label>
+              <ins><%= @kanban.source_warehouse %></ins>
+            </li>
+            <li class="list-group-item">
+              <label><%= KanbanDesc::SOURCE_STORAGE %>:</label>
+              <ins><%= @kanban.source_storage %></ins>
+            </li>
+            <li class="list-group-item">
+              <label><%= KanbanDesc::DES_WAREHOUSE %>:</label>
+              <ins><%= @kanban.des_warehouse %></ins>
+            </li>
+            <li class="list-group-item">
+              <label><%= KanbanDesc::DES_STORAGE %>:</label>
+              <ins><%= @kanban.des_storage %></ins>
+            </li>
+            <li class="list-group-item">
+              <label><%= KanbanDesc::REMARK %>:</label>
+              <ins><%= @kanban.remark %></ins>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <ul class="list-group">
+            <li class="list-group-item">
+              <label>线长:</label>
+              <ins><%= @kanban.wire_length %></ins>
+            </li>
+            <li class="list-group-item">
+              <label><%= KanbanDesc::TASK_TIME %>:</label>
+              <ins><%= @kanban.task_time %></ins>
+            </li>
+            <li class="list-group-item">
+              <label><%= KanbanDesc::STATE %>
+                :</label><span class="label <%= kanban_states_class(@kanban.state) %>"><%= KanbanState.display(@kanban.state) %></span></ins>
+            </li>
+            <li class="list-group-item">
+              <label>二维码信息:</label>
+              <ins><%= @kanban.printed_2DCode %></ins>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="panel-body">
-    <div class="row">
-      <div class="col-md-10">
-        <div class="row">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              基础信息
-              <%= render partial: 'manage' ,locals:{kanban:@kanban}%>
-            </div>
-            <div class="panel-body">
-              <div class="row">
-                <div class="col-md-4">
-                  <ul class="list-group">
-                    <li class="list-group-item">
-                      <label><%= KanbanDesc::NR%>:</label><ins><%= @kanban.nr%></ins>
-                    </li>
-                    <li class="list-group-item">
-                      <label><%= KanbanDesc::WIRE_NR%>:</label><ins><%= @kanban.wire_nr%></ins>
-                    </li>
-                    <li class="list-group-item">
-                      <label><%= KanbanDesc::PRODUCT_NR%>:</label><ins><%= @kanban.product_nr%></ins>
-                    </li>
-                    <li class="list-group-item">
-                      <label><%= KanbanDesc::COPIES%>:</label><ins><%= @kanban.copies%></ins>
-                    </li>
-                    <li class="list-group-item">
-                      <label><%= KanbanDesc::QUANTITY%>:</label><ins><%= @kanban.quantity%></ins>
-                    </li>
-                    <li class="list-group-item">
-                      <label><%= KanbanDesc::TYPE%>:</label><ins><%= KanbanType.display(@kanban.ktype)%></ins>
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-md-4">
-                  <ul class="list-group">
-                    <li class="list-group-item">
-                      <label><%= KanbanDesc::SAFETY_STOCK%>:</label><ins><%= @kanban.safety_stock%></ins>
-                    </li>
-                    <li class="list-group-item">
-                      <label><%= KanbanDesc::SOURCE_WAREHOUSE%>:</label><ins><%= @kanban.source_warehouse%></ins>
-                    </li>
-                    <li class="list-group-item">
-                      <label><%= KanbanDesc::SOURCE_STORAGE%>:</label><ins><%= @kanban.source_storage%></ins>
-                    </li>
-                    <li class="list-group-item">
-                      <label><%= KanbanDesc::DES_WAREHOUSE%>:</label><ins><%= @kanban.des_warehouse%></ins>
-                    </li>
-                    <li class="list-group-item">
-                      <label><%= KanbanDesc::DES_STORAGE%>:</label><ins><%= @kanban.des_storage%></ins>
-                    </li>
-                    <li class="list-group-item">
-                      <label><%= KanbanDesc::REMARK%>:</label><ins><%= @kanban.remark%></ins>
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-md-4">
-                  <ul class="list-group">
-                    <li class="list-group-item">
-                      <label>线长:</label><ins><%= @kanban.wire_length%></ins>
-                    </li>
-                    <li class="list-group-item">
-                      <label><%= KanbanDesc::TASK_TIME%>:</label><ins><%= @kanban.task_time%></ins>
-                    </li>
-                    <li class="list-group-item">
-                      <label><%= KanbanDesc::STATE%>:</label><span class="label <%= kanban_states_class(@kanban.state)%>"><%= KanbanState.display(@kanban.state)%></span></ins>
-                    </li>
-                    <li class="list-group-item">
-                      <label>二维码信息:</label><ins><%= @kanban.printed_2DCode%></ins>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              Routing
-            </div>
-            <div class="panel-body">
-              <% @kanban.process_entities.each do |pe| %>
-              <%= render partial: 'process_entities/simple',locals:{process_entity:pe}%>
-              <% end %>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-2">
-        <h4>说明</h4>
-
-        <p class="text-warning"> 显示KANBAN卡详细信息</p>
-      </div>
+</div>
+<div class="row">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      Routing
+    </div>
+    <div class="panel-body">
+      <% @kanban.process_entities.each do |pe| %>
+          <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
+      <% end %>
     </div>
   </div>
 </div>

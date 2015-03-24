@@ -16,7 +16,7 @@ module FileHandler
       					unless part
       						Part.create({nr:row['Part Nr'],custom_nr: row['Custom Nr'],type:row['Type'],strip_length:row['Strip Length']})
       					else
-      						part.update_attributes({custom_nr:row['Custom Nr'],type:row['Type'],strip_length:row['Strip Length']})
+      						part.update({custom_nr:row['Custom Nr'],type:row['Type'],strip_length:row['Strip Length']})
       					end
       				end
       			end

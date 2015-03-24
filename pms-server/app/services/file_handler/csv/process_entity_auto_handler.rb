@@ -2,12 +2,13 @@ require 'csv'
 module FileHandler
   module Csv
     class ProcessEntityAutoHandler<Base
-      IMPORT_HEADERS=['Nr','Name','Description','Stand Time','Template Code','WorkStation Type','Cost Center',
+      IMPORT_HEADERS=['Nr','Name','Description','Stand Time','Product Nr','Template Code','WorkStation Type','Cost Center',
                       'Wire NO','Component','Qty Factor','Bundle Qty',
                       'T1','T1 Qty Factor','T1 Strip Length',
                       'T2','T2 Qty Factor','T2 Strip Length',
                       'S1','S1 Qty Factor',
-                      'S2','S2 Qty Factor']
+                      'S2','S2 Qty Factor'
+      ]
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
       def self.import(file)
@@ -18,22 +19,30 @@ module FileHandler
             ProcessEntity.transaction do
               CSV.foreach(file.file_path,headers: file.headers,col_sep: file.col_sep,encoding: file.encoding) do |row|
                 process_template = ProcessTemplate.find_by_code(row['Template Code'])
+                product = Part.find_by_nr(row['Product Nr'])
+                #part = Part.find_by_nr(row['Wire Nr'])
+                part = Part.create({nr:"#{row['Product Nr']}_#{row['Wire NO']}",type:PartType::PRODUCT_SEMIFINISHED})
                 params = {}
-                params = params.merge({nr:row['Nr'],name:row['Name'],description:row['Description'],stand_time:row['Stand Time'],process_template_id:process_template.id})
+                params = params.merge({nr:row['Nr'],name:row['Name'],description:row['Description'],stand_time:row['Stand Time'],product_id:product.id,process_template_id:process_template.id})
                 #TODO add WorkStation Type and Cost Center
                 process_entity = ProcessEntity.new(params)
                 process_entity.process_template = process_template
                 process_entity.save
 
-
                 custom_fields = {}
                 ['Wire NO','Component','Qty Factor','Bundle Qty', 'T1','T1 Qty Factor','T1 Strip Length', 'T2','T2 Qty Factor','T2 Strip Length', 'S1','S1 Qty Factor', 'S2','S2 Qty Factor'].each{|header|
                   custom_fields = custom_fields.merge(header_to_custom_fields(header,row[header])) if row[header]
                 }
+
                 custom_fields.each do |k,v|
-                  cf = process_entity.custom_fields.find{|cf| cf.name == k.to_s}
-                  cv = CustomValue.new(custom_field_id:cf.id,is_for_out_stock: cf.is_for_out_stock,value:cf.get_field_format_value(v))
+                 if  cf = process_entity.custom_fields.find{|cf| cf.name == k.to_s}
+                   if cf.name == "default_wire_nr"
+                     cv = CustomValue.new(custom_field_id:cf.id,is_for_out_stock: cf.is_for_out_stock,value:cf.get_field_format_value("#{product.nr}_#{v}"))
+                   else
+                     cv = CustomValue.new(custom_field_id:cf.id,is_for_out_stock: cf.is_for_out_stock,value:cf.get_field_format_value(v))
+                   end
                   process_entity.custom_values<<cv
+                 end
                 end
 
                 process_entity.custom_values.each do |cv|
@@ -79,9 +88,45 @@ module FileHandler
       end
 
       def self.validate_row(row)
-        msg = Message.new({result:true})
-        #TODO Add validation
-        #TODO validate custom field for template
+        msg = Message.new({result:true,contents:[]})
+        #验证步骤号
+        if ProcessEntity.find_by_nr(row['Nr'])
+          msg.contents<<"Nr: #{row['Nr']}，已经存在"
+        end
+
+        #验证零件
+        product = Part.where({nr:row['Product Nr'],type:PartType::PRODUCT}).first
+        wire = Part.where({nr:"#{row['Product Nr']}_#{row['Wire NO']}"},type:PartType::PRODUCT_SEMIFINISHED)
+        if product.nil?
+          msg.contents << "Product Nr: #{row['Product Nr']}不存在"
+        end
+
+        if wire.count > 0
+          msg.contents << "Wire NO: #{row['Wire NO']}已被使用"
+        end
+
+        #验证模板
+        template = ProcessTemplate.find_by_code(row['Template Code'])
+        if template.nil?
+          msg.contents << "Template Code: #{row['Template Code']}不存在"
+        end
+
+        #验证步骤属性
+        ['T1','T2','S1','S2','Component'].each{|header|
+          material = Part.find_by_nr(row[header])
+          if material.nil? && row[header]
+            msg.contents << "#{header}: #{row[header]}不存在"
+          end
+
+          if material && !PartType.is_material?(material.type)
+            msg.contents << "#{header}: #{row[header]}零件类型错误"
+          end
+        }
+
+        unless msg.result=(msg.contents.size==0)
+          msg.content=msg.contents.join('/')
+        end
+
         return msg
       end
 

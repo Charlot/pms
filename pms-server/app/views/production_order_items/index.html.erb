@@ -1,49 +1,49 @@
-<h1>Listing production_order_items</h1>
-<p id="notice"><%= notice %></p>
 
-<% if has_optimise_items %>
-    <%= form_tag('/production_order_items/optimise', method: 'post') do %>
-        <input type="button" value="OPTIMISE" onclick="if(confirm('optimise?')){form.submit();}"/>
+    <p id="notice"><%= notice %></p>
+
+    <% if has_optimise_items %>
+        <%= form_tag('/production_order_items/optimise', method: 'post') do %>
+            <input type="button" value="OPTIMISE" onclick="if(confirm('optimise?')){form.submit();}"/>
+        <% end %>
     <% end %>
-<% end %>
-<table class="table">
-  <thead>
-  <tr>
-    <th>Nr</th>
-    <th>State</th>
-    <th>Code</th>
-    <th>Kanban</th>
-    <th>Machine</th>
-    <th>Production order</th>
-    <th>OptimiseAt</th>
-    <th>OptimiseIndex</th>
-    <th colspan="3"></th>
-  </tr>
-  </thead>
-
-  <tbody>
-  <% @production_order_items.each do |production_order_item| %>
+    <table class="table">
+      <thead>
       <tr>
-        <td><%= production_order_item.nr %></td>
-        <td><%= ProductionOrderItemState.display production_order_item.state %></td>
-        <td><%= production_order_item.code %></td>
-        <td><%= production_order_item.kanban.nr %></td>
-        <td><%= production_order_item.machine.nr if production_order_item.machine %></td>
-        <td><%= production_order_item.production_order.nr if production_order_item.production_order %></td>
-        <td><%= production_order_item.optimise_at %></td>
-        <td><%= production_order_item.optimise_index %></td>
-        <td><%= link_to 'Show', production_order_item %></td>
-        <td><%= link_to 'Edit', edit_production_order_item_path(production_order_item) %></td>
-        <td><%= link_to 'Destroy', production_order_item, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <th>Nr</th>
+        <th>State</th>
+        <th>Code</th>
+        <th>Kanban</th>
+        <th>Machine</th>
+        <th>Production order</th>
+        <th>OptimiseAt</th>
+        <th>OptimiseIndex</th>
+        <th colspan="3"></th>
       </tr>
-  <% end %>
-  </tbody>
-</table>
-<br>
-<% if @optimised && has_distribute_items(@production_order) %>
-    <%= form_tag('/production_order_items/distribute', method: 'post') do %>
-        <%= hidden_field_tag :production_order_id, @production_order.id %>
-        <input type="button" value="DISTRIBUTE" onclick="if(confirm('distribute?')){form.submit();}"/>
+      </thead>
+
+      <tbody>
+      <% @production_order_items.each do |production_order_item| %>
+          <tr>
+            <td><%= production_order_item.nr %></td>
+            <td><%= ProductionOrderItemState.display production_order_item.state %></td>
+            <td><%= production_order_item.code %></td>
+            <td><%= production_order_item.kanban.nr %></td>
+            <td><%= production_order_item.machine.nr if production_order_item.machine %></td>
+            <td><%= production_order_item.production_order.nr if production_order_item.production_order %></td>
+            <td><%= production_order_item.optimise_at %></td>
+            <td><%= production_order_item.optimise_index %></td>
+            <td><%= link_to 'Show', production_order_item %></td>
+            <td><%= link_to 'Edit', edit_production_order_item_path(production_order_item) %></td>
+            <td><%= link_to 'Destroy', production_order_item, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <br>
+    <% if @optimised && has_distribute_items(@production_order) %>
+        <%= form_tag('/production_order_items/distribute', method: 'post') do %>
+            <%= hidden_field_tag :production_order_id, @production_order.id %>
+            <input type="button" value="DISTRIBUTE" onclick="if(confirm('distribute?')){form.submit();}"/>
+        <% end %>
     <% end %>
-<% end %>
-<%= link_to 'New Production order item', new_production_order_item_path %>
+

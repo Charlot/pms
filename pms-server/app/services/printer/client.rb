@@ -1,8 +1,9 @@
 module Printer
   class Client
     attr_accessor :printer
-    def initialize(code,id)
-      self.printer= Kernel.const_get("Printer::#{code.downcase.classify}").new(id)
+
+    def initialize(args)
+      self.printer= Kernel.const_get("Printer::#{args[:code].downcase.classify}").new(args)
     end
 
     def gen_data
