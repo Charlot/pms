@@ -40,7 +40,7 @@ namespace PmsNCRWcf
                         JObject o = JObject.Parse(HttpUtility.UrlDecode(postJson.Split('=')[1]));
                         Dictionary<string, object> v = o.ToObject<Dictionary<string, object>>();
 
-                        OrderItem order = new OrderItem()
+                        OrderItemFile order = new OrderItemFile()
                         {
                             OrderNr = v["order_nr"].ToString(),
                             ItemNr = v["item_nr"].ToString(),

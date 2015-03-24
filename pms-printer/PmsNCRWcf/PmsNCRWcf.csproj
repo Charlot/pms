@@ -79,6 +79,7 @@
     <Compile Include="Model\ApiClient.cs" />
     <Compile Include="Model\Msg.cs" />
     <Compile Include="Model\OrderItem.cs" />
+    <Compile Include="Model\OrderItemFile.cs" />
     <Compile Include="Model\OrderItemCheck.cs" />
     <Compile Include="Model\Printer.cs" />
     <Compile Include="OrderService.cs" />

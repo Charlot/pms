@@ -28,7 +28,8 @@ namespace PmsNCR
 
         private static Object fileLocker = new Object();
         private static Object dirLocker = new Object();
-         
+
+        private static bool unlock = false;
 
         public ClientDataWatcher()
         {
@@ -64,10 +65,16 @@ namespace PmsNCR
             List<string> files = GetAllFilesFromDirectory(WPCSConfig.ClientDataDir,"*.sdc");
             foreach (string file in files)
             {
+
                 if (IsFileClosed(file))
                 {
-                    Process(file);
+                    if (unlock)
+                    {
+                        Process(file);
+                    }
+                    
                 }
+
             }
             scanTimer.Enabled = true;
             scanTimer.Start();
@@ -90,7 +97,7 @@ namespace PmsNCR
                     fullPath = MoveFile(fullPath, System.IO.Path.Combine(toScanDir, System.IO.Path.GetFileName(fullPath)));
                     if (fullPath != null)
                     {
-                        canMoveFile = OrderSDCConverter.ParseSDCToServer(fullPath);
+                        canMoveFile = OrderSDCConverter.ParseSDCToServer(fullPath,WPCSConfig.MachineNr);
                     }
                 }
             }
@@ -244,6 +251,11 @@ namespace PmsNCR
         {
             e.Cancel = true;
             this.WindowState = WindowState.Minimized;
+        }
+
+        private void checkBox1_Checked(object sender, RoutedEventArgs e)
+        {
+            unlock = checkBox1.IsChecked.Value;
         }
     }
 }

@@ -19,6 +19,10 @@ class ProductionOrderItem < ActiveRecord::Base
     where(state: ProductionOrderItemState.wait_produce_states, machine_id: machine.id).order(optimise_index: :asc).first
   end
 
+  def self.for_produce(machine)
+    where(state: ProductionOrderItemState.wait_produce_states, machine_id: machine.id).order(optimise_index: :asc)
+  end
+
   def self.optimise
     ProductionOrderItem.transaction do
       optimise_at=Time.now

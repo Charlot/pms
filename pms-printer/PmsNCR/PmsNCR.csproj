@@ -54,6 +54,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Xml" />
@@ -100,10 +101,24 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="OrderPreviewWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PrinterSetting.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MaterialCheck.xaml.cs">
       <DependentUpon>MaterialCheck.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OrderPreviewWindow.xaml.cs">
+      <DependentUpon>OrderPreviewWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PrinterSetting.xaml.cs">
+      <DependentUpon>PrinterSetting.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -118,6 +133,20 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Template\BaiKa.tff">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Template\BaiKa.tfs" />
+    <None Include="Template\BundleLabel.tff">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Template\LanKa.tff">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Template\LanKa.tfs" />
+    <None Include="Template\read.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="WPCSDataProcessed\keep.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

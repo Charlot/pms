@@ -1,4 +1,4 @@
-class ProductionOrderItemState
+class ProductionOrderItemState<BaseType
   INIT = 100
   OPTIMISE_FAIL=110
   OPTIMISE_SUCCEED=120

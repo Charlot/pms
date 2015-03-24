@@ -1,15 +1,16 @@
 <%= form_for(@production_order_item) do |f| %>
-  <% if @production_order_item.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@production_order_item.errors.count, "error") %> prohibited this production_order_item from being saved:</h2>
+    <% if @production_order_item.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@production_order_item.errors.count, "error") %> prohibited this production_order_item from
+            being saved:</h2>
 
-      <ul>
-      <% @production_order_item.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+          <ul>
+            <% @production_order_item.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
     <div class="row">
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -20,32 +21,38 @@
             <div class="col-md-6">
               <div class="form-group">
                 <%= f.label :nr %><br>
-                <%= f.text_field :nr ,class:"form-control"%>
+                <%= f.text_field :nr, class: "form-control" %>
               </div>
               <div class="form-group">
                 <%= f.label :state %><br>
-                <%= f.number_field :state ,class:"form-control"%>
+                <%= f.number_field :state, class: "form-control" %>
+
+                <div class="field">
+                  <%= f.label :state %><br>
+                  <%= f.select(:state,
+                               production_order_item_state_options, {include_blank: false}) %>
+                </div>
               </div>
               <div class="form-group">
                 <%= f.label :code %><br>
-                <%= f.text_field :code,class:"form-control" %>
+                <%= f.text_field :code, class: "form-control" %>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <%= f.label :kanban_id %><br>
-                <%= f.text_field :kanban_id,class:"form-control" %>
+                <%= f.label :kanban %><br>
+                <%= @production_order_item.kanban.nil? ? '' : @production_order_item.kanban.nr %>
               </div>
               <div class="form-group">
                 <%= f.label :production_order %><br>
-                <%= f.text_field :production_order ,class:"form-control"%>
+                <span><%= @production_order_item.production_order.nil? ? '' : @production_order_item.production_order.nr %></span>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  <div class="actions">
-    <%= f.submit class:'btn btn-info' %>
-  </div>
+    <div class="actions">
+      <%= f.submit class: 'btn btn-info' %>
+    </div>
 <% end %>
