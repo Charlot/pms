@@ -14,9 +14,17 @@ class ProductionOrderItemPresenter<Presenter
      Id:@production_order_item.id,
      ItemNr:@production_order_item.nr,
      TotalQuantity:kanban.quantity,
-     BundleQuanity:kanban.bundle,
+     BundleQuantity:kanban.bundle,
      ProducedQty:@production_order_item.produced_qty
     }
+  end
+
+  def self.init_preview_presenters(params)
+    params.map { |param| self.new(param).to_preview_order }
+  end
+
+  def to_preview_order
+    to_check_material_order
   end
 
   def to_check_material_order

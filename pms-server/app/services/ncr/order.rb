@@ -18,6 +18,13 @@ module Ncr
               puts "$$$$$#{write_order_api(item)}"
               response=RestClient.post(write_order_api(item), {params: post_params(item).to_json},
                                        accept: :json)
+              rb=JSON.parse(response.body)
+              if rb['Result']
+                item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_SUCCEED)
+              else
+                item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_FAIL, message: rb['Content'])
+              end
+              puts JSON.parse(response.body)['Result'].class
             rescue => e
               puts "#{e.class}---#{e.message}-----------------------------"
               # raise(e)
@@ -26,15 +33,7 @@ module Ncr
               end
             end
             puts '***********************************'
-            puts response.body
             puts '***********************************'
-            rb=JSON.parse(response.body)
-            if rb['Result']
-              item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_SUCCEED)
-            else
-              item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_FAIL, message: rb['Content'])
-            end
-            puts JSON.parse(response.body)['Result'].class
           end
           # raise
         end

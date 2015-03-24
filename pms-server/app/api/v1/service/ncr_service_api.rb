@@ -28,6 +28,13 @@ module V1
             end
           end
 
+          # preview order item list
+          get :preview do
+            if machine=Machine.find_by_nr(params[:machine_nr])
+              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(machine).all)
+            end
+          end
+
           get :produce_content do
             if item=ProductionOrderItem.find_by_id(params[:order_item_id])
               return ProductionOrderItemPresenter.new(item).to_produce_order
@@ -50,20 +57,23 @@ module V1
             end
           end
 
-
         end
 
         namespace :printer do
           get :kanban_by_order_item do
-            if item=ProductionOrderItem.find_by_nr(params[:order_nr])
+            if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
               printer=Printer::Client.new({code: params[:code], id: item.kanban_id})
               printer.gen_data
             end
           end
 
+
           get :bundle_label do
-            if item=ProductionOrderItem.find_by_nr(params[:order_nr])
-              printer=Printer::Client.new({code: params[:code], id: item.kanban_id})
+            if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
+              printer=Printer::Client.new({code: params[:code],
+                                           id: item.kanban_id,
+                                           machine_nr: params[:machine_nr],
+                                           bundle_no: params[:bundle_no]})
               printer.gen_data
             end
           end
