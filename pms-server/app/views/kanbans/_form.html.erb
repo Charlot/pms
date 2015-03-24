@@ -150,43 +150,14 @@
                         return;
                     }
                     //
-                    pms.search("parts", {attr: "nr", val: product.val() + "~" + wire.val()}, function (data) {
+                    pms.search("parts", {attr: "nr", val: product.val() + "_" + wire.val()}, function (data) {
                         if (data.result) {
                             //找到了
                             $("#search_Part_Res").val(data.content.id);
                         }
                         else {
                             //未找到，要不要创建
-                            swal({
-                                        title: "是否创建线号",
-                                        text: "系统会自动创建一个半自动零件",
-                                        type: "warning",
-                                        showCancelButton: true,
-                                        confirmButtonColor: "#DD6B55",
-                                        confirmButtonText: "创建!",
-                                        cancelButtonText: "取消?",
-                                        closeOnConfirm: false
-                                    },
-                                    function (isConfirm) {
-                                        if (isConfirm) {
-                                            $.ajax({
-                                                url: "/parts",
-                                                data: {part: {nr: product.val() + "~" + wire.val(), type: 4}},
-                                                type: "POST",
-                                                dataType: 'json',
-                                                success: function (data) {
-                                                    if (data.result) {
-                                                        $("#search_Part_Res").val(data.content.id);
-                                                        swal("创建成功", "创建了一个半自动零件", "success");
-                                                    }
-                                                    else {
-                                                        swal(data.content);
-                                                    }
-                                                }
-                                            })
-                                        }
-                                    }
-                            );
+                            swal({title:"未找到线号",type:"warning"});
                         }
                     })
                 }
