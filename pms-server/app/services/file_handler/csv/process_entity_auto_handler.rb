@@ -23,7 +23,7 @@ module FileHandler
                 #part = Part.find_by_nr(row['Wire Nr'])
                 part = Part.create({nr:"#{row['Product Nr']}_#{row['Wire NO']}",type:PartType::PRODUCT_SEMIFINISHED})
                 params = {}
-                params = params.merge({nr:row['Nr'],name:row['Name'],description:row['Description'],stand_time:row['Stand Time'],product_id:product.id,part_id:part.id,process_template_id:process_template.id})
+                params = params.merge({nr:row['Nr'],name:row['Name'],description:row['Description'],stand_time:row['Stand Time'],product_id:product.id,process_template_id:process_template.id})
                 #TODO add WorkStation Type and Cost Center
                 process_entity = ProcessEntity.new(params)
                 process_entity.process_template = process_template
@@ -96,7 +96,7 @@ module FileHandler
 
         #验证零件
         product = Part.where({nr:row['Product Nr'],type:PartType::PRODUCT}).first
-        wire = Part.where({nr:"#{row['Product Nr']}~#{row['Wire NO']}"},type:PartType::PRODUCT_SEMIFINISHED)
+        wire = Part.where({nr:"#{row['Product Nr']}_#{row['Wire NO']}"},type:PartType::PRODUCT_SEMIFINISHED)
         if product.nil?
           msg.contents << "Product Nr: #{row['Product Nr']}不存在"
         end
