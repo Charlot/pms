@@ -24,7 +24,7 @@
         <td><%= process_entity.description %></td>
         <td><%= process_entity.stand_time %></td>
         <td><%= process_entity.process_template_code %></td>
-        <td><%= ProcessType.display process_entity.process_template.type %></td>
+        <td><%= ProcessType.display process_entity.process_template_type %></td>
         <td><%= link_to 'Show', process_entity %></td>
         <td><%= link_to 'Edit', edit_process_entity_path(process_entity) %></td>
         <td><%= link_to 'Destroy', process_entity, method: :delete, data: {confirm: 'Are you sure?'} %></td>
