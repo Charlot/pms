@@ -6,7 +6,7 @@ module Printer
                                                         :strip_length2,:terminal_custom_nr2,:terminal_nr2,:seal_custom_nr2,:seal_nr2,
           :apab_description,:remark,:kanban_2dcode]
 
-    def generate_data
+    def generate_data(args=nil)
       @kanban = Kanban.find_by_id(self.id)
       #Now the Automatic KANBAN onlu has 1 process entity
       @process_entity = @kanban.process_entities.first
