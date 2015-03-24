@@ -26,10 +26,10 @@ module FileHandler
                 process_entity.custom_fields.each_with_index do |cf, index|
                   cv = nil
                   if CustomFieldFormatType.part?(cf.field_format)
-                    if cf.get_field_format_value(custom_fields_val[index])
+                    if  Part.find_by_nr(custom_fields_val[index])
                       cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
                     else
-                      cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index])}")
+                      cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index]}"))
                     end
                   else
                     cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
@@ -102,11 +102,16 @@ module FileHandler
           msg.contents << "Template Code: #{row['Template Code']}不存在"
         end
 
-        puts "================="
         custom_fields_val = row['Template Fields'].split(',')
         template.custom_fields.each_with_index do |cf, index|
-          if CustomFieldFormatType.part? cf.field_format
-            puts cf.get_field_format_value(custom_fields_val[index])
+          if CustomFieldFormatType.part?(cf.field_format)
+            if Part.find_by_nr(custom_fields_val[index])
+              next
+            elsif  Part.find_by_nr("#{product.nr}_#{custom_fields_val[index]}")
+              next
+            else
+              msg.contents << "Template Fildes: #{custom_fields_val[index]} 未找到"
+            end
           end
         end
 
