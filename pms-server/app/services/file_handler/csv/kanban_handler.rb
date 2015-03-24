@@ -104,6 +104,19 @@ module FileHandler
           msg.contents << "Type: #{row['Type']} 不正确"
         end
 
+        case row['Type'].to_i
+        when KanbanType::WHITE
+          if process_entities.count != 1
+            msg.contents << "Process List: #{row['Process List']} 白卡只能添加一个Routing"
+          end
+
+          if process_entities.first.type != ProcessType::AUTO
+            msg.contents << "Process List: #{row['Process List']} 白卡只能添加全自动Routing"
+          end
+        when KanbanType::BLUE
+
+        end
+
         #TODO 验证库位
 
         unless msg.result=(msg.contents.size==0)
