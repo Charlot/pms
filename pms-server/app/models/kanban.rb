@@ -76,7 +76,7 @@ class Kanban < ActiveRecord::Base
 
   def wire_nr
     if self.part_nr
-      self.part_nr.split("~").last
+      self.part_nr.split("_").last
     else
       nil
     end

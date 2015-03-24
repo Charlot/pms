@@ -2,8 +2,8 @@ require 'csv'
 module FileHandler
   module Csv
     class ProcessEntityAutoHandler<Base
-      IMPORT_HEADERS=['Nr','Name','Description','Stand Time','Product Nr','Wire Nr','Template Code','WorkStation Type','Cost Center',
-                      'Component','Qty Factor','Bundle Qty',
+      IMPORT_HEADERS=['Nr','Name','Description','Stand Time','Product Nr','Template Code','WorkStation Type','Cost Center',
+                      'Wire NO','Component','Qty Factor','Bundle Qty',
                       'T1','T1 Qty Factor','T1 Strip Length',
                       'T2','T2 Qty Factor','T2 Strip Length',
                       'S1','S1 Qty Factor',
@@ -21,7 +21,7 @@ module FileHandler
                 process_template = ProcessTemplate.find_by_code(row['Template Code'])
                 product = Part.find_by_nr(row['Product Nr'])
                 #part = Part.find_by_nr(row['Wire Nr'])
-                part = Part.create({nr:"#{row['Product Nr']}~#{row['Wire Nr']}",type:PartType::PRODUCT_SEMIFINISHED})
+                part = Part.create({nr:"#{row['Product Nr']}_#{row['Wire NO']}",type:PartType::PRODUCT_SEMIFINISHED})
                 params = {}
                 params = params.merge({nr:row['Nr'],name:row['Name'],description:row['Description'],stand_time:row['Stand Time'],product_id:product.id,part_id:part.id,process_template_id:process_template.id})
                 #TODO add WorkStation Type and Cost Center
@@ -30,15 +30,17 @@ module FileHandler
                 process_entity.save
 
                 custom_fields = {}
-                ['Component','Qty Factor','Bundle Qty', 'T1','T1 Qty Factor','T1 Strip Length', 'T2','T2 Qty Factor','T2 Strip Length', 'S1','S1 Qty Factor', 'S2','S2 Qty Factor'].each{|header|
+                ['Wire NO','Component','Qty Factor','Bundle Qty', 'T1','T1 Qty Factor','T1 Strip Length', 'T2','T2 Qty Factor','T2 Strip Length', 'S1','S1 Qty Factor', 'S2','S2 Qty Factor'].each{|header|
                   custom_fields = custom_fields.merge(header_to_custom_fields(header,row[header])) if row[header]
                 }
-                puts "============"
-                puts custom_fields
-                puts process_entity.custom_fields
+
                 custom_fields.each do |k,v|
                  if  cf = process_entity.custom_fields.find{|cf| cf.name == k.to_s}
-                  cv = CustomValue.new(custom_field_id:cf.id,is_for_out_stock: cf.is_for_out_stock,value:cf.get_field_format_value(v))
+                   if cf.name == "default_wire_nr"
+                     cv = CustomValue.new(custom_field_id:cf.id,is_for_out_stock: cf.is_for_out_stock,value:cf.get_field_format_value("#{product.nr}_#{v}"))
+                   else
+                     cv = CustomValue.new(custom_field_id:cf.id,is_for_out_stock: cf.is_for_out_stock,value:cf.get_field_format_value(v))
+                   end
                   process_entity.custom_values<<cv
                  end
                 end
@@ -94,13 +96,13 @@ module FileHandler
 
         #验证零件
         product = Part.where({nr:row['Product Nr'],type:PartType::PRODUCT}).first
-        wire = Part.where({nr:"#{row['Product Nr']}~#{row['Wire Nr']}"},type:PartType::PRODUCT_SEMIFINISHED)
+        wire = Part.where({nr:"#{row['Product Nr']}~#{row['Wire NO']}"},type:PartType::PRODUCT_SEMIFINISHED)
         if product.nil?
           msg.contents << "Product Nr: #{row['Product Nr']}不存在"
         end
 
-        if wire
-          msg.contents << "Wire Nr: #{row['Wire Nr']}已被使用"
+        if wire.count > 0
+          msg.contents << "Wire NO: #{row['Wire NO']}已被使用"
         end
 
         #验证模板

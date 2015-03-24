@@ -97,11 +97,11 @@ module FileHandler
           msg.contents << "Template Code: #{row['Template Code']}不存在"
         end
 
-        #TODO 验证半自动属性
+        puts "================="
         custom_fields_val = row['Template Fields'].split(',')
         template.custom_fields.each_with_index do |cf, index|
-          if CustomFieldFormatType.part? cf.field_format && cf.get_field_format_value(custom_fields_val[index]).nil?
-
+          if CustomFieldFormatType.part? cf.field_format
+            puts cf.get_field_format_value(custom_fields_val[index])
           end
         end
 
