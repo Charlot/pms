@@ -28,6 +28,13 @@ module V1
             end
           end
 
+          # preview order item list
+          get :preview do
+            if machine=Machine.find_by_nr(params[:machine_nr])
+              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(machine).all)
+            end
+          end
+
           get :produce_content do
             if item=ProductionOrderItem.find_by_id(params[:order_item_id])
               return ProductionOrderItemPresenter.new(item).to_produce_order
@@ -49,7 +56,6 @@ module V1
               end
             end
           end
-
 
         end
 

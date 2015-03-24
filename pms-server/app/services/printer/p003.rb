@@ -27,12 +27,12 @@ module Printer
           singleResCC: args[:machine_nr],
           wireNr: kanban.wire_nr,
           partNr: wire.nr,
-          partDesc: wire.description,
+          partDesc: wire.description||'',
           color: 'color',
           length: process_entity.value_wire_qty_factor,
           diameter: 'diameter',
-          t1_nr: nil, t1_custom_nr: nil, t1_strip_length: nil, s1_nr: nil,
-          t2_nr: nil, t2_custom_nr: nil, t2_strip_length: nil, s2_nr: nil,
+          t1_nr: '', t1_custom_nr: '', t1_strip_length: '', s1_nr: '',
+          t2_nr: '', t2_custom_nr: '', t2_strip_length: '', s2_nr: '',
           bundleLabelNr: SecureRandom.uuid
       }
 
