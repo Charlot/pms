@@ -17,7 +17,6 @@ module FileHandler
                 #part = Part.find_by_nr(row['Wire Nr'])
                 params = {}
                 params =  params.merge({nr: row['Nr'], name: row['Name'], description: row['Description'], stand_time: row['Stand Time'],product_id:product.id, process_template_id: process_template.id})
-                #TODO add WorkStation Type and Cost Center
                 process_entity = ProcessEntity.new(params)
                 process_entity.process_template = process_template
                 process_entity.save
@@ -25,16 +24,22 @@ module FileHandler
                 custom_fields_val = row['Template Fields'].split(',')
 
                 process_entity.custom_fields.each_with_index do |cf, index|
-                  cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
-                  process_entity.custom_values<<cv
+                  cv = nil
+                  if CustomFieldFormatType.part?(cf.field_format)
+                    if cf.get_field_format_value(custom_fields_val[index])
+                      cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
+                    else
+                      cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index])}")
+                    end
+                  else
+                    cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
+                  end
+                  process_entity.custom_values<<cv if cv
                 end
 
                 process_entity.custom_values.each_with_index do |cv, index|
                   cf=cv.custom_field
                   if CustomFieldFormatType.part?(cf.field_format)
-                    #2015-3-18，李其
-                    #我和他们确认过，在全自动模板中，零件只消耗一个，为了简化上传，我这里硬编码写成了一个
-                    #后续可以修改
                     process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: 1)
                   end
                 end
