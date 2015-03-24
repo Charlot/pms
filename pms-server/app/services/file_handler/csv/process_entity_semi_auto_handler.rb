@@ -2,7 +2,7 @@ require 'csv'
 module FileHandler
   module Csv
     class ProcessEntitySemiAutoHandler<Base
-      IMPORT_HEADERS=['Nr', 'Name', 'Description', 'Stand Time','Product Nr','Template Code', 'WorkStation Type', 'Cost Center', 'Template Fields']
+      IMPORT_HEADERS=['Nr', 'Name', 'Description', 'Stand Time','Product Nr','Template Code', 'WorkStation Type', 'Cost Center', 'Template Fields','Wire Nr']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
       def self.import(file)
@@ -17,24 +17,36 @@ module FileHandler
                 #part = Part.find_by_nr(row['Wire Nr'])
                 params = {}
                 params =  params.merge({nr: row['Nr'], name: row['Name'], description: row['Description'], stand_time: row['Stand Time'],product_id:product.id, process_template_id: process_template.id})
-                #TODO add WorkStation Type and Cost Center
                 process_entity = ProcessEntity.new(params)
                 process_entity.process_template = process_template
                 process_entity.save
 
+                part = Part.create({nr:"#{product.nr}_#{row['Wire Nr']}",type:PartType::PRODUCT_SEMIFINISHED})
+
+                wire = Part.find_by_nr("#{product.nr}_#{row['Wire Nr']}")
                 custom_fields_val = row['Template Fields'].split(',')
 
                 process_entity.custom_fields.each_with_index do |cf, index|
-                  cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
-                  process_entity.custom_values<<cv
+                  cv = nil
+                  if CustomFieldFormatType.part?(cf.field_format)
+                    if cf.name == "default_wire_nr"
+                      cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index]}"))
+                    else
+                      if  Part.find_by_nr(custom_fields_val[index])
+                        cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
+                      else
+                        cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index]}"))
+                      end
+                    end
+                  else
+                    cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
+                  end
+                  process_entity.custom_values<<cv if cv
                 end
 
                 process_entity.custom_values.each_with_index do |cv, index|
                   cf=cv.custom_field
                   if CustomFieldFormatType.part?(cf.field_format)
-                    #2015-3-18，李其
-                    #我和他们确认过，在全自动模板中，零件只消耗一个，为了简化上传，我这里硬编码写成了一个
-                    #后续可以修改
                     process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: 1)
                   end
                 end
@@ -97,12 +109,26 @@ module FileHandler
           msg.contents << "Template Code: #{row['Template Code']}不存在"
         end
 
-        puts "================="
-        custom_fields_val = row['Template Fields'].split(',')
+        #验证属性
+        custom_fields_val = row['Template Fields'].split(',').collect{|cfv|cfv.strip}
         template.custom_fields.each_with_index do |cf, index|
-          if CustomFieldFormatType.part? cf.field_format
-            puts cf.get_field_format_value(custom_fields_val[index])
+          if CustomFieldFormatType.part?(cf.field_format)
+            if Part.find_by_nr(custom_fields_val[index])
+              next
+            elsif  Part.find_by_nr("#{product.nr}_#{custom_fields_val[index]}")
+              next
+            elsif cf.name == "default_wire_nr"
+              next
+            else
+              msg.contents << "Template Fildes: #{custom_fields_val[index]} 未找到"
+            end
           end
+        end
+
+        #验证生成的线号
+        wire = Part.find_by_nr("#{product.nr}_#{row['Wire Nr']}")
+        if wire
+          msg.contents << "Wire Nr: #{row['Wire Nr']} 已经存在"
         end
 
         unless msg.result=(msg.contents.size==0)

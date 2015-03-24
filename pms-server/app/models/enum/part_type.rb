@@ -6,6 +6,23 @@ class PartType<BaseType
   PRODUCT_SEMIFINISHED=4 #半成品
   PRODUCT=5 #成品
 
+  def self.display type
+    case type
+    when MATERIAL_WIRE
+      '原材料单线'
+    when MATERIAL_TERMINAL
+      '原材料端子'
+    when MATERIAL_SEAL
+      '原材料防水圈'
+    when MATERIAL_OTHER
+      '原材料其他'
+    when PRODUCT_SEMIFINISHED
+      '半成品'
+    when PRODUCT
+      '成品'
+    end
+  end
+
   def self.list_value
     self.constants.collect { |c|
       self.const_get(c)

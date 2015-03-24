@@ -47,7 +47,7 @@ namespace PmsNCRWcf
         }
 
 
-        public Msg<string> PrintKB(string code, string orderNr)
+        public Msg<string> PrintKB(string code, string order_item_nr)
         {
             Msg<string> msg = new Msg<string>();
             try
@@ -55,7 +55,7 @@ namespace PmsNCRWcf
                 var req = new RestRequest(ApiConfig.PrintKBAction, Method.GET);
                 req.RequestFormat = DataFormat.Json;
                 req.AddParameter("code", code);
-                req.AddParameter("order_nr", orderNr);
+                req.AddParameter("order_item_nr", order_item_nr);
                 Printer printer = PrinterConfig.Find(code);
 
                 var res = new ApiClient().Execute(req);
@@ -79,5 +79,43 @@ namespace PmsNCRWcf
             return msg;
         }
 
+
+
+
+
+        public Msg<string> PrintBundleLabel(string code, string order_item_nr, string machine_nr, int bundle_no)
+        {
+            Msg<string> msg = new Msg<string>();
+            try
+            {
+                var req = new RestRequest(ApiConfig.PrintBundleLabelAction, Method.GET);
+                req.RequestFormat = DataFormat.Json;
+                req.AddParameter("code", code);
+                req.AddParameter("order_item_nr", order_item_nr);
+                req.AddParameter("machine_nr", machine_nr);
+                req.AddParameter("bundle_no", bundle_no);
+
+                Printer printer = PrinterConfig.Find(code);
+
+                var res = new ApiClient().Execute(req);
+                var data = JSONHelper.parse<RecordSet>(res.Content);
+                if (data != null && data.Count > 0)
+                {
+                    printer.Print(data);
+                    msg.Result = true;
+                    msg.Content = "打印成功";
+                }
+                else
+                {
+                    msg.Content = "打印失败,无打印内容";
+                }
+            }
+            catch (Exception e)
+            {
+                msg.Content = e.Message;
+                LogUtil.Logger.Error(e.Message);
+            }
+            return msg;
+        }
     }
 }

@@ -85,8 +85,9 @@ module FileHandler
         end
 
         #验证工艺
-        process_entities = ProcessEntity.where(nr:row['Process List'])
-        unless process_entities.count == row['Process List'].split(',').count
+        process_nrs = row['Process List'].split(',').collect { |penr| penr.strip }
+        process_entities = ProcessEntity.where(nr:process_nrs)
+        unless process_entities.count == process_entities.count
           msg.contents << "Process List: #{row['Process List']}，工艺不存在!"
         end
 
@@ -102,6 +103,19 @@ module FileHandler
         #验证看板类型
         unless KanbanType.has_value?(row['Type'].to_i)
           msg.contents << "Type: #{row['Type']} 不正确"
+        end
+
+        case row['Type'].to_i
+        when KanbanType::WHITE
+          if process_entities.count != 1
+            msg.contents << "Process List: #{row['Process List']} 白卡只能添加一个Routing"
+          end
+
+          if process_entities.first.type != ProcessType::AUTO
+            msg.contents << "Process List: #{row['Process List']} 白卡只能添加全自动Routing"
+          end
+        when KanbanType::BLUE
+
         end
 
         #TODO 验证库位

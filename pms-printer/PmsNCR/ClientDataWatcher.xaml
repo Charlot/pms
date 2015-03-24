@@ -5,5 +5,6 @@
     <Grid>
         <Label Content="请勿关闭此窗口！" Height="51" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20"
                HorizontalAlignment="Left" Margin="37,39,0,0" Name="label1" VerticalAlignment="Top" Width="258" />
+        <CheckBox Content="UNLOCK" Height="16" HorizontalAlignment="Left" Margin="261,86,0,0" Name="checkBox1" VerticalAlignment="Top" IsChecked="True" Checked="checkBox1_Checked" />
     </Grid>
 </Window>

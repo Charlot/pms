@@ -1,4 +1,5 @@
 class Kanban < ActiveRecord::Base
+  include AutoKey
   validates :nr, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
   validates :product_id, :presence => true
 
@@ -16,7 +17,7 @@ class Kanban < ActiveRecord::Base
 
   accepts_nested_attributes_for :kanban_process_entities, allow_destroy: true
 
-  before_create :generate_id
+  #before_create :generate_id
 
   # after_create :create_part_bom
   # after_destroy :destroy_part_bom
