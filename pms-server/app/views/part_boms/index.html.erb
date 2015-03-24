@@ -1,8 +1,5 @@
-<h1>Listing part_boms</h1>
-<%= link_to 'New Part bom', new_part_bom_path %>
-<%= link_to 'Import Part bom', import_part_boms_path %>
 <%= render partial: 'search_bom_bar' %>
-<table class="table table-bordered table-striped table-hover>
+<table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
     <th>Part</th>
@@ -18,12 +15,9 @@
         <td><%= part_bom.part.nr %></td>
         <td><%= part_bom.bom_item.nr %></td>
         <td><%= part_bom.quantity %></td>
-        <td><%= link_to 'Edit', edit_part_bom_path(part_bom) %></td>
-        <td><%= link_to 'Destroy', part_bom, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <td><%= link_to '编辑', edit_part_bom_path(part_bom) %></td>
+        <td><%= link_to '删除', part_bom, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
   <% end %>
   </tbody>
 </table>
-
-<br>
-

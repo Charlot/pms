@@ -6,7 +6,7 @@ class SidebarMenu
       PRODUCTION_ORDER_ITEM: {name:PageInfo.productionorderitem,actions:["new", "index"]},
       PART: {name:PageInfo.part,actions:["new", "index", "import"]},
       MEASURE_UNIT: {name:PageInfo.measureunit,actions:["new", "index"]},
-      PART_BOM: {name:PageInfo.partbom,actions:["new", "index"]},
+      PART_BOM: {name:PageInfo.partbom,actions:["new", "index","import"]},
       PROCESS_TEMPLATE:{name:PageInfo.processtemplate,actions: ["new", "index", "import"]},
       PROCESS_ENTITY: {name:PageInfo.processentity,actions:["new", "index"]}
   }
