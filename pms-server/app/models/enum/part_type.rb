@@ -11,4 +11,10 @@ class PartType<BaseType
       self.const_get(c)
     }
   end
+
+  def self.is_material?(type)
+    constants.select{|c|
+      c if c.to_s =~/MATERIAL_/
+    }.collect{|c| const_get(c)}.include?(type.to_i)
+  end
 end

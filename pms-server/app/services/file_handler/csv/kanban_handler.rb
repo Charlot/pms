@@ -2,31 +2,37 @@ require 'csv'
 module FileHandler
   module Csv
     class KanbanHandler<Base
-      IMPORT_HEADERS=['Quantity','Safety Stock','Copies','Remark',
+      IMPORT_HEADERS=['Nr','Quantity','Safety Stock','Copies','Remark',
                       'Wire Nr','Product Nr','Type','Wire Length','Bundle',
       'Source Warehouse','Source Storage','Destination Warehouse','Destination Storage','Process List']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
       def self.import(file)
-        #TODO Test import kanban
         msg = Message.new
         begin
           validate_msg = validate_import(file)
           if validate_msg.result
             Kanban.transaction do
               CSV.foreach(file.file_path,headers: file.headers,col_sep: file.col_sep,encoding: file.encoding) do |row|
-                part = Part.find_by_nr(row['Wire Nr'])
-                product = Part.find_by_nr(row['Product Nr'])
-
-                kanban = Kanban.new({quantity:row['Quantity'],safety_stock:row['Safety Stock'],copies:row['Copies'],remark:row['Remark'],
-                                    part_id:part.id,product_id:product.id,ktype:row['Type'],bundle:row['Bundle'],
-                                    source_warehouse:row['Source Warehouse'],source_storage:row['Source Storage'],des_warehouse:row['Destination Warehouse'],
-                                    des_storage:row['Destination Storage']})
-                process_nrs = row['Process List'].split(',')
-                part_process_entities = ProcessEntity.where(nr:process_nrs).collect{|pe| PartProcessEntity.new({part_id:part.id,process_entity_id:pe.id})}
-                part.part_process_entities=part_process_entities
-                part.save
-                kanban.save
+                if row['Nr']
+                  kanban = Kanban.find_by_nr(row['Nr'])
+                  #更新,只能更新基础信息
+                  kanban.update({quantity:row['Quantity'],safety_stock:row['Safety Stock'],copies:row['Copies'],remark:row['Remark'],bundle:row['Bundle'],
+                                 source_warehouse:row['Source Warehouse'],source_storage:row['Source Storage'],des_warehouse:row['Destination Warehouse'],
+                                 des_storage:row['Destination Storage']})
+                else
+                  #新建
+                  part = Part.find_by_nr(row['Wire Nr'])
+                  product = Part.find_by_nr(row['Product Nr'])
+                  kanban = Kanban.new({quantity:row['Quantity'],safety_stock:row['Safety Stock'],copies:row['Copies'],remark:row['Remark'],
+                                       part_id:part.id,product_id:product.id,ktype:row['Type'],bundle:row['Bundle'],
+                                       source_warehouse:row['Source Warehouse'],source_storage:row['Source Storage'],des_warehouse:row['Destination Warehouse'],
+                                       des_storage:row['Destination Storage']})
+                  process_nrs = row['Process List'].split(',')
+                  kanban_process_entities = ProcessEntity.where(nr:process_nrs).collect{|pe| KanbanProcessEntity.new({process_entity_id:pe.id})}
+                  kanban.kanban_process_entities = kanban_process_entities
+                  kanban.save
+                end
               end
             end
             msg.result = true
@@ -64,9 +70,42 @@ module FileHandler
       end
 
       def self.validate_row(row)
-        msg = Message.new({result:true})
-        #TODO 注意验证，同一个零件只能有一种工艺组合
-        #TODO Validate kanban
+        msg = Message.new({result:true,contents:[]})
+
+        kanban = Kanban.find_by_nr(row['Nr'])
+
+        #如果存在Nr，表示更新，需要验证是否存在
+        if row['Nr'] && kanban.nil?
+          msg.contents << "Nr: row['Nr'] 不存在"
+        end
+
+        #如果是更新KANBAN，不能更新总成号和线号
+        if kanban && (row["Product Nr"] != kanban.product_nr || row['Wire Nr'] != kanban.part_nr)
+          msg.contents << "Wire Nr: #{row['Wire Nr']},Product Nr: #{row['Product nr']} 不能修改"
+        end
+
+        #验证工艺
+        process_entities = ProcessEntity.where(nr:row['Process List'])
+        unless process_entities.count == row['Process List'].split(',').count
+          msg.contents << "Process List: #{row['Process List']}，工艺不存在!"
+        end
+
+        #验证线号:不需要验证，临时创建
+        #验证总成号
+        unless  Part.where({nr:row['Product Nr'],type:PartType::PRODUCT}).count > 0
+          msg.contents << "Product Nr: #{row['Product Nr']} 不存在"
+        end
+
+        #验证看板类型
+        unless KanbanType.has_value?(row['Type'].to_i)
+          msg.contents << "Type: #{row['Type']} 不正确"
+        end
+
+        #TODO 验证库位
+
+        unless msg.result=(msg.contents.size==0)
+          msg.content=msg.contents.join('/')
+        end
         return msg
       end
     end

@@ -10,6 +10,8 @@ class ProcessEntity < ActiveRecord::Base
   has_many :parts, through: :process_parts
   delegate :custom_fields, to: :process_template
   delegate :nr,to: :product,prefix: true, allow_nil: true
+  delegate :code, to: :process_template, prefix: true, allow_nil: true
+  delegate :type, to: :process_template, prefix: true, allow_nil: true
 
   acts_as_customizable
 

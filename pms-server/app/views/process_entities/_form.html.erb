@@ -23,11 +23,13 @@
       <%= f.label :name %><br>
       <%= f.text_field :name %>
     </div>
+
     <div class="field">
       <%= f.label :product_id %>
       <input type="text" id="search_ProductNR" value="<%= @process_entity.product_nr %>"/>
       <%= f.text_field :product_id, class: " hidden", id: "search_ProductNR_Res" %>
     </div>
+
     <div class="field">
       <%= f.label :description %>:
       <%= f.text_area :description %>
