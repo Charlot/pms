@@ -20,7 +20,8 @@ module FileHandler
               CSV.foreach(file.file_path,headers: file.headers,col_sep: file.col_sep,encoding: file.encoding) do |row|
                 process_template = ProcessTemplate.find_by_code(row['Template Code'])
                 product = Part.find_by_nr(row['Product Nr'])
-                part = Part.find_by_nr(row['Wire Nr'])
+                #part = Part.find_by_nr(row['Wire Nr'])
+                part = Part.create({nr:"#{row['Product Nr']}~#{row['Wire Nr']}",type:PartType::PRODUCT_SEMIFINISHED})
                 params = {}
                 params = params.merge({nr:row['Nr'],name:row['Name'],description:row['Description'],stand_time:row['Stand Time'],product_id:product.id,part_id:part.id,process_template_id:process_template.id})
                 #TODO add WorkStation Type and Cost Center
@@ -98,8 +99,8 @@ module FileHandler
           msg.contents << "Product Nr: #{row['Product Nr']}不存在"
         end
 
-        if wire.nil?
-          msg.contents << "Wire Nr: #{row['Wire Nr']}不存在"
+        if wire
+          msg.contents << "Wire Nr: #{row['Wire Nr']}已被使用"
         end
 
         #验证模板
