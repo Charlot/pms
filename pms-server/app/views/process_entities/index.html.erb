@@ -24,9 +24,9 @@
         <td><%= process_entity.process_template_code %></td>
         <td><%= ProcessType.display process_entity.process_template_type %></td>
         <th><%= process_entity.product_nr%></th>
-        <td><%= link_to 'Show', process_entity %></td>
-        <td><%= link_to 'Edit', edit_process_entity_path(process_entity) %></td>
-        <td><%= link_to 'Destroy', process_entity, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <td><%= link_to '详情', process_entity %></td>
+        <td><%= link_to '编辑', edit_process_entity_path(process_entity) %></td>
+        <td><%= link_to '删除', process_entity, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
   <% end %>
   </tbody>
