@@ -8,6 +8,17 @@ class ProductionOrderItemPresenter<Presenter
     self.delegators=Delegators
   end
 
+  def to_bundle_produce_order
+    kanban=@production_order_item.kanban
+    {
+     Id:@production_order_item.id,
+     ItemNr:@production_order_item.nr,
+     TotalQuantity:kanban.quantity,
+     BundleQuanity:kanban.bundle,
+     ProducedQty:@production_order_item.produced_qty
+    }
+  end
+
   def to_check_material_order
     kanban=@production_order_item.kanban
     process_entity=kanban.process_entities.first
