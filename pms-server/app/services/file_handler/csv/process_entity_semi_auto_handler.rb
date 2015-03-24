@@ -30,7 +30,7 @@ module FileHandler
                   cv = nil
                   if CustomFieldFormatType.part?(cf.field_format)
                     if cf.name == "default_wire_nr"
-                      cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index]}"))
+                      cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{row['Wire Nr']}"))
                     else
                       if  Part.find_by_nr(custom_fields_val[index])
                         cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
