@@ -28,9 +28,13 @@ namespace PmsNCRWcf.Config
                 Token = config.Get("Token");
                 PrintDataAction = config.Get("PrintDataAction");
                 PrintKBAction = config.Get("PrintKBAction");
+                PrintBundleLabelAction = config.Get("PrintBundleLabelAction");
+
                 OrderFirstForCheckAction = config.Get("OrderFirstForCheckAction");
                 OrderItemForProduceAction = config.Get("OrderItemForProduceAction");
+                ProducePieceAction = config.Get("ProducePieceAction");
                 OrderItemUpdateStateAction = config.Get("OrderItemUpdateStateAction");
+                OrderListPreviewAction = config.Get("OrderListPreviewAction");
             }
             catch (Exception e)
             {
@@ -69,6 +73,8 @@ namespace PmsNCRWcf.Config
         public static string OrderFirstForCheckAction { get; set; }
         public static string OrderItemForProduceAction { get; set; }
         public static string OrderItemUpdateStateAction { get; set; }
-
+        public static string ProducePieceAction { get; set; }
+        public static string PrintBundleLabelAction { get; set; }
+        public static string OrderListPreviewAction { get; set; }
     }
 }

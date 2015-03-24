@@ -38,7 +38,7 @@ namespace PmsNCR
         private bool LoadOrderItemCheck()
         {
             OrderService s = new OrderService();
-            Msg<OrderItemCheck> msg = s.GetOrderItemForCheck("M002");
+            Msg<OrderItemCheck> msg = s.GetOrderItemForCheck(WPCSConfig.MachineNr);
             if (msg.Result)
             {
                 orderItem = msg.Object;
@@ -164,6 +164,7 @@ namespace PmsNCR
             }
             return wireCan && area1Can && area2Can;
         }
+       
         private void StartProduceBtn_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -172,7 +173,7 @@ namespace PmsNCR
                 Msg<string> msg = s.GetOrderItemForProduce(orderItem.Id);
                 if (msg.Result)
                 {
-                    if (OrderItem.WirteToFile(orderItem.FileName, msg.Object))
+                    if (OrderItemFile.WirteToFile(orderItem.FileName, msg.Object))
                     {
                         OrderDDSConverter.ConvertJsonOrderToDDS(orderItem.FileName);
                     }

@@ -71,5 +71,10 @@ namespace PmsNCR
             }
         }
 
+        private void PrinterSettingBtn_Click(object sender, RoutedEventArgs e)
+        {
+            new PrinterSetting().ShowDialog();
+        }
+
     }
 }
