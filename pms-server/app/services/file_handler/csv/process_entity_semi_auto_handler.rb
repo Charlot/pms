@@ -24,7 +24,6 @@ module FileHandler
 
                 wire = Part.create({nr:"#{product.nr}_#{row['Wire Nr']}",type:PartType::PRODUCT_SEMIFINISHED}) if row['Wire Nr']
                 custom_fields_val = row['Template Fields'].split(',')
-
                 process_entity.custom_fields.each_with_index do |cf, index|
                   cv = nil
                   if CustomFieldFormatType.part?(cf.field_format)
