@@ -22,6 +22,10 @@ namespace PmsNCRWcf.Converter
                 // Article            
                 GenDDSFile(obj, "Article.dds", "article");
 
+                //Wire
+
+                GenDDSFile(obj, "Wire.dds", "wire");
+
                 // Terminal
                 GenDDSFile(obj, "Terminal.dds", "terminal1", "terminal2");
 
