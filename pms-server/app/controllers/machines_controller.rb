@@ -21,6 +21,11 @@ class MachinesController < ApplicationController
   def edit
   end
 
+  # GET/POST /machines/import
+  def import
+    
+  end
+
   # POST /machines
   # POST /machines.json
   def create

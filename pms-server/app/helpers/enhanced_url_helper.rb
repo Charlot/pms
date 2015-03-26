@@ -13,11 +13,13 @@ module EnhancedUrlHelper
   end
 
   def current_model
+    puts "================="
+    puts request.get?
     unless request
       raise "You cannot use helpers that need to determine the current"        "page unlsee your view context provides a Request object"        "in a #request method"
     end
 
-    return false unless request.get? || request.header?
+    return false unless request.get?
 
     params[:controller].classify
   end
@@ -27,7 +29,7 @@ module EnhancedUrlHelper
       raise "You cannot use helpers that need to determine the current"        "page unlsee your view context provides a Request object"        "in a #request method"
     end
 
-    return false unless request.get? || request.header?
+    return false unless request.get?
 
     params[:action]
   end

@@ -31,6 +31,10 @@ Rails.application.routes.draw do
   resources :machines do
     resource :machine_scope
     resources :machine_combinations
+
+    collection do
+      match :import, to: :import,via:[:get,:post]
+    end
   end
 
   resources :resource_groups
