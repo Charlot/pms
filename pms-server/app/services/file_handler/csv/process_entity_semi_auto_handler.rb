@@ -11,6 +11,7 @@ module FileHandler
           validate_msg = validate_import(file)
           if validate_msg.result
             ProcessEntity.transaction do
+
               CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
                 process_template = ProcessTemplate.find_by_code(row['Template Code'])
                 product = Part.find_by_nr(row['Product Nr'])
@@ -21,17 +22,19 @@ module FileHandler
                 process_entity.process_template = process_template
                 process_entity.save
 
-                part = Part.create({nr:"#{product.nr}_#{row['Wire Nr']}",type:PartType::PRODUCT_SEMIFINISHED})
-
-                wire = Part.find_by_nr("#{product.nr}_#{row['Wire Nr']}")
+                wire = Part.create({nr:"#{product.nr}_#{row['Wire Nr']}",type:PartType::PRODUCT_SEMIFINISHED}) if row['Wire Nr']
                 custom_fields_val = row['Template Fields'].split(',')
-
                 process_entity.custom_fields.each_with_index do |cf, index|
                   cv = nil
                   if CustomFieldFormatType.part?(cf.field_format)
-                    if cf.name == "default_wire_nr"
-                      cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index]}"))
+                    if cf.name == "default_wire_nr" && row['Wire Nr']
+                      cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{row['Wire Nr']}"))
                     else
+
+                      if custom_fields_val[index].blank?
+                        next
+                      end
+
                       if  Part.find_by_nr(custom_fields_val[index])
                         cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
                       else
@@ -113,11 +116,13 @@ module FileHandler
         custom_fields_val = row['Template Fields'].split(',').collect{|cfv|cfv.strip}
         template.custom_fields.each_with_index do |cf, index|
           if CustomFieldFormatType.part?(cf.field_format)
+            if cf.name == "default_wire_nr" || custom_fields_val[index].blank?
+              next
+            end
+
             if Part.find_by_nr(custom_fields_val[index])
               next
             elsif  Part.find_by_nr("#{product.nr}_#{custom_fields_val[index]}")
-              next
-            elsif cf.name == "default_wire_nr"
               next
             else
               msg.contents << "Template Fildes: #{custom_fields_val[index]} 未找到"
@@ -126,7 +131,7 @@ module FileHandler
         end
 
         #验证生成的线号
-        wire = Part.find_by_nr("#{product.nr}_#{row['Wire Nr']}")
+        wire = Part.find_by_nr("#{product.nr}_#{row['Wire Nr']}") if product && row['Wire Nr']
         if wire
           msg.contents << "Wire Nr: #{row['Wire Nr']} 已经存在"
         end

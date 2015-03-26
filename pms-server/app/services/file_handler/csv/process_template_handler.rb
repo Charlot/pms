@@ -49,6 +49,9 @@ module FileHandler
         msg=Message.new(result: true)
         CSV.open(tmp_file, 'wb', write_headers: true,
                  headers: INVALID_CSV_HEADERS, col_sep: file.col_sep, encoding: file.encoding) do |csv|
+          puts "================"
+          puts file.to_json
+
           CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
             mmsg = validate_row(row)
             if mmsg.result

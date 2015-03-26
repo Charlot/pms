@@ -1,0 +1,192 @@
+<%= form_for(@kanban, html: {onkeypress: "return event.keyCode != 13;"}) do |f| %>
+    <% if @kanban.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@kanban.errors.count, "error") %> prohibited this kanban from being saved:</h2>
+
+          <ul>
+            <% @kanban.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+    <div class="row">
+      <div class="panel panel-default">
+        <div class="panel-heading" id="kanban" kanban_id="<%= @kanban.id %>">
+          基础信息
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <%= f.label :product_id, "#{KanbanDesc::PRODUCT_NR}:" %>
+                <input type="text" id="search_ProductNR" class="form-control" value="<%= @kanban.product_nr %>"/>
+                <%= f.text_field :product_id, class: "form-control hidden", id: "search_ProductNR_Res" %>
+              </div>
+
+              <!--验证零件是否存在-->
+              <div class="form-group">
+                <%= f.label :part_id, "#{KanbanDesc::WIRE_NR}:" %>
+                <input type="text" id="search_Part" class="form-control" value="<%= @kanban.wire_nr %>"/>
+                <%= f.text_field :part_id, class: "hidden", id: "search_Part_Res" %>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :copies, "#{KanbanDesc::COPIES}:" %>
+                <%= f.number_field :copies, {min: 0, class: "form-control"} %>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :quantity, "#{KanbanDesc::QUANTITY}:" %>
+                <%= f.number_field :quantity, {min: 0, class: "form-control"} %>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :safety_stock, "#{KanbanDesc::SAFETY_STOCK}:" %>
+                <%= f.number_field :safety_stock, {min: 0, class: "form-control"} %>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :remark, "#{KanbanDesc::REMARK}:" %>
+                <%= f.text_field :remark, class: "form-control" %>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <!--验证取料送料库位是否存在-->
+              <div class="form-group">
+                <%= f.label :source_warehouse, "#{KanbanDesc::SOURCE_WAREHOUSE}:" %>
+                <%= f.text_field :source_warehouse, class: "form-control" %>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :source_storage, "#{KanbanDesc::SOURCE_STORAGE}:" %>
+                <%= f.text_field :source_storage, class: "form-control" %>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :des_warehouse, "#{KanbanDesc::DES_WAREHOUSE}:" %>
+                <%= f.text_field :des_warehouse, class: "form-control" %>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :des_storage, "#{KanbanDesc::DES_STORAGE}:" %>
+                <%= f.text_field :des_storage, class: "form-control" %>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :ktype, "#{KanbanDesc::TYPE}" %>
+                <%= f.select(:ktype, kanban_type_options, {include_blank: false}, {class: "form-control", id: "select_KanbanType"}) %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          关联Routing,此Routing是KANBAN生产的线号的Routing
+        </div>
+        <div class="panel-body">
+          <div class="container-fluid" id="addKanbanRoutingTemplate">
+            <div class="row">
+              <div class="col-md-5">
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1">?</span>
+                  <input type="text" class="form-control" id="search_Route" placeholder="Search for Routing...">
+                </div>
+              </div>
+            </div><!--
+            <div class="row" id="routes_List">
+              <% @kanban.process_entities.each do |pe| %>
+                  <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
+              <% end if @kanban.part %>
+            </div>-->
+            <ul id="kpe_List" class="">
+              <%= f.fields_for :kanban_process_entities do |kpe| %>
+              <li>
+              </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <%= f.submit :class => 'btn btn-info' %>
+    </div>
+<% end %>
+
+<% content_for :javascript_includes do %>
+    <%= javascript_include_tag "search" %>
+    <%= javascript_include_tag "fix" %>
+    <%= javascript_include_tag "kanban" %>
+<% end %>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //线号和总称号
+        $('#search_Part,#search_ProductNR').on('keypress blur', function (event) {
+            var wire = $("#search_Part");
+            var product = $("#search_ProductNR");
+            if ((event.keyCode == undefined || event.keyCode == 13)) {
+                if (product.val().length > 0 && $(this).attr("id") == "search_ProductNR") {
+                    //Search Product
+                    pms.search("parts", {attr: "nr", val: product.val()}, function (data) {
+                        if (data.result) {
+                            $("#search_ProductNR_Res").val(data.content.id);
+                        }
+                        else {
+                            swal("成品未找到", "请确认零件中是否存在成品的零件号", "error");
+                        }
+                    })
+                }
+
+                if (wire.val().length > 0 && $(this).attr("id") == "search_Part") {
+                    //Search Part
+                    if (product.val().length == 0) {
+                        swal("请先输入成品号！");
+                        return;
+                    }
+                    //
+                    pms.search("parts", {attr: "nr", val: product.val() + "_" + wire.val()}, function (data) {
+                        if (data.result) {
+                            //找到了
+                            $("#search_Part_Res").val(data.content.id);
+                        }
+                        else {
+                            //未找到，要不要创建
+                            swal({title:"未找到线号",type:"warning"});
+                        }
+                    })
+                }
+            }
+        });
+
+        //搜索Routing
+        $("#search_Route").on("keypress", function (event) {
+            var tar = $(this);
+            var kanban_id = $("#kanban").attr("kanban_id");
+            if (tar.val().length > 0 && (event.keyCode == undefined || event.keyCode == 13)) {
+                pms.search("process_entities", {attr: "nr", val: tar.val()}, function (data) {
+                    if (data.result) {
+                        //TODO add kanban routing
+
+                    } else {
+
+                    }
+                });
+            }
+        });
+
+        $(".remove-routing").on("click", function () {
+            var pe_nr = $(this).attr("pe_nr");
+            var id = $(this).attr("id");
+            var kanban_id = $("#kanban").attr("kanban_id");
+            var target = $(this);
+            //TODO 删除KANBAN
+        });
+    });
+</script>
