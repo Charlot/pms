@@ -19,3 +19,6 @@ $API_AUTH_USER={user: auth['user'], passwd: auth['password']}
 
 lanka = config['printer']['lanka']
 $ROUTE_PART_COUNT= lanka['route_part_count']
+
+kanban_scan = config['kanban']['scan']
+$SCAN_BY_KANBAN = kanban_scan['scan_by_kanban']

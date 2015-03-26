@@ -6,6 +6,7 @@ class ProcessTemplate < ActiveRecord::Base
   validates :code, presence: {message: 'code cannot be blank'}, uniqueness: {message: 'code should be uniq'}
   validates :template, presence: {message: 'template cannot be blank'}, if: Proc.new { |p| ProcessType.semi_auto?(p.type) }
   has_many :custom_fields, lambda { order("#{CustomField.table_name}.position") }, as: :custom_fieldable
+  has_many :process_entities, dependent: :destroy
 
   before_create :parse_template_into_cf, if: Proc.new { |p| ProcessType.semi_auto?(p.type) }
   after_create :parse_cf_into_template, if: Proc.new { |p| ProcessType.semi_auto?(p.type) }

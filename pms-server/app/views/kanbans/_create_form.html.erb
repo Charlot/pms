@@ -104,8 +104,9 @@
               <% end if @kanban.part %>
             </div>-->
             <ul id="kpe_List" class="">
-              <%= f.fields_for :kanban_process_entities do |kpe| %>
-              <li>
+              <%= f.fields_for :kanban_process_entities do |kpe_form| %>
+              <li id="a">
+                <%= kpe_form.text_field :process_entity_id %>
               </li>
               <% end %>
             </ul>
