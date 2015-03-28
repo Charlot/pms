@@ -1,0 +1,68 @@
+<% content_for :javascript_includes do %>
+    <%= javascript_include_tag "search" %>
+    <%= javascript_include_tag "fix" %>
+    <%= javascript_include_tag "kanban" %>
+<% end %>
+
+<div class="row">
+  <div class="container-fluid" id="addKanbanRoutingTemplate">
+    <div class="row">
+      <div class="input-group">
+        <div class="col-md-4">
+          <input type="text" class="form-control" id="search_Route_Product" placeholder="总成号...">
+        </div>
+        <div class="col-md-4">
+          <input type="text" class="form-control" id="search_Route_Template" placeholder="步骤号...">
+        </div>
+        <div class="col-md-4">
+          <span class="input-group-btn">
+            <button class="btn btn-success" type="button" id="search_Route">Search</button>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="row" id="routes_List">
+      <% @kanban.process_entities.each do |pe| %>
+          <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
+      <% end if @kanban.part %>
+    </div>
+    <ul id="kpe_List" class="hidden">
+      <% @kanban.kanban_process_entities.each do |kpe| %>
+          <li id="<%= kpe.process_entity_id %>"><%= kpe.process_entity_id %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+<div class="row" id="routes_List">
+  <% @kanban.process_entities.each do |pe| %>
+      <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
+  <% end if @kanban.part %>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //搜索Routing
+        $("#search_Route").on("keypress", function (event) {
+            var tar = $(this);
+            var kanban_id = $("#kanban").attr("kanban_id");
+            if (tar.val().length > 0 && (event.keyCode == undefined || event.keyCode == 13)) {
+                pms.search("process_entities", {attr: "nr", val: tar.val()}, function (data) {
+                    if (data.result) {
+                        //TODO add kanban routing
+
+                    } else {
+
+                    }
+                });
+            }
+        });
+
+        $(".remove-routing").on("click", function () {
+            var pe_nr = $(this).attr("pe_nr");
+            var id = $(this).attr("id");
+            var kanban_id = $("#kanban").attr("kanban_id");
+            var target = $(this);
+            //TODO 删除KANBAN
+        });
+    });
+</script>

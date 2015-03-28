@@ -1,7 +1,7 @@
 class KanbansController < ApplicationController
   before_action :set_kanban, only: [:show, :edit, :update, :destroy,
                                     :add_process_entities, :delete_process_entities,
-                                    :finish_production, :history, :release, :lock, :discard, :manage]
+                                    :finish_production, :history, :release, :lock, :discard, :manage,:manage_routing]
 
   # GET /kanbans
   # GET /kanbans.json
@@ -40,6 +40,11 @@ class KanbansController < ApplicationController
         format.json { render json: @kanban.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  #GET /kanbans/1/manage_routing
+  def manage_routing
+
   end
 
   #POST /kanbans/1/add_process_entities
@@ -274,7 +279,7 @@ class KanbansController < ApplicationController
                                    :safety_stock, :source_warehouse,
                                    :source_storage, :des_warehouse,
                                    :des_storage, :print_time, :part_id,
-                                   :version, :ktype, :copies
+                                   :version, :ktype, :copies,:product_id
     )
   end
 end

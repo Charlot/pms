@@ -85,6 +85,7 @@ Rails.application.routes.draw do
       get :add_routing_template
       delete :delete_process_entities
       post :add_process_entities
+      get :manage_routing
     end
 
     collection do
