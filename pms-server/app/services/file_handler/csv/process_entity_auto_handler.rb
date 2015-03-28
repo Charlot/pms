@@ -97,7 +97,7 @@ module FileHandler
         end
 
         #验证步骤号
-        if ProcessEntity.where({nr: row['Nr'],product_id:product.id})#find_by_nr(row['Nr']).count > 0
+        if ProcessEntity.where({nr: row['Nr'],product_id:product.id}).count > 0#find_by_nr(row['Nr']).count > 0
           msg.contents<<"Nr: #{row['Nr']}，已经存在"
         end
 
