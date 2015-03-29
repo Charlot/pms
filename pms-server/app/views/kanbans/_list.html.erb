@@ -13,9 +13,7 @@
     <th><%= KanbanDesc::CUSTOMER_NR %></th>
     <th><%= KanbanDesc::VERSION %></th>
     <th><%= KanbanDesc::TASK_TIME %></th>
-    <th>二维码信息</th>
     <th><%= KanbanDesc::PRINT_DATE %></th>
-    <th><%= KanbanDesc::COPIES %></th>
     <th><%= KanbanDesc::STATE %></th>
     <th><%= KanbanDesc::QUANTITY %></th>
     <th><%= KanbanDesc::SOURCE_POSITION %></th>
@@ -36,9 +34,7 @@
         <td><%= kanban.product_custom_nr %></td>
         <td><%= kanban.version_now %></td>
         <td><%= kanban.task_time %></td>
-        <td><%= kanban.printed_2DCode %></td>
         <td><%= kanban.print_time %></td>
-        <td><%= kanban.copies %></td>
         <td>
           <span class="label <%= kanban_states_class(kanban.state) %>"><%= KanbanState.display(kanban.state) %></span>
         </td>

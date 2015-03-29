@@ -42,6 +42,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TECIT.TFORMer, Version=6.0.3.0, Culture=neutral, PublicKeyToken=1b5f4306b234b83d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ThirdPart\TECIT.TFORMer.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -52,6 +56,10 @@
       <Project>{9B5F850A-5136-4095-8955-6C4F7747C48A}</Project>
       <Name>Brilliantech.Framwork</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Brilliantech.ReportGenConnector\Brilliantech.ReportGenConnector.csproj">
+      <Project>{DE39BCC6-CCDA-459D-B0F1-301BD1C009B3}</Project>
+      <Name>Brilliantech.ReportGenConnector</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="api.ini">
@@ -61,10 +69,14 @@
     <None Include="help.sdc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="副本 help.SDC">
+    <None Include="Template\t1.tff">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Template\t2.tff">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

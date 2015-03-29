@@ -12,7 +12,7 @@ module Pms
           self.customizable_options = options
           has_many :custom_values, lambda { includes(:custom_field).order("#{CustomField.table_name}.position") },
                    :as => :customized,
-                   :dependent => :delete_all,
+                   :dependent => :destroy,
                    :validate => false
           send :include, Pms::Acts::Customizable::InstanceMethods
           # validate :validate_custom_field_values

@@ -89,16 +89,16 @@ module FileHandler
 
       def self.validate_row(row)
         msg = Message.new({result:true,contents:[]})
-        #验证步骤号
-        if ProcessEntity.find_by_nr(row['Nr'])
-          msg.contents<<"Nr: #{row['Nr']}，已经存在"
-        end
-
         #验证零件
         product = Part.where({nr:row['Product Nr'],type:PartType::PRODUCT}).first
         wire = Part.where({nr:"#{row['Product Nr']}_#{row['Wire NO']}"},type:PartType::PRODUCT_SEMIFINISHED)
         if product.nil?
           msg.contents << "Product Nr: #{row['Product Nr']}不存在"
+        end
+
+        #验证步骤号
+        if ProcessEntity.where({nr: row['Nr'],product_id:product.id}).count > 0#find_by_nr(row['Nr']).count > 0
+          msg.contents<<"Nr: #{row['Nr']}，已经存在"
         end
 
         if wire.count > 0

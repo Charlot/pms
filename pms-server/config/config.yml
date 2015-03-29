@@ -6,3 +6,7 @@ api:
  auth:
   user: 'UPDATE'
   passwd: 'S12@#4DSA'
+
+kanban:
+ scan:
+  scan_by_kanban: 0

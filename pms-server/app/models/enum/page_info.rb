@@ -3,7 +3,7 @@ module Enum
     @@models = {KANBAN:"KANBAN",MACHINE:"机器",MEASURE_UNIT:"单位",PRODUCTION_ORDER:"生产订单",
                 PRODUCTION_ORDER_ITEM:"生产任务",PART:"零件",PART_BOM:"零件Bom",
                 PROCESS_TEMPLATE:"Routing模板",PROCESS_ENTITY:"Routing",RESOURCE_GROUP_MACHINE:"机器组",
-                RESOURCE_GROUP_TOOL:"模具租",TOOL:"模具",SETTING:"设置"
+                RESOURCE_GROUP_TOOL:"模具组",TOOL:"模具",SETTING:"设置"
     }
 
     @@actions = ["new","index","show","edit","import","panel"]

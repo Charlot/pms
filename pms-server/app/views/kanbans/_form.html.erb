@@ -83,35 +83,7 @@
       </div>
 
     </div>
-    <div class="row">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          关联Routing,此Routing是KANBAN生产的线号的Routing
-        </div>
-        <div class="panel-body">
-          <div class="container-fluid" id="addKanbanRoutingTemplate">
-            <div class="row">
-              <div class="col-md-5">
-                <div class="input-group">
-                  <span class="input-group-addon" id="basic-addon1">?</span>
-                  <input type="text" class="form-control" id="search_Route" placeholder="Search for Routing...">
-                </div>
-              </div>
-            </div>
-            <div class="row" id="routes_List">
-              <% @kanban.process_entities.each do |pe| %>
-                  <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
-              <% end if @kanban.part %>
-            </div>
-            <ul id="kpe_List" class="hidden">
-              <% @kanban.kanban_process_entities.each do |kpe| %>
-                  <li id="<%= kpe.process_entity_id %>"><%= kpe.process_entity_id %></li>
-              <% end %>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
+
 
     <div class="actions">
       <%= f.submit :class => 'btn btn-info' %>
