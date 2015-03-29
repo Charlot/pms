@@ -219,6 +219,22 @@ class KanbansController < ApplicationController
     end
   end
 
+  def scan_to_finish
+    #parse code
+    parsed_code = Kanban.parse_printed_2DCode(params[:code])
+    render json: {result: false, content: "Input Error"} and return unless parsed_code
+
+    @kanban = Kanban.find_by_id(parsed_code[:id])
+
+    #check Kanban State
+    render json: {result: false, content: "Kanban is not released"} and return unless @kanban.state == KanbanState::RELEASED
+
+    #check version of Kanban
+    render json: {result: false, content: "Kanban not fount for#{parsed_code.to_json}" } and return unless @kanban
+    render json: {result: false, content: "Kanban version error.#{parsed_code[:version_nr]}"} and return unless (version = @kanban.versions.where(id: parsed_code[:version_nr]))
+
+  end
+
   # POST /kanbans/scan.json
   def scan
     #parse code
@@ -244,11 +260,9 @@ class KanbansController < ApplicationController
     #不做扫描之后验证是否已经扫入，由工作人员控制
     #注释了这段代码，暂时不实现标注唯一的一张纸质看板卡
     if ProductionOrderItem.where(kanban_id: @kanban.id, state: ProductionOrderState::INIT).count > 0
-      #TODO ProductionOrder 应该与一张KANBAN卡的纸相关联，而不是KANBAN卡
       render json: {result: false, content: "Kanban Order has been released"} and return
     end
 
-    #TODO 加入到待优化队列
     unless (@order = ProductionOrderItem.create(kanban_id: @kanban.id,code:params[:code]))
       render json: {result: false, content: "Production Order Item Created Failed"} and return
     end
