@@ -88,4 +88,4 @@ pms.kanban.search = function(params,callback){
             if(callback){callback(data)}
         }
     })
-}
+};

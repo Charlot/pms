@@ -27,11 +27,16 @@
         <div id="search-Result"></div>
       </div>
     </div>
-    
-    <div class="row" id="routes_List">
-      <% @kanban.process_entities.each do |pe| %>
-          <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
-      <% end if @kanban.part %>
+
+    <div class="row">
+      <ul  id="routes_List">
+        <% @kanban.process_entities.each do |pe| %>
+            <li>
+              <input id="<%= pe.id %>" type="button" value="delete"/>
+              <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
+        <% end if @kanban.part %>
+        </li>
+      </ul>
     </div>
     <ul id="kpe_List" class="hidden">
       <% @kanban.kanban_process_entities.each do |kpe| %>
@@ -78,7 +83,6 @@
                                 //
                                 $("#search-Result").empty();
                                 $("#search-Result").append(data);
-                                //add routing to routing-list
                             },{"dataType":"html"});
                         }
                         else{
