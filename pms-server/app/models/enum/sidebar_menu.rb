@@ -8,7 +8,8 @@ class SidebarMenu
       MEASURE_UNIT: {name:PageInfo.measureunit,actions:["new", "index"]},
       PART_BOM: {name:PageInfo.partbom,actions:["new", "index","import"]},
       PROCESS_TEMPLATE:{name:PageInfo.processtemplate,actions: ["new", "index", "import"]},
-      PROCESS_ENTITY: {name:PageInfo.processentity,actions:["new", "index"]}
+      PROCESS_ENTITY: {name:PageInfo.processentity,actions:["new", "index"]},
+      MACHINE: {name:PageInfo.machine,actions:["new","index","import"]}
   }
 
   class<<self
