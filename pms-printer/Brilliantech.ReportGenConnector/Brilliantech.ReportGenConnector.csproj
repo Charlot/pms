@@ -2,21 +2,19 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{23AB4A94-D686-4316-BACA-40656DF4C718}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{DE39BCC6-CCDA-459D-B0F1-301BD1C009B3}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PmsTestConsole</RootNamespace>
-    <AssemblyName>PmsTestConsole</AssemblyName>
+    <RootNamespace>Brilliantech.ReportGenConnector</RootNamespace>
+    <AssemblyName>Brilliantech.ReportGenConnector</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,9 +22,9 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -37,46 +35,29 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="TECIT.TFORMer, Version=6.0.3.0, Culture=neutral, PublicKeyToken=1b5f4306b234b83d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ThirdPart\TECIT.TFORMer.dll</HintPath>
+      <HintPath>D:\DLL\TECIT.TFORMer.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="IReportGen.cs" />
+    <Compile Include="PrintTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecordData.cs" />
+    <Compile Include="RecordSet.cs" />
+    <Compile Include="ReportGenConfig.cs" />
+    <Compile Include="ReportGenLicenseException.cs" />
+    <Compile Include="ReportPrintException.cs" />
+    <Compile Include="ReportTypeException.cs" />
+    <Compile Include="TecITGener.cs" />
+    <Compile Include="TECITLicense.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Brilliantech.Framwork\Brilliantech.Framwork.csproj">
-      <Project>{9B5F850A-5136-4095-8955-6C4F7747C48A}</Project>
-      <Name>Brilliantech.Framwork</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Brilliantech.ReportGenConnector\Brilliantech.ReportGenConnector.csproj">
-      <Project>{DE39BCC6-CCDA-459D-B0F1-301BD1C009B3}</Project>
-      <Name>Brilliantech.ReportGenConnector</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="api.ini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="app.config" />
-    <None Include="help.sdc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Template\t1.tff">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Template\t2.tff">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
