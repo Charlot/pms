@@ -4,7 +4,7 @@
     <%= javascript_include_tag "kanban" %>
 <% end %>
 
-<div class="row">
+<div class="row" id="kanban" kanban_id="<%= @kanban.id %>">
   <div class="container-fluid" id="addKanbanRoutingTemplate">
     <div class="row">
       <div class="input-group">
@@ -21,6 +21,13 @@
         </div>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-md-8">
+        <div id="search-Result"></div>
+      </div>
+    </div>
+    
     <div class="row" id="routes_List">
       <% @kanban.process_entities.each do |pe| %>
           <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
@@ -42,19 +49,49 @@
 <script type="text/javascript">
     $(document).ready(function () {
         //搜索Routing
-        $("#search_Route").on("keypress", function (event) {
-            var tar = $(this);
+        $("#search_Route").on("click", function (event) {
+            var target = $(this);
             var kanban_id = $("#kanban").attr("kanban_id");
-            if (tar.val().length > 0 && (event.keyCode == undefined || event.keyCode == 13)) {
-                pms.search("process_entities", {attr: "nr", val: tar.val()}, function (data) {
-                    if (data.result) {
-                        //TODO add kanban routing
+            var product = $("#search_Route_Product").val();
+            var template = $("#search_Route_Template").val();
 
-                    } else {
-
-                    }
-                });
+            if (product.length <= 0 || template.length <= 0) {
+                swal("请输入总成号或步骤号！");
+                return;
             }
+
+            var product_id = null;
+            var template_id = null;
+
+            // Search Part
+            pms.search("parts", {"nr": product}, function (data) {
+                if (data.result && data.content.length == 1) {
+                    product_id = data.content[0].id;
+
+                    //Search Template
+                    pms.search("process_templates",{"code":template},function(data){
+                        if( data.result && data.content.length == 1){
+                            template_id = data.content[0].id;
+
+                            //Search Route
+                            pms.search("process_entities",{"product_id":product_id,"process_template_id":template_id},function(data){
+                                //
+                                $("#search-Result").empty();
+                                $("#search-Result").append(data);
+                                //add routing to routing-list
+                            },{"dataType":"html"});
+                        }
+                        else{
+                            swal("步骤号未找到！");
+                            return;
+                        }
+                    })
+                }
+                else {
+                    swal("总成号未找到！");
+                    return
+                }
+            });
         });
 
         $(".remove-routing").on("click", function () {

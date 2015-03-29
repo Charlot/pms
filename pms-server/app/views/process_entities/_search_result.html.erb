@@ -1,0 +1,5 @@
+<ul class="list-group">
+  <% @process_entities.each do |pe|%>
+  <li class="list-group-item"><%= render partial: 'simple', locals:{process_entity:pe}%></li>
+  <% end %>
+</ul>

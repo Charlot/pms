@@ -23,6 +23,7 @@ class ProcessEntitiesController < ApplicationController
   end
 
   # GET /process_entities/search
+=begin
   def search
     @pe = ProcessEntity.send("find_by_"+params[:attr],params[:val])
     respond_to do |format|
@@ -30,6 +31,7 @@ class ProcessEntitiesController < ApplicationController
       format.json { render json: {result: true, content: @pe}}
     end
   end
+=end
 
   # GET /process_entities/1/simple
   def simple

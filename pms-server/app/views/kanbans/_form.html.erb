@@ -105,9 +105,9 @@
             if ((event.keyCode == undefined || event.keyCode == 13)) {
                 if (product.val().length > 0 && $(this).attr("id") == "search_ProductNR") {
                     //Search Product
-                    pms.search("parts", {attr: "nr", val: product.val()}, function (data) {
-                        if (data.result) {
-                            $("#search_ProductNR_Res").val(data.content.id);
+                    pms.search("parts", {"nr": product.val()}, function (data) {
+                        if (data.result && data.content.length == 1) {
+                            $("#search_ProductNR_Res").val(data.content[0].id);
                         }
                         else {
                             swal("成品未找到", "请确认零件中是否存在成品的零件号", "error");
@@ -122,7 +122,7 @@
                         return;
                     }
                     //
-                    pms.search("parts", {attr: "nr", val: product.val() + "_" + wire.val()}, function (data) {
+                    pms.search("parts", {"nr": product.val() + "_" + wire.val()}, function (data) {
                         if (data.result) {
                             //找到了
                             $("#search_Part_Res").val(data.content.id);
