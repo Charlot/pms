@@ -25,14 +25,15 @@
     <div class="row">
       <div class="col-md-8">
         <div id="search-Result"></div>
+        <div class="btn btn-info" id="add_Route"><span class="glyphicon glyphicon-ok"></span>添加</div>
       </div>
     </div>
 
     <div class="row">
-      <ul  id="routes_List">
+      <ul  id="routes_List" class="list-group">
         <% @kanban.process_entities.each do |pe| %>
-            <li>
-              <input id="<%= pe.id %>" type="button" value="delete"/>
+            <li process_entity_id="<%= pe.id%>" class="list-group-item">
+              <input id="<%= pe.id %>" type="button" value="delete" class="remove-routing"/>
               <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
         <% end if @kanban.part %>
         </li>
@@ -44,11 +45,6 @@
       <% end %>
     </ul>
   </div>
-</div>
-<div class="row" id="routes_List">
-  <% @kanban.process_entities.each do |pe| %>
-      <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
-  <% end if @kanban.part %>
 </div>
 
 <script type="text/javascript">
@@ -98,12 +94,38 @@
             });
         });
 
+        $("#add_Route").on("click",function(){
+            var routes = $(".select-routing").attr("process_entity_id");
+            if(routes.length <= 0){
+                swal("请选择Routing!");
+                return;
+            }
+
+            var routes_existed = $("#route_List").children().attr("process_entity_id");
+
+            if(undefined != routes_existed){
+                routes.forEach(function(r){
+                    if($.inArray(r) != -1){
+                        swal("Routing已经存在!");
+                        return;
+                    }
+                })
+            }
+
+            pms.kanban.addRouting($("#kanban").attr("kanban_id"),routes,function(data){
+                if(data.result){
+                    //TODO 添加成功
+                }else{
+                    swal(data.content);
+                }
+            })
+        });
+
         $(".remove-routing").on("click", function () {
-            var pe_nr = $(this).attr("pe_nr");
             var id = $(this).attr("id");
             var kanban_id = $("#kanban").attr("kanban_id");
             var target = $(this);
-            //TODO 删除KANBAN
+            pms.kanban.delRouting();
         });
     });
 </script>

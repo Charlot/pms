@@ -1,5 +1,5 @@
 <ul class="list-group">
   <% @process_entities.each do |pe|%>
-  <li class="list-group-item list-group-item-warning"><input class="select-routing" type="checkbox"/><%= render partial: 'simple', locals:{process_entity:pe}%></li>
+      <li class="list-group-item list-group-item-warning"><input class="select-routing" process_entity_id="<%= pe.id %>" type="checkbox"/><%= render partial: 'simple', locals:{process_entity:pe}%></li>
   <% end %>
 </ul>
