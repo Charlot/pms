@@ -1,8 +1,8 @@
 require 'csv'
 module FileHandler
   module Csv
-    class MachineHandler<Base
-      IMPORT_HEADERS=['Nr', 'Name', 'Description', 'Resource Group', 'IP']
+    class MachineCombinationHandler<Base
+      IMPORT_HEADERS=['Machine Nr', 'W1', 'T1', 'T2', 'S1', 'S2']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
       def self.import(file)
@@ -10,23 +10,22 @@ module FileHandler
         begin
           validate_msg = validate_import(file)
           if validate_msg.result
-            Machine.transaction do
+            MachineCombination.transaction do
               CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
-                resource_group = ResourceGroup.find_by_nr(row['Resource Group'])
-                machine = Machine.find_by_name(row['Name'])
-                if machine
-                  machine.update({name: row['Name'], description: row['Description'], resource_group_id: resource_group.id, ip: row['IP']})
-                else
-                  machine = Machine.new({nr: row['Nr'], name: row['Name'], description: row['Description'], resource_group_id: resource_group.id, ip: row['IP']})
-                  machine.save
-                  #create default scope
-                  machine_scope = MachineScope.new({w1: 1, t1: 1, t2: 1, s1: 1, s2: 1, machine_id: machine.id})
-                  machine_scope.save
+              machine = Machine.find_by_nr(row['Machine Nr'])
+              machine_combination = MachineCombination.new
+              ['W1', 'T1', 'T2', 'S1', 'S2'].each { |header|
+                if row[header].present?
+                  part = Part.find_by_nr(row[header])
+                  machine_combination.send("#{header.downcase}=", part.nr)
                 end
+              }
+              machine_combination.machine = machine
+              machine_combination.save
               end
             end
             msg.result = true
-            msg.content = 'Machine 上传成功'
+            msg.content = 'Machine Combination 上传成功'
           else
             msg.result = false
             msg.content = validate_msg.content
@@ -61,15 +60,21 @@ module FileHandler
 
       def self.validate_row(row)
         msg = Message.new(contents: [])
-        unless ResourceGroup.find_by_nr(row['Resource Group'])
-          msg.contents << "Resource Group:#{row['Resource Group']}不存在"
+
+        machine = Machine.find_by_nr(row['Machine Nr'])
+        unless machine.present?
+          msg.contents << "Machine Nr: #{row['Machine Nr']} 不存在！"
         end
 
-        unless Machine.find_by_id(row['Machine Nr']).nil?
-          msg.contents << "IP: #{row['IP']}已经存在"
-        end
+        ['W1', 'T1', 'T2', 'S1', 'S2'].each { |header|
+          if row[header].present?
+            unless Part.find_by_nr(row[header])
+              msg.contents << "#{header}: #{row[header]} 未找到！"
+            end
+          end
+        }
 
-        unless msg.result=(msg.contents.size==0)
+        unless msg.result = (msg.contents.size == 0)
           msg.content=msg.contents.join('/')
         end
         return msg

@@ -22,10 +22,10 @@ module FileHandler
                                  des_storage:row['Destination Storage']})
                 else
                   #新建
-                  part = Part.find_by_nr("#{row['Product Nr']}_#{row['Wire Nr']}")
+                  #part_id = (part = Part.find_by_nr("#{row['Product Nr']}_#{row['Wire Nr']}")).nil? ? nil : part.id
                   product = Part.find_by_nr(row['Product Nr'])
                   kanban = Kanban.new({quantity:row['Quantity'],safety_stock:row['Safety Stock'],copies:row['Copies'],remark:row['Remark'],
-                                       part_id:part.id,product_id:product.id,ktype:row['Type'],bundle:row['Bundle'],
+                                       product_id:product.id,ktype:row['Type'],bundle:row['Bundle'],
                                        source_warehouse:row['Source Warehouse'],source_storage:row['Source Storage'],des_warehouse:row['Destination Warehouse'],
                                        des_storage:row['Destination Storage']})
                   process_nrs = row['Process List'].split(',')
@@ -84,19 +84,21 @@ module FileHandler
           msg.contents << "Wire Nr: #{row['Wire Nr']},Product Nr: #{row['Product nr']} 不能修改"
         end
 
-        #验证工艺
-        process_nrs = row['Process List'].split(',').collect { |penr| penr.strip }
-        process_entities = ProcessEntity.where(nr:process_nrs)
-        unless process_entities.count == process_entities.count
-          msg.contents << "Process List: #{row['Process List']}，工艺不存在!"
-        end
-
         #验证总成号
-        unless  Part.where({nr:row['Product Nr'],type:PartType::PRODUCT}).count > 0
+        product = nil
+        unless  product = Part.where({nr:row['Product Nr'],type:PartType::PRODUCT}).first
           msg.contents << "Product Nr: #{row['Product Nr']} 不存在"
         end
 
-        if kanban.nil? && Part.where({nr:"#{row['Product Nr']}_#{row['Wire Nr']}"}).count <= 0
+        #验证工艺
+        process_nrs = row['Process List'].split(',').collect { |penr| penr.strip }
+        process_entities = ProcessEntity.where({nr:process_nrs,product_id:product.id})
+
+        unless process_entities.count == process_nrs.count
+          msg.contents << "Process List: #{process_nrs - process_entities.collect{|pe| pe.nr}}，工艺不存在!"
+        end
+
+        if kanban.nil? && row['Wire Nr'].present? &&Part.where({nr:"#{row['Product Nr']}_#{row['Wire Nr']}"}).count <= 0
           msg.contents << "Wire Nr:#{row['Wire Nr']} 不存在"
         end
 
@@ -111,7 +113,7 @@ module FileHandler
             msg.contents << "Process List: #{row['Process List']} 白卡只能添加一个Routing"
           end
 
-          if process_entities.first.type != ProcessType::AUTO
+          if process_entities.first.process_template.type != ProcessType::AUTO
             msg.contents << "Process List: #{row['Process List']} 白卡只能添加全自动Routing"
           end
         when KanbanType::BLUE

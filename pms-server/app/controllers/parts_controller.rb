@@ -5,7 +5,7 @@ class PartsController < ApplicationController
   # GET /parts
   # GET /parts.json
   def index
-    @parts = Part.all
+    @parts = Part.paginate(:page => params[:page])
     respond_to do |format|
       format.html
       format.csv { send_data @parts.to_csv }
@@ -73,6 +73,7 @@ class PartsController < ApplicationController
 
   # GET /parts/search
   # GET /parts/search.json
+=begin
   def search
     @part = Part.send("find_by_"+params[:attr],params[:val])
     respond_to do |format|
@@ -80,6 +81,7 @@ class PartsController < ApplicationController
       format.json { render json: {result: true, content: @part.as_json(include: :process_entities)}}
     end
   end
+=end
 
   # POST /parts/1/add_process_entitties
   def add_process_entities

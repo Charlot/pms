@@ -4,7 +4,7 @@
     <%= javascript_include_tag "kanban" %>
 <% end %>
 
-<div class="row">
+<div class="row" id="kanban" kanban_id="<%= @kanban.id %>">
   <div class="container-fluid" id="addKanbanRoutingTemplate">
     <div class="row">
       <div class="input-group">
@@ -21,10 +21,23 @@
         </div>
       </div>
     </div>
-    <div class="row" id="routes_List">
-      <% @kanban.process_entities.each do |pe| %>
-          <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
-      <% end if @kanban.part %>
+
+    <div class="row">
+      <div class="col-md-8">
+        <div id="search-Result"></div>
+        <div class="btn btn-info" id="add_Route"><span class="glyphicon glyphicon-ok"></span>添加</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <ul  id="routes_List" class="list-group">
+        <% @kanban.process_entities.each do |pe| %>
+            <li process_entity_id="<%= pe.id%>" class="list-group-item">
+              <input id="<%= pe.id %>" type="button" value="delete" class="remove-routing"/>
+              <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
+        <% end if @kanban.part %>
+        </li>
+      </ul>
     </div>
     <ul id="kpe_List" class="hidden">
       <% @kanban.kanban_process_entities.each do |kpe| %>
@@ -33,36 +46,86 @@
     </ul>
   </div>
 </div>
-<div class="row" id="routes_List">
-  <% @kanban.process_entities.each do |pe| %>
-      <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
-  <% end if @kanban.part %>
-</div>
 
 <script type="text/javascript">
     $(document).ready(function () {
         //搜索Routing
-        $("#search_Route").on("keypress", function (event) {
-            var tar = $(this);
+        $("#search_Route").on("click", function (event) {
+            var target = $(this);
             var kanban_id = $("#kanban").attr("kanban_id");
-            if (tar.val().length > 0 && (event.keyCode == undefined || event.keyCode == 13)) {
-                pms.search("process_entities", {attr: "nr", val: tar.val()}, function (data) {
-                    if (data.result) {
-                        //TODO add kanban routing
+            var product = $("#search_Route_Product").val();
+            var template = $("#search_Route_Template").val();
 
-                    } else {
-
-                    }
-                });
+            if (product.length <= 0 || template.length <= 0) {
+                swal("请输入总成号或步骤号！");
+                return;
             }
+
+            var product_id = null;
+            var template_id = null;
+
+            // Search Part
+            pms.search("parts", {"nr": product}, function (data) {
+                if (data.result && data.content.length == 1) {
+                    product_id = data.content[0].id;
+
+                    //Search Template
+                    pms.search("process_templates",{"code":template},function(data){
+                        if( data.result && data.content.length == 1){
+                            template_id = data.content[0].id;
+
+                            //Search Route
+                            pms.search("process_entities",{"product_id":product_id,"process_template_id":template_id},function(data){
+                                //
+                                $("#search-Result").empty();
+                                $("#search-Result").append(data);
+                            },{"dataType":"html"});
+                        }
+                        else{
+                            swal("步骤号未找到！");
+                            return;
+                        }
+                    })
+                }
+                else {
+                    swal("总成号未找到！");
+                    return
+                }
+            });
+        });
+
+        $("#add_Route").on("click",function(){
+            var routes = $(".select-routing").attr("process_entity_id");
+            if(routes.length <= 0){
+                swal("请选择Routing!");
+                return;
+            }
+
+            var routes_existed = $("#route_List").children().attr("process_entity_id");
+
+            if(undefined != routes_existed){
+                routes.forEach(function(r){
+                    if($.inArray(r) != -1){
+                        swal("Routing已经存在!");
+                        return;
+                    }
+                })
+            }
+
+            pms.kanban.addRouting($("#kanban").attr("kanban_id"),routes,function(data){
+                if(data.result){
+                    //TODO 添加成功
+                }else{
+                    swal(data.content);
+                }
+            })
         });
 
         $(".remove-routing").on("click", function () {
-            var pe_nr = $(this).attr("pe_nr");
             var id = $(this).attr("id");
             var kanban_id = $("#kanban").attr("kanban_id");
             var target = $(this);
-            //TODO 删除KANBAN
+            pms.kanban.delRouting();
         });
     });
 </script>

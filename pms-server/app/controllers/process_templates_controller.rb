@@ -5,7 +5,7 @@ class ProcessTemplatesController < ApplicationController
   # GET /process_templates
   # GET /process_templates.json
   def index
-    @process_templates = ProcessTemplate.all
+    @process_templates = ProcessTemplate.paginate(:page => params[:page])
   end
 
   # GET /process_templates/1
