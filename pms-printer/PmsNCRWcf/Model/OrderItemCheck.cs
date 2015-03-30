@@ -36,6 +36,10 @@ namespace PmsNCRWcf.Model
         [DataMember]
         public string Tool2Nr { get; set; }
         [DataMember]
+        public string Seal1Nr { get; set; }
+        [DataMember]
+        public string Seal2Nr { get; set; }
+        [DataMember]
         public string FileName { get; set; }
     }
 }
