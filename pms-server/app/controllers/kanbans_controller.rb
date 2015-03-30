@@ -6,7 +6,7 @@ class KanbansController < ApplicationController
   # GET /kanbans
   # GET /kanbans.json
   def index
-    @kanbans = Kanban.all
+    @kanbans = Kanban.paginate(:page => params[:page])
   end
 
   # GET /kanbans/1

@@ -8,7 +8,8 @@ class ProcessEntitiesController < ApplicationController
     @process_entities = ProcessEntity.paginate(:page => params[:page])
   end
 
-  # GET /process_entities/1
+  # GET /process_enti
+  # ties/1
   # GET /process_entities/1.json
   def show
   end
