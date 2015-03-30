@@ -4,7 +4,7 @@ class MeasureUnitsController < ApplicationController
   # GET /measure_units
   # GET /measure_units.json
   def index
-    @measure_units = MeasureUnit.all
+    @measure_units = MeasureUnit.paginate(:page => params[:page])
   end
 
   # GET /measure_units/1

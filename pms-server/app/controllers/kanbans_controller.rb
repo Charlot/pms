@@ -6,7 +6,7 @@ class KanbansController < ApplicationController
   # GET /kanbans
   # GET /kanbans.json
   def index
-    @kanbans = Kanban.all
+    @kanbans = Kanban.paginate(:page => params[:page])
   end
 
   # GET /kanbans/1
@@ -121,11 +121,11 @@ class KanbansController < ApplicationController
   # POST /kanbans/1/finish_production.json
   def finish_production
     msg = Message.new
-    end_product = {part_id: @kanban.part_id, quantity: @kanban.quantity}
-    raw_materials = []
-    @kanban.get_raw_materials.each { |raw_material|
-      raw_materials << {part_id: raw_material.part_id, quantity: raw_material.quantity * @kanban.quantity}
-    }
+    #end_product = {part_id: @kanban.part_id, quantity: @kanban.quantity}
+    #raw_materials = []
+    #@kanban.get_raw_materials.each { |raw_material|
+    #  raw_materials << {part_id: raw_material.part_id, quantity: raw_material.quantity * @kanban.quantity}
+    #}
     #TODO Move storage for both end products and raw materials
     render json: msg
   end
@@ -183,7 +183,7 @@ class KanbansController < ApplicationController
   # Search by part_nr and product_nr
   def search
     msg = Message.new
-    @kanbans = Kanban.search(params[:part_nr],params[:product_nr])
+    @kanbans = Kanban.search(params[:part_nr],params[:product_nr]).paginate(:page => params[:page])
     msg.result = true
     msg.content = @kanbans
 
@@ -219,6 +219,22 @@ class KanbansController < ApplicationController
     end
   end
 
+  def scan_to_finish
+    #parse code
+    parsed_code = Kanban.parse_printed_2DCode(params[:code])
+    render json: {result: false, content: "Input Error"} and return unless parsed_code
+
+    @kanban = Kanban.find_by_id(parsed_code[:id])
+
+    #check Kanban State
+    render json: {result: false, content: "Kanban is not released"} and return unless @kanban.state == KanbanState::RELEASED
+
+    #check version of Kanban
+    render json: {result: false, content: "Kanban not fount for#{parsed_code.to_json}" } and return unless @kanban
+    render json: {result: false, content: "Kanban version error.#{parsed_code[:version_nr]}"} and return unless (version = @kanban.versions.where(id: parsed_code[:version_nr]))
+
+  end
+
   # POST /kanbans/scan.json
   def scan
     #parse code
@@ -244,11 +260,9 @@ class KanbansController < ApplicationController
     #不做扫描之后验证是否已经扫入，由工作人员控制
     #注释了这段代码，暂时不实现标注唯一的一张纸质看板卡
     if ProductionOrderItem.where(kanban_id: @kanban.id, state: ProductionOrderState::INIT).count > 0
-      #TODO ProductionOrder 应该与一张KANBAN卡的纸相关联，而不是KANBAN卡
       render json: {result: false, content: "Kanban Order has been released"} and return
     end
 
-    #TODO 加入到待优化队列
     unless (@order = ProductionOrderItem.create(kanban_id: @kanban.id,code:params[:code]))
       render json: {result: false, content: "Production Order Item Created Failed"} and return
     end

@@ -2,6 +2,13 @@
     <%= javascript_include_tag "printer" %>
 <% end %>
 
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @kanbans %>
+  </div>
+  <%= will_paginate @kanbans, :container => false %>
+</div>
+
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
@@ -52,3 +59,7 @@
   <% end %>
   </tbody>
 </table>
+
+<div class="digg_pagination">
+  <%= will_paginate @kanbans, :container => false %>
+</div>

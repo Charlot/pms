@@ -1,0 +1,18 @@
+#will_paginate
+zh:
+  will_paginate:
+    previous_label: "&#8592; 前一页"
+    next_label: "后一页 &#8594;"
+    page_gap: "&hellip;"
+    page_entries_info:
+      single_page:
+        zero:  "未找到 %{model}"
+        one:   "%{model} 数量 1"
+        other: " 总数 %{count} "
+      single_page_html:
+        zero:  "未找到 %{model}"
+        one:   "%{model} 数量 <b>1</b> "
+        other: "  总数&nbsp;<b>%{count}</b> "
+
+      multi_page: "总数 %{count} ，显示第 %{from} - %{to} "
+      multi_page_html: " 总数 <b>%{count}</b>  显示第 <b>%{from}&nbsp;-&nbsp;%{to}</b>"
