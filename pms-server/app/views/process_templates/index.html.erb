@@ -1,3 +1,9 @@
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @process_templates %>
+  </div>
+  <%= will_paginate @process_templates, :container => false %>
+</div>
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
@@ -27,6 +33,9 @@
   <% end %>
   </tbody>
 </table>
+<div class="digg_pagination">
+  <%= will_paginate @process_templates, :container => false %>
+</div>
 
 <!--<hr >
 <%= form_tag autoimport_process_templates_path, multipart:true do %>

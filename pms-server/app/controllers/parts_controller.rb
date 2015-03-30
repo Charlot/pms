@@ -5,7 +5,7 @@ class PartsController < ApplicationController
   # GET /parts
   # GET /parts.json
   def index
-    @parts = Part.all
+    @parts = Part.paginate(:page => params[:page])
     respond_to do |format|
       format.html
       format.csv { send_data @parts.to_csv }

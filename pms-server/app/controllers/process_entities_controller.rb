@@ -5,7 +5,7 @@ class ProcessEntitiesController < ApplicationController
   # GET /process_entities
   # GET /process_entities.json
   def index
-    @process_entities = ProcessEntity.all
+    @process_entities = ProcessEntity.paginate(:page => params[:page])
   end
 
   # GET /process_entities/1
