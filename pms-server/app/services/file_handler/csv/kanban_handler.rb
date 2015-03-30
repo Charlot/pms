@@ -22,10 +22,10 @@ module FileHandler
                                  des_storage:row['Destination Storage']})
                 else
                   #新建
-                  part = Part.find_by_nr("#{row['Product Nr']}_#{row['Wire Nr']}")
+                  part_id = (part = Part.find_by_nr("#{row['Product Nr']}_#{row['Wire Nr']}")).nil? ? nil : part.id
                   product = Part.find_by_nr(row['Product Nr'])
                   kanban = Kanban.new({quantity:row['Quantity'],safety_stock:row['Safety Stock'],copies:row['Copies'],remark:row['Remark'],
-                                       part_id:part.id,product_id:product.id,ktype:row['Type'],bundle:row['Bundle'],
+                                       part_id:part_id,product_id:product.id,ktype:row['Type'],bundle:row['Bundle'],
                                        source_warehouse:row['Source Warehouse'],source_storage:row['Source Storage'],des_warehouse:row['Destination Warehouse'],
                                        des_storage:row['Destination Storage']})
                   process_nrs = row['Process List'].split(',')
@@ -95,10 +95,10 @@ module FileHandler
         process_nrs = row['Process List'].split(',').collect { |penr| penr.strip }
         process_entities = ProcessEntity.where({nr:process_nrs,product_id:product.id})
         unless process_entities.count == process_nrs.count
-          msg.contents << "Process List: #{row['Process List']}，工艺不存在!"
+          msg.contents << "Process List: #{process_nrs - process_entities.collect{|pe| pe.nr}}，工艺不存在!"
         end
 
-        if kanban.nil? && Part.where({nr:"#{row['Product Nr']}_#{row['Wire Nr']}"}).count <= 0
+        if kanban.nil? && row['Wire Nr'].present? &&Part.where({nr:"#{row['Product Nr']}_#{row['Wire Nr']}"}).count <= 0
           msg.contents << "Wire Nr:#{row['Wire Nr']} 不存在"
         end
 
