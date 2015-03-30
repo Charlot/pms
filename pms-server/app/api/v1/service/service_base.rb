@@ -8,6 +8,7 @@ module V1
         mount PrintServiceAPI
         mount MachineServiceAPI
         mount NcrServiceAPI
+        mount KanbanServiceAPI
       end
     end
   end
