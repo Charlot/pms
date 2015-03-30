@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150324035959) do
+ActiveRecord::Schema.define(version: 20150330072504) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -81,7 +81,6 @@ ActiveRecord::Schema.define(version: 20150324035959) do
     t.string   "source_storage"
     t.string   "des_warehouse"
     t.string   "des_storage"
-    t.integer  "part_id",                        null: false
     t.datetime "print_time"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -91,7 +90,6 @@ ActiveRecord::Schema.define(version: 20150324035959) do
   end
 
   add_index "kanbans", ["nr"], name: "index_kanbans_on_nr", using: :btree
-  add_index "kanbans", ["part_id"], name: "index_kanbans_on_part_id", using: :btree
   add_index "kanbans", ["product_id"], name: "index_kanbans_on_product_id", using: :btree
 
   create_table "machine_combinations", force: true do |t|

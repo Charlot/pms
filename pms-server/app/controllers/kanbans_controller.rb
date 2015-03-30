@@ -121,11 +121,11 @@ class KanbansController < ApplicationController
   # POST /kanbans/1/finish_production.json
   def finish_production
     msg = Message.new
-    end_product = {part_id: @kanban.part_id, quantity: @kanban.quantity}
-    raw_materials = []
-    @kanban.get_raw_materials.each { |raw_material|
-      raw_materials << {part_id: raw_material.part_id, quantity: raw_material.quantity * @kanban.quantity}
-    }
+    #end_product = {part_id: @kanban.part_id, quantity: @kanban.quantity}
+    #raw_materials = []
+    #@kanban.get_raw_materials.each { |raw_material|
+    #  raw_materials << {part_id: raw_material.part_id, quantity: raw_material.quantity * @kanban.quantity}
+    #}
     #TODO Move storage for both end products and raw materials
     render json: msg
   end

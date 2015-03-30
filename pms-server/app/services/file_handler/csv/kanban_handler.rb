@@ -22,10 +22,10 @@ module FileHandler
                                  des_storage:row['Destination Storage']})
                 else
                   #新建
-                  part_id = (part = Part.find_by_nr("#{row['Product Nr']}_#{row['Wire Nr']}")).nil? ? nil : part.id
+                  #part_id = (part = Part.find_by_nr("#{row['Product Nr']}_#{row['Wire Nr']}")).nil? ? nil : part.id
                   product = Part.find_by_nr(row['Product Nr'])
                   kanban = Kanban.new({quantity:row['Quantity'],safety_stock:row['Safety Stock'],copies:row['Copies'],remark:row['Remark'],
-                                       part_id:part_id,product_id:product.id,ktype:row['Type'],bundle:row['Bundle'],
+                                       product_id:product.id,ktype:row['Type'],bundle:row['Bundle'],
                                        source_warehouse:row['Source Warehouse'],source_storage:row['Source Storage'],des_warehouse:row['Destination Warehouse'],
                                        des_storage:row['Destination Storage']})
                   process_nrs = row['Process List'].split(',')
@@ -89,7 +89,6 @@ module FileHandler
         unless  product = Part.where({nr:row['Product Nr'],type:PartType::PRODUCT}).first
           msg.contents << "Product Nr: #{row['Product Nr']} 不存在"
         end
-
 
         #验证工艺
         process_nrs = row['Process List'].split(',').collect { |penr| penr.strip }
