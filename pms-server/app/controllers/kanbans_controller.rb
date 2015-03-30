@@ -183,7 +183,7 @@ class KanbansController < ApplicationController
   # Search by part_nr and product_nr
   def search
     msg = Message.new
-    @kanbans = Kanban.search(params[:part_nr],params[:product_nr])
+    @kanbans = Kanban.search(params[:part_nr],params[:product_nr]).paginate(:page => params[:page])
     msg.result = true
     msg.content = @kanbans
 
