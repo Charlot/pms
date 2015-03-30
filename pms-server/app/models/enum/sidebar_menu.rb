@@ -9,7 +9,10 @@ class SidebarMenu
       PART_BOM: {name:PageInfo.partbom,actions:["new", "index","import"]},
       PROCESS_TEMPLATE:{name:PageInfo.processtemplate,actions: ["new", "index", "import"]},
       PROCESS_ENTITY: {name:PageInfo.processentity,actions:["new", "index"]},
-      MACHINE: {name:PageInfo.machine,actions:["new","index","import"]}
+      MACHINE: {name:PageInfo.machine,actions:["new","index","import"]},
+      RESOURCE_GROUP_MACHINE: {name:PageInfo.resourcegroupmachine,actions:["new","index"]},
+      RESOURCE_GROUP_TOOL: {name:PageInfo.resourcegrouptool,actions:["new","index"]},
+      TOOL:  {name:PageInfo.tool,actions:["new","index","import"]}
   }
 
   class<<self

@@ -5,6 +5,8 @@ class ImportTemplate
   PROCESS_ENTITY_AUTO_CSV_TEMPLATE='process_entity_auto.csv'
   PROCESS_ENTITY_SEMI_AUTO_CSV_TEMPLATE='process_entity_semi_auto.csv'
   KANBAN_CSV_TEMPLATE='kanban.csv'
+  MACHINE_CSV_TEMPLATE='machine.csv'
+  MACHINE_COMBINATION_CSV_TEMPLATE='machine_combination.csv'
 
   def self.method_missing(method_name, *args, &block)
     if method_name.to_s.include?('_template')
