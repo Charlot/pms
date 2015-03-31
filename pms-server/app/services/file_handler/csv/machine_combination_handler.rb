@@ -17,7 +17,7 @@ module FileHandler
               ['W1', 'T1', 'T2', 'S1', 'S2'].each { |header|
                 if row[header].present?
                   part = Part.find_by_nr(row[header])
-                  machine_combination.send("#{header.downcase}=", part.nr)
+                  machine_combination.send("#{header.downcase}=", part.id)
                 end
               }
               machine_combination.machine = machine
@@ -60,9 +60,8 @@ module FileHandler
 
       def self.validate_row(row)
         msg = Message.new(contents: [])
-
         machine = Machine.find_by_nr(row['Machine Nr'])
-        unless machine.present?
+        unless machine
           msg.contents << "Machine Nr: #{row['Machine Nr']} 不存在！"
         end
 
