@@ -14,7 +14,11 @@ Rails.application.routes.draw do
 
   resources :settings
 
-  resources :tools
+  resources :tools do
+    collection do
+      match :import, to: :import,via:[:get,:post]
+    end
+  end
 
   resources :resource_group_parts do
     collection do
@@ -24,7 +28,11 @@ Rails.application.routes.draw do
 
   mount ApplicationAPI => '/'
 
-  resources :machine_combinations
+  resources :machine_combinations do
+    collection do
+      match :import, to: :import,via:[:get,:post]
+    end
+  end
 
   resources :machine_scopes
 

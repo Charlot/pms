@@ -32,17 +32,23 @@ namespace PmsNCR
         }
 
         private void LoadOrderListForPreview() {
-
             OrderService service = new OrderService();
             Msg<List<OrderItemCheck>> msg = service.GetOrderPreviewList(WPCSConfig.MachineNr);
             if (msg.Result)
             {
                 List<OrderItemCheck> items = msg.Object;
+                PreviewOrderDG.ItemsSource = items;
             }
             else
             {
                 MessageBox.Show(msg.Content);
             }
+        }
+         
+
+        private void UpdatePreviewBtn_Click(object sender, RoutedEventArgs e)
+        {
+            LoadOrderListForPreview();
         }
     }
 }

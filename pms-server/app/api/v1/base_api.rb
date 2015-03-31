@@ -3,5 +3,6 @@ module V1
     include OauthAPIGuard
     version 'v1',
             :using => :path
+
   end
 end

@@ -16,7 +16,7 @@ module Enum
         }
         @@actions.each { |action|
           m = k.to_s.split("_").map(&:capitalize).join
-          puts "#{m}_#{action}"
+          #puts "#{m}_#{action}"
           define_method("#{m}_#{action}".to_sym){
             model = self.send(m.downcase)
             action_content(model,action)
