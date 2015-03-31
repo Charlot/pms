@@ -14,14 +14,10 @@ else
         process_entities.each{|pe|
           pe.destroy
         }
-        puts "删除#{process_entities.count}个成品!"
+        puts "删除#{process_entities.count}个Routing!"
       rescue => e
         puts e.message
       end
     end
   end
 end
-
-
-
-
