@@ -38,6 +38,9 @@ module FileHandler
                       if  Part.find_by_nr(custom_fields_val[index])
                         cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
                       else
+                        puts row['Template Fields']
+                        puts "===================="
+                        puts custom_fields_val[index]
                         cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index]}"))
                       end
                     end

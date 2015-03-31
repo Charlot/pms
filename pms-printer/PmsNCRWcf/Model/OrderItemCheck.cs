@@ -10,6 +10,8 @@ namespace PmsNCRWcf.Model
     public class OrderItemCheck
     {
         [DataMember]
+        public int No { get; set; }
+        [DataMember]
         public int Id { get; set; }
         [DataMember]
         public string ItemNr { get; set; }
