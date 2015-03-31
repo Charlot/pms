@@ -1,3 +1,4 @@
+# 修复看板数据错误
 Kanban.where(ktype:KanbanType::WHITE).each do |k|
   if k.process_entities.count > 1
     if k.process_entities.where(product_id:k.product_id).count <=0
@@ -20,4 +21,24 @@ Kanban.where(ktype:KanbanType::WHITE).each do |k|
   else
     puts "不需要修改".green
   end
+end
+
+# 修复Routing数据
+ProcessEntity.joins(:process_template).where("process_templates.type = ?",ProcessType::AUTO).each do |pe|
+  pe.custom_values.each{|cv|
+    if cv.custom_field.name == "default_wire_nr"
+      wire_nr =  "#{pe.product_nr}_#{cv.value}"
+
+      if Part.where(nr:wire_nr,type:PartType::PRODUCT_SEMIFINISHED).count <= 0
+        Part.transaction do
+          begin
+            puts "新建线号:#{wire_nr}"
+            Part.create({nr:wire_nr,type:PartType::PRODUCT_SEMIFINISHED})
+          rescue => e
+            puts e.backtrace
+          end
+        end
+      end
+    end
+  }
 end
