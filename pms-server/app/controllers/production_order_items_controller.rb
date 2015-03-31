@@ -102,6 +102,21 @@ class ProductionOrderItemsController < ApplicationController
     end
   end
 
+  # POST
+  def export
+    if @production_order=ProductionOrder.find_by_id(params[:production_order_id])
+      items=ProductionOrderItem.for_export(@production_order)
+      msg=FileHandler::Csv::ProductionOrderItemHandler.new.export_optimized(items, request.user_agent)
+      if msg.result
+        send_file msg.content
+      else
+        render 'shared/error'
+      end
+    else
+      render 'shared/error'
+    end
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_production_order_item
