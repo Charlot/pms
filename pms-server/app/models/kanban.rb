@@ -77,7 +77,7 @@ class Kanban < ActiveRecord::Base
 
   def wire_nr
     if self.process_entities.first && self.process_entities.first.value_of_default_wire_nr
-      self.process_entities.first.value_of_default_wire_nr.split("_").last
+      self.process_entities.first.value_of_default_wire_nr
     else
       nil
     end

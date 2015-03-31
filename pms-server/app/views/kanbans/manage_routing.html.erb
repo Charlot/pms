@@ -30,14 +30,16 @@
     </div>
 
     <div class="row">
-      <ul  id="routes_List" class="list-group">
-        <% @kanban.process_entities.each do |pe| %>
-            <li process_entity_id="<%= pe.id%>" class="list-group-item">
-              <input id="<%= pe.id %>" type="button" value="delete" class="remove-routing"/>
-              <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
-        <% end if @kanban.part %>
-        </li>
-      </ul>
+      <div class="col-md-8">
+        <ul  id="routes_List" class="list-group">
+          <% @kanban.process_entities.each do |pe| %>
+              <li process_entity_id="<%= pe.id%>" class="list-group-item">
+                <input id="<%= pe.id %>" type="button" value="delete" class="remove-routing btn btn-error"/>
+                <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
+          <% end %>
+          </li>
+        </ul>
+      </div>
     </div>
     <ul id="kpe_List" class="hidden">
       <% @kanban.kanban_process_entities.each do |kpe| %>
@@ -115,6 +117,7 @@
             pms.kanban.addRouting($("#kanban").attr("kanban_id"),routes,function(data){
                 if(data.result){
                     //TODO 添加成功
+                    swal("添加成功!")
                 }else{
                     swal(data.content);
                 }
@@ -125,7 +128,14 @@
             var id = $(this).attr("id");
             var kanban_id = $("#kanban").attr("kanban_id");
             var target = $(this);
-            pms.kanban.delRouting();
+            pms.kanban.delRouting(kanban_id,id,function(data){
+                if(data.result){
+                    target.parent().remove();
+                }
+                else{
+                    swal(data.content);
+                }
+            });
         });
     });
 </script>
