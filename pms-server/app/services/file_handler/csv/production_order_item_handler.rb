@@ -2,7 +2,7 @@ require 'csv'
 module FileHandler
   module Csv
     class ProductionOrderItemHandler<Base
-      EXPORT_CSV_HEADERS=%w(No OrderItemNr Kanban Machine OrderNr PartNr)
+      EXPORT_CSV_HEADERS=%w(No OrderItemNr Kanban Machine OrderNr PartNr Material)
 
       def export_optimized(items, user_agent, tmp_path=nil)
         msg=Message.new
@@ -12,12 +12,14 @@ module FileHandler
                    headers: EXPORT_CSV_HEADERS,
                    col_sep: SEPARATOR, encoding: ProductionOrderItemHandler.get_encoding(user_agent)) do |csv|
             items.each_with_index do |item, i|
+              material = item.kanban.material.collect { |p| "#{p.nr}|#{PartType.display(p.type)}"}.join(";")
               csv<<[i+1,
                     item.nr,
                     item.kanban_nr,
                     item.machine_nr,
                     item.production_order_nr,
-                    item.kanban.wire_nr
+                    item.kanban.wire_nr,
+                    material
               ]
             end
           end

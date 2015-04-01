@@ -32,7 +32,7 @@ ProcessEntity.joins(:process_template).where("process_templates.type = ?",Proces
       if Part.where(nr:wire_nr,type:PartType::PRODUCT_SEMIFINISHED).count <= 0
         Part.transaction do
           begin
-            puts "新建线号:#{wire_nr}"
+            puts "新建线号:#{wire_nr}".green
             Part.create({nr:wire_nr,type:PartType::PRODUCT_SEMIFINISHED})
           rescue => e
             puts e.backtrace

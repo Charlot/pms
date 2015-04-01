@@ -9,17 +9,17 @@ class PartType<BaseType
   def self.display type
     case type
     when MATERIAL_WIRE
-      '原材料单线'
+      'Material Wire'
     when MATERIAL_TERMINAL
-      '原材料端子'
+      'Material Contact'
     when MATERIAL_SEAL
-      '原材料防水圈'
+      'Material Seal'
     when MATERIAL_OTHER
-      '原材料其他'
+      'Material Other'
     when PRODUCT_SEMIFINISHED
-      '半成品'
+      'Product Semi'
     when PRODUCT
-      '成品'
+      'Product'
     end
   end
 

@@ -58,7 +58,7 @@ class ProcessEntity < ActiveRecord::Base
         f.id.to_i==v.scan(/{(\d+)}/).map(&:first).first.to_i }
         puts "********************#{cf.to_json}"
         cfv=cfvs.detect { |v| v.custom_field_id==cf.id }
-        CustomFieldFormatType.part?(cf.field_format) ? ((part=Part.find_by_id(cfv.value)).nil? ? 'N/A' : part.nr) : (cfv.value.nil? ? 'N/A' : cfv.value)
+        CustomFieldFormatType.part?(cf.field_format) ? ((part=Part.find_by_id(cfv.value)).nil? ? '' : part.nr) : (cfv.value.nil? ? '' : cfv.value)
       else
         'ERROR'
       end
