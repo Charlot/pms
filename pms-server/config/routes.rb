@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     collection do
       post :optimise
       post :distribute
+      post :export
     end
   end
 

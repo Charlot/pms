@@ -2,7 +2,6 @@
     <%= javascript_include_tag "printer" %>
 <% end %>
 <div class="btn-group btn-group-sm" role="group" aria-label="...">
-  <button class="btn btn-default print" type="button" id="<%= kanban.id %>" kanban_type="<%= kanban.ktype %>">打印</button>
   <%= link_to '编辑', edit_kanban_path, class: "btn btn-default" %>
   <%= link_to '编辑Routing', manage_routing_kanban_path(kanban), class: "btn btn-default" %>
   <%= link_to '发布', release_kanban_path(kanban), class: "btn btn-info", method: :post %>

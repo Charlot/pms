@@ -23,6 +23,14 @@ class ProductionOrderItem < ActiveRecord::Base
     where(state: ProductionOrderItemState.wait_produce_states, machine_id: machine.id).order(optimise_index: :asc)
   end
 
+  def self.for_export(production_order)
+    where(production_order_id: production_order.id)
+        .joins(:kanban)
+        .joins(:production_order)
+        .joins(:machine).order(optimise_index: :asc)
+        .select('production_orders.nr as production_order_nr,kanbans.nr as kanban_nr,machines.nr as machine_nr,production_order_items.*')
+  end
+
   def self.optimise
     ProductionOrderItem.transaction do
       optimise_at=Time.now
