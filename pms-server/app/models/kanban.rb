@@ -4,7 +4,7 @@ class Kanban < ActiveRecord::Base
   validates :product_id, :presence => true
 
 
-  belongs_to :part
+  #belongs_to :part
   belongs_to :product, class_name: 'Part'
   #delegate :process_entities,to: :part
   has_many :kanban_process_entities ,dependent: :destroy

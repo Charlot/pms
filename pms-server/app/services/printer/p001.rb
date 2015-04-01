@@ -47,7 +47,7 @@ module Printer
         }
 
         pe.process_parts.first($ROUTE_PART_COUNT).each_with_index { |pp,index |
-          if PartType.is_material?(pp.part.type)
+          if pe.value_default_wire_nr.nil? || pp.value_default_wire_nr != pp.part.nr
             body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr
             body["wiredesc#{index+1}_of_route".to_sym] = pp.part.custom_nr
             body["wire_quantity#{index+1}_of_route".to_sym] = pp.quantity
