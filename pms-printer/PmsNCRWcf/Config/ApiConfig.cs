@@ -76,5 +76,6 @@ namespace PmsNCRWcf.Config
         public static string ProducePieceAction { get; set; }
         public static string PrintBundleLabelAction { get; set; }
         public static string OrderListPreviewAction { get; set; }
+        public static string KanbanListAction { get; set; }
     }
 }

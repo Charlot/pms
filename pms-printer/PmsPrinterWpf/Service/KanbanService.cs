@@ -42,5 +42,69 @@ namespace PmsPrinterWpf.Service
             }
             return msg;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="page">page start from 1</param>
+        /// <returns></returns>
+        public Msg<List<Kanban>> List(int type, int page)
+        {
+            Msg<List<Kanban>> msg = new Msg<List<Kanban>>();
+            try
+            {
+                var req = new RestRequest(ApiConfig.KanbanListAction, Method.GET);
+                req.RequestFormat = DataFormat.Json;
+                req.AddParameter("type", type);
+                req.AddParameter("page", page);
+
+                var res = new APIClient().Execute(req);
+                var kanbans = JSONHelper.parse<List<Kanban>>(res.Content);
+                if (kanbans != null && kanbans.Count > 0)
+                {
+                    msg.Result = true;
+                    msg.Object = kanbans;
+                }
+                else
+                {
+                    msg.Content = "无看板";
+                }
+            }
+            catch (Exception e)
+            {
+                msg.Content = e.Message;
+                LogUtil.Logger.Error(e.Message);
+            }
+            return msg;
+        }
+
+        public Msg<List<SelectOption>> TypeList()
+        {
+            Msg<List<SelectOption>> msg = new Msg<List<SelectOption>>();
+            try
+            {
+                var req = new RestRequest(ApiConfig.KanbanTypeListAction, Method.GET);
+                req.RequestFormat = DataFormat.Json; 
+
+                var res = new APIClient().Execute(req);
+                var types = JSONHelper.parse<List<SelectOption>>(res.Content);
+                if (types != null && types.Count > 0)
+                {
+                    msg.Result = true;
+                    msg.Object = types;
+                }
+                else
+                {
+                    msg.Content = "无看板类型";
+                }
+            }
+            catch (Exception e)
+            {
+                msg.Content = e.Message;
+                LogUtil.Logger.Error(e.Message);
+            }
+            return msg;
+        }
     }
 }
