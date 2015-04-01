@@ -19,8 +19,22 @@
         <StackPanel Grid.Row="1">
             <StackPanel Margin="20,10,0,0" Orientation="Horizontal">
                 <Label Content="Kanban 号：" FontSize="20" VerticalAlignment="Center"/>
-                <TextBox Name="KanbanNrTB" Height="40" FontSize="22" Text="000003" Width="317" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBox Name="KanbanNrTB" Height="40" FontSize="22" Text="000050" Width="317" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <Button Content="打 印" Margin="10,0,0,0" Foreground="White" Height="50" Width="96" FontSize="20" Name="PrintBtn" Click="PrintBtn_Click">
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF849DF5" Offset="0"/>
+                            <GradientStop Color="#FF687DD4" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <Button.Effect>
+                        <DropShadowEffect Opacity="0.295"/>
+                    </Button.Effect>
+                </Button>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Right">
+                <Button Content="看板列表" Margin="0,10,40,0" Foreground="White"
+                        Height="50" Width="96" FontSize="20" Name="KanbanListBtn" Click="KanbanListBtn_Click">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FF849DF5" Offset="0"/>
@@ -59,6 +73,7 @@
                                 <DropShadowEffect Opacity="0.295"/>
                             </Button.Effect>
                         </Button>
+                      
                     </StackPanel>
                 </GroupBox>
             </StackPanel>

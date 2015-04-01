@@ -60,5 +60,10 @@ namespace PmsPrinterWpf
         {
           new PrinterSetting().ShowDialog();
         }
+
+        private void KanbanListBtn_Click(object sender, RoutedEventArgs e)
+        {
+            new KanbanList().ShowDialog();
+        }
     }
 }
