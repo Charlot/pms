@@ -83,6 +83,15 @@ class Kanban < ActiveRecord::Base
     end
   end
 
+  #看板对应的物料清单
+  def material
+    if (self.ktype == KanbanType::WHITE) && self.process_entities.first
+      self.process_entities.first.process_parts.select{|pp| PartType.is_material?(pp.part.type)}.collect{|pp|pp.part}
+    else
+      []
+    end
+  end
+
   def print_time
     self[:print_time].localtime.strftime("%Y-%m-%d %H:%M:%S") if self[:print_time]
   end
@@ -131,7 +140,7 @@ class Kanban < ActiveRecord::Base
 
   # part_nr,product_nr
   def self.search(part_nr="",product_nr="")
-    joins(:part,:product).where('parts.nr LIKE ? and products_kanbans.nr LIKE ?',"%#{part_nr}%","%#{product_nr}%")
+    joins(:product).where('parts.nr LIKE ?',"%#{product_nr}%")
   end
 
   #

@@ -40,17 +40,19 @@ module Printer
         body = {
             route_nr:pe.process_template.code,
             route_name:pe.name,
-            route_desc:pe.description,
+            route_desc:pe.template_text,
             work_time_of_route:pe.stand_time,
             #Consume Date是什么东西？
-            consume_date:'consume date'
+            consume_date:'consume date' #TODO route consume data
         }
 
         pe.process_parts.first($ROUTE_PART_COUNT).each_with_index { |pp,index |
-          body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr
-          body["wiredesc#{index+1}_of_route".to_sym] = pp.part.custom_nr
-          body["wire_quantity#{index+1}_of_route".to_sym] = pp.quantity
-          body["unit_of_wire#{index+1}".to_sym] = pp.unit
+          if PartType.is_material?(pp.part.type)
+            body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr
+            body["wiredesc#{index+1}_of_route".to_sym] = pp.part.custom_nr
+            body["wire_quantity#{index+1}_of_route".to_sym] = pp.quantity
+            body["unit_of_wire#{index+1}".to_sym] = pp.unit
+          end
         }
 
         BODY.each do |k|
