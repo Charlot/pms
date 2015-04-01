@@ -14,6 +14,10 @@ class ProcessEntity < ActiveRecord::Base
   delegate :code, to: :process_template, prefix: true, allow_nil: true
   delegate :type, to: :process_template, prefix: true, allow_nil: true
 
+  searchable do
+
+  end
+
   acts_as_customizable
 
   # after_create :build_process_parts
@@ -58,7 +62,7 @@ class ProcessEntity < ActiveRecord::Base
         f.id.to_i==v.scan(/{(\d+)}/).map(&:first).first.to_i }
         puts "********************#{cf.to_json}"
         cfv=cfvs.detect { |v| v.custom_field_id==cf.id }
-        CustomFieldFormatType.part?(cf.field_format) ? ((part=Part.find_by_id(cfv.value)).nil? ? '' : part.nr) : (cfv.value.nil? ? '' : cfv.value)
+        CustomFieldFormatType.part?(cf.field_format) ? ((part=Part.find_by_id(cfv.value)).nil? ? '' : part.parsed_nr) : (cfv.value.nil? ? '' : cfv.value)
       else
         'ERROR'
       end

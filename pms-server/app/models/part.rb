@@ -54,6 +54,14 @@ class Part < ActiveRecord::Base
       end
   end
 
+  def parsed_nr
+    if type == PartType::PRODUCT_SEMIFINISHED && nr.include?("_")
+      nr.split("_").last
+    else
+      nr
+    end
+  end
+
   private
   def update_cv_strip_length
     if self.strip_length_changed?
