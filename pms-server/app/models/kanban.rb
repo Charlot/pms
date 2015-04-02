@@ -58,12 +58,12 @@ class Kanban < ActiveRecord::Base
           part = pp.part
           puts "~~~~~~~~~~~~~~~~"
           if pe.value_default_wire_nr.nil? || part.nr != pe.value_default_wire_nr || part.type == PartType::PRODUCT_SEMIFINISHED
-            data << {part_nr:part.parsed_nr,positions:part.positions(self.id)}
+            data << [part.parsed_nr,part.positions(self.id).join(",")].join(":")
           end
         }
       end
     }
-    data
+    data.join('\\n')
   end
 
   def update_part_bom
