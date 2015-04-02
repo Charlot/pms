@@ -28,7 +28,8 @@
           <ul class="dropdown-menu" role="manage">
             <li class="<%= 'active' if current_controller?({controller: 'measure_units'})%>"><a href="<%= measure_units_path %>">单位</a></li>
             <li class="<%= 'active' if current_controller?({controller: 'parts'})%>"><a href="<%= parts_path %>">零件</a></li>
-            <li class="<%= 'active' if current_controller?({controller: 'part_boms'})%>"><a href="<%= part_boms_path %>">BOM表</a></li>
+            <!--<li class="<%= 'active' if current_controller?({controller: 'part_boms'})%>"><a href="<%= part_boms_path %>">BOM表</a></li>-->
+            <li class="<%= 'active' if current_controller?({controller: 'master_bom_items'})%>"><a href="<%= master_bom_items_path %>">Master BOM</a></li>
             <li class="<%= 'active' if current_controller?({controller: 'process_templates'})%>"><a href="<%= process_templates_path %>">步骤模板</a></li>
             <li class="<%= 'active' if current_controller?({controller: 'process_entities'})%>"><a href="<%= process_entities_path %>">步骤</a></li>
             <li class="<%= 'active' if current_controller?({controller: 'kanbans'})%>"><a href="<%= kanbans_path %>">KANBAN</a></li>

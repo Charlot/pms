@@ -8,6 +8,7 @@ class ImportTemplate
   MACHINE_CSV_TEMPLATE='machine.csv'
   MACHINE_COMBINATION_CSV_TEMPLATE='machine_combination.csv'
   TOOL_CSV_TEMPLATE='tool.csv'
+  MASTER_BOM_CSV_TEMPLATE='master_bom.csv'
 
   def self.method_missing(method_name, *args, &block)
     if method_name.to_s.include?('_template')

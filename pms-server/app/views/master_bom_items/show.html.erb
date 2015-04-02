@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Qty:</strong>
+  <%= @master_bom_item.qty %>
+</p>
+
+<p>
+  <strong>Bom item:</strong>
+  <%= @master_bom_item.bom_item_id %>
+</p>
+
+<p>
+  <strong>Product:</strong>
+  <%= @master_bom_item.product_id %>
+</p>
+
+<p>
+  <strong>Department:</strong>
+  <%= @master_bom_item.department %>
+</p>
+
+<%= link_to 'Edit', edit_master_bom_item_path(@master_bom_item) %> |
+<%= link_to 'Back', master_bom_items_path %>
