@@ -46,6 +46,26 @@ class Kanban < ActiveRecord::Base
     # end
   end
 
+  #硬编码
+  #只有在2220,2221,2410这几个步骤的时候，才需要现实取料信息
+  def gathered_material
+    data =[]
+    process_entities.each{|pe|
+      puts pe.process_template_code
+      if ["2220","2221","2410"].include?(pe.process_template_code)
+        puts "============"
+        pe.process_parts.each{|pp|
+          part = pp.part
+          puts "~~~~~~~~~~~~~~~~"
+          if pe.value_default_wire_nr.nil? || part.nr != pe.value_default_wire_nr || part.type == PartType::PRODUCT_SEMIFINISHED
+            data << {part_nr:part.parsed_nr,positions:part.positions(self.id)}
+          end
+        }
+      end
+    }
+    data
+  end
+
   def update_part_bom
     #TODO Kanban Update Part Bom
   end
