@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150330072504) do
+ActiveRecord::Schema.define(version: 20150401083438) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(version: 20150330072504) do
   create_table "kanbans", force: true do |t|
     t.string   "nr",                             null: false
     t.string   "remark"
-    t.float    "quantity",         default: 0.0
+    t.integer  "quantity",         default: 0
     t.float    "safety_stock",     default: 0.0, null: false
     t.integer  "copies",           default: 0
     t.integer  "state",            default: 0

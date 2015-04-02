@@ -4,7 +4,7 @@ class Kanban < ActiveRecord::Base
   validates :product_id, :presence => true
 
 
-  belongs_to :part
+  #belongs_to :part
   belongs_to :product, class_name: 'Part'
   #delegate :process_entities,to: :part
   has_many :kanban_process_entities ,dependent: :destroy
@@ -12,7 +12,7 @@ class Kanban < ActiveRecord::Base
   delegate :nr, to: :part,prefix: true, allow_nil: true
   delegate :nr, to: :product,prefix: true, allow_nil: true
   delegate :custom_nr, to: :product,prefix: true,allow_nil: true
-  delegate :custom_nr, to: :part, prefix: true,allow_nil: true
+  #delegate :custom_nr, to: :part, prefix: true,allow_nil: true
   has_many :production_order, as: :orderable
 
   accepts_nested_attributes_for :kanban_process_entities, allow_destroy: true
@@ -83,6 +83,15 @@ class Kanban < ActiveRecord::Base
     end
   end
 
+  #看板对应的物料清单
+  def material
+    if (self.ktype == KanbanType::WHITE) && self.process_entities.first
+      self.process_entities.first.process_parts.select{|pp| PartType.is_material?(pp.part.type)}.collect{|pp|pp.part}
+    else
+      []
+    end
+  end
+
   def print_time
     self[:print_time].localtime.strftime("%Y-%m-%d %H:%M:%S") if self[:print_time]
   end
@@ -131,7 +140,7 @@ class Kanban < ActiveRecord::Base
 
   # part_nr,product_nr
   def self.search(part_nr="",product_nr="")
-    joins(:part,:product).where('parts.nr LIKE ? and products_kanbans.nr LIKE ?',"%#{part_nr}%","%#{product_nr}%")
+    joins(:product).where('parts.nr LIKE ?',"%#{product_nr}%")
   end
 
   #

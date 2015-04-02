@@ -18,9 +18,9 @@ module Printer
       #TODO还要加一个条形码字段，条形码中不只是KANBAN NR
       head={
           kanban_nr: @kanban.nr,
-          part_nr: @kanban.wire_nr,
+          part_nr: @kanban.product_nr,
           print_date:@kanban.print_time,
-          customer_nr:@kanban.part_custom_nr,
+          customer_nr:@kanban.product_custom_nr,
           wire_position:@kanban.desc_position,
           card_number:@kanban.copies,
           card_quantity:@kanban.quantity,
@@ -40,17 +40,23 @@ module Printer
         body = {
             route_nr:pe.process_template.code,
             route_name:pe.name,
-            route_desc:pe.description,
+            route_desc:pe.template_text,
             work_time_of_route:pe.stand_time,
             #Consume Date是什么东西？
-            consume_date:'consume date'
+            consume_date:'consume date' #TODO route consume data
         }
 
         pe.process_parts.first($ROUTE_PART_COUNT).each_with_index { |pp,index |
-          body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr
-          body["wiredesc#{index+1}_of_route".to_sym] = pp.part.custom_nr
-          body["wire_quantity#{index+1}_of_route".to_sym] = pp.quantity
-          body["unit_of_wire#{index+1}".to_sym] = pp.unit
+          if pe.value_default_wire_nr.nil? || pp.value_default_wire_nr != pp.part.nr
+            if pp.part.type == PartType::PRODUCT_SEMIFINISHED && pp.part.nr.include?("_")
+              body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr.split("_").last
+            else
+              body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr
+            end
+            body["wiredesc#{index+1}_of_route".to_sym] = pp.part.custom_nr
+            body["wire_quantity#{index+1}_of_route".to_sym] = pp.quantity
+            body["unit_of_wire#{index+1}".to_sym] = pp.unit
+          end
         }
 
         BODY.each do |k|
