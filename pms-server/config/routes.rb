@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  resources :part_positions do
+    collection do
+      match :import, to: :import,via:[:get,:post]
+    end
+  end
+
   resources :kanban_process_entities
 
   resources :production_order_items do

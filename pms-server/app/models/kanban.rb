@@ -35,7 +35,6 @@ class Kanban < ActiveRecord::Base
   end
 
   def destroy_part_bom
-    #TODO Kanban Update Part Bom
     # 要考虑相同KB的量，如果KB具有多张，则要特殊处理
     # part=self.part
     # product=self.product
@@ -52,7 +51,7 @@ class Kanban < ActiveRecord::Base
     data =[]
     process_entities.each{|pe|
       puts pe.process_template_code
-      if ["2220","2221","2410"].include?(pe.process_template_code)
+      #if ["2220","2221","2410"].include?(pe.process_template_code)
         puts "============"
         pe.process_parts.each{|pp|
           part = pp.part
@@ -61,9 +60,9 @@ class Kanban < ActiveRecord::Base
             data << [part.parsed_nr,part.positions(self.id).join(",")].join(":")
           end
         }
-      end
+      #end
     }
-    data.join('\\n')
+    data.join('\n')
   end
 
   def update_part_bom

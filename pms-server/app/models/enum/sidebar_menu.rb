@@ -12,7 +12,8 @@ class SidebarMenu
       MACHINE: {name:PageInfo.machine,actions:["new","index","import"]},
       RESOURCE_GROUP_MACHINE: {name:PageInfo.resourcegroupmachine,actions:["new","index"]},
       RESOURCE_GROUP_TOOL: {name:PageInfo.resourcegrouptool,actions:["new","index"]},
-      TOOL:  {name:PageInfo.tool,actions:["new","index","import"]}
+      TOOL:  {name:PageInfo.tool,actions:["new","index","import"]},
+      PART_POSITION: {name:PageInfo.partposition,actions:["new","index","import"]}
   }
 
   class<<self
