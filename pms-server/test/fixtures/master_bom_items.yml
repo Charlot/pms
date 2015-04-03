@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  qty: 1.5
+  bom_item_id: 1
+  product_id: 1
+  department_id: 
+
+two:
+  qty: 1.5
+  bom_item_id: 1
+  product_id: 1
+  department_id: 

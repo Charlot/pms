@@ -60,6 +60,17 @@ ActiveRecord::Schema.define(version: 20150402030908) do
   add_index "custom_values", ["custom_field_id"], name: "index_custom_values_on_custom_field_id", using: :btree
   add_index "custom_values", ["customized_type", "customized_id"], name: "index_custom_values_on_customized_type_and_customized_id", using: :btree
 
+  create_table "departments", force: true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "code"
+    t.integer  "parent_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "departments", ["parent_id"], name: "index_departments_on_parent_id", using: :btree
+
   create_table "kanban_process_entities", force: true do |t|
     t.integer  "kanban_id"
     t.integer  "process_entity_id"
@@ -152,6 +163,19 @@ ActiveRecord::Schema.define(version: 20150402030908) do
 
   add_index "machines", ["nr"], name: "index_machines_on_nr", using: :btree
   add_index "machines", ["resource_group_id"], name: "index_machines_on_resource_group_id", using: :btree
+
+  create_table "master_bom_items", force: true do |t|
+    t.float    "qty"
+    t.integer  "bom_item_id"
+    t.integer  "product_id"
+    t.integer  "department_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "master_bom_items", ["bom_item_id"], name: "index_master_bom_items_on_bom_item_id", using: :btree
+  add_index "master_bom_items", ["department_id"], name: "index_master_bom_items_on_department_id", using: :btree
+  add_index "master_bom_items", ["product_id"], name: "index_master_bom_items_on_product_id", using: :btree
 
   create_table "measure_units", force: true do |t|
     t.string   "code"

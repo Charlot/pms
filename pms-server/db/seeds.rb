@@ -5,3 +5,13 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+puts '------init department------'
+puts 'create Assembly'
+unless Department.find_by_code('A')
+  Department.create(name: 'Assembly', code: 'A')
+end
+
+puts 'create Cutting'
+unless Department.find_by_code('C')
+  Department.create(name: 'Cutting', code: 'C')
+end
