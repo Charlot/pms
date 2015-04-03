@@ -13,8 +13,9 @@ module Enum
         RESOURCE_GROUP_MACHINE: {name: PageInfo.resourcegroupmachine, actions: ["new", "index"]},
         RESOURCE_GROUP_TOOL: {name: PageInfo.resourcegrouptool, actions: ["new", "index"]},
         TOOL: {name: PageInfo.tool, actions: ["new", "index", "import"]},
-        PART_POSITION: {name:PageInfo.partposition,actions:["new","index","import"]},
-        MASTER_BOM_ITEM: {name: PageInfo.masterbomitem, actions: ['new', 'index', 'import']}
+        PART_POSITION: {name: PageInfo.partposition, actions: ["new", "index", "import"]},
+        MASTER_BOM_ITEM: {name: PageInfo.masterbomitem, actions: ['new', 'index', 'import']},
+        DEPARTMENT: {NAME: PageInfo.department, actions: ['index','new']}
     }
 
     class<<self

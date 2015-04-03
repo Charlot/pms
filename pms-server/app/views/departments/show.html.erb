@@ -1,24 +1,22 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Name:</strong>
+  <strong><%= DepartmentDesc::NAME %>:</strong>
   <%= @department.name %>
 </p>
 
-<p>
-  <strong>Description:</strong>
-  <%= @department.description %>
-</p>
 
 <p>
-  <strong>Code:</strong>
+  <strong><%= DepartmentDesc::CODE %>:</strong>
   <%= @department.code %>
 </p>
 
+
 <p>
-  <strong>Parent:</strong>
-  <%= @department.parent_id %>
+  <strong><%= DepartmentDesc::DESCRIPTION %>:</strong>
+  <%= @department.description %>
 </p>
 
-<%= link_to 'Edit', edit_department_path(@department) %> |
-<%= link_to 'Back', departments_path %>
+
+<%= link_to '编辑', edit_department_path(@department) %> |
+<%= link_to '返回', departments_path %>

@@ -5,7 +5,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :master_bom_items
+  resources :master_bom_items do
+    collection do
+      match :import, to: :import, via: [:get, :post]
+    end
+  end
 
   resources :departments
 
