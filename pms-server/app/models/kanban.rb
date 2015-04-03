@@ -50,7 +50,6 @@ class Kanban < ActiveRecord::Base
   def gathered_material
     data =[]
     process_entities.each { |pe|
-      puts pe.process_template_code
       pe.process_parts.each { |pp|
         part = pp.part
         if pe.value_default_wire_nr.nil? || part.nr != pe.value_default_wire_nr || part.type == PartType::PRODUCT_SEMIFINISHED

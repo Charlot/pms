@@ -2,7 +2,7 @@ require 'csv'
 module FileHandler
   module Csv
     class KanbanHandler<Base
-      IMPORT_HEADERS=['Nr','Quantity','Safety Stock','Copies','Remark',
+      IMPORT_HEADERS=['Nr','Quantity','Safety Stock','Copies','Remark','Remark2',
                       'Wire Nr','Product Nr','Type','Wire Length','Bundle',
       'Source Warehouse','Source Storage','Destination Warehouse','Destination Storage','Process List']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
@@ -19,12 +19,12 @@ module FileHandler
                   #更新,只能更新基础信息
                   kanban.update({quantity:row['Quantity'],safety_stock:row['Safety Stock'],copies:row['Copies'],remark:row['Remark'],bundle:row['Bundle'],
                                  source_warehouse:row['Source Warehouse'],source_storage:row['Source Storage'],des_warehouse:row['Destination Warehouse'],
-                                 des_storage:row['Destination Storage']})
+                                 des_storage:row['Destination Storage'],remark2:row['Remark2']})
                 else
                   #新建
                   #part_id = (part = Part.find_by_nr("#{row['Product Nr']}_#{row['Wire Nr']}")).nil? ? nil : part.id
                   product = Part.find_by_nr(row['Product Nr'])
-                  kanban = Kanban.new({quantity:row['Quantity'],safety_stock:row['Safety Stock'],copies:row['Copies'],remark:row['Remark'],
+                  kanban = Kanban.new({quantity:row['Quantity'],safety_stock:row['Safety Stock'],copies:row['Copies'],remark:row['Remark'],remark2:row['Remark2']
                                        product_id:product.id,ktype:row['Type'],bundle:row['Bundle'],
                                        source_warehouse:row['Source Warehouse'],source_storage:row['Source Storage'],des_warehouse:row['Destination Warehouse'],
                                        des_storage:row['Destination Storage'],state:KanbanState::RELEASED})

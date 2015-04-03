@@ -1,4 +1,6 @@
-# 修复看板数据错误
+puts "======================".yellow
+puts "修复看板数据错误".yellow
+puts "======================".yellow
 Kanban.where(ktype:KanbanType::WHITE).each do |k|
   if k.process_entities.count > 1
     if k.process_entities.where(product_id:k.product_id).count <=0
@@ -23,12 +25,13 @@ Kanban.where(ktype:KanbanType::WHITE).each do |k|
   end
 end
 
-# 修复Routing数据
+puts "======================".yellow
+puts "修复Routing数据".yellow
+puts "======================".yellow
 ProcessEntity.joins(:process_template).where("process_templates.type = ?",ProcessType::AUTO).each do |pe|
   pe.custom_values.each{|cv|
     if cv.custom_field.name == "default_wire_nr"
       wire_nr =  "#{pe.product_nr}_#{cv.value}"
-
       if Part.where(nr:wire_nr,type:PartType::PRODUCT_SEMIFINISHED).count <= 0
         Part.transaction do
           begin
@@ -42,3 +45,19 @@ ProcessEntity.joins(:process_template).where("process_templates.type = ?",Proces
     end
   }
 end
+
+#
+puts "======================".yellow
+puts "修复ProcessParts".yellow
+puts "======================".yellow
+
+ProcessEntity.all.each{|pe|
+  if pe.value_default_wire_nr
+    pe.process_parts.each{|pa|
+      if pa.part.nr == pe.value_default_wire_nr
+        pa.destroy
+        puts "删除了#{pa.part.nr}"
+      end
+    }
+  end
+}
