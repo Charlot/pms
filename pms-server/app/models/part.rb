@@ -16,9 +16,9 @@ class Part < ActiveRecord::Base
   validates :nr, presence: true, uniqueness: {message: 'part nr should be uniq'}
 
   #search
-  searchable do
-    text :nr
-  end
+  #searchable do
+  #  text :nr
+  #end
   #search
 
   after_save :update_cv_strip_length

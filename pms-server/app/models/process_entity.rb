@@ -9,14 +9,10 @@ class ProcessEntity < ActiveRecord::Base
   has_many :kanban_process_entities, dependent: :destroy
   has_many :process_parts
   has_many :parts, through: :process_parts
-  delegate :custom_fields, to: :process_template
+  delegate :custom_fields, to: :process_template,allow_nil: true
   delegate :nr,to: :product,prefix: true, allow_nil: true
   delegate :code, to: :process_template, prefix: true, allow_nil: true
   delegate :type, to: :process_template, prefix: true, allow_nil: true
-
-  searchable do
-
-  end
 
   acts_as_customizable
 

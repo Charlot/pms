@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150402030908) do
+ActiveRecord::Schema.define(version: 20150403031155) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -98,6 +98,7 @@ ActiveRecord::Schema.define(version: 20150402030908) do
     t.integer  "ktype"
     t.integer  "product_id",                     null: false
     t.integer  "bundle",           default: 0
+    t.string   "remark2"
   end
 
   add_index "kanbans", ["nr"], name: "index_kanbans_on_nr", using: :btree

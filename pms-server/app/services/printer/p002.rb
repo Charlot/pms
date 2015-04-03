@@ -52,7 +52,7 @@ module Printer
           seal_custom_nr2:parts_info[:s2_custom_nr],
           seal_nr2:parts_info[:s2_nr],
 
-          apab_description:'',
+          apab_description:@kanban.remark2,
           remark:@kanban.remark
       }
       heads=[]

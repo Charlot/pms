@@ -7,11 +7,11 @@ class Kanban < ActiveRecord::Base
   #belongs_to :part
   belongs_to :product, class_name: 'Part'
   #delegate :process_entities,to: :part
-  has_many :kanban_process_entities ,dependent: :destroy
+  has_many :kanban_process_entities, dependent: :destroy
   has_many :process_entities, through: :kanban_process_entities
-  delegate :nr, to: :part,prefix: true, allow_nil: true
-  delegate :nr, to: :product,prefix: true, allow_nil: true
-  delegate :custom_nr, to: :product,prefix: true,allow_nil: true
+  delegate :nr, to: :part, prefix: true, allow_nil: true
+  delegate :nr, to: :product, prefix: true, allow_nil: true
+  delegate :custom_nr, to: :product, prefix: true, allow_nil: true
   #delegate :custom_nr, to: :part, prefix: true,allow_nil: true
   has_many :production_order, as: :orderable
 
@@ -49,18 +49,14 @@ class Kanban < ActiveRecord::Base
   #只有在2220,2221,2410这几个步骤的时候，才需要现实取料信息
   def gathered_material
     data =[]
-    process_entities.each{|pe|
+    process_entities.each { |pe|
       puts pe.process_template_code
-      #if ["2220","2221","2410"].include?(pe.process_template_code)
-        puts "============"
-        pe.process_parts.each{|pp|
-          part = pp.part
-          puts "~~~~~~~~~~~~~~~~"
-          if pe.value_default_wire_nr.nil? || part.nr != pe.value_default_wire_nr || part.type == PartType::PRODUCT_SEMIFINISHED
-            data << [part.parsed_nr,part.positions(self.id).join(",")].join(":")
-          end
-        }
-      #end
+      pe.process_parts.each { |pp|
+        part = pp.part
+        if pe.value_default_wire_nr.nil? || part.nr != pe.value_default_wire_nr || part.type == PartType::PRODUCT_SEMIFINISHED
+          data << [part.parsed_nr, part.positions(self.id).join(",")].join(":")
+        end
+      }
     }
     data.join('\n')
   end
@@ -70,7 +66,7 @@ class Kanban < ActiveRecord::Base
   end
 
   def can_update?
-    if [KanbanState::INIT,KanbanState::LOCKED].include?(state)
+    if [KanbanState::INIT, KanbanState::LOCKED].include?(state)
       true
     else
       false
@@ -87,7 +83,7 @@ class Kanban < ActiveRecord::Base
   end
 
   def can_destroy?
-    if [KanbanState::INIT,KanbanState::LOCKED,KanbanState::DELETED].include?(state)
+    if [KanbanState::INIT, KanbanState::LOCKED, KanbanState::DELETED].include?(state)
       true
     else
       false
@@ -105,7 +101,7 @@ class Kanban < ActiveRecord::Base
   #看板对应的物料清单
   def material
     if (self.ktype == KanbanType::WHITE) && self.process_entities.first
-      self.process_entities.first.process_parts.select{|pp| PartType.is_material?(pp.part.type)}.collect{|pp|pp.part}
+      self.process_entities.first.process_parts.select { |pp| PartType.is_material?(pp.part.type) }.collect { |pp| pp.part }
     else
       []
     end
@@ -158,8 +154,8 @@ class Kanban < ActiveRecord::Base
   end
 
   # part_nr,product_nr
-  def self.search(part_nr="",product_nr="")
-    joins(:product).where('parts.nr LIKE ?',"%#{product_nr}%")
+  def self.search(part_nr="", product_nr="")
+    joins(:product).where('parts.nr LIKE ?', "%#{product_nr}%")
   end
 
   #
