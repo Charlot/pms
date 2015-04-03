@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  resources :part_positions do
+    collection do
+      match :import, to: :import, via: [:get, :post]
+    end
+  end
+
   resources :master_bom_items
 
   resources :departments

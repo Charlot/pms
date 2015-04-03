@@ -21,6 +21,19 @@ module V1
           ""
         end
       end
+
+      get do
+        kanbans = Kanban.where(ktype:params[:type]).paginate(:page=> params[:page])
+        data = []
+        kanbans.each_with_index{|k,index|
+          data << {No:index+kanbans.offset+1,Id:k.id,Nr:k.nr,Type:k.ktype}
+        }
+        data
+      end
+
+      get :types do
+        KanbanType.to_select
+      end
     end
   end
   end

@@ -15,6 +15,12 @@ class Part < ActiveRecord::Base
   has_one :tool
   validates :nr, presence: true, uniqueness: {message: 'part nr should be uniq'}
 
+  #search
+  searchable do
+    text :nr
+  end
+  #search
+
   after_save :update_cv_strip_length
 
   def self.to_csv(options = {})
@@ -46,6 +52,19 @@ class Part < ActiveRecord::Base
       when ".xlsx" then Roo::Excelx.new(file.path, nil, :ignore)
       else raise "Unknown file type: #{file.original_filename}"
       end
+  end
+
+  #这表示一个Part可能会被送往的位置
+  def positions(kanban_id)
+    Kanban.joins(process_entities: :process_parts).where("process_parts.part_id = ? AND kanbans.ktype != ? AND kanbans.des_storage is not NULL AND kanbans.id != ?",self.id,KanbanType::WHITE,kanban_id).collect{|k|k.desc_position}
+  end
+
+  def parsed_nr
+    if type == PartType::PRODUCT_SEMIFINISHED && nr.include?("_")
+      nr.split("_").last
+    else
+      nr
+    end
   end
 
   private

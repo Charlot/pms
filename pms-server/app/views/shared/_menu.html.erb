@@ -49,6 +49,7 @@
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">库存<span class="caret"></span></a>
           <ul class="dropdown-menu" role="manage">
+            <li class="<%= 'active' if current_controller?({controller: 'part_positions'})%>"><a href="<%= part_positions_path%>">Cutting原材料库位</a> </li>
             <li><a href='<%= "#{Setting.wms_url}/storages/panel" if Setting.wms_url%>'>库存</a></li>
             <li><a href="<%= %>">移库</a></li>
           </ul>

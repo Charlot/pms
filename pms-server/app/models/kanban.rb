@@ -4,7 +4,7 @@ class Kanban < ActiveRecord::Base
   validates :product_id, :presence => true
 
 
-  # belongs_to :part
+  #belongs_to :part
   belongs_to :product, class_name: 'Part'
   #delegate :process_entities,to: :part
   has_many :kanban_process_entities ,dependent: :destroy
@@ -12,7 +12,7 @@ class Kanban < ActiveRecord::Base
   delegate :nr, to: :part,prefix: true, allow_nil: true
   delegate :nr, to: :product,prefix: true, allow_nil: true
   delegate :custom_nr, to: :product,prefix: true,allow_nil: true
-  delegate :custom_nr, to: :part, prefix: true,allow_nil: true
+  #delegate :custom_nr, to: :part, prefix: true,allow_nil: true
   has_many :production_order, as: :orderable
 
   accepts_nested_attributes_for :kanban_process_entities, allow_destroy: true
@@ -35,7 +35,6 @@ class Kanban < ActiveRecord::Base
   end
 
   def destroy_part_bom
-    #TODO Kanban Update Part Bom
     # 要考虑相同KB的量，如果KB具有多张，则要特殊处理
     # part=self.part
     # product=self.product
@@ -44,6 +43,26 @@ class Kanban < ActiveRecord::Base
     #     pb.destroy
     #   end
     # end
+  end
+
+  #硬编码
+  #只有在2220,2221,2410这几个步骤的时候，才需要现实取料信息
+  def gathered_material
+    data =[]
+    process_entities.each{|pe|
+      puts pe.process_template_code
+      #if ["2220","2221","2410"].include?(pe.process_template_code)
+        puts "============"
+        pe.process_parts.each{|pp|
+          part = pp.part
+          puts "~~~~~~~~~~~~~~~~"
+          if pe.value_default_wire_nr.nil? || part.nr != pe.value_default_wire_nr || part.type == PartType::PRODUCT_SEMIFINISHED
+            data << [part.parsed_nr,part.positions(self.id).join(",")].join(":")
+          end
+        }
+      #end
+    }
+    data.join('\n')
   end
 
   def update_part_bom
@@ -80,6 +99,15 @@ class Kanban < ActiveRecord::Base
       self.process_entities.first.value_default_wire_nr
     else
       nil
+    end
+  end
+
+  #看板对应的物料清单
+  def material
+    if (self.ktype == KanbanType::WHITE) && self.process_entities.first
+      self.process_entities.first.process_parts.select{|pp| PartType.is_material?(pp.part.type)}.collect{|pp|pp.part}
+    else
+      []
     end
   end
 
@@ -131,7 +159,7 @@ class Kanban < ActiveRecord::Base
 
   # part_nr,product_nr
   def self.search(part_nr="",product_nr="")
-    joins(:part,:product).where('parts.nr LIKE ? and products_kanbans.nr LIKE ?',"%#{part_nr}%","%#{product_nr}%")
+    joins(:product).where('parts.nr LIKE ?',"%#{product_nr}%")
   end
 
   #
