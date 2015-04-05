@@ -98,7 +98,7 @@ ActiveRecord::Schema.define(version: 20150403031155) do
     t.integer  "ktype"
     t.integer  "product_id",                     null: false
     t.integer  "bundle",           default: 0
-    t.string   "remark2"
+    t.string   "remark2",          default: ""
   end
 
   add_index "kanbans", ["nr"], name: "index_kanbans_on_nr", using: :btree

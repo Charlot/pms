@@ -24,7 +24,7 @@ module FileHandler
                   #新建
                   #part_id = (part = Part.find_by_nr("#{row['Product Nr']}_#{row['Wire Nr']}")).nil? ? nil : part.id
                   product = Part.find_by_nr(row['Product Nr'])
-                  kanban = Kanban.new({quantity:row['Quantity'],safety_stock:row['Safety Stock'],copies:row['Copies'],remark:row['Remark'],remark2:row['Remark2']
+                  kanban = Kanban.new({quantity:row['Quantity'],safety_stock:row['Safety Stock'],copies:row['Copies'],remark:row['Remark'],remark2:row['Remark2'],
                                        product_id:product.id,ktype:row['Type'],bundle:row['Bundle'],
                                        source_warehouse:row['Source Warehouse'],source_storage:row['Source Storage'],des_warehouse:row['Destination Warehouse'],
                                        des_storage:row['Destination Storage'],state:KanbanState::RELEASED})

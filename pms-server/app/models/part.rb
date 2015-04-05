@@ -55,8 +55,16 @@ class Part < ActiveRecord::Base
   end
 
   #这表示一个Part可能会被送往的位置
-  def positions(kanban_id)
-    Kanban.joins(process_entities: :process_parts).where("process_parts.part_id = ? AND kanbans.ktype != ? AND kanbans.des_storage is not NULL AND kanbans.id != ?",self.id,KanbanType::WHITE,kanban_id).collect{|k|k.desc_position}
+  def positions(kanban_id,product_id)
+    if PartType.is_material?(self.type)
+      pp = PartPosition.find_by_part_id(self.id)
+      pp.nil? ? ["N/A"]:[pp.storage]
+    else
+      kanbans = Kanban.joins(process_entities: :process_parts)
+          .where("process_entities.product_id = ? AND process_parts.part_id = ? AND kanbans.ktype != ? AND kanbans.des_storage is not NULL AND kanbans.id != ?",product_id,self.id,KanbanType::WHITE,kanban_id)
+      kanbans.each{|k| puts k.nr}
+      kanbans.collect{|k|k.desc_position}
+    end
   end
 
   def parsed_nr

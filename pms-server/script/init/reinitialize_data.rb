@@ -1,3 +1,4 @@
+#
 puts "======================".yellow
 puts "修复看板数据错误".yellow
 puts "======================".yellow
@@ -25,6 +26,7 @@ Kanban.where(ktype:KanbanType::WHITE).each do |k|
   end
 end
 
+#
 puts "======================".yellow
 puts "修复Routing数据".yellow
 puts "======================".yellow
@@ -61,3 +63,14 @@ ProcessEntity.all.each{|pe|
     }
   end
 }
+
+#
+puts "======================".yellow
+puts "发布看板".yellow
+puts "======================".yellow
+Kanban.all.each do |kanban|
+  kanban.without_versioning do
+    kanban.update(state: KanbanState::RELEASED)
+    puts "#{kanban.nr}发布成功！".green
+  end
+end
