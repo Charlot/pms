@@ -1,2 +1,2 @@
-Part No.;Component P/N;Material Qty Per Harness;Dep
-;;;值：C或A，C代表cutting,A代表总装
+Part No.;Component P/N;Material Qty Per Harness;Dep;Delete
+;;;值：C或A，C代表cutting,A代表总装;值：1代表删除，0代表不删除，默认为0，如果组合不存在，则新建

@@ -19,6 +19,9 @@ class Part < ActiveRecord::Base
   #searchable do
   #  text :nr
   #end
+  # searchable do
+  #   text :nr
+  # end
   #search
 
   after_save :update_cv_strip_length
