@@ -3,8 +3,8 @@
     <div class="form-group">
       <div class="row">
         <div class="col-md-6">
-          <label>扫描投卡</label>
-          <input type="text" id="scan_Kanban" class="form-control"/>
+          <label>扫描销卡</label>
+          <input type="text" id="scan_Kanban_Finish" class="form-control"/>
         </div>
       </div>
     </div>
@@ -15,12 +15,12 @@
 <% end %>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#scan_Kanban').on('keypress', function (event) {
-            var kanban_id = $('#scan_Kanban').val();
+        $('#scan_Kanban_Finish').on('keypress', function (event) {
+            var kanban_id = $('#scan_Kanban_Finish').val();
             if (kanban_id.length > 0 && event.keyCode == 13) {
-                pms.kanban.scan(kanban_id, function (data) {
+                pms.kanban.scan_finish(kanban_id, function (data) {
                     if(data.result){
-                        swal("投卡成功！");
+                        swal("销卡成功！");
                     }
                     else{
                         swal(data.content);

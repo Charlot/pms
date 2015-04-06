@@ -22,7 +22,7 @@ Kanban.where(ktype:KanbanType::WHITE).each do |k|
       k.kanban_process_entities.joins(:process_entity).where("process_entities.product_id != ?",k.product_id).each{|e|e.destroy}
     end
   else
-    puts "不需要修改".green
+    #puts "不需要修改".green
   end
 end
 
@@ -71,12 +71,12 @@ puts "======================".yellow
 Kanban.includes(:kanban_process_entities).all.each do |kanban|
   kanban.without_versioning do
     kanban.update(state: KanbanState::RELEASED)
-    puts "#{kanban.nr}发布成功！".green
+    #puts "#{kanban.nr}发布成功！".green
   end
 
   kanban.kanban_process_entities.each do |kpe|
     if kpe.process_entity.product_id != kanban.product_id
-      puts "删除#{kanban.nr}下，多余的步骤:#{kpe.process_entity.nr}:#{kanban.product_id}"
+      puts "删除#{kanban.nr}下，多余的步骤:#{kpe.process_entity.nr}:#{kpe.process_entity.product_nr}".red
       kpe.destroy
     end
   end
