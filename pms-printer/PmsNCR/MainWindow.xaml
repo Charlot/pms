@@ -13,6 +13,8 @@
             <Button Content="物料检查" Height="29" Name="MaterialCheckBtn" Width="171" Margin="10,10,0,10" Click="MaterialCheckBtn_Click" />
             <Button Content="订单预览" Height="29" Name="OrderPreviewBtn" Width="171" Margin="10,10,0,10" Click="OrderPreviewBtn_Click" />
             <Button Content="打印机设置" Height="29" Name="PrinterSettingBtn" Width="171"  Margin="10,10,0,10" Click="PrinterSettingBtn_Click"/>
+
+            <Button Content="机器设置" Height="29" Name="MachineSettingBtn" Width="171"  Margin="10,10,0,10" Click="MachineSettingBtn_Click" />
         </StackPanel>
     </Grid>
 </Window>
