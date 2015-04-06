@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resources :master_bom_items do
     collection do
       match :import, to: :import, via: [:get, :post]
+      match :transport, to: :transport, via: [:get, :post]
     end
   end
 

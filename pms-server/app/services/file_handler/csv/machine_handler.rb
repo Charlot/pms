@@ -12,6 +12,7 @@ module FileHandler
           if validate_msg.result
             Machine.transaction do
               CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+                row.strip
                 resource_group = ResourceGroup.find_by_nr(row['Resource Group'])
                 machine = Machine.find_by_name(row['Name'])
                 if machine
