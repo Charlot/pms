@@ -8,7 +8,7 @@ module Enum
                 DEPARTMENT: '部门'
     }
 
-    @@actions = ["new", "index", "show", "edit", "import", "panel"]
+    @@actions = ["new", "index", "show", "edit", "import", "panel",'transport']
 
     class<<self
       @@models.each { |k, v|
@@ -41,6 +41,13 @@ module Enum
           "导入#{model}"
         when "panel"
           "#{model}控制面板"
+        when 'transport'
+          case model
+            when 'Master BOM'
+              "订单BOM转换"
+            else
+              'N/A'
+          end
         else
           "N/A"
       end
