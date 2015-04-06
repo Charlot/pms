@@ -6,15 +6,16 @@ module V1
         # 配置机器API
         namespace :setting do
           post :ip do
-            msg=Message.new
+            msg=ServiceMessage.new
             if machine=Machine.find_by_nr(params[:machine_nr])
               if params[:ip]=~Resolv::IPv4::Regex
-                msg.result = machine.update(ip: params[:ip])
+                msg.Result = machine.update(ip: params[:ip])
+                msg.Content='IP 设置成功!'
               else
-                msg.content = "Machine IP #{params[:ip]} is not valid"
+                msg.Content = "Machine IP #{params[:ip]} is not valid"
               end
             else
-              msg.content="No Machine Nr: #{params[:machine_nr]}"
+              msg.Content="No Machine Nr: #{params[:machine_nr]}"
             end
             msg
           end
