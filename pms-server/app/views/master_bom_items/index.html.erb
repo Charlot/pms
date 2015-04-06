@@ -12,10 +12,10 @@
   <tbody>
   <% @master_bom_items.each do |master_bom_item| %>
       <tr>
+        <td><%= master_bom_item.product.nr %></td>
+        <td><%= master_bom_item.bom_item.nr %></td>
         <td><%= master_bom_item.qty %></td>
-        <td><%= master_bom_item.bom_item_id %></td>
-        <td><%= master_bom_item.product_id %></td>
-        <td><%= master_bom_item.department %></td>
+        <td><%= master_bom_item.department.name %></td>
         <td><%= link_to 'Show', master_bom_item %></td>
         <td><%= link_to 'Edit', edit_master_bom_item_path(master_bom_item) %></td>
         <td><%= link_to 'Destroy', master_bom_item, method: :delete, data: {confirm: 'Are you sure?'} %></td>
