@@ -4,7 +4,7 @@ class MasterBomItemsController < ApplicationController
   # GET /master_bom_items
   # GET /master_bom_items.json
   def index
-    @master_bom_items = MasterBomItem.all
+    @master_bom_items = MasterBomItem.paginate(:page => params[:page])
   end
 
   # GET /master_bom_items/1

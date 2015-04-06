@@ -1,3 +1,7 @@
+<div class="digg_pagination">
+  <%= will_paginate @master_bom_items, :container => false %>
+</div>
+
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
@@ -27,3 +31,6 @@
 <br>
 
 <%= link_to 'New Master bom item', new_master_bom_item_path %>
+<div class="digg_pagination">
+  <%= will_paginate @master_bom_items, :container => false %>
+</div>
