@@ -62,6 +62,6 @@ class ProcessEntity < ActiveRecord::Base
       else
         'ERROR'
       end
-    end
+    end if self.process_template.template
   end
 end
