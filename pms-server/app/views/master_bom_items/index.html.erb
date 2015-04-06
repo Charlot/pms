@@ -1,18 +1,16 @@
-<h1>Listing master_bom_items</h1>
-
-<table>
+<table class="table table-bordered table-striped table-hover">
   <thead>
-    <tr>
-      <th>Qty</th>
-      <th>Bom item</th>
-      <th>Product</th>
-      <th>Department</th>
-      <th colspan="3"></th>
-    </tr>
+  <tr>
+    <th>Part No.</th>
+    <th>Component P/N</th>
+    <th>Material Qty Per Harness</th>
+    <th>Department</th>
+    <th colspan="3"></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @master_bom_items.each do |master_bom_item| %>
+  <% @master_bom_items.each do |master_bom_item| %>
       <tr>
         <td><%= master_bom_item.qty %></td>
         <td><%= master_bom_item.bom_item_id %></td>
@@ -20,9 +18,9 @@
         <td><%= master_bom_item.department %></td>
         <td><%= link_to 'Show', master_bom_item %></td>
         <td><%= link_to 'Edit', edit_master_bom_item_path(master_bom_item) %></td>
-        <td><%= link_to 'Destroy', master_bom_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Destroy', master_bom_item, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 
