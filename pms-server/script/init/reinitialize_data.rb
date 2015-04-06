@@ -68,9 +68,16 @@ ProcessEntity.all.each{|pe|
 puts "======================".yellow
 puts "发布看板".yellow
 puts "======================".yellow
-Kanban.all.each do |kanban|
+Kanban.includes(:kanban_process_entities).all.each do |kanban|
   kanban.without_versioning do
     kanban.update(state: KanbanState::RELEASED)
     puts "#{kanban.nr}发布成功！".green
+  end
+
+  kanban.kanban_process_entities.each do |kpe|
+    if kpe.process_entity.product_id != kanban.product_id
+      puts "删除#{kanban.nr}下，多余的步骤:#{kpe.process_entity.nr}:#{kanban.product_id}"
+      kpe.destroy
+    end
   end
 end
