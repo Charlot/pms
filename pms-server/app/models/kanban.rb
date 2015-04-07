@@ -91,8 +91,8 @@ class Kanban < ActiveRecord::Base
   end
 
   def wire_nr
-    if (self.ktype == KanbanType::WHITE) && self.process_entities.first && self.process_entities.first.value_default_wire_nr
-      self.process_entities.first.value_default_wire_nr
+    if (self.ktype == KanbanType::WHITE) && self.process_entities.first
+      self.process_entities.first.wire_nr
     else
       nil
     end
