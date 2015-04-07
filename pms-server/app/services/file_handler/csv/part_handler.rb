@@ -12,6 +12,7 @@ module FileHandler
       		if validate_msg.result
       			Part.transaction do
       				CSV.foreach(file.file_path,headers: file.headers,col_sep: file.col_sep,encoding: file.encoding) do |row|
+                row.strip
       					part = Part.find_by_nr(row['Part Nr'])
       					unless part
       						Part.create({nr:row['Part Nr'],custom_nr: row['Custom Nr'],type:row['Type'],strip_length:row['Strip Length']})

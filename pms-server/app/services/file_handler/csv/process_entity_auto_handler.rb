@@ -18,6 +18,7 @@ module FileHandler
           if validate_msg.result
             ProcessEntity.transaction do
               CSV.foreach(file.file_path,headers: file.headers,col_sep: file.col_sep,encoding: file.encoding) do |row|
+                row.strip
                 process_template = ProcessTemplate.find_by_code(row['Template Code'])
                 product = Part.find_by_nr(row['Product Nr'])
                 #part = Part.find_by_nr(row['Wire Nr'])

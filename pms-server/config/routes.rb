@@ -124,6 +124,7 @@ Rails.application.routes.draw do
       get :panel
       get :search
       match :import, to: :import, via: [:get, :post]
+      match :scan_finish, to: :scan_finish, via: [:get,:post]
     end
   end
 

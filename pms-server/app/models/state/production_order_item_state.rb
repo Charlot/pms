@@ -11,6 +11,7 @@ class ProductionOrderItemState<BaseType
   ABORTED=500
   INTERRUPTED=600
   PAUSED=700
+  SCANNED=800
 
 
   def self.display(state)
@@ -39,6 +40,8 @@ class ProductionOrderItemState<BaseType
         '已中断'
       when PAUSED
         '已暂停'
+      when SCANNED
+        '已销卡'
       else
         'Init'
     end
@@ -49,10 +52,14 @@ class ProductionOrderItemState<BaseType
   end
 
   def self.distribute_states
-    [OPTIMISE_SUCCEED,DISTRIBUTE_FAIL]
+    [OPTIMISE_SUCCEED, DISTRIBUTE_FAIL]
   end
 
   def self.wait_produce_states
     DISTRIBUTE_SUCCEED
+  end
+
+  def self.wait_scan_states
+    [TERMINATED]
   end
 end

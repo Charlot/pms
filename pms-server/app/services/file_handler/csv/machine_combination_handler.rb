@@ -12,16 +12,17 @@ module FileHandler
           if validate_msg.result
             MachineCombination.transaction do
               CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
-              machine = Machine.find_by_nr(row['Machine Nr'])
-              machine_combination = MachineCombination.new
-              ['W1', 'T1', 'T2', 'S1', 'S2'].each { |header|
-                if row[header].present?
-                  part = Part.find_by_nr(row[header])
-                  machine_combination.send("#{header.downcase}=", part.id)
-                end
-              }
-              machine_combination.machine = machine
-              machine_combination.save
+                row.strip
+                machine = Machine.find_by_nr(row['Machine Nr'])
+                machine_combination = MachineCombination.new
+                ['W1', 'T1', 'T2', 'S1', 'S2'].each { |header|
+                  if row[header].present?
+                    part = Part.find_by_nr(row[header])
+                    machine_combination.send("#{header.downcase}=", part.id)
+                  end
+                }
+                machine_combination.machine = machine
+                machine_combination.save
               end
             end
             msg.result = true

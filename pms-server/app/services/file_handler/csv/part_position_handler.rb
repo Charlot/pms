@@ -12,6 +12,7 @@ module FileHandler
           if validate_msg.result
             PartPosition.transaction do
               CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+                row.strip
                 part = Part.find_by_nr(row['Part Nr'])
                 part_position = PartPosition.find_by_part_id(part.id)
                 unless part_position

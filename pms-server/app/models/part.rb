@@ -19,10 +19,6 @@ class Part < ActiveRecord::Base
   #searchable do
   #  text :nr
   #end
-  # searchable do
-  #   text :nr
-  # end
-  #search
 
   after_save :update_cv_strip_length
 
@@ -64,7 +60,7 @@ class Part < ActiveRecord::Base
       pp.nil? ? ["N/A"]:[pp.storage]
     else
       kanbans = Kanban.joins(process_entities: :process_parts)
-          .where("process_entities.product_id = ? AND process_parts.part_id = ? AND kanbans.ktype != ? AND kanbans.des_storage is not NULL AND kanbans.id != ?",product_id,self.id,KanbanType::WHITE,kanban_id)
+          .where("process_parts.part_id = ? AND kanbans.ktype != ? AND kanbans.des_storage is not NULL AND kanbans.id != ?",self.id,KanbanType::WHITE,kanban_id)
       kanbans.each{|k| puts k.nr}
       kanbans.collect{|k|k.desc_position}
     end
