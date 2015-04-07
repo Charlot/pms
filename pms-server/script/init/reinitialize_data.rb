@@ -81,3 +81,19 @@ Kanban.includes(:kanban_process_entities).all.each do |kanban|
     end
   end
 end
+
+#修复步骤属性
+puts "======================".yellow
+puts "修复步骤属性".yellow
+puts "======================".yellow
+CustomField.all.each do |cf|
+  if cf.name == "default_wire_nr"
+    cf.update(is_for_out_stock:false)
+    cf.custom_values.each do |cv|
+      if (pp =cv.customized.process_parts.where(part_id:cv.value)).count > 0
+        puts "删除#{pp.count}个零件"
+        pp.each{|p|p.destroy}
+      end
+    end
+  end
+end

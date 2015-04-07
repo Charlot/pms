@@ -18,6 +18,8 @@ class ProcessEntity < ActiveRecord::Base
 
   # after_create :build_process_parts
 
+  #
+
   def custom_field_type
     puts '***************************************8'
     puts "#{self.process_template_id}_#{ProcessTemplate.name}"
