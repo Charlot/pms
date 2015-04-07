@@ -33,10 +33,10 @@ module Printer
           card_number:@kanban.copies,
           work_time:@kanban.task_time,
           send_position:@kanban.source_position,
-          wire_description:@kanban.part_custom_nr,
+          wire_description:'@kanban.part_custom_nr',
           kanban_2dcode: @kanban.printed_2DCode,
           wire_length:@process_entity.value_wire_qty_factor,
-          bundle_number:@kanban.value_default_bundle_qty,
+          bundle_number:@kanban.bundle,
 
           strip_length1:@process_entity.t1_strip_length,
           terminal_custom_nr1:parts_info[:t1_custom_nr],
