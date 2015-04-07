@@ -19,8 +19,10 @@ class Machine < ActiveRecord::Base
     return optimise_time
   end
 
-  def for_optimise_order_items(machine_time)
-    production_order_items.where(machine_time: machine_time, state: ProductionOrderItemState::INIT)
+  def for_optimise_order_items(machine_time=nil)
+    q=production_order_items.where(state:ProductionOrderItemState::INIT)
+    q= q.where(machine_time: machine_time) unless machine_time.nil?
+    q
   end
 
   def sort_order_item

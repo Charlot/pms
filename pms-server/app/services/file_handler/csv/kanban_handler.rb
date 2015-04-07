@@ -31,7 +31,7 @@ module FileHandler
                                        source_warehouse: row['Source Warehouse'], source_storage: row['Source Storage'], des_warehouse: row['Destination Warehouse'],
                                        des_storage: row['Destination Storage'], state: KanbanState::RELEASED})
                   process_nrs = row['Process List'].split(',')
-                  kanban_process_entities = ProcessEntity.where(nr: process_nrs).collect { |pe| KanbanProcessEntity.new({process_entity_id: pe.id}) }
+                  kanban_process_entities = ProcessEntity.where({nr:process_nrs,product_id:product.id}).collect { |pe| KanbanProcessEntity.new({process_entity_id: pe.id}) }
                   kanban.kanban_process_entities = kanban_process_entities
                   kanban.save
                 end
