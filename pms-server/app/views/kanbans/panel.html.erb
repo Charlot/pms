@@ -1,11 +1,11 @@
 <div class="row">
   <div class="col-md-5">
     <div class="form-group">
-
-      <label>扫描KANBAN，投卡</label>
       <div class="row">
-        <div class="col-md-6"><select>
-        </select><input type="text" id="scan_Kanban" class="form-control"></input></div>
+        <div class="col-md-6">
+          <label>扫描投卡</label>
+          <input type="text" id="scan_Kanban" class="form-control"/>
+        </div>
       </div>
     </div>
   </div>
@@ -19,7 +19,12 @@
             var kanban_id = $('#scan_Kanban').val();
             if (kanban_id.length > 0 && event.keyCode == 13) {
                 pms.kanban.scan(kanban_id, function (data) {
-                    console.log(data);
+                    if(data.result){
+                        swal("投卡成功！");
+                    }
+                    else{
+                        swal(data.content);
+                    }
                 })
             }
         });

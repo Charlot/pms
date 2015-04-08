@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Brilliantech.Framwork.Utils.ConfigUtil;
 using System.IO;
+using Brilliantech.ReportGenConnector;
+using TECIT.TFORMer;
 
 namespace PmsTestConsole
 {
@@ -24,8 +26,32 @@ namespace PmsTestConsole
             
            // Console.WriteLine(DateTime.Now.ToString("HHmmsss"));
 
-            Console.WriteLine("J_0001,9".Split(',')[0].TrimStart("J_".ToCharArray()));
-            Console.Read();
+         //   Console.WriteLine("J_0001,9".Split(',')[0].TrimStart("J_".ToCharArray()));
+            try
+            {
+                RecordSet rs = new RecordSet();
+                RecordData rd = new RecordData();
+                rd.Add("A", "AAA");
+                rs.Add(rd);
+
+                IReportGen gen = new TecITGener();
+                ReportGenConfig config = new ReportGenConfig()
+                {
+                   Printer = "Microsoft XPS Document Writer",
+
+                   // Printer = "Zebra ZM400 (203 dpi) - ZPL (副本 1)",
+                    NumberOfCopies = 1,
+                    PrinterType = (PrinterType)0,
+                    Template = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Template\\t1.tff")
+                };
+
+                gen.Print(rs, config);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.Read();
+            }
         }
     }
 }

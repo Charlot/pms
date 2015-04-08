@@ -1,0 +1,24 @@
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+    <tr>
+      <th>零件号</th>
+      <th>库存</th>
+      <th>描述</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @part_positions.each do |part_position| %>
+      <tr>
+        <td><%= part_position.part_nr%></td>
+        <td><%= part_position.storage%></td>
+        <td><%= part_position.description%></td>
+        <td><%= link_to '编辑', edit_part_position_path(part_position) %></td>
+        <td><%= link_to '删除', part_position, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

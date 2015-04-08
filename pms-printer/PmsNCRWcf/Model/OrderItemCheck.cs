@@ -10,6 +10,8 @@ namespace PmsNCRWcf.Model
     public class OrderItemCheck
     {
         [DataMember]
+        public int No { get; set; }
+        [DataMember]
         public int Id { get; set; }
         [DataMember]
         public string ItemNr { get; set; }
@@ -35,6 +37,10 @@ namespace PmsNCRWcf.Model
         public float Terminal2StripLength { get; set; }
         [DataMember]
         public string Tool2Nr { get; set; }
+        [DataMember]
+        public string Seal1Nr { get; set; }
+        [DataMember]
+        public string Seal2Nr { get; set; }
         [DataMember]
         public string FileName { get; set; }
     }

@@ -122,8 +122,6 @@ class PartsController < ApplicationController
   end
   
   def import
-    #Part.import(params[:file])
-    #redirect_to parts_url, notice: 'Part was successfully imported.'
     if request.post?
       msg = Message.new
       begin 

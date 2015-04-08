@@ -1,10 +1,32 @@
 Rails.application.routes.draw do
+  resources :part_positions do
+    collection do
+      match :import, to: :import, via: [:get, :post]
+    end
+  end
+
+  resources :master_bom_items do
+    collection do
+      match :import, to: :import, via: [:get, :post]
+      match :transport, to: :transport, via: [:get, :post]
+    end
+  end
+
+  resources :departments
+
+  resources :master_bom_items do
+    collection do
+      match :import, to: :import, via: [:get, :post]
+    end
+  end
+
   resources :kanban_process_entities
 
   resources :production_order_items do
     collection do
       post :optimise
       post :distribute
+      post :export
     end
   end
 
@@ -14,7 +36,11 @@ Rails.application.routes.draw do
 
   resources :settings
 
-  resources :tools
+  resources :tools do
+    collection do
+      match :import, to: :import, via: [:get, :post]
+    end
+  end
 
   resources :resource_group_parts do
     collection do
@@ -24,7 +50,11 @@ Rails.application.routes.draw do
 
   mount ApplicationAPI => '/'
 
-  resources :machine_combinations
+  resources :machine_combinations do
+    collection do
+      match :import, to: :import, via: [:get, :post]
+    end
+  end
 
   resources :machine_scopes
 
@@ -33,7 +63,7 @@ Rails.application.routes.draw do
     resources :machine_combinations
 
     collection do
-      match :import, to: :import,via:[:get,:post]
+      match :import, to: :import, via: [:get, :post]
     end
   end
 
@@ -53,8 +83,9 @@ Rails.application.routes.draw do
     end
     collection do
       get :search
-      match :import_auto, to: :import_auto,via:[:get,:post]
-      match :import_semi_auto,to: :import_semi_auto,via:[:get,:post]
+      match :import_auto, to: :import_auto, via: [:get, :post]
+      match :import_semi_auto, to: :import_semi_auto, via: [:get, :post]
+      get :export_unused
     end
   end
 
@@ -73,7 +104,7 @@ Rails.application.routes.draw do
       post :autoimport
       post :semiautoimport
       post :manual_import
-      match :import,to: :import,via: [:get,:post]
+      match :import, to: :import, via: [:get, :post]
     end
   end
 
@@ -93,7 +124,8 @@ Rails.application.routes.draw do
       post :scan
       get :panel
       get :search
-      match :import ,to: :import,via: [:get,:post]
+      match :import, to: :import, via: [:get, :post]
+      match :scan_finish, to: :scan_finish, via: [:get,:post]
     end
   end
 
@@ -114,7 +146,7 @@ Rails.application.routes.draw do
     end
     collection do
       get :search
-      match :import, to: :import, via: [:get,:post]
+      match :import, to: :import, via: [:get, :post]
       #post :import
     end
   end

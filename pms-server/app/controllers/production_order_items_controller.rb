@@ -6,7 +6,7 @@ class ProductionOrderItemsController < ApplicationController
   def index
     if params.has_key?(:production_order_id)
       @production_order=ProductionOrder.find_by_id(params[:production_order_id])
-      @production_order_items=@production_order.production_order_items
+      @production_order_items=@production_order.production_order_items.order(machine_id: :asc,optimise_index: :asc)
       @optimised=true
     else
       @production_order_items = ProductionOrderItem.for_optimise
@@ -99,6 +99,21 @@ class ProductionOrderItemsController < ApplicationController
     else
       msg.content = 'Production Order Not found Error'
       redirect_to production_order_items_path, notice: msg.content
+    end
+  end
+
+  # POST
+  def export
+    if @production_order=ProductionOrder.find_by_id(params[:production_order_id])
+      items=ProductionOrderItem.for_export(@production_order)
+      msg=FileHandler::Csv::ProductionOrderItemHandler.new.export_optimized(items, request.user_agent)
+      if msg.result
+        send_file msg.content
+      else
+        render 'shared/error'
+      end
+    else
+      render 'shared/error'
     end
   end
 

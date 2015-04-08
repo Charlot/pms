@@ -1,0 +1,22 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong><%= DepartmentDesc::NAME %>:</strong>
+  <%= @department.name %>
+</p>
+
+
+<p>
+  <strong><%= DepartmentDesc::CODE %>:</strong>
+  <%= @department.code %>
+</p>
+
+
+<p>
+  <strong><%= DepartmentDesc::DESCRIPTION %>:</strong>
+  <%= @department.description %>
+</p>
+
+
+<%= link_to '编辑', edit_department_path(@department) %> |
+<%= link_to '返回', departments_path %>

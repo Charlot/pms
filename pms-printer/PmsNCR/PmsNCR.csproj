@@ -82,6 +82,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MachineSettingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -92,6 +96,9 @@
     </Compile>
     <Compile Include="ClientDataWatcher.xaml.cs">
       <DependentUpon>ClientDataWatcher.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MachineSettingWindow.xaml.cs">
+      <DependentUpon>MachineSettingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -133,20 +140,22 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Content Include="Template\BaiKa_bak.tff">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Template\BaiKa.tff" />
+    <None Include="Template\BundleLabel.tff">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Tool\WinTail.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Template\BaiKa.tff">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Template\BaiKa.tfs" />
-    <None Include="Template\BundleLabel.tff">
+    <None Include="Template\BundleLabel_bak.tff">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Template\LanKa.tff">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Template\LanKa.tfs" />
     <None Include="Template\read.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

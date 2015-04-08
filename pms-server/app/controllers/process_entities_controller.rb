@@ -23,16 +23,9 @@ class ProcessEntitiesController < ApplicationController
   def edit
   end
 
-  # GET /process_entities/search
-=begin
+
   def search
-    @pe = ProcessEntity.send("find_by_"+params[:attr],params[:val])
-    respond_to do |format|
-      format.json { render json: {result: false, content: "Not Found!"}} unless @pe
-      format.json { render json: {result: true, content: @pe}}
-    end
   end
-=end
 
   # GET /process_entities/1/simple
   def simple
@@ -69,6 +62,17 @@ class ProcessEntitiesController < ApplicationController
       rescue => e
         msg.content = e.message
       end
+      render json: msg
+    end
+  end
+
+  # GET
+  def export_unused
+    msg = FileHandler::Csv::ProcessEntityHandler.export_unused(request.user_agent.downcase)
+    #render json: msg
+    if msg.result
+      send_file msg.content
+    else
       render json: msg
     end
   end
