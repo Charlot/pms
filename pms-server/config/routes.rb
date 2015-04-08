@@ -85,6 +85,7 @@ Rails.application.routes.draw do
       get :search
       match :import_auto, to: :import_auto, via: [:get, :post]
       match :import_semi_auto, to: :import_semi_auto, via: [:get, :post]
+      get :export_unused
     end
   end
 
