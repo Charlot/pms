@@ -9,7 +9,7 @@ class ProcessEntity < ActiveRecord::Base
   has_many :kanban_process_entities, dependent: :destroy
   has_many :process_parts
   has_many :parts, through: :process_parts
-  delegate :custom_fields, to: :process_template
+  delegate :custom_fields, to: :process_template,allow_nil: true
   delegate :nr,to: :product,prefix: true, allow_nil: true
   delegate :code, to: :process_template, prefix: true, allow_nil: true
   delegate :type, to: :process_template, prefix: true, allow_nil: true
@@ -17,6 +17,15 @@ class ProcessEntity < ActiveRecord::Base
   acts_as_customizable
 
   # after_create :build_process_parts
+
+  #
+  def wire_nr
+    if self.value_default_wire_nr && (part = Part.find_by_id(self.value_default_wire_nr))
+      part.nr.split("_").last
+    else
+      ""
+    end
+  end
 
   def custom_field_type
     puts '***************************************8'
@@ -51,17 +60,21 @@ class ProcessEntity < ActiveRecord::Base
     cfvs=self.custom_field_values
     puts "***#{cfs.to_s}"
     puts "---#{cfvs.to_s}"
-    self.process_template.template.gsub(/{\d+}/).each do |v|
-      puts "#####{v}"
-      if cf=cfs.detect { |f|
-        puts "#{v.to_i}~~~#{f.id.to_i==v.to_i}"
-        f.id.to_i==v.scan(/{(\d+)}/).map(&:first).first.to_i }
-        puts "********************#{cf.to_json}"
-        cfv=cfvs.detect { |v| v.custom_field_id==cf.id }
-        CustomFieldFormatType.part?(cf.field_format) ? ((part=Part.find_by_id(cfv.value)).nil? ? 'N/A' : part.nr) : (cfv.value.nil? ? 'N/A' : cfv.value)
-      else
-        'ERROR'
+    if template.template
+      self.process_template.template.gsub(/{\d+}/).each do |v|
+        puts "#####{v}"
+        if cf=cfs.detect { |f|
+          puts "#{v.to_i}~~~#{f.id.to_i==v.to_i}"
+          f.id.to_i==v.scan(/{(\d+)}/).map(&:first).first.to_i }
+          puts "********************#{cf.to_json}"
+          cfv=cfvs.detect { |v| v.custom_field_id==cf.id }
+          CustomFieldFormatType.part?(cf.field_format) ? ((part=Part.find_by_id(cfv.value)).nil? ? '' : part.parsed_nr) : (cfv.value.nil? ? '' : cfv.value)
+        else
+          'ERROR'
+        end
       end
+    else
+      ""
     end
   end
 end

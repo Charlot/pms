@@ -1,0 +1,33 @@
+<%= form_for(@master_bom_item) do |f| %>
+  <% if @master_bom_item.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@master_bom_item.errors.count, "error") %> prohibited this master_bom_item from being saved:</h2>
+
+      <ul>
+      <% @master_bom_item.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :qty %><br>
+    <%= f.text_field :qty %>
+  </div>
+  <div class="field">
+    <%= f.label :bom_item_id %><br>
+    <%= f.number_field :bom_item_id %>
+  </div>
+  <div class="field">
+    <%= f.label :product_id %><br>
+    <%= f.number_field :product_id %>
+  </div>
+  <div class="field">
+    <%= f.label :department_id %><br>
+    <%= f.text_field :department_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

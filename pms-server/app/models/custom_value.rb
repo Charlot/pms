@@ -11,9 +11,9 @@ class CustomValue < ActiveRecord::Base
 
   def self.value_by_format(field, value)
     if field.field_format=='part'
-      (part=Part.find_by_id(value)).nil? ? 'N/A' : part.nr
+      (part=Part.find_by_id(value)).nil? ? '' : part.nr
     else
-      value.nil? ? 'N/A' : value
+      value.nil? ? '' : value
     end
   end
 

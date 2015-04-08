@@ -2,11 +2,19 @@
     <%= javascript_include_tag "printer" %>
 <% end %>
 
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @kanbans %>
+  </div>
+  <%= will_paginate @kanbans, :container => false %>
+</div>
+
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
     <th>#</th>
     <th><%= KanbanDesc::NR %></th>
+    <th> 条形码信息</th>
     <th><%= KanbanDesc::TYPE %></th>
     <th><%= KanbanDesc::WIRE_NR %></th>
     <th><%= KanbanDesc::PRODUCT_NR %></th>
@@ -19,7 +27,7 @@
     <th><%= KanbanDesc::SOURCE_POSITION %></th>
     <th><%= KanbanDesc::DES_POSITION %></th>
     <th>历史</th>
-    <th colspan="3"></th>
+    <th colspan="2"></th>
   </tr>
   </thead>
 
@@ -28,6 +36,7 @@
       <tr>
         <td><%= index + 1 %></td>
         <td><%= kanban.nr %></td>
+        <td><%= kanban.printed_2DCode%></td>
         <td><%= KanbanType.display(kanban.ktype) %></td>
         <td><%= kanban.wire_nr %></td>
         <td><%= kanban.product_nr %></td>
@@ -43,12 +52,13 @@
         <td><%= "#{kanban.source_warehouse} | #{kanban.source_storage}" %></td>
         <td><%= "#{kanban.des_warehouse} | #{kanban.des_storage}" %></td>
         <td><%= link_to '修改历史', history_kanban_path(kanban) %></td>
-        <td>
-          <button class="btn btn-default print" type="button" id="<%= kanban.id %>" kanban_type="<%= kanban.ktype %>">打印</button>
-        </td>
         <td><%= link_to '详细', kanban, class: "btn btn-default" %></td>
         <td><%= link_to '编辑', edit_kanban_path(kanban), class: "btn btn-default" %></td>
       </tr>
   <% end %>
   </tbody>
 </table>
+
+<div class="digg_pagination">
+  <%= will_paginate @kanbans, :container => false %>
+</div>

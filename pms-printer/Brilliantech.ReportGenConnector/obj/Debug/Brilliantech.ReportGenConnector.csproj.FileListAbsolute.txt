@@ -1,0 +1,5 @@
+C:\Users\Charlot\Documents\GitHub\pms\pms-printer\Brilliantech.ReportGenConnector\bin\Debug\Brilliantech.ReportGenConnector.dll
+C:\Users\Charlot\Documents\GitHub\pms\pms-printer\Brilliantech.ReportGenConnector\bin\Debug\Brilliantech.ReportGenConnector.pdb
+C:\Users\Charlot\Documents\GitHub\pms\pms-printer\Brilliantech.ReportGenConnector\bin\Debug\TECIT.TFORMer.dll
+C:\Users\Charlot\Documents\GitHub\pms\pms-printer\Brilliantech.ReportGenConnector\obj\Debug\Brilliantech.ReportGenConnector.dll
+C:\Users\Charlot\Documents\GitHub\pms\pms-printer\Brilliantech.ReportGenConnector\obj\Debug\Brilliantech.ReportGenConnector.pdb

@@ -82,5 +82,10 @@ namespace PmsNCR
             new OrderPreviewWindow().Show();
         }
 
+        private void MachineSettingBtn_Click(object sender, RoutedEventArgs e)
+        {
+            new MachineSettingWindow().ShowDialog(); 
+        }
+
     }
 }

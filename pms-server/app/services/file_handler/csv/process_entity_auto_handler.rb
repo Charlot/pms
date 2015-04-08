@@ -18,6 +18,7 @@ module FileHandler
           if validate_msg.result
             ProcessEntity.transaction do
               CSV.foreach(file.file_path,headers: file.headers,col_sep: file.col_sep,encoding: file.encoding) do |row|
+                row.strip
                 process_template = ProcessTemplate.find_by_code(row['Template Code'])
                 product = Part.find_by_nr(row['Product Nr'])
                 #part = Part.find_by_nr(row['Wire Nr'])
@@ -47,7 +48,7 @@ module FileHandler
 
                 process_entity.custom_values.each do |cv|
                   cf=cv.custom_field
-                  if CustomFieldFormatType.part?(cf.field_format)
+                  if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
                     process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: process_entity.process_part_quantity_by_cf(cf.name.to_sym))
                   end
                 end

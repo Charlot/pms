@@ -23,6 +23,14 @@ class ProductionOrderItem < ActiveRecord::Base
     where(state: ProductionOrderItemState.wait_produce_states, machine_id: machine.id).order(optimise_index: :asc)
   end
 
+  def self.for_export(production_order)
+    where(production_order_id: production_order.id)
+        .joins(:kanban)
+        .joins(:production_order)
+        .joins(:machine).order(machine_id: :asc,optimise_index: :asc)
+        .select('production_orders.nr as production_order_nr,kanbans.nr as kanban_nr,machines.nr as machine_nr,production_order_items.*')
+  end
+
   def self.optimise
     ProductionOrderItem.transaction do
       optimise_at=Time.now
@@ -33,21 +41,35 @@ class ProductionOrderItem < ActiveRecord::Base
         combinations=MachineCombination.load_combinations
         items.each do |item|
           if node= combinations.match(MachineCombination.init_node_by_kanban(item.kanban))
+
+            # item.update(machine_id: node.machine_id,
+            #             optimise_index: Machine.find_by_id(node.machine_id).optimise_time_by_kanban(item.kanban),
+            #             optimise_at: optimise_at,
+            #             state: ProductionOrderItemState::OPTIMISE_SUCCEED)
+            #
+
             item.update(machine_id: node.machine_id,
-                        optimise_index: Machine.find_by_id(node.machine_id).optimise_time_by_kanban(item.kanban),
-                        optimise_at: optimise_at,
-                        state: ProductionOrderItemState::OPTIMISE_SUCCEED)
+                        machine_time: Machine.find_by_id(node.machine_id).optimise_time_by_kanban(item.kanban),
+            optimise_at: optimise_at
+            )
             order.production_order_items<<item
             success_count+=1
           else
             item.update(state: ProductionOrderItemState::OPTIMISE_FAIL)
           end
         end
+        self.optimise_order
         if success_count>0
           order.save
           return order
         end
       end
+    end
+  end
+
+  def self.optimise_order
+    Machine.all.each do |machine|
+      machine.sort_order_item
     end
   end
 end

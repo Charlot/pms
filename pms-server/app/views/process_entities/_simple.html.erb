@@ -1,43 +1,24 @@
-<div>
-  <button type="button" class=" btn btn-danger btn-sm remove-routing" id="<%= process_entity.id%>" pe_nr="<%= process_entity.nr%>">删除</button>
-  <div class="panel panel-default">
-    <div class="row">
-      <div class="col-md-4">
-        <ul class="list-group">
-          <li class="list-group-item">
-            <label>NR:</label><ins><%= process_entity.nr%></ins>
-          </li>
-          <li class="list-group-item">
-            <label>Name:</label><ins><%= process_entity.name%></ins>
-          </li>
-          <li class="list-group-item">
-            <label>Description:</label><ins><%= simple_format(process_entity.description)%></ins>
-          </li>
-        </ul>
-      </div>
-      <div class="col-md-4">
-        <li class="list-group-item">
-          <label>Stand time:</label><ins><%= process_entity.stand_time%></ins>
-        </li>
-        <li class="list-group-item">
-          <label>Workstation type:</label><ins><%= process_entity.workstation_type%></ins>
-        </li>
-        <li class="list-group-item">
-          <label>Cost center:</label><ins><%= process_entity.cost_center%></ins>
-        </li>
-      </div>
-      <div class="col-md-4">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            Process template:
-          </div>
-          <div class="panel-ody">
-            <ins><%= simple_format(process_entity.template_text) if process_entity.process_template.template%></ins>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<li class="list-group-item">
+  <label>步骤号:</label>
+  <ins>
+    <a href="<%= process_entity_path(process_entity)%>"><%= process_entity.nr %></a>
+  </ins>
+  /
+  <label>名称:</label>
+  <ins><%= process_entity.name %></ins>
+  <label>总成号:</label>
+  <ins><%= process_entity.product_nr %></ins>
 
+  <label>使用零件:</label>
+  <% process_entity.process_parts.each do |pp| %>
+  <span><%= pp.parsed_nr%></span>
+  <% end %>
 
+  <label>生产零件:</label>
+  <span><%= process_entity.wire_nr%></span>
+
+  <a href="<%= process_template_path(process_entity.process_template)%>">
+    <label>Template:</label>
+    <%= process_entity.template_text%>
+  </a>
+</li>

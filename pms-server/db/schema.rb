@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150324035959) do
+ActiveRecord::Schema.define(version: 20150408005332) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -60,6 +60,17 @@ ActiveRecord::Schema.define(version: 20150324035959) do
   add_index "custom_values", ["custom_field_id"], name: "index_custom_values_on_custom_field_id", using: :btree
   add_index "custom_values", ["customized_type", "customized_id"], name: "index_custom_values_on_customized_type_and_customized_id", using: :btree
 
+  create_table "departments", force: true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "code"
+    t.integer  "parent_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "departments", ["parent_id"], name: "index_departments_on_parent_id", using: :btree
+
   create_table "kanban_process_entities", force: true do |t|
     t.integer  "kanban_id"
     t.integer  "process_entity_id"
@@ -73,7 +84,7 @@ ActiveRecord::Schema.define(version: 20150324035959) do
   create_table "kanbans", force: true do |t|
     t.string   "nr",                             null: false
     t.string   "remark"
-    t.float    "quantity",         default: 0.0
+    t.integer  "quantity",         default: 0
     t.float    "safety_stock",     default: 0.0, null: false
     t.integer  "copies",           default: 0
     t.integer  "state",            default: 0
@@ -81,17 +92,16 @@ ActiveRecord::Schema.define(version: 20150324035959) do
     t.string   "source_storage"
     t.string   "des_warehouse"
     t.string   "des_storage"
-    t.integer  "part_id",                        null: false
     t.datetime "print_time"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "ktype"
     t.integer  "product_id",                     null: false
     t.integer  "bundle",           default: 0
+    t.string   "remark2",          default: ""
   end
 
   add_index "kanbans", ["nr"], name: "index_kanbans_on_nr", using: :btree
-  add_index "kanbans", ["part_id"], name: "index_kanbans_on_part_id", using: :btree
   add_index "kanbans", ["product_id"], name: "index_kanbans_on_product_id", using: :btree
 
   create_table "machine_combinations", force: true do |t|
@@ -155,6 +165,19 @@ ActiveRecord::Schema.define(version: 20150324035959) do
   add_index "machines", ["nr"], name: "index_machines_on_nr", using: :btree
   add_index "machines", ["resource_group_id"], name: "index_machines_on_resource_group_id", using: :btree
 
+  create_table "master_bom_items", force: true do |t|
+    t.float    "qty"
+    t.integer  "bom_item_id"
+    t.integer  "product_id"
+    t.integer  "department_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "master_bom_items", ["bom_item_id"], name: "index_master_bom_items_on_bom_item_id", using: :btree
+  add_index "master_bom_items", ["department_id"], name: "index_master_bom_items_on_department_id", using: :btree
+  add_index "master_bom_items", ["product_id"], name: "index_master_bom_items_on_product_id", using: :btree
+
   create_table "measure_units", force: true do |t|
     t.string   "code"
     t.string   "describe"
@@ -176,6 +199,14 @@ ActiveRecord::Schema.define(version: 20150324035959) do
 
   add_index "part_boms", ["bom_item_id"], name: "index_part_boms_on_bom_item_id", using: :btree
   add_index "part_boms", ["part_id"], name: "index_part_boms_on_part_id", using: :btree
+
+  create_table "part_positions", force: true do |t|
+    t.integer  "part_id"
+    t.string   "storage"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "part_process_entities", force: true do |t|
     t.integer  "part_id"
@@ -261,6 +292,8 @@ ActiveRecord::Schema.define(version: 20150324035959) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "produced_qty"
+    t.float    "machine_time",        default: 0.0
+    t.float    "prev_index",          default: 0.0
   end
 
   add_index "production_order_items", ["kanban_id"], name: "index_production_order_items_on_kanban_id", using: :btree

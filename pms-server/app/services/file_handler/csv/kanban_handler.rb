@@ -2,9 +2,9 @@ require 'csv'
 module FileHandler
   module Csv
     class KanbanHandler<Base
-      IMPORT_HEADERS=['Nr','Quantity','Safety Stock','Copies','Remark',
-                      'Wire Nr','Product Nr','Type','Wire Length','Bundle',
-      'Source Warehouse','Source Storage','Destination Warehouse','Destination Storage','Process List']
+      IMPORT_HEADERS=['Nr', 'Quantity', 'Safety Stock', 'Copies', 'Remark', 'Remark2',
+                      'Wire Nr', 'Product Nr', 'Type', 'Wire Length', 'Bundle',
+                      'Source Warehouse', 'Source Storage', 'Destination Warehouse', 'Destination Storage', 'Process List']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
       def self.import(file)
@@ -13,23 +13,25 @@ module FileHandler
           validate_msg = validate_import(file)
           if validate_msg.result
             Kanban.transaction do
-              CSV.foreach(file.file_path,headers: file.headers,col_sep: file.col_sep,encoding: file.encoding) do |row|
+              CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+
+                row.strip
                 if row['Nr']
                   kanban = Kanban.find_by_nr(row['Nr'])
                   #更新,只能更新基础信息
-                  kanban.update({quantity:row['Quantity'],safety_stock:row['Safety Stock'],copies:row['Copies'],remark:row['Remark'],bundle:row['Bundle'],
-                                 source_warehouse:row['Source Warehouse'],source_storage:row['Source Storage'],des_warehouse:row['Destination Warehouse'],
-                                 des_storage:row['Destination Storage']})
+                  kanban.update({quantity: row['Quantity'], safety_stock: row['Safety Stock'], copies: row['Copies'], remark: row['Remark'], bundle: row['Bundle'],
+                                 source_warehouse: row['Source Warehouse'], source_storage: row['Source Storage'], des_warehouse: row['Destination Warehouse'],
+                                 des_storage: row['Destination Storage'], remark2: row['Remark2']})
                 else
                   #新建
-                  part = Part.find_by_nr("#{row['Product Nr']}_#{row['Wire Nr']}")
+                  #part_id = (part = Part.find_by_nr("#{row['Product Nr']}_#{row['Wire Nr']}")).nil? ? nil : part.id
                   product = Part.find_by_nr(row['Product Nr'])
-                  kanban = Kanban.new({quantity:row['Quantity'],safety_stock:row['Safety Stock'],copies:row['Copies'],remark:row['Remark'],
-                                       part_id:part.id,product_id:product.id,ktype:row['Type'],bundle:row['Bundle'],
-                                       source_warehouse:row['Source Warehouse'],source_storage:row['Source Storage'],des_warehouse:row['Destination Warehouse'],
-                                       des_storage:row['Destination Storage']})
+                  kanban = Kanban.new({quantity: row['Quantity'], safety_stock: row['Safety Stock'], copies: row['Copies'], remark: row['Remark'], remark2: row['Remark2'],
+                                       product_id: product.id, ktype: row['Type'], bundle: row['Bundle'],
+                                       source_warehouse: row['Source Warehouse'], source_storage: row['Source Storage'], des_warehouse: row['Destination Warehouse'],
+                                       des_storage: row['Destination Storage'], state: KanbanState::RELEASED})
                   process_nrs = row['Process List'].split(',')
-                  kanban_process_entities = ProcessEntity.where(nr:process_nrs).collect{|pe| KanbanProcessEntity.new({process_entity_id:pe.id})}
+                  kanban_process_entities = ProcessEntity.where({nr:process_nrs,product_id:product.id}).collect { |pe| KanbanProcessEntity.new({process_entity_id: pe.id}) }
                   kanban.kanban_process_entities = kanban_process_entities
                   kanban.save
                 end
@@ -70,7 +72,7 @@ module FileHandler
       end
 
       def self.validate_row(row)
-        msg = Message.new({result:true,contents:[]})
+        msg = Message.new({result: true, contents: []})
 
         kanban = Kanban.find_by_nr(row['Nr'])
 
@@ -84,19 +86,21 @@ module FileHandler
           msg.contents << "Wire Nr: #{row['Wire Nr']},Product Nr: #{row['Product nr']} 不能修改"
         end
 
-        #验证工艺
-        process_nrs = row['Process List'].split(',').collect { |penr| penr.strip }
-        process_entities = ProcessEntity.where(nr:process_nrs)
-        unless process_entities.count == process_entities.count
-          msg.contents << "Process List: #{row['Process List']}，工艺不存在!"
-        end
-
         #验证总成号
-        unless  Part.where({nr:row['Product Nr'],type:PartType::PRODUCT}).count > 0
+        product = nil
+        unless product = Part.where({nr: row['Product Nr'], type: PartType::PRODUCT}).first
           msg.contents << "Product Nr: #{row['Product Nr']} 不存在"
         end
 
-        if kanban.nil? && Part.where({nr:"#{row['Product Nr']}_#{row['Wire Nr']}"}).count <= 0
+        #验证工艺
+        process_nrs = row['Process List'].split(',').collect { |penr| penr.strip }
+        process_entities = ProcessEntity.where({nr: process_nrs, product_id: product.id})
+
+        unless process_entities.count == process_nrs.count
+          msg.contents << "Process List: #{process_nrs - process_entities.collect { |pe| pe.nr }}，工艺不存在!"
+        end
+
+        if kanban.nil? && row['Wire Nr'].present? &&Part.where({nr: "#{row['Product Nr']}_#{row['Wire Nr']}"}).count <= 0
           msg.contents << "Wire Nr:#{row['Wire Nr']} 不存在"
         end
 
@@ -106,15 +110,15 @@ module FileHandler
         end
 
         case row['Type'].to_i
-        when KanbanType::WHITE
-          if process_entities.count != 1
-            msg.contents << "Process List: #{row['Process List']} 白卡只能添加一个Routing"
-          end
+          when KanbanType::WHITE
+            if process_entities.count != 1
+              msg.contents << "Process List: #{row['Process List']} 白卡只能添加一个Routing"
+            end
 
-          if process_entities.first.type != ProcessType::AUTO
-            msg.contents << "Process List: #{row['Process List']} 白卡只能添加全自动Routing"
-          end
-        when KanbanType::BLUE
+            if process_entities.first.process_template.type != ProcessType::AUTO
+              msg.contents << "Process List: #{row['Process List']} 白卡只能添加全自动Routing"
+            end
+          when KanbanType::BLUE
 
         end
 

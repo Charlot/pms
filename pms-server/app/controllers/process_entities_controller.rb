@@ -5,10 +5,11 @@ class ProcessEntitiesController < ApplicationController
   # GET /process_entities
   # GET /process_entities.json
   def index
-    @process_entities = ProcessEntity.all
+    @process_entities = ProcessEntity.paginate(:page => params[:page])
   end
 
-  # GET /process_entities/1
+  # GET /process_enti
+  # ties/1
   # GET /process_entities/1.json
   def show
   end
@@ -22,13 +23,8 @@ class ProcessEntitiesController < ApplicationController
   def edit
   end
 
-  # GET /process_entities/search
+
   def search
-    @pe = ProcessEntity.send("find_by_"+params[:attr],params[:val])
-    respond_to do |format|
-      format.json { render json: {result: false, content: "Not Found!"}} unless @pe
-      format.json { render json: {result: true, content: @pe}}
-    end
   end
 
   # GET /process_entities/1/simple

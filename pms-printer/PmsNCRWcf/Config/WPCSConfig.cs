@@ -116,12 +116,22 @@ namespace PmsNCRWcf.Config
         public static string MachineNr
         {
             get { return WPCSConfig.machineNr; }
-            set { WPCSConfig.machineNr = value; }
+            set
+            {
+                WPCSConfig.machineNr = value;
+                config.Set("MachineNr", value);
+                config.Save();
+            }
         }
         public static string MachineIP
         {
             get { return WPCSConfig.machineIP; }
-            set { WPCSConfig.machineIP = value; }
+            set
+            {
+                WPCSConfig.machineIP = value;
+                config.Set("MachineIP", value);
+                config.Save();
+            }
         }
 
         public static int ScanClientFolderInterval

@@ -1,0 +1,36 @@
+<div class="digg_pagination">
+  <%= will_paginate @master_bom_items, :container => false %>
+</div>
+
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+  <tr>
+    <th>Part No.</th>
+    <th>Component P/N</th>
+    <th>Material Qty Per Harness</th>
+    <th>Department</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @master_bom_items.each do |master_bom_item| %>
+      <tr>
+        <td><%= master_bom_item.product.nr %></td>
+        <td><%= master_bom_item.bom_item.nr %></td>
+        <td><%= master_bom_item.qty %></td>
+        <td><%= master_bom_item.department.name %></td>
+        <td><%= link_to 'Show', master_bom_item %></td>
+        <td><%= link_to 'Edit', edit_master_bom_item_path(master_bom_item) %></td>
+        <td><%= link_to 'Destroy', master_bom_item, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Master bom item', new_master_bom_item_path %>
+<div class="digg_pagination">
+  <%= will_paginate @master_bom_items, :container => false %>
+</div>
