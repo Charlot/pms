@@ -19,6 +19,13 @@ class ProcessEntity < ActiveRecord::Base
   # after_create :build_process_parts
 
   #
+  def wire_nr
+    if self.value_default_wire_nr && (part = Part.find_by_id(self.value_default_wire_nr))
+      part.nr.split("_").last
+    else
+      ""
+    end
+  end
 
   def custom_field_type
     puts '***************************************8'
