@@ -66,6 +66,17 @@ class ProcessEntitiesController < ApplicationController
     end
   end
 
+  # GET
+  def export_unused
+    msg = FileHandler::Csv::ProcessEntityHandler.export_unused(request.user_agent.downcase)
+    #render json: msg
+    if msg.result
+      send_file msg.content
+    else
+      render json: msg
+    end
+  end
+
   # POST /process_entities
   # POST /process_entities.json
   def create
