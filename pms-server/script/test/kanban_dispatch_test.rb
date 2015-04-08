@@ -15,13 +15,15 @@ class KanbanDispatchTest
 
     ProductionOrder.destroy_all
     ProductionOrderItem.destroy_all
-    
+
     Kanban.where({ktype: KanbanType::WHITE}).each_with_index {|k,index|
       @kanban = k
 
       if ProductionOrderItem.where(kanban_id: @kanban.id, state: ProductionOrderItemState::INIT).count > 0
         next
       end
+
+      k.update({quantity:10,bundle:2})
 
       unless (@order = ProductionOrderItem.create(kanban_id: @kanban.id,code:@kanban.printed_2DCode))
         next
