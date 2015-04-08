@@ -6,7 +6,7 @@ class ProductionOrderItemsController < ApplicationController
   def index
     if params.has_key?(:production_order_id)
       @production_order=ProductionOrder.find_by_id(params[:production_order_id])
-      @production_order_items=@production_order.production_order_items
+      @production_order_items=@production_order.production_order_items.order(machine_id: :asc,optimise_index: :asc)
       @optimised=true
     else
       @production_order_items = ProductionOrderItem.for_optimise
@@ -74,13 +74,13 @@ class ProductionOrderItemsController < ApplicationController
     begin
       if ProductionOrderItem.for_optimise.count>0
         if order= ProductionOrderItem.optimise
-          redirect_to production_order_production_order_items_path(order), notice: 'Optimise Success'
+         # redirect_to production_order_production_order_items_path(order), notice: 'Optimise Success'
         else
           # raise
-          redirect_to production_order_items_path, notice: 'Optimise Fail'
+        #  redirect_to production_order_items_path, notice: 'Optimise Fail'
         end
       else
-        redirect_to production_order_items_path, notice: 'No Item For Optimise'
+       # redirect_to production_order_items_path, notice: 'No Item For Optimise'
       end
     rescue => e
       raise e
