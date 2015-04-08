@@ -219,6 +219,16 @@ class KanbansController < ApplicationController
     end
   end
 
+  def export_routing_error
+    msg = FileHandler::Csv::KanbanHandler.export_routing_error(request.user_agent.downcase)
+    #render json: msg
+    if msg.result
+      send_file msg.content
+    else
+      render json: msg
+    end
+  end
+
   def scan_finish
     @hide_sidebar = true
     if request.post?
