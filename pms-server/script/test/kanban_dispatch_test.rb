@@ -15,8 +15,7 @@ class KanbanDispatchTest
 
     ProductionOrder.destroy_all
     ProductionOrderItem.destroy_all
-
-
+    
     Kanban.where({ktype: KanbanType::WHITE}).each_with_index {|k,index|
       @kanban = k
 
