@@ -74,13 +74,13 @@ class ProductionOrderItemsController < ApplicationController
     begin
       if ProductionOrderItem.for_optimise.count>0
         if order= ProductionOrderItem.optimise
-         # redirect_to production_order_production_order_items_path(order), notice: 'Optimise Success'
+          redirect_to production_order_production_order_items_path(order), notice: 'Optimise Success'
         else
           # raise
-        #  redirect_to production_order_items_path, notice: 'Optimise Fail'
+          redirect_to production_order_items_path, notice: 'Optimise Fail'
         end
       else
-       # redirect_to production_order_items_path, notice: 'No Item For Optimise'
+        redirect_to production_order_items_path, notice: 'No Item For Optimise'
       end
     rescue => e
       raise e
