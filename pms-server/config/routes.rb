@@ -124,6 +124,7 @@ Rails.application.routes.draw do
       post :scan
       get :panel
       get :search
+      get :export_routing_error
       match :import, to: :import, via: [:get, :post]
       match :scan_finish, to: :scan_finish, via: [:get,:post]
     end

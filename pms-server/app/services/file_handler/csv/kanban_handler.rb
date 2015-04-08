@@ -71,6 +71,35 @@ module FileHandler
         return msg
       end
 
+      def self.export_routing_error(user_agent)
+        msg = Message.new
+        begin
+          tmp_file = KanbanHandler.full_tmp_path('看板步骤不一致.csv') unless tmp_file
+
+          CSV.open(tmp_file, 'wb', write_headers: true,
+                   headers: ['ID','NR','Product Nr','Process List'],
+                   col_sep: SEPARATOR, encoding: ProcessEntityHandler.get_encoding(user_agent)) do |csv|
+            Kanban.all.each_with_index do |k|
+              if ( pes = k.process_entities.select{|pe| pe.product_id != k.product_id}).count>0
+                csv<<[
+                    k.id,
+                    k.nr,
+                    k.product_nr,
+                    pes.collect{|pe|
+                      "#{pe.nr},#{pe.product_nr}"
+                    }.join(";")
+                ]
+              end
+            end
+          end
+          msg.result =true
+          msg.content =tmp_file
+        rescue => e
+          msg.content =e.message
+        end
+        msg
+      end
+
       def self.validate_row(row)
         msg = Message.new({result: true, contents: []})
 
