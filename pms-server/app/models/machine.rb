@@ -86,9 +86,9 @@ class Machine < ActiveRecord::Base
         if current_process.value_s2 != item_process.value_s2
           optimise_index+=self.seal_time
         end
-      #  if optimise_index==0
+        if optimise_index==0
           compares[item]=optimise_index
-       # end
+        end
       end
 
       puts '88888888888888888888888888888888'
