@@ -91,7 +91,7 @@ CustomField.all.each do |cf|
     cf.update(is_for_out_stock:false)
     cf.custom_values.each do |cv|
       if (pp =cv.customized.process_parts.where(part_id:cv.value)).count > 0
-        puts "删除#{pp.count}个零件"
+        puts "#{pp.collect{|p|p.part.nr}.join(',')},删除#{pp.count}个零件损耗".red
         pp.each{|p|p.destroy}
       end
     end

@@ -35,7 +35,8 @@ module Printer
         heads<<{Key:k,Value:head[k]}
       end
 
-      @kanban.process_entities.each do |pe|
+      @kanban.kanban_process_entities.each do |kpe|
+        pe = kpe.process_entity
         bodies =[]
         body = {
             route_nr:pe.process_template.code,
@@ -43,7 +44,7 @@ module Printer
             route_desc:pe.template_text,
             work_time_of_route:pe.stand_time,
             #Consume Date是什么东西？
-            consume_date:'consume date' #TODO route consume data
+            consume_date: kpe.id#TODO route consume data
         }
 
         pe.process_parts.first($ROUTE_PART_COUNT).each_with_index { |pp,index |
