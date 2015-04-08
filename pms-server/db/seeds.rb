@@ -15,3 +15,6 @@ puts 'create Cutting'
 unless Department.find_by_code('C')
   Department.create(name: 'Cutting', code: 'C')
 end
+
+puts 'update machine time'
+Machine.update_all(print_time: 45, seal_time: 40, terminal_time: 15, wire_time: 5)

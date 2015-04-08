@@ -27,7 +27,7 @@ class ProductionOrderItem < ActiveRecord::Base
     where(production_order_id: production_order.id)
         .joins(:kanban)
         .joins(:production_order)
-        .joins(:machine).order(optimise_index: :asc)
+        .joins(:machine).order(machine_id: :asc,optimise_index: :asc)
         .select('production_orders.nr as production_order_nr,kanbans.nr as kanban_nr,machines.nr as machine_nr,production_order_items.*')
   end
 

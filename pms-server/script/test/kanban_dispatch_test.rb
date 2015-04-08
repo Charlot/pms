@@ -17,7 +17,7 @@ class KanbanDispatchTest
     ProductionOrderItem.destroy_all
 
 
-    Kanban.where({ktype: KanbanType::WHITE}).limit(1).each_with_index {|k,index|
+    Kanban.where({ktype: KanbanType::WHITE}).limit(100).each_with_index {|k,index|
       @kanban = k
 
       if ProductionOrderItem.where(kanban_id: @kanban.id, state: ProductionOrderItemState::INIT).count > 0
