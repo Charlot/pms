@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  resources :warehouses
+  resources :warehouses do
+    resources :storages
+  end
+
 
   resources :part_positions do
     collection do

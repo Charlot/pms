@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150408101318) do
+ActiveRecord::Schema.define(version: 20150408122347) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -339,6 +339,15 @@ ActiveRecord::Schema.define(version: 20150408101318) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "storages", force: true do |t|
+    t.string   "nr"
+    t.integer  "warehouse_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "storages", ["warehouse_id"], name: "index_storages_on_warehouse_id", using: :btree
 
   create_table "tools", force: true do |t|
     t.string   "nr"

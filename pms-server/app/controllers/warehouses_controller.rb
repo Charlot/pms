@@ -69,6 +69,6 @@ class WarehousesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def warehouse_params
-      params[:warehouse]
+      params[:warehouse].permit(:nr,:description)
     end
 end
