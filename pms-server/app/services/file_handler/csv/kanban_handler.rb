@@ -27,6 +27,8 @@ module FileHandler
                 puts pes
                 kanbans = Kanban.joins(:kanban_process_entities).where(kanban_process_entities:{process_entity_id:pes})
 
+                #TODO Update Kanban
+
                 if kanbans.count != 1
                   puts "!!!!!!!!!!!!!!!!".red
                   puts "#{kanbans.collect{|k|k.nr}.join(',')}"
