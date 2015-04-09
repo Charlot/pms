@@ -13,7 +13,7 @@ Kanban.where({ktype: KanbanType::WHITE}).each_with_index {|k,index|
   end
 
   process_entity = @kanban.process_entities.first
-  if process_entity
+  if process_entity && process_entity.process_parts.count > 0
     can_create = true
     parts = []
     process_entity.process_parts.each{|pe|
@@ -38,6 +38,6 @@ Kanban.where({ktype: KanbanType::WHITE}).each_with_index {|k,index|
       puts "新建订单成功：#{@kanban.nr},#{parts.join('-')}".green
     end
   else
-    puts "步骤不存在！"
+    puts "步骤不存在！或步骤不消耗零件!".red
   end
 }
