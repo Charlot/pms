@@ -16,6 +16,9 @@ module FileHandler
               CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
 
                 row.strip
+                if row['Quantity'].to_i < row['Bundle'].to_i
+                  row['Bundle'] = row['Quantity']
+                end
                 if row['Nr']
                   kanban = Kanban.find_by_nr(row['Nr'])
                   #更新,只能更新基础信息
