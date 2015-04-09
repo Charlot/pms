@@ -82,7 +82,7 @@ module FileHandler
           tmp_file = KanbanHandler.full_tmp_path('看板步骤不一致.csv') unless tmp_file
 
           CSV.open(tmp_file, 'wb', write_headers: true,
-                   headers: ['ID', 'NR', 'Product Nr', 'Process List'],
+                   headers: ['ID', 'NR', 'Product Nr', 'Process List', 'Desc'],
                    col_sep: SEPARATOR, encoding: ProcessEntityHandler.get_encoding(user_agent)) do |csv|
             Kanban.all.each_with_index do |k|
               null_process_parts = false
@@ -93,26 +93,37 @@ module FileHandler
                     k.product_nr,
                     pes.collect { |pe|
                       "#{pe.nr},#{pe.product_nr}"
-                    }.join(";")
+                    }.join(";"),
+                    '不存在消料'
                 ]
-                next
               end
 
               pes = []
-              k.process_entities.each{|pe|
+              k.process_entities.each { |pe|
                 if pe.process_parts.count == 0
                   null_process_parts = true
                   pes << "#{pe.id}:#{pe.nr}"
                 end
               }
               if null_process_parts
-              csv<<[
-                  k.id,
-                  k.nr,
-                  k.product_nr,
-                  pes.join("|")
-              ]
-                end
+                csv<<[
+                    k.id,
+                    k.nr,
+                    k.product_nr,
+                    pes.join("|"),
+                    '步骤与看板总成号不一致'
+                ]
+              end
+
+              if k.des_storage.nil? || k.des_storage.blank?
+                csv<<[
+                    k.id,
+                    k.nr,
+                    k.product_nr,
+                    "",
+                    '看板目标库位不存在'
+                ]
+              end
             end
           end
           msg.result =true

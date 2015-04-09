@@ -1,6 +1,6 @@
 #
 puts "======================".yellow
-puts "修复看板数据错误".yellow
+puts "1.修复看板数据错误".yellow
 puts "======================".yellow
 Kanban.where(ktype:KanbanType::WHITE).each do |k|
   if k.process_entities.count > 1
@@ -28,7 +28,7 @@ end
 
 #
 puts "======================".yellow
-puts "修复Routing数据".yellow
+puts "2.修复Routing数据".yellow
 puts "======================".yellow
 ProcessEntity.joins(:process_template).where("process_templates.type = ?",ProcessType::AUTO).each do |pe|
   pe.custom_values.each{|cv|
@@ -50,7 +50,7 @@ end
 
 #
 puts "======================".yellow
-puts "修复ProcessParts".yellow
+puts "3.修复ProcessParts".yellow
 puts "======================".yellow
 
 ProcessEntity.all.each{|pe|
@@ -66,7 +66,7 @@ ProcessEntity.all.each{|pe|
 
 #
 puts "======================".yellow
-puts "发布看板".yellow
+puts "4.发布看板".yellow
 puts "======================".yellow
 Kanban.includes(:kanban_process_entities).all.each do |kanban|
   kanban.without_versioning do
@@ -84,7 +84,7 @@ end
 
 #修复步骤属性
 puts "======================".yellow
-puts "修复步骤属性".yellow
+puts "5.修复步骤属性".yellow
 puts "======================".yellow
 CustomField.all.each do |cf|
   if cf.name == "default_wire_nr"
@@ -97,3 +97,14 @@ CustomField.all.each do |cf|
     end
   end
 end
+
+#修复步骤属性
+puts "======================".yellow
+puts "6.修复看板库位".yellow
+puts "======================".yellow
+Kanban.all.each {|k|
+  if k.des_storage.nil? || k.des_storage.blank?
+    k.update(des_storage:k.source_storage)
+    puts "更新库位:#{k.nr},目标库位#{k.des_storage}".green
+  end
+}
