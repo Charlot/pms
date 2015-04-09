@@ -31,9 +31,9 @@ Kanban.where({ktype: KanbanType::WHITE}).each_with_index {|k,index|
     #end
 
     if can_create
-      unless (@order = ProductionOrderItem.create(kanban_id: @kanban.id,code:@kanban.printed_2DCode))
-        next
-      end
+      #unless (@order = ProductionOrderItem.create(kanban_id: @kanban.id,code:@kanban.printed_2DCode))
+      #  next
+      #end
 
       puts "新建订单成功：#{@kanban.nr},#{parts.join('-')}".green
     end
