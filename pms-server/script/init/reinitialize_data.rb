@@ -104,7 +104,7 @@ puts "6.修复看板库位".yellow
 puts "======================".yellow
 Kanban.all.each {|k|
   if k.des_storage.nil? || k.des_storage.blank?
-    kanban.without_versioning do
+    k.without_versioning do
       k.update(des_storage:k.source_storage)
     end
     puts "更新库位:#{k.nr},目标库位#{k.des_storage}".green

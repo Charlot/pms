@@ -7,6 +7,49 @@ module FileHandler
                       'Source Warehouse', 'Source Storage', 'Destination Warehouse', 'Destination Storage', 'Process List']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
+      def self.import_update(file)
+        msg = Message.new
+        begin
+          validate_msg = validate_import(file)
+          if validate_msg.result
+            Kanban.transaction do
+              CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+                row.strip
+                product = Part.find_by_nr(row['Product Nr'])
+
+                if row['Quantity'].to_i < row['Bundle'].to_i
+                  row['Bundle'] = row['Quantity']
+                end
+
+                route_list = row['Process List']
+                pes = []
+                ProcessEntity.where(nr:route_list,product_id:product.id).each{|pe| pes << pe.id}
+                puts pes
+                kanbans = Kanban.joins(:kanban_process_entities).where(kanban_process_entities:{process_entity_id:pes})
+
+                if kanbans.count != 1
+                  puts "!!!!!!!!!!!!!!!!".red
+                  puts "#{kanbans.collect{|k|k.nr}.join(',')}"
+                else
+                  if kanbans.first.process_entities.collect{|pe|pe.id} == pes
+                    puts "AAAAAAAA!".green
+                  end
+                end
+              end
+            end
+            msg.result = true
+            msg.content = 'Kanban 上传成功'
+          else
+            msg.result = false
+            msg.content = validate_msg.content
+          end
+        rescue => e
+          puts e.backtrace
+          msg.content = e.message
+        end
+        return msg
+      end
+
       def self.import(file)
         msg = Message.new
         begin
@@ -175,11 +218,11 @@ module FileHandler
         case row['Type'].to_i
           when KanbanType::WHITE
             if process_entities.count != 1
-              msg.contents << "Process List: #{row['Process List']} 白卡只能添加一个Routing"
+              #msg.contents << "Process List: #{row['Process List']} 白卡只能添加一个Routing"
             end
 
-            if process_entities.first.process_template.type != ProcessType::AUTO
-              msg.contents << "Process List: #{row['Process List']} 白卡只能添加全自动Routing"
+            if process_entities.first && process_entities.first.process_template.type != ProcessType::AUTO
+              #msg.contents << "Process List: #{row['Process List']} 白卡只能添加全自动Routing"
             end
           when KanbanType::BLUE
 
