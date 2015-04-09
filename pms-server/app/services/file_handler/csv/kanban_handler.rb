@@ -85,16 +85,7 @@ module FileHandler
                    headers: ['ID', 'NR', 'Product Nr', 'Process List'],
                    col_sep: SEPARATOR, encoding: ProcessEntityHandler.get_encoding(user_agent)) do |csv|
             Kanban.all.each_with_index do |k|
-              if k.process_entities.count ==0
-                csv<<[
-                    k.id,
-                    k.nr,
-                    k.product_nr,
-                    ''
-                ]
-                next
-              end
-
+              null_process_parts = false
               if (pes = k.process_entities.select { |pe| pe.product_id != k.product_id }).count>0
                 csv<<[
                     k.id,
@@ -104,7 +95,24 @@ module FileHandler
                       "#{pe.nr},#{pe.product_nr}"
                     }.join(";")
                 ]
+                next
               end
+
+              pes = []
+              k.process_entities.each{|pe|
+                if pe.process_parts.count == 0
+                  null_process_parts = true
+                  pes << "#{pe.id}:#{pe.nr}"
+                end
+              }
+              if null_process_parts
+              csv<<[
+                  k.id,
+                  k.nr,
+                  k.product_nr,
+                  pes.join("|")
+              ]
+                end
             end
           end
           msg.result =true
