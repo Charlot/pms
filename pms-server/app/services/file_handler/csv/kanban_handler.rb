@@ -2,7 +2,7 @@ require 'csv'
 module FileHandler
   module Csv
     class KanbanHandler<Base
-      IMPORT_HEADERS=['Nr', 'Quantity', 'Safety Stock', 'Copies', 'Remark', 'Remark2',
+      IMPORT_HEADERS=['Nr', 'Quantity', 'Safety Stock', 'Copies', 'Remark',
                       'Wire Nr', 'Product Nr', 'Type', 'Wire Length', 'Bundle',
                       'Source Warehouse', 'Source Storage', 'Destination Warehouse', 'Destination Storage', 'Process List']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
@@ -14,8 +14,10 @@ module FileHandler
           if validate_msg.result
             Kanban.transaction do
               CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
-
                 row.strip
+
+                product = Part.find_by_nr(row['Product Nr'])
+
                 if row['Quantity'].to_i < row['Bundle'].to_i
                   row['Bundle'] = row['Quantity']
                 end
@@ -24,17 +26,17 @@ module FileHandler
                   #更新,只能更新基础信息
                   kanban.update({quantity: row['Quantity'], safety_stock: row['Safety Stock'], copies: row['Copies'], remark: row['Remark'], bundle: row['Bundle'],
                                  source_warehouse: row['Source Warehouse'], source_storage: row['Source Storage'], des_warehouse: row['Destination Warehouse'],
-                                 des_storage: row['Destination Storage'], remark2: row['Remark2']})
+                                 des_storage: row['Destination Storage']})
                 else
                   #新建
                   #part_id = (part = Part.find_by_nr("#{row['Product Nr']}_#{row['Wire Nr']}")).nil? ? nil : part.id
-                  product = Part.find_by_nr(row['Product Nr'])
-                  kanban = Kanban.new({quantity: row['Quantity'], safety_stock: row['Safety Stock'], copies: row['Copies'], remark: row['Remark'], remark2: row['Remark2'],
+
+                  kanban = Kanban.new({quantity: row['Quantity'], safety_stock: row['Safety Stock'], copies: row['Copies'], remark: row['Remark'],
                                        product_id: product.id, ktype: row['Type'], bundle: row['Bundle'],
                                        source_warehouse: row['Source Warehouse'], source_storage: row['Source Storage'], des_warehouse: row['Destination Warehouse'],
                                        des_storage: row['Destination Storage'], state: KanbanState::RELEASED})
                   process_nrs = row['Process List'].split(',')
-                  kanban_process_entities = ProcessEntity.where({nr:process_nrs,product_id:product.id}).collect { |pe| KanbanProcessEntity.new({process_entity_id: pe.id}) }
+                  kanban_process_entities = ProcessEntity.where({nr: process_nrs, product_id: product.id}).collect { |pe| KanbanProcessEntity.new({process_entity_id: pe.id}) }
                   kanban.kanban_process_entities = kanban_process_entities
                   kanban.save
                 end
@@ -80,15 +82,15 @@ module FileHandler
           tmp_file = KanbanHandler.full_tmp_path('看板步骤不一致.csv') unless tmp_file
 
           CSV.open(tmp_file, 'wb', write_headers: true,
-                   headers: ['ID','NR','Product Nr','Process List'],
+                   headers: ['ID', 'NR', 'Product Nr', 'Process List'],
                    col_sep: SEPARATOR, encoding: ProcessEntityHandler.get_encoding(user_agent)) do |csv|
             Kanban.all.each_with_index do |k|
-              if ( pes = k.process_entities.select{|pe| pe.product_id != k.product_id}).count>0
+              if (pes = k.process_entities.select { |pe| pe.product_id != k.product_id }).count>0
                 csv<<[
                     k.id,
                     k.nr,
                     k.product_nr,
-                    pes.collect{|pe|
+                    pes.collect { |pe|
                       "#{pe.nr},#{pe.product_nr}"
                     }.join(";")
                 ]
