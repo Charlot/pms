@@ -8,6 +8,10 @@ ProductionOrderItem.destroy_all
 Kanban.where({ktype: KanbanType::WHITE}).each_with_index {|k,index|
   @kanban = k
 
+  if @kanban.quantity <= 0
+    next
+  end
+
   if ProductionOrderItem.where(kanban_id: @kanban.id, state: ProductionOrderItemState::INIT).count > 0
     next
   end
