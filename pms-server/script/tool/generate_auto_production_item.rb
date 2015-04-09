@@ -26,9 +26,9 @@ Kanban.where({ktype: KanbanType::WHITE}).each_with_index {|k,index|
       end
     }
 
-    #if process_entity.process_parts.select{|pe| pe.part.type == PartType::MATERIAL_TERMINAL}.count <= 0
-    #  can_create = false
-    #end
+    if process_entity.process_parts.select{|pe| pe.part.type == PartType::MATERIAL_TERMINAL}.count <= 0
+      can_create = false
+    end
 
     if can_create
       #unless (@order = ProductionOrderItem.create(kanban_id: @kanban.id,code:@kanban.printed_2DCode))
