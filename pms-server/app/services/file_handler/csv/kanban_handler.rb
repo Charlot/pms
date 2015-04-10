@@ -30,11 +30,11 @@ module FileHandler
                 #TODO Update Kanban
 
                 if kanbans.count != 1
-                  puts "!!!!!!!!!!!!!!!!".red
-                  puts "#{kanbans.collect{|k|k.nr}.join(',')}"
+                  puts "#{kanbans.collect{|k|k.nr}.join(',')}".red
                 else
                   if kanbans.first.process_entities.collect{|pe|pe.id} == pes
-                    puts "AAAAAAAA!".green
+                    kanban = kanbans.first
+                    #kanban.update()
                   end
                 end
               end
