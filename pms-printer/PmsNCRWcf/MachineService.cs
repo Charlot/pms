@@ -29,7 +29,7 @@ namespace PmsNCRWcf
                 }
                 else
                 {
-                    msg.Content = "API 返回错误，请联系相关人员";
+                    msg.Content = "API ERROR";
                 }
             }
             catch (Exception e)

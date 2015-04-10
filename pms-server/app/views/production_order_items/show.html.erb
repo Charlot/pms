@@ -17,7 +17,7 @@
 
 <p>
   <strong>Kanban:</strong>
-  <%= @production_order_item.kanban %>
+  <%= link_to @production_order_item.kanban.nr,kanban_path(@production_order_item.kanban)%>
 </p>
 
 <p>

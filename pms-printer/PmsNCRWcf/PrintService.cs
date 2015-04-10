@@ -31,11 +31,11 @@ namespace PmsNCRWcf
                 {
                     printer.Print(data);
                     msg.Result = true;
-                    msg.Content = "打印成功";
+                    msg.Content = "Print Sucess";
                 }
                 else
                 {
-                    msg.Content = "打印失败,无打印内容";
+                    msg.Content = "Print Fail, No Content";
                 }
             }
             catch (Exception e)
@@ -47,7 +47,7 @@ namespace PmsNCRWcf
         }
 
 
-        public Msg<string> PrintKB(string code, string order_item_nr)
+        public Msg<string> PrintKB(string code, string order_item_nr,string machine_nr)
         {
             Msg<string> msg = new Msg<string>();
             try
@@ -56,19 +56,21 @@ namespace PmsNCRWcf
                 req.RequestFormat = DataFormat.Json;
                 req.AddParameter("code", code);
                 req.AddParameter("order_item_nr", order_item_nr);
+                req.AddParameter("machine_nr", machine_nr);
+
                 Printer printer = PrinterConfig.Find(code);
 
                 var res = new ApiClient().Execute(req);
                 var data = JSONHelper.parse<RecordSet>(res.Content);
                 if (data != null && data.Count > 0)
-                {
+                 {
                     printer.Print(data);
                     msg.Result = true;
-                    msg.Content = "打印成功";
+                    msg.Content = "Print Sucess";
                 }
                 else
                 {
-                    msg.Content = "打印失败,无打印内容";
+                    msg.Content = "Print Fail, No Content";
                 }
             }
             catch (Exception e)
@@ -99,18 +101,18 @@ namespace PmsNCRWcf
 
                 var res = new ApiClient().Execute(req);
                 var data = JSONHelper.parse<RecordSet>(res.Content);
-                if (data != null && data.Count > 0)
+                 if (data != null && data.Count > 0)
                 {
                     printer.Print(data);
                     msg.Result = true;
-                    msg.Content = "打印成功";
+                    msg.Content = "Print Sucess";
                 }
                 else
                 {
-                    msg.Content = "打印失败,无打印内容";
+                    msg.Content = "Print Fail, No Content";
                 }
             }
-            catch (Exception e)
+             catch (Exception e)
             {
                 msg.Content = e.Message;
                 LogUtil.Logger.Error(e.Message);

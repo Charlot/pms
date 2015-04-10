@@ -11,12 +11,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.ServiceModel.Web;
+//using System.ServiceModel.Web;
 using PmsNCRWcf;
-using Brilliantech.Framwork.Utils.LogUtil;
+//using Brilliantech.Framwork.Utils.LogUtil;
 using PmsNCRWcf.Converter;
 using PmsNCRWcf.Model;
 using PmsNCRWcf.Config;
+//using PmsNCRWcf.Config;
 
 namespace PmsNCR
 {
@@ -26,7 +27,11 @@ namespace PmsNCR
     public partial class MainWindow : Window
     {
 
-        WebServiceHost host = null;
+        //WebServiceHost host = null;
+
+        MaterialCheck materialCheck = null;
+        OrderPreviewWindow previewWindow = null;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -34,40 +39,49 @@ namespace PmsNCR
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (startService()) {
-                new ClientDataWatcher().Show();
-            }
+            this.Title = "PMS CLIENT: " + WPCSConfig.MachineNr;
+           // if (startService()) {
+             new ClientDataWatcher().Show();
+            //}
         }
 
-        private bool startService()
-        { 
-            try
-            {
-                if (host == null)
-                {
-                    host = new WebServiceHost(typeof(ReceiverService));
-                }
-                host.Open();
-                LogUtil.Logger.Info("NCR接受服务启动:"+host.Description.Endpoints[0].Address);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                LogUtil.Logger.Error(ex.Message);              
-            }
-            return false;
-        }
+        //private bool startService()
+        //{ 
+        //    try
+        //    {
+        //        if (host == null)
+        //        {
+        //            host = new WebServiceHost(typeof(ReceiverService));
+        //        }
+        //        host.Open();
+        //        LogUtil.Logger.Info("NCR接受服务启动:"+host.Description.Endpoints[0].Address);
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex.Message);
+        //        LogUtil.Logger.Error(ex.Message);              
+        //    }
+        //    return false;
+        //}
         
 
         private void MaterialCheckBtn_Click(object sender, RoutedEventArgs e)
         {
-            new MaterialCheck().Show();
+            if (MaterialCheck.IsShow == false)
+            {
+                materialCheck = new MaterialCheck();
+                materialCheck.Show();
+            }
+            else {
+                materialCheck.Show();
+                materialCheck.Activate();
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (MessageBox.Show("确认关闭?") == MessageBoxResult.OK) {
+            if (MessageBox.Show("Confirm Close?") == MessageBoxResult.OK) {
                 Application.Current.Shutdown();
             }
         }
@@ -79,7 +93,16 @@ namespace PmsNCR
 
         private void OrderPreviewBtn_Click(object sender, RoutedEventArgs e)
         {
-            new OrderPreviewWindow().Show();
+            if (OrderPreviewWindow.IsShow == false)
+            {
+               previewWindow= new OrderPreviewWindow();
+                previewWindow.Show();
+            }
+            else
+            { 
+                previewWindow.Show();
+                previewWindow.Activate();
+            }
         }
 
         private void MachineSettingBtn_Click(object sender, RoutedEventArgs e)

@@ -47,7 +47,7 @@
         <td>
           <span class="label <%= kanban_states_class(kanban.state) %>"><%= KanbanState.display(kanban.state) %></span>
         </td>
-        <td><%= kanban.quantity %></td>
+        <td><%= kanban.quantity %>|<%= kanban.bundle%></td>
 
         <td><%= "#{kanban.source_warehouse} | #{kanban.source_storage}" %></td>
         <td><%= "#{kanban.des_warehouse} | #{kanban.des_storage}" %></td>

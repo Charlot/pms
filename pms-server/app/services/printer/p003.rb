@@ -19,7 +19,7 @@ module Printer
           CO_Nr: 'CO_NR',
           CP_Nr: 'CP_NR',
           kBanNr: kanban.nr,
-          warehouse: 'warehouse',
+          warehouse: kanban.des_storage,
           pnNr: 'pnNr',
           bundleNo: args[:bundle_no],
           totalQuantity: kanban.quantity,
@@ -30,7 +30,7 @@ module Printer
           partDesc: wire.description||'',
           color: 'color',
           length: process_entity.value_wire_qty_factor,
-          diameter: 'diameter',
+          diameter: wire.cross_section,
           t1_nr: '', t1_custom_nr: '', t1_strip_length: '', s1_nr: '',
           t2_nr: '', t2_custom_nr: '', t2_strip_length: '', s2_nr: '',
           bundleLabelNr: SecureRandom.uuid
@@ -41,8 +41,8 @@ module Printer
         if value && part = Part.find_by_id(value)
           head["#{cf}_custom_nr".to_sym] = part.custom_nr if head.has_key?("#{cf}_custom_nr".to_sym)
           head["#{cf}_nr".to_sym] = part.nr if head.has_key?("#{cf}_nr".to_sym)
-          head["#{cf}_strip_length".to_sym]=process_entity.send("#{cf}_strip_length") if head.has_key?("#{cf}_strip_length".to_sym)
         end
+        head["#{cf}_strip_length".to_sym]=process_entity.send("#{cf}_strip_length") if head.has_key?("#{cf}_strip_length".to_sym)
       }
 
       heads=[]

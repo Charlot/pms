@@ -13,17 +13,17 @@ module FileHandler
             CSV.foreach(file.file_path,headers: file.headers,col_sep: file.col_sep,encoding: file.encoding) do |row|
               row.strip
               Tool.transaction do
-                rg = ResourceGroup.find_by_nr(row['Resourec Group'])
+                rg = ResourceGroup.find_by_nr(row['Resource Group'])
                 part = Part.find_by_nr(row['Part'])
                 if tool = Tool.find_by_nr(row['Nr'])
                   #update
                   tool.update({
                                   resource_group_id:rg.id,
                                   part_id:part.id,
-                                  mmt:row['MNT'],
+                                  mnt:row['MNT'],
                                   used_days:row['Used Days'],
                                   rql:row['Rql'],
-                                  Tol:row['Tol'],
+                                  tol:row['Tol'],
                                   rql_date:row['Rql Date']
                               })
                 else
@@ -32,22 +32,28 @@ module FileHandler
                                       nr:row['Nr'],
                                       resource_group_id:rg.id,
                                       part_id:part.id,
-                                      mmt:row['MNT'],
+                                      mnt:row['MNT'],
                                       used_days:row['Used Days'],
                                       rql:row['Rql'],
-                                      Tol:row['Tol'],
+                                      tol:row['Tol'],
                                       rql_date:row['Rql Date']
                                   })
                   tool.save
                 end
               end
             end
+            msg.result = true
+            msg.content = '模具导入成功'
           else
-
+            msg.result = false
+            msg.content = validate_msg.content
           end
         rescue => e
-
+          puts e.backtrace
+          msg.result = false
+          msg.content = e.message
         end
+        msg
       end
 
       def self.validate_import(file)
@@ -73,8 +79,8 @@ module FileHandler
 
       def self.validate_row(row)
         msg = Message.new({result:true,contents:[]})
-
-        unless ResourceGroup.find_by_nr(row['Resource Group'])
+        rg = ResourceGroup.find_by_nr(row['Resource Group'])
+        unless rg
           msg.contents << "Resource Group:#{row['Resource Group']} 不存在"
         end
 
