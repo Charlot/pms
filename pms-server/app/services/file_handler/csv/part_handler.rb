@@ -2,7 +2,7 @@ require 'csv'
 module FileHandler
   module Csv
     class PartHandler<Base
-      IMPORT_HEADERS=['Part Nr','Custom Nr','Type','Strip Length'] #Resource Group 和 Measure Unit后加
+      IMPORT_HEADERS=['Part Nr','Custom Nr','Type','Strip Length','Color','Color Desc','Component Type','Cross Section']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
       def self.import(file)
@@ -14,10 +14,16 @@ module FileHandler
       				CSV.foreach(file.file_path,headers: file.headers,col_sep: file.col_sep,encoding: file.encoding) do |row|
                 row.strip
       					part = Part.find_by_nr(row['Part Nr'])
+                params = {}
+                IMPORT_HEADERS.each{|header|
+                  unless (row[header].nil? || header_to_attr(header))
+                    params[header_to_attr(header)] = row[header]
+                  end
+                }
       					unless part
-      						Part.create({nr:row['Part Nr'],custom_nr: row['Custom Nr'],type:row['Type'],strip_length:row['Strip Length']})
-      					else
-      						part.update({custom_nr:row['Custom Nr'],type:row['Type'],strip_length:row['Strip Length']})
+      						Part.create(params)
+                else
+      						part.update(params.except(:nr))
       					end
       				end
       			end
@@ -65,6 +71,28 @@ module FileHandler
           msg.content=msg.contents.join('/')
         end
         return msg
+      end
+
+      def self.header_to_attr header
+        case header
+          when 'Part Nr'
+            :nr
+          when 'Custom Nr'
+            :custom_nr
+          when 'Type'
+            :type
+          when 'Strip Length'
+            :strip_length
+          when 'Color'
+            :color
+          when 'Color Desc'
+            :color_desc
+          when 'Component Type'
+            :component_type
+          when 'Cross Section'
+            :cross_section
+          else
+        end
       end
     end
   end

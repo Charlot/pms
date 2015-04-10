@@ -7,6 +7,7 @@ class ProcessEntity < ActiveRecord::Base
   belongs_to :cost_center
   belongs_to :product, class_name: 'Part'
   has_many :kanban_process_entities, dependent: :destroy
+  has_many :kanbans, through: :kanban_process_entities
   has_many :process_parts
   has_many :parts, through: :process_parts
   delegate :custom_fields, to: :process_template,allow_nil: true
@@ -21,6 +22,13 @@ class ProcessEntity < ActiveRecord::Base
   #
   def wire
     if self.value_default_wire_nr && (part = Part.find_by_id(self.value_default_wire_nr))
+      return part
+    end
+    nil
+  end
+
+  def wire_component
+    if self.value_wire_nr && (part = Part.find_by_id(self.value_wire_nr))
       return part
     end
     nil
