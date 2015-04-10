@@ -75,7 +75,9 @@ module FileHandler
                     }
                     params[:product_id] = product.id
                     puts params
-                    kanban.update(params)
+                    kanban.without_versioning do
+                      kanban.update(params)
+                    end
                   end
                 end
               end
