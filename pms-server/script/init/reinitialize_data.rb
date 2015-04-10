@@ -103,7 +103,7 @@ puts "======================".yellow
 puts "6.修复看板库位".yellow
 puts "======================".yellow
 Kanban.all.each {|k|
-  if k.des_storage.nil? || k.des_storage.blank?
+  if (k.des_storage.nil? || k.des_storage.blank?) && k.source_storage
     k.without_versioning do
       k.update(des_storage:k.source_storage)
     end
@@ -118,8 +118,16 @@ puts "======================".yellow
 KanbanProcessEntity.all.each do |kpe|
   process_entity = kpe.process_entity
   if process_entity.kanbans.count > 1
+    k = process_entity.kanbans.first
     process_entity.kanbans.each{|kanban|
+      if k.process_entities.count < kanban.process_entities.count
+        k = kanban
+      end
       puts "#{kanban.nr}:#{kanban.process_entities.collect{|pe|pe.nr}.join(',')}"
+    }
+    (process_entity.kanbans - [k]).each{|x|
+      x.destroy
+      puts "删除#{x.nr}"
     }
     puts "============================"
   end
