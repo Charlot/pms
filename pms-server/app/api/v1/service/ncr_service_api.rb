@@ -10,7 +10,7 @@ module V1
             if machine=Machine.find_by_nr(params[:machine_nr])
               if params[:ip]=~Resolv::IPv4::Regex
                 msg.Result = machine.update(ip: params[:ip])
-                msg.Content='IP 设置成功!'
+                msg.Content='IP Settled!'
               else
                 msg.Content = "Machine IP #{params[:ip]} is not valid"
               end
@@ -63,7 +63,7 @@ module V1
         namespace :printer do
           get :kanban_by_order_item do
             if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
-              printer=Printer::Client.new({code: params[:code], id: item.kanban_id, machine_nr: params[:machine_nr]})
+              printer=Printer::Client.new({code: params[:code], id: Kanban.find_by_id(item.kanban_id).nr, machine_nr: params[:machine_nr]})
               printer.gen_data
             end
           end

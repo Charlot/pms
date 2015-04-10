@@ -178,7 +178,6 @@ module Ncr
               WireGroup: 'Group0',
               ElectricalSizeMM2: '0.50', #process_entity.value_wire_qty_factor,
               Color: 'RD',
-
               Name: wire.nr,
               Hint: wire.nr
           }
