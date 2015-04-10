@@ -117,7 +117,7 @@ namespace PmsNCR
                     if (IsFileClosed(fullPath))
                     {
                         File.Delete(fullPath);
-                        LogUtil.Logger.Warn("【删除读完的数据文件】" + fullPath);
+                        LogUtil.Logger.Warn("[Delete File After Proccessed]" + fullPath);
                     }
                 }
                 else
@@ -149,11 +149,11 @@ namespace PmsNCR
             }
             catch (Exception e)
             {
-                LogUtil.Logger.Error("【获取所有文件出现异常】" + e.Message);
+                LogUtil.Logger.Error("[Get All File Error]" + e.Message);
                 return null;
             }
         }
-
+         
         /// <summary>
         /// Move file
         /// </summary>
@@ -177,24 +177,24 @@ namespace PmsNCR
                         }
                         if (File.Exists(destFileName))
                         {
-                            throw new IOException("目标文件已经存在");
+                            throw new IOException("Target File Exists");
                         }
                         else
                         {
                             File.Move(sourceFileName, destFileName);
-                            LogUtil.Logger.Info("【文件移动】【自】" + sourceFileName + "【至】" + destFileName);
+                            LogUtil.Logger.Info("Move File [From]" + sourceFileName + "[To]" + destFileName);
                             return destFileName;
                         }
                     }
                     else
                     {
-                        throw new IOException("源文件不存在");
+                        throw new IOException("Source File No Exists");
                     }                   
                 }
             }
             catch (Exception e)
             {
-                LogUtil.Logger.Error("【文件移动】【自】" + sourceFileName + "【至】" + destFileName + "【错误】" + e.Message);
+                LogUtil.Logger.Error("Move File [From]" + sourceFileName + "[To]" + destFileName + "[ERROR]" + e.Message);
             }
             return null;
         }
@@ -242,7 +242,7 @@ namespace PmsNCR
             }
             catch (Exception e)
             {
-                LogUtil.Logger.Warn(fileName + "文件未关闭." + e.Message);
+                LogUtil.Logger.Warn(fileName + "File not close." + e.Message);
                 return false;
             }
         }

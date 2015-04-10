@@ -98,7 +98,7 @@ namespace PmsNCR
                     printer.Type = int.Parse((PrintTypeCB.SelectedItem as ComboBoxItem).Tag.ToString());
                     printer.Copy = copy;
                     PrinterConfig.Save(printer);
-                    MessageBox.Show("设置成功");
+                    MessageBox.Show("Printer Setting Success");
                 }
 
             }

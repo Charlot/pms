@@ -1,0 +1,73 @@
+﻿<Window x:Class="PmsNCR.OrderPreviewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="PMS CLIENT - OrderPreviewWindow" Height="322" Width="846"
+        Loaded="Window_Loaded" ResizeMode="CanResize" WindowStartupLocation="CenterScreen" WindowState="Maximized">
+    
+    <Window.Resources>
+        <Style x:Key="contentCenterStyle"
+               TargetType="{x:Type TextBlock}">
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="10,5,10,10"/>
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontFamily" Value="Times New Roman" />
+        </Style>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition  Height="Auto"/>
+            <RowDefinition Height="250*" />
+        </Grid.RowDefinitions> 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="150"/>
+        </Grid.ColumnDefinitions>
+            <DataGrid Name="PreviewOrderDG" BorderThickness="0" Background="White" IsReadOnly="True"  
+                              ClipboardCopyMode="IncludeHeader" AutoGenerateColumns="False" 
+                              CanUserAddRows="false" CanUserDeleteRows="false" SnapsToDevicePixels="True" 
+                         
+                              CanUserReorderColumns="True" FontSize="13">
+
+
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FF269EF1"/>
+                                <GradientStop Color="#FF052841" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="FontSize" Value="10" />
+                    <Setter Property="Padding" Value="20,10,20,10"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="序号" Binding="{Binding Path=No}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                <DataGridTextColumn Header="订单号" Binding="{Binding Path=ItemNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                    <DataGridTextColumn Header="线号" Binding="{Binding Path=WireNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                    <DataGridTextColumn Header="客户号" Binding="{Binding Path=WireCusNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                    <DataGridTextColumn Header="线长" Binding="{Binding Path=WireLength}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                    <DataGridTextColumn Header="端子1" Binding="{Binding Path=Terminal1Nr}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                    <DataGridTextColumn Header="模具1" Binding="{Binding Path=Tool1Nr}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                    <DataGridTextColumn Header="端子2" Binding="{Binding Path=Terminal2Nr}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                    <DataGridTextColumn Header="模具2" Binding="{Binding Path=Tool2Nr}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                    <DataGridTextColumn Header="防水圈1" Binding="{Binding Path=Seal1Nr}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                    <DataGridTextColumn Header="防水圈2" Binding="{Binding Path=Seal2Nr}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        <StackPanel Grid.Column="1">
+            <Button Content="刷 新" Height="52"
+                  Name="UpdatePreviewBtn" 
+                 Width="87" Click="UpdatePreviewBtn_Click" Margin="34,6,0,0" />
+            <Button Height="56"  Width="88"  Margin="34,16,0,0" Content="显示预览卡"/>
+        </StackPanel>
+    </Grid>
+</Window>

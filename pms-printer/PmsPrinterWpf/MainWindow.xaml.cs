@@ -34,13 +34,17 @@ namespace PmsPrinterWpf
 
             if (kanbanNr.Length > 0)
             {
-                Msg<string> msg = new KanbanService().GetPrintCode(kanbanNr);
-                if (msg.Result)
+                foreach (string k in kanbanNr.Split(';'))
                 {
-                    new PrintService().Print(msg.Object, kanbanNr);
-                }
-                else {
-                    MessageBox.Show(msg.Content);
+                    Msg<string> msg = new KanbanService().GetPrintCode(k);
+                    if (msg.Result)
+                    {
+                        new PrintService().Print(msg.Object, k);
+                    }
+                    else
+                    {
+                        MessageBox.Show(msg.Content);
+                    }
                 }
             }
             else

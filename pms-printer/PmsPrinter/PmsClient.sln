@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brilliantech.Framwork", "..\Brilliantech.Framwork\Brilliantech.Framwork.csproj", "{9B5F850A-5136-4095-8955-6C4F7747C48A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PmsNCR", "..\PmsNCR\PmsNCR.csproj", "{52A540FC-DB32-4A84-BADC-90BBF265B8DC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PmsNCRWcf", "..\PmsNCRWcf\PmsNCRWcf.csproj", "{DCC92F99-680C-4703-BF54-8E6C81F06753}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7782081D-1528-4ABD-B792-87E3D68B9CF5}"
@@ -21,6 +19,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PmsTESTWin", "PmsTESTWin\PmsTESTWin.csproj", "{5D96F9BB-03D5-40C5-981D-0ADDD72F9FBE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PmsPrinterWpf", "..\PmsPrinterWpf\PmsPrinterWpf.csproj", "{9DE79377-F8CC-453E-99C5-AFA46BBD48F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWpf", "TestWpf\TestWpf.csproj", "{FD7F2D79-4A04-4C95-95EB-B18B51F3E306}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PmsNCR", "..\PmsNCR\PmsNCR.csproj", "{52A540FC-DB32-4A84-BADC-90BBF265B8DC}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -45,16 +47,6 @@ Global
 		{9B5F850A-5136-4095-8955-6C4F7747C48A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9B5F850A-5136-4095-8955-6C4F7747C48A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9B5F850A-5136-4095-8955-6C4F7747C48A}.Release|x86.ActiveCfg = Release|Any CPU
-		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Debug|x86.ActiveCfg = Debug|x86
-		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Debug|x86.Build.0 = Debug|x86
-		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Release|Any CPU.ActiveCfg = Release|x86
-		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Release|Mixed Platforms.Build.0 = Release|x86
-		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Release|x86.ActiveCfg = Release|x86
-		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Release|x86.Build.0 = Release|x86
 		{DCC92F99-680C-4703-BF54-8E6C81F06753}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DCC92F99-680C-4703-BF54-8E6C81F06753}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCC92F99-680C-4703-BF54-8E6C81F06753}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -105,6 +97,26 @@ Global
 		{9DE79377-F8CC-453E-99C5-AFA46BBD48F4}.Release|Mixed Platforms.Build.0 = Release|x86
 		{9DE79377-F8CC-453E-99C5-AFA46BBD48F4}.Release|x86.ActiveCfg = Release|x86
 		{9DE79377-F8CC-453E-99C5-AFA46BBD48F4}.Release|x86.Build.0 = Release|x86
+		{FD7F2D79-4A04-4C95-95EB-B18B51F3E306}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{FD7F2D79-4A04-4C95-95EB-B18B51F3E306}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{FD7F2D79-4A04-4C95-95EB-B18B51F3E306}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{FD7F2D79-4A04-4C95-95EB-B18B51F3E306}.Debug|x86.ActiveCfg = Debug|x86
+		{FD7F2D79-4A04-4C95-95EB-B18B51F3E306}.Debug|x86.Build.0 = Debug|x86
+		{FD7F2D79-4A04-4C95-95EB-B18B51F3E306}.Release|Any CPU.ActiveCfg = Release|x86
+		{FD7F2D79-4A04-4C95-95EB-B18B51F3E306}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{FD7F2D79-4A04-4C95-95EB-B18B51F3E306}.Release|Mixed Platforms.Build.0 = Release|x86
+		{FD7F2D79-4A04-4C95-95EB-B18B51F3E306}.Release|x86.ActiveCfg = Release|x86
+		{FD7F2D79-4A04-4C95-95EB-B18B51F3E306}.Release|x86.Build.0 = Release|x86
+		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Debug|x86.ActiveCfg = Debug|x86
+		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Debug|x86.Build.0 = Debug|x86
+		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Release|Any CPU.ActiveCfg = Release|x86
+		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Release|Mixed Platforms.Build.0 = Release|x86
+		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Release|x86.ActiveCfg = Release|x86
+		{52A540FC-DB32-4A84-BADC-90BBF265B8DC}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

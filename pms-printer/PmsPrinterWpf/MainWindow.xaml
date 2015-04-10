@@ -19,7 +19,7 @@
         <StackPanel Grid.Row="1">
             <StackPanel Margin="20,10,0,0" Orientation="Horizontal">
                 <Label Content="Kanban 号：" FontSize="20" VerticalAlignment="Center"/>
-                <TextBox Name="KanbanNrTB" Height="40" FontSize="22" Text="" Width="317" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBox Name="KanbanNrTB" Height="203" FontSize="22" Text="" Width="317" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <Button Content="打 印" Margin="10,0,0,0" Foreground="White" Height="50" Width="96" FontSize="20" Name="PrintBtn" Click="PrintBtn_Click">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -46,7 +46,7 @@
                     </Button.Effect>
                 </Button>
             </StackPanel>
-            <StackPanel  Margin="5,150,0,0">
+            <StackPanel  Margin="5,0,0,0">
                 <GroupBox  Header="打印操作" FontSize="14">
                     <StackPanel Orientation="Horizontal">
                         <Button Content="服务器设置" Margin="370,0,0,0"

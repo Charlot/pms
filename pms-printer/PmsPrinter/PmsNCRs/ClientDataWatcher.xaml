@@ -1,0 +1,10 @@
+﻿<Window x:Class="PmsNCR.ClientDataWatcher"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ClientDataWatcher" Height="173" Width="372" ResizeMode="CanMinimize" Closing="Window_Closing">
+    <Grid>
+        <Label Content="请勿关闭此窗口！" Height="51" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20"
+               HorizontalAlignment="Left" Margin="37,39,0,0" Name="label1" VerticalAlignment="Top" Width="258" />
+        <CheckBox Content="UNLOCK" Height="16" HorizontalAlignment="Left" Margin="261,86,0,0" Name="checkBox1" VerticalAlignment="Top" IsChecked="True" Checked="checkBox1_Checked" />
+    </Grid>
+</Window>
