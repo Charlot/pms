@@ -147,7 +147,7 @@ module FileHandler
                     pes.collect { |pe|
                       "#{pe.nr},#{pe.product_nr}"
                     }.join(";"),
-                    '不存在消料'
+                    '看板与步骤总成号不一致'
                 ]
               end
 
@@ -164,7 +164,7 @@ module FileHandler
                     k.nr,
                     k.product_nr,
                     pes.join("|"),
-                    '步骤与看板总成号不一致'
+                    '不存在消料'
                 ]
               end
 
