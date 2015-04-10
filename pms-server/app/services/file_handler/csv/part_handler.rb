@@ -16,7 +16,7 @@ module FileHandler
       					part = Part.find_by_nr(row['Part Nr'])
                 params = {}
                 IMPORT_HEADERS.each{|header|
-                  unless (row[header].nil? || header_to_attr(header))
+                  unless (row[header].nil? || header_to_attr(header).nil?)
                     params[header_to_attr(header)] = row[header]
                   end
                 }
