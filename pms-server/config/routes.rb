@@ -156,6 +156,7 @@ Rails.application.routes.draw do
       get :search
       match :import, to: :import, via: [:get, :post]
       #post :import
+      match :search, to: :search, via: [:get, :post]
     end
   end
   resources :files
