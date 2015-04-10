@@ -154,10 +154,10 @@ ActiveRecord::Schema.define(version: 20150410015239) do
     t.integer  "resource_group_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.float    "print_time",        default: 0.0
-    t.float    "seal_time",         default: 0.0
-    t.float    "terminal_time",     default: 0.0
-    t.float    "wire_time",         default: 0.0
+    t.float    "print_time",        default: 45.0
+    t.float    "seal_time",         default: 40.0
+    t.float    "terminal_time",     default: 15.0
+    t.float    "wire_time",         default: 5.0
     t.integer  "status",            default: 0
     t.string   "ip"
   end
