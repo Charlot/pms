@@ -20,11 +20,11 @@ module Ncr
               #                          accept: :json)
               # rb=JSON.parse(response.body)
               # if rb['Result']
-                item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_SUCCEED)
-              # else
-              #   item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_FAIL, message: rb['Content'])
-              # end
-              # puts JSON.parse(response.body)['Result'].class
+              item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_SUCCEED)
+                # else
+                #   item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_FAIL, message: rb['Content'])
+                # end
+                # puts JSON.parse(response.body)['Result'].class
             rescue => e
               puts "#{e.class}---#{e.message}-----------------------------"
               # raise(e)
@@ -135,6 +135,23 @@ module Ncr
           }
       }
 
+      pull_off_length1=nil
+      if t1.nil? && s1.nil?
+        begin
+          pull_off_length1 =process_entity.t1_strip_length.to_f/2
+        rescue => e
+          puts e.message
+        end
+      end
+
+      pull_off_length2=nil
+      if t2.nil? && s2.nil?
+        begin
+          pull_off_length2 =process_entity.t2_strip_length.to_f/2
+        rescue => e
+          puts e.message
+        end
+      end
       # article
       json[:article]={
           NewArticle: {
@@ -147,7 +164,8 @@ module Ncr
               WireKey: wire.nr,
               WireLength: process_entity.value_wire_qty_factor,
               StrippingLength: "#{process_entity.t1_strip_length}, #{process_entity.t2_strip_length}",
-              PulloffLength: "#{process_entity.t1_strip_length}, #{process_entity.t2_strip_length}",
+              # PulloffLength: "#{process_entity.t1_strip_length}, #{process_entity.t2_strip_length}",
+              PulloffLength: "#{pull_off_length1}, #{pull_off_length2}",
               SealKey: "#{s1.nil? ? '' : s1.nr}, #{s2.nil? ? '' : s2.nr}",
               TerminalKey: "#{t1.nil? ? '' : t1.nr}, #{t2.nil? ? '' : t2.nr}"
           }
@@ -160,6 +178,7 @@ module Ncr
               WireGroup: 'Group0',
               ElectricalSizeMM2: '0.50', #process_entity.value_wire_qty_factor,
               Color: 'RD',
+
               Name: wire.nr,
               Hint: wire.nr
           }
@@ -215,9 +234,9 @@ module Ncr
         }
       end
 
-      puts "---------------------"
-      puts json.to_json
-      puts "------------------------"
+      # puts "---------------------"
+      # puts json.to_json
+      # puts "------------------------"
       json
     end
   end

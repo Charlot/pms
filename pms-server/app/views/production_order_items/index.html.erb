@@ -13,6 +13,8 @@
     <th>State</th>
     <th>Code</th>
     <th>Kanban</th>
+    <th>Kanban Quantity</th>
+    <th>Produced Quantity</th>
     <th>Machine</th>
     <th>TotalTime</th>
     <th>Production order</th>
@@ -30,6 +32,8 @@
         <td><%= ProductionOrderItemState.display production_order_item.state %></td>
         <td><%= production_order_item.code %></td>
         <td><%= production_order_item.kanban.nr %></td>
+        <td><%= production_order_item.kanban.quantity %></td>
+        <td><%= production_order_item.produced_qty %></td>
         <td><%= production_order_item.machine.nr if production_order_item.machine %></td>
         <td><%= production_order_item.machine_time%></td>
         <td><%= production_order_item.production_order.nr if production_order_item.production_order %></td>

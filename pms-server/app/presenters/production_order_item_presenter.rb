@@ -60,6 +60,27 @@ class ProductionOrderItemPresenter<Presenter
         Seal1Nr: s1.nil? ? nil : s1.nr,
         Seal2Nr: s2.nil? ? nil : s1.nr
     }
+
+    # {
+    #     No: 0,
+    #     Id: 102,
+    #     ItemNr: "000102",
+    #     OrderNr: "000001",
+    #     FileName: "000102.json",
+    #     WireNr: "76755022W116",
+    #     WireCusNr: "FLRYW-B 0",
+    #     WireLength: 2060,
+    #     Terminal1Nr: 'nil',
+    #     Terminal1CusNr: 'nil',
+    #     Terminal1StripLength: 1,
+    #     Tool1Nr: 'nil',
+    #     Terminal2Nr: 'nil',
+    #     Terminal2CusNr: 'nil',
+    #     Terminal2StripLength: 1,
+    #     Tool2Nr: 'nil',
+    #     Seal1Nr: 'nil',
+    #     Seal2Nr: nil
+    # }
   end
 
   def to_produce_order

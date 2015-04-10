@@ -26,6 +26,13 @@ class ProcessEntity < ActiveRecord::Base
     nil
   end
 
+  def wire_component
+    if self.value_wire_nr && (part = Part.find_by_id(self.value_wire_nr))
+      return part
+    end
+    nil
+  end
+
   def custom_field_type
     puts '***************************************8'
     puts "#{self.process_template_id}_#{ProcessTemplate.name}"

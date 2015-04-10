@@ -63,7 +63,7 @@ module V1
         namespace :printer do
           get :kanban_by_order_item do
             if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
-              printer=Printer::Client.new({code: params[:code], id: item.kanban_id})
+              printer=Printer::Client.new({code: params[:code], id: item.kanban_id, machine_nr: params[:machine_nr]})
               printer.gen_data
             end
           end
