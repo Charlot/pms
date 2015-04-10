@@ -20,9 +20,11 @@ module FileHandler
                     params[header_to_attr(header)] = row[header]
                   end
                 }
+		puts params
       					unless part
       						Part.create(params)
                 else
+		puts "Update-------------------------"
       						part.update(params.except(:nr))
       					end
       				end

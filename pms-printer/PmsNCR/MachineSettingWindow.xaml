@@ -1,7 +1,7 @@
 ﻿<Window x:Class="PmsNCR.MachineSettingWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      Title="上海彩卓" Height="550" Width="725" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+      Title="PMS" Height="294" Width="440" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Window.Resources>
         <Style x:Name="LableStyle" TargetType="Label">
             <Setter Property="FontSize" Value="16"/>
@@ -14,7 +14,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="78*" />
             <RowDefinition Height="433*" />
-            <RowDefinition Height="78*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0">
             <StackPanel.Background>
@@ -23,44 +22,46 @@
                     <GradientStop Color="#FF849DF5" Offset="1"/>
                 </LinearGradientBrush>
             </StackPanel.Background>
-            <Label Content="机器设置" FontSize="20" Foreground="White" FontWeight="Bold" Margin="10,10,0,0"/>
+            <Label Content="Machine Setting" FontSize="20" Foreground="White" FontWeight="Bold" Margin="10,10,0,0"/>
         </StackPanel>
-        <StackPanel Grid.Row="1" Margin="5,20,0,0" HorizontalAlignment="Left" Width="698">
+        <StackPanel Grid.Row="1" Margin="5,20,0,0" HorizontalAlignment="Left">
 
             <StackPanel Orientation="Horizontal"  Margin="0,5,0,5">
                 <StackPanel Width="150">
-                    <Label Content="机器编号"/>
+                    <Label Content="Machine Nr"/>
                 </StackPanel>
                 <TextBox Name="MachineNrTB" Width="249"  FontSize="20"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Margin="0,5,0,5">
                 <StackPanel Width="150">
-                    <Label Content="机器IP"/>
+                    <Label Content="Machine IP"/>
                 </StackPanel>
 
                 <TextBox Name="MachineIPTB" Width="249" FontSize="20"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Margin="0,5,0,5">
                 <StackPanel Width="150">
-                    <Label Content="服务器IP"/>
+                    <Label Content="Server IP"/>
                 </StackPanel>
 
                 <TextBox Name="ServerIPTB" Width="249" FontSize="20"/>
             </StackPanel>
+            <StackPanel Width="200">
+                <Button Name="SaveBtn" Content="Save"   Foreground="White" Height="39" 
+                        Width="114"  FontSize="15" Click="SaveBtn_Click">
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF849DF5" Offset="0"/>
+                            <GradientStop Color="#FF687DD4" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <Button.Effect>
+                        <DropShadowEffect Opacity="0.295"/>
+                    </Button.Effect>
+                </Button>
+            </StackPanel>
         </StackPanel>
-        <StackPanel Grid.Row="2">
-            <Button Name="SaveBtn" Content="保存"   Foreground="White" Height="59" Width="175"  FontSize="15" Click="SaveBtn_Click">
-                <Button.Background>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#FF849DF5" Offset="0"/>
-                        <GradientStop Color="#FF687DD4" Offset="1"/>
-                    </LinearGradientBrush>
-                </Button.Background>
-                <Button.Effect>
-                    <DropShadowEffect Opacity="0.295"/>
-                </Button.Effect>
-            </Button>
-        </StackPanel>
+        
     </Grid>
 </Window>
 

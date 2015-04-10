@@ -23,18 +23,23 @@ namespace PmsNCR
     /// </summary>
     public partial class MaterialCheck : Window
     {
+        public static bool IsShow = false;
         private OrderItemCheck orderItem = null;
 
         public MaterialCheck()
         {
             InitializeComponent();
+            LoadCheck();           
+            ScanCodeTB.Focus();
+            IsShow = true;
+        }
+
+        public void LoadCheck() {
             if (LoadOrderItemCheck())
             {
                 InitCheckGraph();
             }
-            ScanCodeTB.Focus();
         }
-
         private bool LoadOrderItemCheck()
         {
             OrderService s = new OrderService();
@@ -61,10 +66,19 @@ namespace PmsNCR
             {
                 StripLength1Lab.Content = orderItem.Terminal1StripLength.ToString();
             }
+            else
+            {
+                StripLength1Lab.Content = null;
+            }
 
             if (orderItem.Terminal2StripLength != null)
             {
                 StripLength2Lab.Content = orderItem.Terminal2StripLength.ToString();
+            }
+            else
+            {
+
+                StripLength2Lab.Content = null;
             }
 
             if (orderItem.Terminal1Nr != null)
@@ -164,30 +178,48 @@ namespace PmsNCR
             }
             return wireCan && area1Can && area2Can;
         }
-       
+
         private void StartProduceBtn_Click(object sender, RoutedEventArgs e)
         {
-            try
+            MessageBoxResult result = MessageBox.Show("Confirm Start?");
+            if (result.Equals(MessageBoxResult.OK))
             {
-                OrderService s = new OrderService();
-                Msg<string> msg = s.GetOrderItemForProduce(orderItem.Id);
-                if (msg.Result)
+                try
                 {
-                    if (OrderItemFile.WirteToFile(orderItem.FileName, msg.Object))
+                    OrderService s = new OrderService();
+                    Msg<string> msg = s.GetOrderItemForProduce(orderItem.Id);
+                    if (msg.Result)
                     {
-                        OrderDDSConverter.ConvertJsonOrderToDDS(orderItem.FileName);
+                        if (OrderItemFile.WirteToFile(orderItem.FileName, msg.Object))
+                        {
+                            if (OrderDDSConverter.ConvertJsonOrderToDDS(orderItem.FileName))
+                            {
+                                MessageBox.Show("Order Created, Please Use EASY to work!");
+                                this.Close();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show(msg.Content);
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show(msg.Content);
+                    MessageBox.Show(ex.Message);
+                    LogUtil.Logger.Error(ex.Message);
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                LogUtil.Logger.Error(ex.Message);
-            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            IsShow = false;
+        }
+
+        private void AbortBtn_Click(object sender, RoutedEventArgs e)
+        {
+            new AbortConfirmWindow(this,OrderNrLab.Content.ToString()).ShowDialog();
         }
     }
 }

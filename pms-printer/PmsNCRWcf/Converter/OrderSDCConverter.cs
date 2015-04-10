@@ -21,20 +21,29 @@ namespace PmsNCRWcf.Converter
                 switch (node)
                 {
                     case "JobStarted":
-                        return service.ChangeOrderItemState(GetJobNr(config.Get("Job", node)), OrderItemState.STARTED).Result;
+                        string jobNr = GetJobNr(config.Get("Job", node));
+                        new PrintService().PrintKB("P002", jobNr,machineNr);
+                        return service.ChangeOrderItemState(jobNr, OrderItemState.STARTED).Result;
                     case "JobRestarted":
-                        return service.ChangeOrderItemState(GetJobNr(config.Get("Job", node)), OrderItemState.RESTARTED).Result;
+                        string jobNr1 = GetJobNr(config.Get("Job", node));
+                        int piece3 = int.Parse(config.Get("TotalGoodPieces", node));
+                        if (piece3 == 0)
+                        {
+                            new PrintService().PrintKB("P002", jobNr1, machineNr);
+                        }
+                        return service.ChangeOrderItemState(jobNr1, OrderItemState.RESTARTED).Result;
                     case "JobPaused":
                         return service.ChangeOrderItemState(GetJobNr(config.Get("Job", node)), OrderItemState.PAUSED).Result;
                     case "JobInterrupted":
                         return service.ChangeOrderItemState(GetJobNr(config.Get("Job", node)), OrderItemState.INTERRUPTED).Result;
                     case "JobAborted":
                         return service.ChangeOrderItemState(GetJobNr(config.Get("Job", node)), OrderItemState.ABORTED).Result;
-                    case "JobTerminated":
-                        // PrintKanban();
-                        string orderNr = GetJobNr(config.Get("Job", node));
-                        new PrintService().PrintKB("P002", orderNr);
-                        return service.ChangeOrderItemState(orderNr, OrderItemState.TERMINATED).Result;
+                    //case "JobTerminated":
+                    //    // PrintKanban();
+                    //    string orderNr = GetJobNr(config.Get("Job", node));
+                    //      new PrintService().PrintKB("P002", orderNr);
+                    //    return service.ChangeOrderItemState(orderNr, OrderItemState.TERMINATED).Result;               
+
                     case "ProductionInterrupted":
                         string pOrderNr = GetJobNr(config.Get("Job", node));
                         int piece = int.Parse(config.Get("TotalGoodPieces", node));
@@ -50,6 +59,23 @@ namespace PmsNCRWcf.Converter
                         }
                         break;
                     case "ProductionTerminated":
+                        string pOrderNr2 = GetJobNr(config.Get("Job", node));
+
+                        service.ChangeOrderItemState(pOrderNr2, OrderItemState.TERMINATED);
+                        int piece2 = int.Parse(config.Get("TotalGoodPieces", node));
+                        Msg<OrderItem> msg2 = service.ProducePiece(pOrderNr2, piece2);
+                        if (msg2.Result)
+                        {
+                            OrderItem item = msg2.Object;
+                            if (piece2 % item.BundleQuantity == 0 && piece2 > 0)
+                            {
+                                new PrintService().PrintBundleLabel("P003", pOrderNr2, machineNr, piece2 / item.BundleQuantity);
+                            }
+                            return true;
+                        }
+
+                        //// priny
+                        //new PrintService().PrintKB("P002", pOrderNr2);
                         break;
                     default:
                         break;

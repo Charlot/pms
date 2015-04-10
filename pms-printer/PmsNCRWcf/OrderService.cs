@@ -36,7 +36,7 @@ namespace PmsNCRWcf
                 }
                 else
                 {
-                    msg.Content = "不存在需要生产的订单，请联系相关人员";
+                    msg.Content = "No Order";
                 }
             }
             catch (Exception e) {
@@ -67,7 +67,7 @@ namespace PmsNCRWcf
             }
             else
             {
-                msg.Content = "不存在需要生产的订单，请联系相关人员";
+                msg.Content = "No Order";
             }
             return msg;
         }
@@ -95,7 +95,7 @@ namespace PmsNCRWcf
             }
             else
             {
-                msg.Content = "不存在需要生产的订单，请联系相关人员";
+                msg.Content = "No Order";
             }
             return msg;
         }
@@ -126,7 +126,7 @@ namespace PmsNCRWcf
                 }
                 else
                 {
-                    msg.Content = "API 返回错误，请联系相关人员";
+                    msg.Content = "API ERROR";
                 }
             }
             catch (Exception e)
@@ -157,7 +157,7 @@ namespace PmsNCRWcf
                 }
                 else
                 {
-                    msg.Content = "API 返回数据错误，请联系相关人员";
+                    msg.Content = "API ERROR";
                 }
             }
             catch (Exception e)

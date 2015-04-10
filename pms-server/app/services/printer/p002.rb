@@ -13,7 +13,7 @@ module Printer
       parts_info = {}
 
       wire=Part.find_by_id(@process_entity.value_wire_nr)
-      wire_desc= wire.nil? ? '' : "#{wire.nr};  #{wire.component_type};  #{wire.description}"
+      wire_desc= wire.nil? ? '' : "#{wire.nr}; #{wire.cross_section} ;#{wire.component_type};  #{wire.description}"
       ['t1', 't2', 's1', 's2'].each { |cf|
         value = @process_entity.send("value_#{cf}")
         if value && part = Part.find_by_id(value)
