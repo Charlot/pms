@@ -48,7 +48,7 @@ module Printer
         }
 
         pe.process_parts.first($ROUTE_PART_COUNT).each_with_index { |pp,index |
-          if pe.value_default_wire_nr.nil? || pp.value_default_wire_nr != pp.part.nr
+          if pe.value_default_wire_nr.nil? || pe.value_default_wire_nr != pp.part.nr
             if pp.part.type == PartType::PRODUCT_SEMIFINISHED && pp.part.nr.include?("_")
               body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr.split("_").last
             else

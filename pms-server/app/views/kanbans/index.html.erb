@@ -2,6 +2,7 @@
   <div class="panel-heading">
     <%= render partial: 'search' %>
     <%= link_to "导出与Kanban总成号不一致的步骤",export_routing_error_kanbans_path,class:'btn btn-warning'%>
+    <%= link_to "导入并更新",import_update_kanbans_path,class:"btn btn-default"%>
   </div>
   <div class="panel-body" id="search_Kanban_Res">
     <%= render partial: 'list' %>

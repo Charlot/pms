@@ -126,6 +126,7 @@ Rails.application.routes.draw do
       get :search
       get :export_routing_error
       match :import, to: :import, via: [:get, :post]
+      match :import_update, to: :import_update, via: [:get, :post]
       match :scan_finish, to: :scan_finish, via: [:get,:post]
     end
   end

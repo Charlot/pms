@@ -2,7 +2,6 @@ module FileHandler
   module Csv
     class ProcessEntityHandler<Base
       EXPORT_CSV_HEADERS=%w(NO Nr ProductNr)
-
       def self.export_unused(user_agent)
         msg = Message.new
         begin
