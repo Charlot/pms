@@ -41,8 +41,8 @@ module Printer
         if value && part = Part.find_by_id(value)
           head["#{cf}_custom_nr".to_sym] = part.custom_nr if head.has_key?("#{cf}_custom_nr".to_sym)
           head["#{cf}_nr".to_sym] = part.nr if head.has_key?("#{cf}_nr".to_sym)
-          head["#{cf}_strip_length".to_sym]=process_entity.send("#{cf}_strip_length") if head.has_key?("#{cf}_strip_length".to_sym)
         end
+        head["#{cf}_strip_length".to_sym]=process_entity.send("#{cf}_strip_length") if head.has_key?("#{cf}_strip_length".to_sym)
       }
 
       heads=[]
