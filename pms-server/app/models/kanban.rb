@@ -53,9 +53,7 @@ class Kanban < ActiveRecord::Base
     process_entities.each { |pe|
       pe.process_parts.each { |pp|
         part = pp.part
-        #if pe.value_default_wire_nr.nil? || part.nr != pe.value_default_wire_nr || part.type == PartType::PRODUCT_SEMIFINISHED
         data << [part.parsed_nr, part.positions(self.id,self.product_id).join(",")].join(":")
-        #end
       }
     }
     data.join('\n')
