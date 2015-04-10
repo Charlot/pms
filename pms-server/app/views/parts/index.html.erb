@@ -10,6 +10,9 @@
     <th>Nr</th>
     <th>Custom nr</th>
     <th>Type</th>
+    <th>Color</th>
+    <th>Component Type</th>
+    <th>Cross Section</th>
     <th>Strip length</th>
     <th>Resource group</th>
     <th>Measure unit</th>
@@ -23,6 +26,9 @@
         <td><%= part.nr %></td>
         <td><%= part.custom_nr %></td>
         <td><%= PartType.display(part.type) %></td>
+        <td><%= part.color%></td>
+        <td><%= part.component_type%></td>
+        <td><%= part.cross_section%></td>
         <td><%= part.strip_length %></td>
         <td><%= part.resource_group_tool.nr if part.resource_group_tool %></td>
         <td><%= part.measure_unit %></td>

@@ -110,3 +110,17 @@ Kanban.all.each {|k|
     puts "更新库位:#{k.nr},目标库位#{k.des_storage}".green
   end
 }
+
+#修复陈旧看板数据
+puts "======================".yellow
+puts "7.修复陈旧看板数据".yellow
+puts "======================".yellow
+KanbanProcessEntity.all.each do |kpe|
+  process_entity = kpe.process_entity
+  if process_entity.kanbans.count > 1
+    process_entity.kanbans.each{|kanban|
+      puts "#{kanban.nr}:#{kanban.process_entities.collect{|pe|pe.nr}.join(',')}"
+    }
+    puts "============================"
+  end
+end

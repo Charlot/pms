@@ -231,7 +231,7 @@ ActiveRecord::Schema.define(version: 20150410015239) do
     t.string   "color"
     t.string   "color_desc"
     t.string   "component_type"
-    t.string   "cross_section"
+    t.float    "cross_section",     default: 0.0
   end
 
   add_index "parts", ["custom_nr"], name: "index_parts_on_custom_nr", using: :btree
