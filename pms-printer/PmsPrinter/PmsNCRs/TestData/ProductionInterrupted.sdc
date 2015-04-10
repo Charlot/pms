@@ -1,5 +1,0 @@
-[ProductionInterrupted]
-ArticleKey=A_000035
-Job=J_000035
-ProductionRequestedPieces=100
-TotalGoodPieces=10

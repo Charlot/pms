@@ -11,8 +11,8 @@ module FileHandler
           validate_msg = validate_import(file)
           if validate_msg.result
             ProcessEntity.transaction do
-
               CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+                row.strip
                 process_template = ProcessTemplate.find_by_code(row['Template Code'])
                 product = Part.find_by_nr(row['Product Nr'])
                 #part = Part.find_by_nr(row['Wire Nr'])
@@ -28,7 +28,7 @@ module FileHandler
                   cv = nil
                   if CustomFieldFormatType.part?(cf.field_format)
                     if cf.name == "default_wire_nr" && row['Wire Nr']
-                      cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{row['Wire Nr']}"))
+                      cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: false, value: cf.get_field_format_value("#{product.nr}_#{row['Wire Nr']}"))
                     else
 
                       if custom_fields_val[index].blank?
@@ -52,7 +52,7 @@ module FileHandler
 
                 process_entity.custom_values.each_with_index do |cv, index|
                   cf=cv.custom_field
-                  if CustomFieldFormatType.part?(cf.field_format)
+                  if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
                     process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: 1)
                   end
                 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150406194820) do
+ActiveRecord::Schema.define(version: 20150410015239) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -154,10 +154,10 @@ ActiveRecord::Schema.define(version: 20150406194820) do
     t.integer  "resource_group_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.float    "print_time",        default: 0.0
-    t.float    "seal_time",         default: 0.0
-    t.float    "terminal_time",     default: 0.0
-    t.float    "wire_time",         default: 0.0
+    t.float    "print_time",        default: 45.0
+    t.float    "seal_time",         default: 40.0
+    t.float    "terminal_time",     default: 15.0
+    t.float    "wire_time",         default: 5.0
     t.integer  "status",            default: 0
     t.string   "ip"
   end
@@ -228,6 +228,10 @@ ActiveRecord::Schema.define(version: 20150406194820) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "description"
+    t.string   "color"
+    t.string   "color_desc"
+    t.string   "component_type"
+    t.float    "cross_section",     default: 0.0
   end
 
   add_index "parts", ["custom_nr"], name: "index_parts_on_custom_nr", using: :btree
@@ -293,6 +297,7 @@ ActiveRecord::Schema.define(version: 20150406194820) do
     t.datetime "updated_at"
     t.integer  "produced_qty"
     t.float    "machine_time",        default: 0.0
+    t.float    "prev_index",          default: 0.0
   end
 
   add_index "production_order_items", ["kanban_id"], name: "index_production_order_items_on_kanban_id", using: :btree

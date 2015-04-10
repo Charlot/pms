@@ -13,7 +13,8 @@ class Kanban < ActiveRecord::Base
   delegate :nr, to: :product, prefix: true, allow_nil: true
   delegate :custom_nr, to: :product, prefix: true, allow_nil: true
   #delegate :custom_nr, to: :part, prefix: true,allow_nil: true
-  has_many :production_order, as: :orderable
+  #has_many :production_order, as: :orderable
+  has_many :production_order_items
 
   accepts_nested_attributes_for :kanban_process_entities, allow_destroy: true
 
@@ -90,8 +91,16 @@ class Kanban < ActiveRecord::Base
   end
 
   def wire_nr
-    if (self.ktype == KanbanType::WHITE) && self.process_entities.first && self.process_entities.first.value_default_wire_nr
-      self.process_entities.first.value_default_wire_nr
+    if (self.ktype == KanbanType::WHITE) && self.process_entities.first && self.process_entities.first.wire
+      self.process_entities.first.wire.nr.split("_").last
+    else
+      nil
+    end
+  end
+
+  def wire_description
+    if (self.ktype == KanbanType::WHITE) && self.process_entities.first && self.process_entities.first.wire
+      self.process_entities.first.wire.custom_nr
     else
       nil
     end

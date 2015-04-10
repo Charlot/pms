@@ -7,6 +7,7 @@ class ProcessEntity < ActiveRecord::Base
   belongs_to :cost_center
   belongs_to :product, class_name: 'Part'
   has_many :kanban_process_entities, dependent: :destroy
+  has_many :kanbans, through: :kanban_process_entities
   has_many :process_parts
   has_many :parts, through: :process_parts
   delegate :custom_fields, to: :process_template,allow_nil: true
@@ -17,6 +18,21 @@ class ProcessEntity < ActiveRecord::Base
   acts_as_customizable
 
   # after_create :build_process_parts
+
+  #
+  def wire
+    if self.value_default_wire_nr && (part = Part.find_by_id(self.value_default_wire_nr))
+      return part
+    end
+    nil
+  end
+
+  def wire_component
+    if self.value_wire_nr && (part = Part.find_by_id(self.value_wire_nr))
+      return part
+    end
+    nil
+  end
 
   def custom_field_type
     puts '***************************************8'
@@ -51,17 +67,21 @@ class ProcessEntity < ActiveRecord::Base
     cfvs=self.custom_field_values
     puts "***#{cfs.to_s}"
     puts "---#{cfvs.to_s}"
-    self.process_template.template.gsub(/{\d+}/).each do |v|
-      puts "#####{v}"
-      if cf=cfs.detect { |f|
-        puts "#{v.to_i}~~~#{f.id.to_i==v.to_i}"
-        f.id.to_i==v.scan(/{(\d+)}/).map(&:first).first.to_i }
-        puts "********************#{cf.to_json}"
-        cfv=cfvs.detect { |v| v.custom_field_id==cf.id }
-        CustomFieldFormatType.part?(cf.field_format) ? ((part=Part.find_by_id(cfv.value)).nil? ? '' : part.parsed_nr) : (cfv.value.nil? ? '' : cfv.value)
-      else
-        'ERROR'
+    if template.template
+      self.process_template.template.gsub(/{\d+}/).each do |v|
+        puts "#####{v}"
+        if cf=cfs.detect { |f|
+          puts "#{v.to_i}~~~#{f.id.to_i==v.to_i}"
+          f.id.to_i==v.scan(/{(\d+)}/).map(&:first).first.to_i }
+          puts "********************#{cf.to_json}"
+          cfv=cfvs.detect { |v| v.custom_field_id==cf.id }
+          CustomFieldFormatType.part?(cf.field_format) ? ((part=Part.find_by_id(cfv.value)).nil? ? '' : part.parsed_nr) : (cfv.value.nil? ? '' : cfv.value)
+        else
+          'ERROR'
+        end
       end
-    end if self.process_template.template
+    else
+      ""
+    end
   end
 end

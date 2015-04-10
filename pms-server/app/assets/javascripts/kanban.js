@@ -83,6 +83,20 @@ pms.kanban.scan = function(code,callback){
     })
 };
 
+pms.kanban.scan_finish = function(code,callback){
+    $.ajax({
+        url: '/kanbans/scan_finish',
+        data: {code:code},
+        dataType:'json',
+        type:'POST',
+        success: function(data){
+            if(callback){
+                callback(data);
+            }
+        }
+    })
+};
+
 pms.kanban.search = function(params,callback){
     $.ajax({
         url: '/kanbans/search',

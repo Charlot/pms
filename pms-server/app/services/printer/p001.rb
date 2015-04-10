@@ -35,7 +35,8 @@ module Printer
         heads<<{Key:k,Value:head[k]}
       end
 
-      @kanban.process_entities.each do |pe|
+      @kanban.kanban_process_entities.each do |kpe|
+        pe = kpe.process_entity
         bodies =[]
         body = {
             route_nr:pe.process_template.code,
@@ -43,11 +44,11 @@ module Printer
             route_desc:pe.template_text,
             work_time_of_route:pe.stand_time,
             #Consume Date是什么东西？
-            consume_date:'consume date' #TODO route consume data
+            consume_date: kpe.id#TODO route consume data
         }
 
         pe.process_parts.first($ROUTE_PART_COUNT).each_with_index { |pp,index |
-          if pe.value_default_wire_nr.nil? || pp.value_default_wire_nr != pp.part.nr
+          if pe.value_default_wire_nr.nil? || pe.value_default_wire_nr != pp.part.nr
             if pp.part.type == PartType::PRODUCT_SEMIFINISHED && pp.part.nr.include?("_")
               body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr.split("_").last
             else

@@ -13,7 +13,11 @@
     <th>State</th>
     <th>Code</th>
     <th>Kanban</th>
+    <th>Kanban Quantity</th>
+    <th>Kanban Bundle</th>
+    <th>Produced Quantity</th>
     <th>Machine</th>
+    <th>TotalTime</th>
     <th>Production order</th>
     <th>OptimiseAt</th>
     <th>OptimiseIndex</th>
@@ -28,8 +32,12 @@
         <td><%= production_order_item.nr %></td>
         <td><%= ProductionOrderItemState.display production_order_item.state %></td>
         <td><%= production_order_item.code %></td>
-        <td><%= production_order_item.kanban.nr %></td>
+        <td><%= link_to production_order_item.kanban.nr,kanban_path(production_order_item.kanban) %></td>
+        <td><%= production_order_item.kanban.quantity %></td>
+        <td><%= production_order_item.kanban.bundle %></td>
+        <td><%= production_order_item.produced_qty %></td>
         <td><%= production_order_item.machine.nr if production_order_item.machine %></td>
+        <td><%= production_order_item.machine_time%></td>
         <td><%= production_order_item.production_order.nr if production_order_item.production_order %></td>
         <td><%= production_order_item.optimise_at %></td>
         <td><%= production_order_item.optimise_index %></td>

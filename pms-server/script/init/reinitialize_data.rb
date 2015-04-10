@@ -1,6 +1,6 @@
 #
 puts "======================".yellow
-puts "修复看板数据错误".yellow
+puts "1.修复看板数据错误".yellow
 puts "======================".yellow
 Kanban.where(ktype:KanbanType::WHITE).each do |k|
   if k.process_entities.count > 1
@@ -22,13 +22,13 @@ Kanban.where(ktype:KanbanType::WHITE).each do |k|
       k.kanban_process_entities.joins(:process_entity).where("process_entities.product_id != ?",k.product_id).each{|e|e.destroy}
     end
   else
-    puts "不需要修改".green
+    #puts "不需要修改".green
   end
 end
 
 #
 puts "======================".yellow
-puts "修复Routing数据".yellow
+puts "2.修复Routing数据".yellow
 puts "======================".yellow
 ProcessEntity.joins(:process_template).where("process_templates.type = ?",ProcessType::AUTO).each do |pe|
   pe.custom_values.each{|cv|
@@ -50,7 +50,7 @@ end
 
 #
 puts "======================".yellow
-puts "修复ProcessParts".yellow
+puts "3.修复ProcessParts".yellow
 puts "======================".yellow
 
 ProcessEntity.all.each{|pe|
@@ -66,11 +66,69 @@ ProcessEntity.all.each{|pe|
 
 #
 puts "======================".yellow
-puts "发布看板".yellow
+puts "4.发布看板".yellow
 puts "======================".yellow
-Kanban.all.each do |kanban|
+Kanban.includes(:kanban_process_entities).all.each do |kanban|
   kanban.without_versioning do
     kanban.update(state: KanbanState::RELEASED)
-    puts "#{kanban.nr}发布成功！".green
+    #puts "#{kanban.nr}发布成功！".green
+  end
+
+  kanban.kanban_process_entities.each do |kpe|
+    if kpe.process_entity.product_id != kanban.product_id
+      puts "删除#{kanban.nr}下，多余的步骤:#{kpe.process_entity.nr}:#{kpe.process_entity.product_nr}".red
+      kpe.destroy
+    end
+  end
+end
+
+#修复步骤属性
+puts "======================".yellow
+puts "5.修复步骤属性".yellow
+puts "======================".yellow
+CustomField.all.each do |cf|
+  if cf.name == "default_wire_nr"
+    cf.update(is_for_out_stock:false)
+    cf.custom_values.each do |cv|
+      if (pp =cv.customized.process_parts.where(part_id:cv.value)).count > 0
+        puts "#{pp.collect{|p|p.part.nr}.join(',')},删除#{pp.count}个零件损耗".red
+        pp.each{|p|p.destroy}
+      end
+    end
+  end
+end
+
+#修复步骤属性
+puts "======================".yellow
+puts "6.修复看板库位".yellow
+puts "======================".yellow
+Kanban.all.each {|k|
+  if (k.des_storage.nil? || k.des_storage.blank?) && k.source_storage
+    k.without_versioning do
+      k.update(des_storage:k.source_storage)
+    end
+    puts "更新库位:#{k.nr},目标库位#{k.des_storage}".green
+  end
+}
+
+#修复陈旧看板数据
+puts "======================".yellow
+puts "7.修复陈旧看板数据".yellow
+puts "======================".yellow
+KanbanProcessEntity.all.each do |kpe|
+  process_entity = kpe.process_entity
+  if process_entity.kanbans.count > 1
+    k = process_entity.kanbans.first
+    process_entity.kanbans.each{|kanban|
+      if k.process_entities.count < kanban.process_entities.count
+        k = kanban
+      end
+      puts "#{kanban.nr}:#{kanban.process_entities.collect{|pe|pe.nr}.join(',')}"
+    }
+    (process_entity.kanbans - [k]).each{|x|
+      x.destroy
+      puts "删除#{x.nr}"
+    }
+    puts "============================"
   end
 end
