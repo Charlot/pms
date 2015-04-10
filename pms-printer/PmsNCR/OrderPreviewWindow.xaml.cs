@@ -21,6 +21,8 @@ namespace PmsNCR
     /// </summary>
     public partial class OrderPreviewWindow : Window
     {
+        public static bool IsShow = false;
+
         public OrderPreviewWindow()
         {
             InitializeComponent();
@@ -28,6 +30,7 @@ namespace PmsNCR
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            IsShow = true;
             LoadOrderListForPreview();
         }
 
@@ -49,6 +52,11 @@ namespace PmsNCR
         private void UpdatePreviewBtn_Click(object sender, RoutedEventArgs e)
         {
             LoadOrderListForPreview();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            IsShow = false;
         }
     }
 }
