@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150408005332) do
+ActiveRecord::Schema.define(version: 20150410015239) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -228,6 +228,10 @@ ActiveRecord::Schema.define(version: 20150408005332) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "description"
+    t.string   "color"
+    t.string   "color_desc"
+    t.string   "component_type"
+    t.float    "cross_section",     default: 0.0
   end
 
   add_index "parts", ["custom_nr"], name: "index_parts_on_custom_nr", using: :btree
