@@ -7,6 +7,41 @@ module FileHandler
                       'Source Warehouse', 'Source Storage', 'Destination Warehouse', 'Destination Storage', 'Process List']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
+      def self.import_to_get_kanban_list(file)
+        msg = Message.new
+        begin
+          list = []
+          validate_msg = validate_import(file)
+          if validate_msg.result
+              CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+                row.strip
+                product = Part.find_by_nr(row['Product Nr'])
+
+                route_list = row['Process List'].split(',')
+                puts "================="
+                pes = []
+                ProcessEntity.where(nr:route_list,product_id:product.id).each{|pe| pes << pe.id}
+                kanbans = Kanban.joins(:kanban_process_entities).where(kanban_process_entities:{process_entity_id:pes}).distinct
+                if kanbans.count != 1
+                  puts "!!!!!!!!!!!!!!!!!!!!!!!!!".red
+                else
+                  list << kanbans.first.nr
+                end
+            end
+            msg.result = false
+              puts list.count
+            msg.content = list.join(";")
+          else
+            msg.result = false
+            msg.content = validate_msg.content
+          end
+        rescue => e
+          puts e.backtrace
+          msg.content = e.message
+        end
+        return msg
+      end
+
       def self.import_update(file)
         msg = Message.new
         begin
@@ -25,9 +60,7 @@ module FileHandler
                 pes = []
                 ProcessEntity.where(nr:route_list,product_id:product.id).each{|pe| pes << pe.id}
                 puts pes
-                kanbans = Kanban.joins(:kanban_process_entities).where(kanban_process_entities:{process_entity_id:pes})
-
-                #TODO Update Kanban
+                kanbans = Kanban.joins(:kanban_process_entities).where(kanban_process_entities:{process_entity_id:pes}).distinct
 
                 if kanbans.count != 1
                   puts "#{kanbans.collect{|k|k.nr}.join(',')}".red

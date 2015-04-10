@@ -90,7 +90,10 @@ class Kanban < ActiveRecord::Base
 
   def wire_nr
     if (self.ktype == KanbanType::WHITE) && self.process_entities.first && self.process_entities.first.wire
-      self.process_entities.first.wire.nr.split("_").last
+      name = self.process_entities.first.wire.nr.split("_")
+      puts name
+      name = (name - [name.first])
+      name.join("_")
     else
       nil
     end
