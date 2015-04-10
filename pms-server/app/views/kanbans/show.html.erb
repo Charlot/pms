@@ -31,6 +31,10 @@
               <ins><%= @kanban.quantity %></ins>
             </li>
             <li class="list-group-item">
+              <label><%= KanbanDesc::BUNDLE %>:</label>
+              <ins><%= @kanban.bundle %></ins>
+            </li>
+            <li class="list-group-item">
               <label><%= KanbanDesc::TYPE %>:</label>
               <ins><%= KanbanType.display(@kanban.ktype) %></ins>
             </li>
