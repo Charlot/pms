@@ -34,7 +34,15 @@ module FileHandler
                 else
                   if kanbans.first.process_entities.collect{|pe|pe.id} == pes
                     kanban = kanbans.first
-                    #kanban.update()
+                    params = {}
+                    IMPORT_HEADERS.each{|header|
+                      unless (row[header].nil? || header_to_attr(header).nil?)
+                        params[header_to_attr(header)] = row[header]
+                      end
+                    }
+                    params[:product_id] = product.id
+                    puts params
+                    kanban.update(params)
                   end
                 end
               end
@@ -236,6 +244,37 @@ module FileHandler
           msg.content=msg.contents.join('/')
         end
         return msg
+      end
+
+      def self.header_to_attr header
+        case header
+          when "Nr"
+            :nr
+          when "Quantity"
+            :quantity
+          when "Safety Stock"
+            :safety_stock
+          when "Copies"
+            :copies
+          when "Remark"
+            :remark
+          when "Type"
+            :ktype
+          when "Wire Length"
+            :wire_length
+          when "Bundle"
+            :bundle
+          when "Source Warehouse"
+            :source_warehouse
+          when "Source Storage"
+            :source_storage
+          when "Destination Warehouse"
+            :des_warehouse
+          when "Destination Storage"
+            :des_storage
+          else
+            nil
+        end
       end
     end
   end
