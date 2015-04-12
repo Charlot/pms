@@ -35,7 +35,7 @@ namespace PmsNCRWcf.Config
                 ProducePieceAction = config.Get("ProducePieceAction");
                 OrderItemUpdateStateAction = config.Get("OrderItemUpdateStateAction");
                 OrderListPreviewAction = config.Get("OrderListPreviewAction");
-
+                OrderListPassedAction = config.Get("OrderListPassedAction");
                 MachineIPSettingAction = config.Get("MachineIPSettingAction");
             }
             catch (Exception e)
@@ -78,6 +78,7 @@ namespace PmsNCRWcf.Config
         public static string ProducePieceAction { get; set; }
         public static string PrintBundleLabelAction { get; set; }
         public static string OrderListPreviewAction { get; set; }
+        public static string OrderListPassedAction { get; set; }
         public static string KanbanListAction { get; set; }
         public static string MachineIPSettingAction { get; set; }
     }
