@@ -59,6 +59,7 @@ namespace PmsNCR
         private void UpdatePreviewBtn_Click(object sender, RoutedEventArgs e)
         {
             LoadOrderListForPreview();
+            BundleNoTB.Text = string.Empty;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -72,6 +73,19 @@ namespace PmsNCR
             {
                 OrderItemCheck item = PreviewOrderDG.SelectedItem as OrderItemCheck;
                 new PrintService().PrintKB("P002", item.ItemNr, WPCSConfig.MachineNr);
+            }
+        }
+
+        private void PrintBundleLabelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            int bundleNo = 0;
+            int.TryParse(BundleNoTB.Text, out bundleNo);
+            if (bundleNo > 0 && PreviewOrderDG.SelectedItems.Count == 1)
+            {
+                OrderItemCheck item = PreviewOrderDG.SelectedItem as OrderItemCheck;
+
+                new PrintService().PrintBundleLabel("P003", item.ItemNr, WPCSConfig.MachineNr,bundleNo);
+          
             }
         }
     }
