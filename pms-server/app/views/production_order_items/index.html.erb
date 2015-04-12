@@ -55,9 +55,9 @@
         <input type="button" value="DISTRIBUTE" onclick="if(confirm('distribute?')){form.submit();}"/>
     <% end %>
     <br/>
-    <%= form_tag('/production_order_items/export', method: 'post') do %>
-        <%= hidden_field_tag :production_order_id, @production_order.id %>
-        <input type="button" value="EXPORT" onclick="if(confirm('export?')){form.submit();}"/>
-    <% end %>
 <% end %>
 
+<%= form_tag('/production_order_items/export', method: 'post') do %>
+    <%= hidden_field_tag :production_order_id, @production_order.id %>
+    <input type="button" value="EXPORT" onclick="if(confirm('export?')){form.submit();}"/>
+<% end %>

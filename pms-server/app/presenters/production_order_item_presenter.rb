@@ -48,6 +48,7 @@ class ProductionOrderItemPresenter<Presenter
         FileName: "#{@production_order_item.nr}.json",
         KanbanNr:kanban.nr,
         KanbanQuantity:kanban.quantity,
+        KanbanBundle: kanban.bundle,
         KanbanWireNr:kanban.wire_nr,
         WireNr: wire.nr,
         WireCusNr: wire.custom_nr||'',

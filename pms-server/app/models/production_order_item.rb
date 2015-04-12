@@ -25,6 +25,11 @@ class ProductionOrderItem < ActiveRecord::Base
         .order(production_order_id: :asc, optimise_index: :asc)
   end
 
+  def self.for_passed(machine)
+    where(state: ProductionOrderItemState.passed_states, machine_id: machine.id)
+        .order(production_order_id: :desc, optimise_index: :desc)
+  end
+
   def self.for_export(production_order)
     where(production_order_id: production_order.id)
         .joins(:kanban)
