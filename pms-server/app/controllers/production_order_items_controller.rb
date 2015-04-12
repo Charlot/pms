@@ -119,7 +119,7 @@ class ProductionOrderItemsController < ApplicationController
 
   def search
     @production_order_items=nil
-    if params.has_key?(:production_order_id)
+    if params.has_key?(:production_order_id) && params[:production_order_id].length>0
       @production_order=ProductionOrder.find_by_id(params[:production_order_id])
       @production_order_items=@production_order.production_order_items.order(machine_id: :asc, optimise_index: :asc)
       @optimised=true
@@ -129,6 +129,7 @@ class ProductionOrderItemsController < ApplicationController
 
     if params.has_key?(:machine_nr) && params[:machine_nr].length>0
       @production_order_items= @production_order_items.joins(:machine).where(machines: {nr: params[:machine_nr]})
+      @machine_nr=params[:machine_nr]
     end
     @production_order_items= @production_order_items.paginate(:page => params[:page])
     render :index
