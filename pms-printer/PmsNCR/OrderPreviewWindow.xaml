@@ -53,8 +53,10 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="No." Binding="{Binding Path=No}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="Order" Binding="{Binding Path=ItemNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                <DataGridTextColumn Header="OrderBatch" Binding="{Binding Path=OrderNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="Kanban" Binding="{Binding Path=KanbanNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="Quantity" Binding="{Binding Path=KanbanQuantity}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                <DataGridTextColumn Header="Bundle" Binding="{Binding Path=KanbanBundle}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="Wire" Binding="{Binding Path=KanbanWireNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="Row Wire" Binding="{Binding Path=WireNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                     <!--<DataGridTextColumn Header="CustNr" Binding="{Binding Path=WireCusNr}" ElementStyle="{StaticResource contentCenterStyle}"/>-->
@@ -68,9 +70,14 @@
                 </DataGrid.Columns>
             </DataGrid>
         <StackPanel Grid.Column="1">
+            <ComboBox Name="OrderStateCB"  Margin="34,6,0,0" Height="52"   Width="87">
+                <ComboBoxItem Content="NextOrder" IsSelected="True"></ComboBoxItem>
+                <ComboBoxItem Content="PassedOrder"></ComboBoxItem>
+            </ComboBox>
             <Button Content="Refresh" Height="52"
                   Name="UpdatePreviewBtn" 
                  Width="87" Click="UpdatePreviewBtn_Click" Margin="34,6,0,0" />
+            <Button Content="Print Kanban" Height="52" Name="PrintKanbanBtn" Width="87" Margin="34,6,0,0" Click="PrintKanbanBtn_Click" />
             <!--<Button Height="56"  Width="88"  Margin="34,16,0,0" Content="显示预览卡"/>-->
         </StackPanel>
     </Grid>

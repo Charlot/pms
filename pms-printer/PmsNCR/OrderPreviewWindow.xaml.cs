@@ -36,7 +36,14 @@ namespace PmsNCR
 
         private void LoadOrderListForPreview() {
             OrderService service = new OrderService();
-            Msg<List<OrderItemCheck>> msg = service.GetOrderPreviewList(WPCSConfig.MachineNr);
+            Msg<List<OrderItemCheck>> msg = null;
+            if (OrderStateCB.SelectedIndex == 0)
+            {
+                msg = service.GetOrderPreviewList(WPCSConfig.MachineNr);
+            }
+            else if (OrderStateCB.SelectedIndex == 1) {
+                msg = service.GetOrderPassedList(WPCSConfig.MachineNr);
+            }
             if (msg.Result)
             {
                 List<OrderItemCheck> items = msg.Object;
@@ -57,6 +64,15 @@ namespace PmsNCR
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             IsShow = false;
+        }
+
+        private void PrintKanbanBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (PreviewOrderDG.SelectedItems.Count == 1)
+            {
+                OrderItemCheck item = PreviewOrderDG.SelectedItem as OrderItemCheck;
+                new PrintService().PrintKB("P002", item.ItemNr, WPCSConfig.MachineNr);
+            }
         }
     }
 }
