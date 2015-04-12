@@ -52,8 +52,8 @@
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="No." Binding="{Binding Path=No}" ElementStyle="{StaticResource contentCenterStyle}"/>
-                <DataGridTextColumn Header="Order" Binding="{Binding Path=ItemNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
-                <DataGridTextColumn Header="OrderBatch" Binding="{Binding Path=OrderNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                <DataGridTextColumn Header="JobNr" Binding="{Binding Path=ItemNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                <DataGridTextColumn Header="OrderNr" Binding="{Binding Path=OrderNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="Kanban" Binding="{Binding Path=KanbanNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="Quantity" Binding="{Binding Path=KanbanQuantity}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="Bundle" Binding="{Binding Path=KanbanBundle}" ElementStyle="{StaticResource contentCenterStyle}"/>
