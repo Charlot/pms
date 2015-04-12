@@ -6,10 +6,10 @@ class ProductionOrderItemsController < ApplicationController
   def index
     if params.has_key?(:production_order_id)
       @production_order=ProductionOrder.find_by_id(params[:production_order_id])
-      @production_order_items=@production_order.production_order_items.order(machine_id: :asc,optimise_index: :asc)
+      @production_order_items=@production_order.production_order_items.order(machine_id: :asc, optimise_index: :asc).paginate(:page => params[:page])
       @optimised=true
     else
-      @production_order_items = ProductionOrderItem.for_optimise
+      @production_order_items = ProductionOrderItem.for_optimise.paginate(:page => params[:page])
     end
   end
 
@@ -115,6 +115,24 @@ class ProductionOrderItemsController < ApplicationController
     else
       render 'shared/error'
     end
+  end
+
+  def search
+    @production_order_items=nil
+    if params.has_key?(:production_order_id) && params[:production_order_id].length>0
+      @production_order=ProductionOrder.find_by_id(params[:production_order_id])
+      @production_order_items=@production_order.production_order_items.order(machine_id: :asc, optimise_index: :asc)
+      @optimised=true
+    else
+      @production_order_items = ProductionOrderItem.for_optimise
+    end
+
+    if params.has_key?(:machine_nr) && params[:machine_nr].length>0
+      @production_order_items= @production_order_items.joins(:machine).where(machines: {nr: params[:machine_nr]})
+      @machine_nr=params[:machine_nr]
+    end
+    @production_order_items= @production_order_items.paginate(:page => params[:page])
+    render :index
   end
 
   private
