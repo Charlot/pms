@@ -6,10 +6,10 @@ class ProductionOrderItemsController < ApplicationController
   def index
     if params.has_key?(:production_order_id)
       @production_order=ProductionOrder.find_by_id(params[:production_order_id])
-      @production_order_items=@production_order.production_order_items.order(machine_id: :asc,optimise_index: :asc)
+      @production_order_items=@production_order.production_order_items.order(machine_id: :asc,optimise_index: :asc).paginate(:page => params[:page])
       @optimised=true
     else
-      @production_order_items = ProductionOrderItem.for_optimise
+      @production_order_items = ProductionOrderItem.for_optimise.paginate(:page => params[:page])
     end
   end
 
