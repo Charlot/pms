@@ -59,10 +59,21 @@ class Part < ActiveRecord::Base
       pp = PartPosition.find_by_part_id(self.id)
       pp.nil? ? ["N/A"]:[pp.storage]
     else
+      #ProcessPart.where(part_id:self.id).each{|pp|
+      #  puts pp.part.nr
+      #}
+
+      #ProcessEntity.joins(:custom_values).where({custom_values: {value:self.id}}).each{|pe|
+      #  puts pe.nr
+      #}
+
+      #puts "=============".red
       kanbans = Kanban.joins(process_entities: :process_parts)
           .where("process_parts.part_id = ? AND kanbans.ktype != ? AND kanbans.des_storage is not NULL AND kanbans.id != ?",self.id,KanbanType::WHITE,kanban_id)
-      kanbans.each{|k| puts k.nr}
-      kanbans.collect{|k|k.desc_position}
+      kanbans.each{|k| puts "#{k.nr}".red}
+      #puts "=============".red
+      kanbans.collect{|k|k.desc_storage}
+      #[]
     end
   end
 

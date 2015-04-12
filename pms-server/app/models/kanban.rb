@@ -53,9 +53,7 @@ class Kanban < ActiveRecord::Base
     process_entities.each { |pe|
       pe.process_parts.each { |pp|
         part = pp.part
-        #if pe.value_default_wire_nr.nil? || part.nr != pe.value_default_wire_nr || part.type == PartType::PRODUCT_SEMIFINISHED
         data << [part.parsed_nr, part.positions(self.id,self.product_id).join(",")].join(":")
-        #end
       }
     }
     data.join('\n')
@@ -92,7 +90,10 @@ class Kanban < ActiveRecord::Base
 
   def wire_nr
     if (self.ktype == KanbanType::WHITE) && self.process_entities.first && self.process_entities.first.wire
-      self.process_entities.first.wire.nr.split("_").last
+      name = self.process_entities.first.wire.nr.split("_")
+      puts name
+      name = (name - [name.first])
+      name.join("_")
     else
       nil
     end
