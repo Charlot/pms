@@ -4,6 +4,24 @@
         <input type="button" value="OPTIMISE" onclick="if(confirm('optimise?')){form.submit();}"/>
     <% end %>
 <% end %>
+<div>
+  <form method="get" action="<%= search_production_order_items_path %>">
+    <div>
+      <div>
+        <span>机器号：
+          <input type="text" name="machine_nr" value="<%= @machine_nr %>"/>
+        </span>
+        <!--<span>状态：-->
+          <!--<%= select_tag 'state',options_for_select(production_order_item_state_options),selected: @state, include_blank: true %>-->
+        <!--</span>-->
+      </div>
+      <input type="hidden" name="production_order_id" value="<%= @production_order.id if @production_order %>"/>
+      <div>
+        <input type="submit" value="查找" class="btn btn-primary" name="search"/>
+      </div>
+    </div>
+  </form>
+</div>
 
 <div class="digg_pagination">
   <div class="page_info">
@@ -69,7 +87,7 @@
         <%= hidden_field_tag :production_order_id, @production_order.id %>
         <input type="button" value="EXPORT" onclick="if(confirm('export?')){form.submit();}"/>
     <% end %>
-    <% end %>
+<% end %>
 <hr/>
 <div class="digg_pagination">
   <%= will_paginate @production_order_items, :container => false %>
