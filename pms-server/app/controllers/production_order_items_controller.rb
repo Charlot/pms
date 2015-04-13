@@ -143,6 +143,6 @@ class ProductionOrderItemsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def production_order_item_params
-    params.require(:production_order_item).permit(:nr, :state, :code, :kanban_id, :production_order)
+    params.require(:production_order_item).permit(:nr, :state, :code, :kanban_id, :machine_id,:production_order)
   end
 end
