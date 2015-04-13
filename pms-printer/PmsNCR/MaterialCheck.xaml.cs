@@ -57,7 +57,7 @@ namespace PmsNCR
 
         private void InitCheckGraph()
         {
-            OrderNrLab.Content = orderItem.ItemNr;
+            JobNrLab.Content = orderItem.ItemNr;
             WireNrTB.Text = orderItem.WireNr;
             WireCusNrTB.Text = orderItem.WireCusNr;
             WireLenghLab.Content = orderItem.WireLength;
@@ -219,7 +219,7 @@ namespace PmsNCR
 
         private void AbortBtn_Click(object sender, RoutedEventArgs e)
         {
-            new AbortConfirmWindow(this,OrderNrLab.Content.ToString()).ShowDialog();
+            new AbortConfirmWindow(this,JobNrLab.Content.ToString()).ShowDialog();
         }
     }
 }
