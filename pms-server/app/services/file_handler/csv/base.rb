@@ -16,9 +16,6 @@ module FileHandler
       end
 
       def self.validate_import(file)
-        puts "----------------".red
-        puts self.class.name
-        puts "----------------".red
 
         tmp_file=full_tmp_path(file.file_name)
         msg=Message.new(result: true)

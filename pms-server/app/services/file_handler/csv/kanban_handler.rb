@@ -4,7 +4,8 @@ module FileHandler
     class KanbanHandler<Base
       IMPORT_HEADERS=['Nr', 'Quantity', 'Safety Stock', 'Copies', 'Remark',
                       'Wire Nr', 'Product Nr', 'Type', 'Wire Length', 'Bundle',
-                      'Source Warehouse', 'Source Storage', 'Destination Warehouse', 'Destination Storage', 'Process List']
+                      'Source Warehouse', 'Source Storage', 'Destination Warehouse',
+                      'Destination Storage', 'Process List']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
       def self.import_to_get_kanban_list(file)
@@ -93,6 +94,10 @@ module FileHandler
           msg.content = e.message
         end
         return msg
+      end
+
+      def self.export(user_agent)
+        
       end
 
       def self.import(file)
