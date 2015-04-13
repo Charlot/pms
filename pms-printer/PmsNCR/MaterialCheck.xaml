@@ -14,9 +14,9 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <Label Content="Order:" Height="28" HorizontalAlignment="Left" Margin="332,12,0,0" Name="label1" VerticalAlignment="Top" />
-        <Label Content="ORDER_NR" Height="28" HorizontalAlignment="Left"
-               Margin="384,12,0,0" Name="OrderNrLab" VerticalAlignment="Top" Width="129" />
+        <Label Content="Job:" Height="28" HorizontalAlignment="Left" Margin="332,12,0,0" Name="label1" VerticalAlignment="Top" />
+        <Label Content="JOB_NR" Height="28" HorizontalAlignment="Left"
+               Margin="384,12,0,0" Name="JobNrLab" VerticalAlignment="Top" Width="129" />
         <Label Content="Wire:" Height="28" HorizontalAlignment="Left" Margin="332,46,0,0" Name="label2" VerticalAlignment="Top" />
         <TextBox Height="23" HorizontalAlignment="Left" Margin="384,46,0,0" Name="WireNrTB" VerticalAlignment="Top" Width="120" />
         <TextBox Height="23" HorizontalAlignment="Left" Margin="385,75,0,0" Name="WireCusNrTB" VerticalAlignment="Top" Width="120" />

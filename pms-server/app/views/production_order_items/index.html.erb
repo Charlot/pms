@@ -1,10 +1,34 @@
 <p id="notice"><%= notice %></p>
-
 <% if has_optimise_items %>
     <%= form_tag('/production_order_items/optimise', method: 'post') do %>
         <input type="button" value="OPTIMISE" onclick="if(confirm('optimise?')){form.submit();}"/>
     <% end %>
 <% end %>
+<div>
+  <form method="get" action="<%= search_production_order_items_path %>">
+    <div>
+      <div>
+        <span>机器号：
+          <input type="text" name="machine_nr" value="<%= @machine_nr %>"/>
+        </span>
+        <!--<span>状态：-->
+          <!--<%= select_tag 'state',options_for_select(production_order_item_state_options),selected: @state, include_blank: true %>-->
+        <!--</span>-->
+      </div>
+      <input type="hidden" name="production_order_id" value="<%= @production_order.id if @production_order %>"/>
+      <div>
+        <input type="submit" value="查找" class="btn btn-primary" name="search"/>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @production_order_items %>
+  </div>
+  <%= will_paginate @production_order_items, :container => false %>
+</div>
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
@@ -32,12 +56,12 @@
         <td><%= production_order_item.nr %></td>
         <td><%= ProductionOrderItemState.display production_order_item.state %></td>
         <td><%= production_order_item.code %></td>
-        <td><%= link_to production_order_item.kanban.nr,kanban_path(production_order_item.kanban) %></td>
+        <td><%= link_to production_order_item.kanban.nr, kanban_path(production_order_item.kanban) %></td>
         <td><%= production_order_item.kanban.quantity %></td>
         <td><%= production_order_item.kanban.bundle %></td>
         <td><%= production_order_item.produced_qty %></td>
         <td><%= production_order_item.machine.nr if production_order_item.machine %></td>
-        <td><%= production_order_item.machine_time%></td>
+        <td><%= production_order_item.machine_time %></td>
         <td><%= production_order_item.production_order.nr if production_order_item.production_order %></td>
         <td><%= production_order_item.optimise_at %></td>
         <td><%= production_order_item.optimise_index %></td>
@@ -49,15 +73,22 @@
   </tbody>
 </table>
 <br>
+
+<hr/>
 <% if @optimised && has_distribute_items(@production_order) %>
     <%= form_tag('/production_order_items/distribute', method: 'post') do %>
         <%= hidden_field_tag :production_order_id, @production_order.id %>
         <input type="button" value="DISTRIBUTE" onclick="if(confirm('distribute?')){form.submit();}"/>
     <% end %>
     <br/>
+<% end %>
+<% if @production_order %>
     <%= form_tag('/production_order_items/export', method: 'post') do %>
         <%= hidden_field_tag :production_order_id, @production_order.id %>
         <input type="button" value="EXPORT" onclick="if(confirm('export?')){form.submit();}"/>
     <% end %>
 <% end %>
-
+<hr/>
+<div class="digg_pagination">
+  <%= will_paginate @production_order_items, :container => false %>
+</div>

@@ -35,6 +35,11 @@
               </div>
 
               <div class="form-group">
+                <%= f.label :quantity, "#{KanbanDesc::BUNDLE}:" %>
+                <%= f.number_field :bundle, {min: 0, class: "form-control"} %>
+              </div>
+
+              <div class="form-group">
                 <%= f.label :safety_stock, "#{KanbanDesc::SAFETY_STOCK}:" %>
                 <%= f.number_field :safety_stock, {min: 0, class: "form-control"} %>
               </div>

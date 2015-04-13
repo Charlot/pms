@@ -7,6 +7,7 @@ class KanbanDesc
   COPIES="打印份数"
   STATE="状态"
   QUANTITY="卡量"
+  BUNDLE="捆扎数"
   WIRE_NR="线号"
   PRODUCT_NR="总成号"
   CUSTOMER_NR="客户号"

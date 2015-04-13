@@ -65,4 +65,8 @@ class ProductionOrderItemState<BaseType
   def self.wait_scan_states
     [TERMINATED]
   end
+
+  def self.passed_states
+    [STARTED,RESTARTED,TERMINATED,ABORTED,MANUAL_ABORTED,INTERRUPTED,PAUSED]
+  end
 end
