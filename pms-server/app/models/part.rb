@@ -72,7 +72,7 @@ class Part < ActiveRecord::Base
           .where("process_parts.part_id = ? AND kanbans.ktype != ? AND kanbans.des_storage is not NULL AND kanbans.id != ?",self.id,KanbanType::WHITE,kanban_id)
       kanbans.each{|k| puts "#{k.nr}".red}
       #puts "=============".red
-      kanbans.collect{|k|k.desc_storage}
+      kanbans.collect{|k|k.des_storage}
       #[]
     end
   end

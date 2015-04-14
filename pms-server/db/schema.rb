@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150410015239) do
+ActiveRecord::Schema.define(version: 20150413080347) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -291,7 +291,7 @@ ActiveRecord::Schema.define(version: 20150410015239) do
     t.integer  "kanban_id"
     t.integer  "production_order_id"
     t.integer  "machine_id"
-    t.integer  "optimise_index",      default: 0
+    t.float    "optimise_index",      default: 0.0
     t.datetime "optimise_at"
     t.datetime "created_at"
     t.datetime "updated_at"
