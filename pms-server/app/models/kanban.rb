@@ -99,6 +99,14 @@ class Kanban < ActiveRecord::Base
     end
   end
 
+  def wire_length
+    if (self.ktype == KanbanType::WHITE) && (pe = self.process_entities.first)
+      pe.value_wire_qty_factor
+    else
+      nil
+    end
+  end
+
   def wire_description
     if (self.ktype == KanbanType::WHITE) && self.process_entities.first && self.process_entities.first.wire
       self.process_entities.first.wire.custom_nr

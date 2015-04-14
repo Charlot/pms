@@ -2,7 +2,11 @@ require 'csv'
 module FileHandler
   module Csv
     class ProcessEntitySemiAutoHandler<Base
-      IMPORT_HEADERS=['Nr', 'Name', 'Description', 'Stand Time','Product Nr','Template Code', 'WorkStation Type', 'Cost Center', 'Template Fields','Wire Nr']
+      IMPORT_HEADERS=[
+          'Nr', 'Name', 'Description', 'Stand Time',
+          'Product Nr','Template Code', 'WorkStation Type',
+          'Cost Center', 'Template Fields','Wire Nr'
+      ]
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
       def self.import(file)

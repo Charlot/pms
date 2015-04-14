@@ -32,6 +32,22 @@ class ProcessEntitiesController < ApplicationController
     render partial: 'simple',locals:{process_entity:@process_entity}
   end
 
+  #GET
+
+  def export_auto
+    msg = Message.new
+    begin
+      msg = FileHandler::Csv::ProcessEntityHandler.export_auto(request.user_agent.downcase)
+    rescue => e
+      msg.content = e.message
+    end
+    if msg.result
+      send_file msg.content
+    else
+      render json: msg
+    end
+  end
+
   # GET POST
   def import_auto
     if request.post?
