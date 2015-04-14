@@ -3,7 +3,7 @@ module Enum
     @@sidebar_menu = {
         KANBAN: {name: PageInfo.kanban, actions: ["new", "index", "import"]},
         PRODUCTION_ORDER: {name: PageInfo.productionorder, actions: ["new", "index"]},
-        PRODUCTION_ORDER_ITEM: {name: PageInfo.productionorderitem, actions: ["new", "index"]},
+        PRODUCTION_ORDER_ITEM: {name: PageInfo.productionorderitem, actions: ["new", "index","state_export"]},
         PART: {name: PageInfo.part, actions: ["new", "index", "import"]},
         MEASURE_UNIT: {name: PageInfo.measureunit, actions: ["new", "index"]},
         PART_BOM: {name: PageInfo.partbom, actions: ["new", "index", "import"]},

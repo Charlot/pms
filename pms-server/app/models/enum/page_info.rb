@@ -39,6 +39,8 @@ module Enum
           "编辑#{model}"
         when "import"
           "导入#{model}"
+        when 'state_export'
+          "状态导出#{model}"
         when "panel"
           "#{model}控制面板"
         when 'transport'

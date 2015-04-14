@@ -117,6 +117,17 @@ class ProductionOrderItemsController < ApplicationController
     end
   end
 
+  def state_export
+    if request.post?
+      msg=FileHandler::Csv::ProductionOrderItemHandler.new.export_by_state(params, request.user_agent)
+      if msg.result
+        send_file msg.content
+      else
+        render 'shared/error'
+      end
+    end
+  end
+
   def search
     @production_order_items=nil
     if params.has_key?(:production_order_id) && params[:production_order_id].length>0
@@ -143,6 +154,6 @@ class ProductionOrderItemsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def production_order_item_params
-    params.require(:production_order_item).permit(:nr, :state,:optimise_index,:production_order_id, :code, :kanban_id, :machine_id,:production_order)
+    params.require(:production_order_item).permit(:nr, :state, :optimise_index, :production_order_id, :code, :kanban_id, :machine_id, :production_order)
   end
 end
