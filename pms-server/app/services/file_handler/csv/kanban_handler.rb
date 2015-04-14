@@ -25,6 +25,7 @@ module FileHandler
                 kanbans = Kanban.joins(:kanban_process_entities).where(kanban_process_entities:{process_entity_id:pes}).distinct
                 if kanbans.count != 1
                   puts "!!!!!!!!!!!!!!!!!!!!!!!!!".red
+                  puts "#{kanbans.collect{|k|k.nr}.join(",")}".red
                 else
                   list << kanbans.first.nr
                 end
@@ -283,8 +284,10 @@ module FileHandler
         process_nrs = row['Process List'].split(',').collect { |penr| penr.strip }
         process_entities = ProcessEntity.where({nr: process_nrs, product_id: product.id})
 
-        unless process_entities.count == process_nrs.count
-          msg.contents << "Process List: #{process_nrs - process_entities.collect { |pe| pe.nr }}，工艺不存在!"
+        nrs = process_nrs - process_entities.collect{|pe|pe.nr}
+
+        unless nrs.count == 0
+          msg.contents << "Process List: #{nrs.join(",")}，工艺不存在!"
         end
 
         if kanban.nil? && row['Wire Nr'].present? &&Part.where({nr: "#{row['Product Nr']}_#{row['Wire Nr']}"}).count <= 0
