@@ -95,7 +95,7 @@ class ProductionOrderItemPresenter<Presenter
     # }
   end
 
-  def to_produce_order
-    Ncr::Order.new.json_order_item_content(@production_order_item)
+  def to_produce_order(mirror=false)
+    Ncr::Order.new.json_order_item_content(@production_order_item,mirror)
   end
 end
