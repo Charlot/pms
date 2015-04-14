@@ -5,7 +5,7 @@ module Enum
                 PROCESS_TEMPLATE: "Routing模板", PROCESS_ENTITY: "Routing", RESOURCE_GROUP_MACHINE: "机器组",
                 RESOURCE_GROUP_TOOL: "模具组", TOOL: "模具", SETTING: "设置", MASTER_BOM_ITEM: 'Master BOM',
                 PART_POSITION: "Cutting原材料库存",
-                DEPARTMENT: '部门'
+                DEPARTMENT: "部门",WAREHOUSE: "仓库",STORAGE:"库位"
     }
 
     @@actions = ["new", "index", "show", "edit", "import", "panel",'transport']

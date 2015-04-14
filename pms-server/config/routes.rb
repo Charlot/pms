@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  resources :warehouses do
+    resources :storages
+  end
+
+
   resources :part_positions do
     collection do
       match :import, to: :import, via: [:get, :post]
@@ -154,6 +159,7 @@ Rails.application.routes.draw do
       get :search
       match :import, to: :import, via: [:get, :post]
       #post :import
+      match :search, to: :search, via: [:get, :post]
     end
   end
   resources :files
