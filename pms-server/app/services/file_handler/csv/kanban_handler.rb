@@ -3,8 +3,9 @@ module FileHandler
   module Csv
     class KanbanHandler<Base
       IMPORT_HEADERS=['Nr', 'Quantity', 'Safety Stock', 'Copies', 'Remark',
-                      'Wire Nr', 'Product Nr', 'Type', 'Wire Length', 'Bundle',
-                      'Source Warehouse', 'Source Storage', 'Destination Warehouse', 'Destination Storage', 'Process List']
+                      'Wire Nr', 'Product Nr', 'Type', 'Bundle',
+                      'Source Warehouse', 'Source Storage', 'Destination Warehouse',
+                      'Destination Storage', 'Process List']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
       def self.import_to_get_kanban_list(file)
@@ -93,6 +94,41 @@ module FileHandler
           msg.content = e.message
         end
         return msg
+      end
+
+      def self.export(user_agent)
+        msg = Message.new
+        begin
+          tmp_file = KanbanHandler.full_tmp_path('kanbans.csv') unless tmp_file
+
+          CSV.open(tmp_file, 'wb', write_headers: true,
+                   headers: IMPORT_HEADERS,
+                   col_sep: SEPARATOR, encoding: ProcessEntityHandler.get_encoding(user_agent)) do |csv|
+            Kanban.all.each_with_index do |k|
+              csv << [
+                  k.nr,
+                  k.quantity,
+                  k.safety_stock,
+                  k.copies,
+                  k.remark,
+                  k.wire_nr,
+                  k.product_nr,
+                  k.ktype,
+                  k.bundle,
+                  k.source_warehouse,
+                  k.source_storage,
+                  k.des_warehouse,
+                  k.des_storage,
+                  k.process_entities.collect { |pe| pe.nr }.join(",")
+              ]
+            end
+          end
+          msg.result =true
+          msg.content =tmp_file
+        rescue => e
+          msg.content =e.message
+        end
+        msg
       end
 
       def self.import(file)
@@ -295,8 +331,8 @@ module FileHandler
             :remark
           when "Type"
             :ktype
-          when "Wire Length"
-            :wire_length
+          #when "Wire Length"
+          #  :wire_length
           when "Bundle"
             :bundle
           when "Source Warehouse"

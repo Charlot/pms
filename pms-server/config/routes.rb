@@ -89,6 +89,8 @@ Rails.application.routes.draw do
     end
     collection do
       get :search
+      get :export_auto
+      get :export_semi
       match :import_auto, to: :import_auto, via: [:get, :post]
       match :import_semi_auto, to: :import_semi_auto, via: [:get, :post]
       get :export_unused
@@ -131,6 +133,7 @@ Rails.application.routes.draw do
       get :panel
       get :search
       get :export_routing_error
+      get :export
       match :import, to: :import, via: [:get, :post]
       match :import_update, to: :import_update, via: [:get, :post]
       match :import_to_get_kanban_list, to: :import_to_get_kanban_list,via: [:get,:post]
@@ -157,6 +160,7 @@ Rails.application.routes.draw do
       get :search
       match :import, to: :import, via: [:get, :post]
       #post :import
+      match :search, to: :search, via: [:get, :post]
     end
   end
   resources :files

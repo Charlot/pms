@@ -236,6 +236,22 @@ class KanbansController < ApplicationController
     end
   end
 
+  #GET
+  def export
+    msg = Message.new
+    begin
+      msg = FileHandler::Csv::KanbanHandler.export(request.user_agent.downcase)
+    rescue => e
+      msg.content = e.message
+    end
+    if msg.result
+      send_file msg.content
+    else
+      render json: msg
+
+    end
+  end
+
   # GET/POST
   def import
     if request.post?
