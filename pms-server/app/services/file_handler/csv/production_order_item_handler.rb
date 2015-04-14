@@ -40,9 +40,10 @@ module FileHandler
                    headers: STATE_EXPORT_CSV_HEADERS,
                    col_sep: SEPARATOR, encoding: ProductionOrderItemHandler.get_encoding(user_agent)) do |csv|
 
-            q= ProductionOrderItem.joins(:machine)
+            q= ProductionOrderItem.joins(:machine).order(machine_id: :asc, production_order_id: :asc,optimise_index: :asc)
             q= q.where(machines: {nr: params[:machine_nr]}) unless params[:machine_nr].blank?
             q= q.where(state: params[:state]) unless params[:state].blank?
+
             begin
               q=q.where(updated_at: [Time.parse(params[:start_time]).utc..Time.parse(params[:end_time]).utc]) unless params[:start_time].blank? || params[:end_time].blank
             end
