@@ -14,23 +14,23 @@ module FileHandler
           list = []
           validate_msg = validate_import(file)
           if validate_msg.result
-              CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
-                row.strip
-                product = Part.find_by_nr(row['Product Nr'])
+            CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+              row.strip
+              product = Part.find_by_nr(row['Product Nr'])
 
-                route_list = row['Process List'].split(',')
-                puts "================="
-                pes = []
-                ProcessEntity.where(nr:route_list,product_id:product.id).each{|pe| pes << pe.id}
-                kanbans = Kanban.joins(:kanban_process_entities).where(kanban_process_entities:{process_entity_id:pes}).distinct
-                if kanbans.count != 1
-                  puts "!!!!!!!!!!!!!!!!!!!!!!!!!".red
-                else
-                  list << kanbans.first.nr
-                end
+              route_list = row['Process List'].split(',')
+              puts "================="
+              pes = []
+              ProcessEntity.where(nr: route_list, product_id: product.id).each { |pe| pes << pe.id }
+              kanbans = Kanban.joins(:kanban_process_entities).where(kanban_process_entities: {process_entity_id: pes}).distinct
+              if kanbans.count != 1
+                puts "!!!!!!!!!!!!!!!!!!!!!!!!!".red
+              else
+                list << kanbans.first.nr
+              end
             end
             msg.result = false
-              puts list.count
+            puts list.count
             msg.content = list.join(";")
           else
             msg.result = false
@@ -59,17 +59,17 @@ module FileHandler
 
                 route_list = row['Process List']
                 pes = []
-                ProcessEntity.where(nr:route_list,product_id:product.id).each{|pe| pes << pe.id}
+                ProcessEntity.where(nr: route_list, product_id: product.id).each { |pe| pes << pe.id }
                 puts pes
-                kanbans = Kanban.joins(:kanban_process_entities).where(kanban_process_entities:{process_entity_id:pes}).distinct
+                kanbans = Kanban.joins(:kanban_process_entities).where(kanban_process_entities: {process_entity_id: pes}).distinct
 
                 if kanbans.count != 1
-                  puts "#{kanbans.collect{|k|k.nr}.join(',')}".red
+                  puts "#{kanbans.collect { |k| k.nr }.join(',')}".red
                 else
-                  if kanbans.first.process_entities.collect{|pe|pe.id} == pes
+                  if kanbans.first.process_entities.collect { |pe| pe.id } == pes
                     kanban = kanbans.first
                     params = {}
-                    IMPORT_HEADERS.each{|header|
+                    IMPORT_HEADERS.each { |header|
                       unless (row[header].nil? || header_to_attr(header).nil?)
                         params[header_to_attr(header)] = row[header]
                       end
@@ -283,8 +283,13 @@ module FileHandler
         process_nrs = row['Process List'].split(',').collect { |penr| penr.strip }
         process_entities = ProcessEntity.where({nr: process_nrs, product_id: product.id})
 
-        unless process_entities.count == process_nrs.count
-          msg.contents << "Process List: #{process_nrs - process_entities.collect { |pe| pe.nr }}，工艺不存在!"
+        nrs= process_nrs - process_entities.collect { |pe| pe.nr }
+        # unless process_entities.count == process_nrs.count
+        #   msg.contents << "Process List: #{process_nrs - process_entities.collect { |pe| pe.nr }}，工艺不存在!"
+        # end
+
+        unless nrs.count==0
+          msg.contents << "Process List: #{nrs}，工艺不存在!"
         end
 
         if kanban.nil? && row['Wire Nr'].present? &&Part.where({nr: "#{row['Product Nr']}_#{row['Wire Nr']}"}).count <= 0

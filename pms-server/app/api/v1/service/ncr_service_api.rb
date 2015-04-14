@@ -45,7 +45,8 @@ module V1
 
           get :produce_content do
             if item=ProductionOrderItem.find_by_id(params[:order_item_id])
-              return ProductionOrderItemPresenter.new(item).to_produce_order
+              mirror= params.has_key?(:mirror)
+              return ProductionOrderItemPresenter.new(item).to_produce_order(mirror)
             end
           end
 

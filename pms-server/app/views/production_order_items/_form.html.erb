@@ -33,6 +33,12 @@
                   <%= f.label :machine %>
                   <%= f.select(:machine_id, machine_options) %>
                 </div>
+
+                <div>
+                  <%= f.label :order %>
+                  <%= f.select(:production_order_id, production_order_options) %>
+                </div>
+
                 <div class="field">
                   <%= f.label :state %><br>
                   <%= f.select(:state,
