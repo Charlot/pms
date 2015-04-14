@@ -52,12 +52,16 @@ namespace PmsNCRWcf
         /// </summary>
         /// <param name="orderItemId"></param>
         /// <returns></returns>
-        public Msg<string> GetOrderItemForProduce(int orderItemId)
+        public Msg<string> GetOrderItemForProduce(int orderItemId,bool mirror=false)
         {
             Msg<string> msg = new Msg<string>();
             var req = new RestRequest(ApiConfig.OrderItemForProduceAction, Method.GET);
             req.RequestFormat = DataFormat.Json;
             req.AddParameter("order_item_id", orderItemId);
+            if (mirror)
+            {
+                req.AddParameter("mirror", mirror);
+            }
             var res = new ApiClient().Execute(req);
             var data = res.Content;
             if (data != null)
