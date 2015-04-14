@@ -45,7 +45,7 @@ module FileHandler
             q= q.where(state: params[:state]) unless params[:state].blank?
 
             begin
-              q=q.where(updated_at: [Time.parse(params[:start_time]).utc..Time.parse(params[:end_time]).utc]) unless params[:start_time].blank? || params[:end_time].blank
+              q=q.where(updated_at: [Time.parse(params[:start_time]).utc..Time.parse(params[:end_time]).utc]) unless params[:start_time].blank? || params[:end_time].blank?
             end
 
             items=ProductionOrderItemPresenter.init_preview_presenters(q.all)
@@ -56,6 +56,7 @@ module FileHandler
               end
               csv<<row
             end
+            csv<<[] if items.count==0
           end
           msg.result =true
           msg.content =tmp_file
