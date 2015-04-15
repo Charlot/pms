@@ -27,6 +27,15 @@ class ProcessEntity < ActiveRecord::Base
     nil
   end
 
+  def parsed_wire_nr
+    if wire
+      nrs = wire.nr.split("_")
+      (nrs-[nrs.first]).join("")
+    else
+      ''
+    end
+  end
+
   def wire_component
     if self.value_wire_nr && (part = Part.find_by_id(self.value_wire_nr))
       return part

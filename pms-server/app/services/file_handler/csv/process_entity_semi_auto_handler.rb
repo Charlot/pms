@@ -2,7 +2,11 @@ require 'csv'
 module FileHandler
   module Csv
     class ProcessEntitySemiAutoHandler<Base
-      IMPORT_HEADERS=['Nr', 'Name', 'Description', 'Stand Time','Product Nr','Template Code', 'WorkStation Type', 'Cost Center', 'Template Fields','Wire Nr']
+      IMPORT_HEADERS=[
+          'Nr', 'Name', 'Description', 'Stand Time',
+          'Product Nr','Template Code', 'WorkStation Type',
+          'Cost Center', 'Template Fields','Wire Nr'
+      ]
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
       def self.import(file)
@@ -18,6 +22,8 @@ module FileHandler
                 #part = Part.find_by_nr(row['Wire Nr'])
                 params = {}
                 params =  params.merge({nr: row['Nr'], name: row['Name'], description: row['Description'], stand_time: row['Stand Time'],product_id:product.id, process_template_id: process_template.id})
+
+                #pe = ProcessEntity.where({product_id:product.id,nr:params[:nr]}).first
                 process_entity = ProcessEntity.new(params)
                 process_entity.process_template = process_template
                 process_entity.save
