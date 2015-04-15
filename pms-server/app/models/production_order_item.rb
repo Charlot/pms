@@ -16,18 +16,25 @@ class ProductionOrderItem < ActiveRecord::Base
   end
 
   def self.first_wait_produce(machine)
-    where(state: ProductionOrderItemState.wait_produce_states, machine_id: machine.id).order(optimise_index: :asc).first
+    where(state: ProductionOrderItemState.wait_produce_states, machine_id: machine.id)
+        .order(production_order_id: :asc, optimise_index: :asc).first
   end
 
   def self.for_produce(machine)
-    where(state: ProductionOrderItemState.wait_produce_states, machine_id: machine.id).order(optimise_index: :asc)
+    where(state: ProductionOrderItemState.wait_produce_states, machine_id: machine.id)
+        .order(production_order_id: :asc, optimise_index: :asc)
+  end
+
+  def self.for_passed(machine)
+    where(state: ProductionOrderItemState.passed_states, machine_id: machine.id)
+        .order(production_order_id: :desc, optimise_index: :desc)
   end
 
   def self.for_export(production_order)
     where(production_order_id: production_order.id)
         .joins(:kanban)
         .joins(:production_order)
-        .joins(:machine).order(machine_id: :asc,optimise_index: :asc)
+        .joins(:machine).order(machine_id: :asc, production_order_id: :asc,optimise_index: :asc)
         .select('production_orders.nr as production_order_nr,kanbans.nr as kanban_nr,machines.nr as machine_nr,production_order_items.*')
   end
 
@@ -50,7 +57,7 @@ class ProductionOrderItem < ActiveRecord::Base
 
             item.update(machine_id: node.machine_id,
                         machine_time: Machine.find_by_id(node.machine_id).optimise_time_by_kanban(item.kanban),
-            optimise_at: optimise_at
+                        optimise_at: optimise_at
             )
             order.production_order_items<<item
             success_count+=1

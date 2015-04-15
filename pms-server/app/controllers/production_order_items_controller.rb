@@ -6,10 +6,10 @@ class ProductionOrderItemsController < ApplicationController
   def index
     if params.has_key?(:production_order_id)
       @production_order=ProductionOrder.find_by_id(params[:production_order_id])
-      @production_order_items=@production_order.production_order_items.order(machine_id: :asc,optimise_index: :asc)
+      @production_order_items=@production_order.production_order_items.order(machine_id: :asc, optimise_index: :asc).paginate(:page => params[:page])
       @optimised=true
     else
-      @production_order_items = ProductionOrderItem.for_optimise
+      @production_order_items = ProductionOrderItem.for_optimise.paginate(:page => params[:page])
     end
   end
 
@@ -117,6 +117,35 @@ class ProductionOrderItemsController < ApplicationController
     end
   end
 
+  def state_export
+    if request.post?
+      msg=FileHandler::Csv::ProductionOrderItemHandler.new.export_by_state(params, request.user_agent)
+      if msg.result
+        send_file msg.content
+      else
+        render 'shared/error'
+      end
+    end
+  end
+
+  def search
+    @production_order_items=nil
+    if params.has_key?(:production_order_id) && params[:production_order_id].length>0
+      @production_order=ProductionOrder.find_by_id(params[:production_order_id])
+      @production_order_items=@production_order.production_order_items.order(machine_id: :asc, optimise_index: :asc)
+      @optimised=true
+    else
+      @production_order_items = ProductionOrderItem.for_optimise
+    end
+
+    if params.has_key?(:machine_nr) && params[:machine_nr].length>0
+      @production_order_items= @production_order_items.joins(:machine).where(machines: {nr: params[:machine_nr]})
+      @machine_nr=params[:machine_nr]
+    end
+    @production_order_items= @production_order_items.paginate(:page => params[:page])
+    render :index
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_production_order_item
@@ -125,6 +154,6 @@ class ProductionOrderItemsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def production_order_item_params
-    params.require(:production_order_item).permit(:nr, :state, :code, :kanban_id, :production_order)
+    params.require(:production_order_item).permit(:nr, :state, :optimise_index, :production_order_id, :code, :kanban_id, :machine_id, :production_order)
   end
 end

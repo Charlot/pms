@@ -16,9 +16,15 @@ namespace PmsNCRWcf.Model
         [DataMember]
         public string ItemNr { get; set; }
         [DataMember]
+        public string OrderNr { get; set; }
+        [DataMember]
+        public string ProductNr { get; set; }
+        [DataMember]
         public string KanbanNr { get; set; }
         [DataMember]
         public int KanbanQuantity { get; set; }
+        [DataMember]
+        public string KanbanBundle { get; set; }
         [DataMember]
         public string KanbanWireNr { get; set; }
         [DataMember]

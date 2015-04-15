@@ -1,7 +1,7 @@
 ﻿<Window x:Class="PmsNCR.OrderPreviewWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="PMS CLIENT - OrderPreviewWindow" Height="322" Width="846"
+        Title="PMS CLIENT - OrderPreviewWindow" Height="322" Width="852"
         Loaded="Window_Loaded" ResizeMode="CanResize" 
         WindowStartupLocation="CenterScreen" Closing="Window_Closing">
     
@@ -52,9 +52,12 @@
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="No." Binding="{Binding Path=No}" ElementStyle="{StaticResource contentCenterStyle}"/>
-                <DataGridTextColumn Header="Order" Binding="{Binding Path=ItemNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                <DataGridTextColumn Header="JobNr" Binding="{Binding Path=ItemNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                <DataGridTextColumn Header="OrderNr" Binding="{Binding Path=OrderNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                <DataGridTextColumn Header="ProductNr" Binding="{Binding Path=ProductNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="Kanban" Binding="{Binding Path=KanbanNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="Quantity" Binding="{Binding Path=KanbanQuantity}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                <DataGridTextColumn Header="Bundle" Binding="{Binding Path=KanbanBundle}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="Wire" Binding="{Binding Path=KanbanWireNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="Row Wire" Binding="{Binding Path=WireNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                     <!--<DataGridTextColumn Header="CustNr" Binding="{Binding Path=WireCusNr}" ElementStyle="{StaticResource contentCenterStyle}"/>-->
@@ -68,9 +71,20 @@
                 </DataGrid.Columns>
             </DataGrid>
         <StackPanel Grid.Column="1">
+            <ComboBox Name="OrderStateCB"  Margin="20,6,0,0" Height="52"
+                      Width="87" FontStretch="Normal" VerticalContentAlignment="Center">
+                <ComboBoxItem Content="NextOrder" IsSelected="True"></ComboBoxItem>
+                <ComboBoxItem Content="PassedOrder"></ComboBoxItem>
+            </ComboBox>
             <Button Content="Refresh" Height="52"
                   Name="UpdatePreviewBtn" 
-                 Width="87" Click="UpdatePreviewBtn_Click" Margin="34,6,0,0" />
+                 Width="87" Click="UpdatePreviewBtn_Click" Margin="20,6,0,0" />
+            <Button Content="Print Kanban" Height="52" Name="PrintKanbanBtn" Width="87" Margin="20,6,0,0" Click="PrintKanbanBtn_Click" />
+            <StackPanel Height="104" Name="stackPanel1" Width="138" Margin="10,5,0,0" Background="#FFCACDE5">
+                <Label Content="BundleNo:" Height="28" Name="label1" />
+                <TextBox Height="23" Name="BundleNoTB" Width="120" />
+                <Button Content="Print Bundle Label" Height="32" Name="PrintBundleLabelBtn" Width="120" Click="PrintBundleLabelBtn_Click" />
+            </StackPanel>
             <!--<Button Height="56"  Width="88"  Margin="34,16,0,0" Content="显示预览卡"/>-->
         </StackPanel>
     </Grid>

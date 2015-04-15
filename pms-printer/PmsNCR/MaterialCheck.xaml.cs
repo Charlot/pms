@@ -57,7 +57,7 @@ namespace PmsNCR
 
         private void InitCheckGraph()
         {
-            OrderNrLab.Content = orderItem.ItemNr;
+            JobNrLab.Content = orderItem.ItemNr;
             WireNrTB.Text = orderItem.WireNr;
             WireCusNrTB.Text = orderItem.WireCusNr;
             WireLenghLab.Content = orderItem.WireLength;
@@ -108,17 +108,20 @@ namespace PmsNCR
                 if (text.Length > 1)
                 {
                     string prefix = text.Substring(0, 1);
-                    string content = text.Substring(1, text.Length - 1);
+                    string content = String.Empty;
                     if (prefix.Equals(MaterialCheckConfig.AreaPrefix))
                     {
+                        content = text.Substring(MaterialCheckConfig.AreaPrefix.Length, text.Length - 1);
                         CurrentAreaTB.Text = content;
                     }
-                    else if (prefix.Equals(MaterialCheckConfig.WirePrefix))
+                    else if (CurrentAreaTB.Text.Length==0 && prefix.Equals(MaterialCheckConfig.WirePrefix))
                     {
+                        content = text.Substring(MaterialCheckConfig.WirePrefix.Length, text.Length - 1);
                         WireCB.IsChecked = WireNrTB.Text.Equals(content);
                     }
                     else if (prefix.Equals(MaterialCheckConfig.TerminalPrefix))
                     {
+                        content = text.Substring(MaterialCheckConfig.TerminalPrefix.Length, text.Length - 1);
                         if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area1))
                         {
                             Terminal1CB.IsChecked = TerminalNr1TB.Text.Equals(content);
@@ -131,6 +134,7 @@ namespace PmsNCR
                     }
                     else if (prefix.Equals(MaterialCheckConfig.ToolPrefix))
                     {
+                        content = text.Substring(MaterialCheckConfig.ToolPrefix.Length, text.Length - 1);
 
                         if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area1))
                         {
@@ -187,7 +191,7 @@ namespace PmsNCR
                 try
                 {
                     OrderService s = new OrderService();
-                    Msg<string> msg = s.GetOrderItemForProduce(orderItem.Id);
+                    Msg<string> msg = s.GetOrderItemForProduce(orderItem.Id,mirror);
                     if (msg.Result)
                     {
                         if (OrderItemFile.WirteToFile(orderItem.FileName, msg.Object))
@@ -219,7 +223,58 @@ namespace PmsNCR
 
         private void AbortBtn_Click(object sender, RoutedEventArgs e)
         {
-            new AbortConfirmWindow(this,OrderNrLab.Content.ToString()).ShowDialog();
+            new AbortConfirmWindow(this,JobNrLab.Content.ToString()).ShowDialog();
         }
+
+        private bool mirror = false;
+        private void MirrorBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (!mirror)
+            {
+                mirror = true;
+                MirrorBtn.FontWeight = FontWeights.Bold;
+                MirrorBtn.Foreground = new SolidColorBrush(Colors.Red);
+                MirrorBtn.Content = "!Mirror!";
+            }
+            else
+            {
+                mirror = false;                
+                MirrorBtn.FontWeight = FontWeights.Normal;
+                MirrorBtn.Foreground = new SolidColorBrush(Colors.Black);
+                MirrorBtn.Content = "Mirror";
+            }
+            MirrorArea();
+        }
+
+        private void MirrorArea() {
+            object strip1 = StripLength1Lab.Content;
+            StripLength1Lab.Content =StripLength2Lab.Content;
+            StripLength2Lab.Content = strip1;
+
+            Visibility tervisi = Terminal1GraphLab.Visibility;
+            Terminal1GraphLab.Visibility = Terminal2GraphLab.Visibility;
+            Terminal2GraphLab.Visibility = tervisi;
+
+            string ter1 = TerminalNr1TB.Text;
+            TerminalNr1TB.Text = TerminalNr2TB.Text;
+            TerminalNr2TB.Text = ter1;
+
+            string ter1cus = TerminalCusNr1TB.Text;
+            TerminalCusNr1TB.Text = TerminalCusNr2TB.Text;
+            TerminalCusNr2TB.Text = ter1cus;
+
+
+            string tool1 = Tool1NrTB.Text;
+            Tool1NrTB.Text = Tool2NrTB.Text;
+            Tool2NrTB.Text = tool1;
+
+            Visibility visibility= WorkArea1.Visibility;
+            WorkArea1.Visibility = WorkArea2.Visibility;
+            WorkArea2.Visibility = visibility;
+
+
+
+        }
+
     }
 }

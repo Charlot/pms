@@ -29,9 +29,11 @@ Rails.application.routes.draw do
 
   resources :production_order_items do
     collection do
+      get :search
       post :optimise
       post :distribute
       post :export
+      match :state_export, to: :state_export, via: [:get, :post]
     end
   end
 

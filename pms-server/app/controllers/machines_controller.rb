@@ -4,7 +4,7 @@ class MachinesController < ApplicationController
   # GET /machines
   # GET /machines.json
   def index
-    @machines = Machine.all
+    @machines = Machine.order(nr: :asc).all
   end
 
   # GET /machines/1

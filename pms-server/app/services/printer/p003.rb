@@ -27,7 +27,7 @@ module Printer
           singleResCC: args[:machine_nr],
           wireNr: kanban.wire_nr,
           partNr: wire.nr,
-          partDesc: wire.description||'',
+          partDesc: "#{wire.component_type}  #{wire.description}",
           color: 'color',
           length: process_entity.value_wire_qty_factor,
           diameter: wire.cross_section,

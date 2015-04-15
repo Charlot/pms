@@ -52,12 +52,16 @@ namespace PmsNCRWcf
         /// </summary>
         /// <param name="orderItemId"></param>
         /// <returns></returns>
-        public Msg<string> GetOrderItemForProduce(int orderItemId)
+        public Msg<string> GetOrderItemForProduce(int orderItemId,bool mirror=false)
         {
             Msg<string> msg = new Msg<string>();
             var req = new RestRequest(ApiConfig.OrderItemForProduceAction, Method.GET);
             req.RequestFormat = DataFormat.Json;
             req.AddParameter("order_item_id", orderItemId);
+            if (mirror)
+            {
+                req.AddParameter("mirror", mirror);
+            }
             var res = new ApiClient().Execute(req);
             var data = res.Content;
             if (data != null)
@@ -146,6 +150,35 @@ namespace PmsNCRWcf
             try
             {
                 var req = new RestRequest(ApiConfig.OrderListPreviewAction, Method.GET);
+                req.RequestFormat = DataFormat.Json;
+                req.AddParameter("machine_nr", machineNr);
+                var res = new ApiClient().Execute(req);
+                var data = JSONHelper.parse<List<OrderItemCheck>>(res.Content);
+                if (data != null)
+                {
+                    msg.Result = true;
+                    msg.Object = data;
+                }
+                else
+                {
+                    msg.Content = "API ERROR";
+                }
+            }
+            catch (Exception e)
+            {
+                msg.Result = false;
+                msg.Content = e.Message;
+                LogUtil.Logger.Error(e.Message);
+            }
+            return msg;
+        }
+
+        public Msg<List<OrderItemCheck>> GetOrderPassedList(string machineNr)
+        {
+            Msg<List<OrderItemCheck>> msg = new Msg<List<OrderItemCheck>>();
+            try
+            {
+                var req = new RestRequest(ApiConfig.OrderListPassedAction, Method.GET);
                 req.RequestFormat = DataFormat.Json;
                 req.AddParameter("machine_nr", machineNr);
                 var res = new ApiClient().Execute(req);

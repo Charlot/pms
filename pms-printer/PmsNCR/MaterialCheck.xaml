@@ -14,9 +14,9 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <Label Content="Order:" Height="28" HorizontalAlignment="Left" Margin="332,12,0,0" Name="label1" VerticalAlignment="Top" />
-        <Label Content="ORDER_NR" Height="28" HorizontalAlignment="Left"
-               Margin="384,12,0,0" Name="OrderNrLab" VerticalAlignment="Top" Width="129" />
+        <Label Content="Job:" Height="28" HorizontalAlignment="Left" Margin="332,12,0,0" Name="label1" VerticalAlignment="Top" />
+        <Label Content="JOB_NR" Height="28" HorizontalAlignment="Left"
+               Margin="384,12,0,0" Name="JobNrLab" VerticalAlignment="Top" Width="129" />
         <Label Content="Wire:" Height="28" HorizontalAlignment="Left" Margin="332,46,0,0" Name="label2" VerticalAlignment="Top" />
         <TextBox Height="23" HorizontalAlignment="Left" Margin="384,46,0,0" Name="WireNrTB" VerticalAlignment="Top" Width="120" />
         <TextBox Height="23" HorizontalAlignment="Left" Margin="385,75,0,0" Name="WireCusNrTB" VerticalAlignment="Top" Width="120" />
@@ -77,19 +77,23 @@
             <CheckBox IsChecked="False"  Content="" Height="16" HorizontalAlignment="Left" Margin="194,79,0,0" Name="Tool2CB" VerticalAlignment="Top" />
         </Grid>
         <Label Content="Area 2" Height="28" HorizontalAlignment="Left" Margin="667,80,0,0" Name="label8" VerticalAlignment="Top" />
-        <Label Content="Scan Bar" Height="28" HorizontalAlignment="Left" Margin="103,304,0,0" Name="label9" VerticalAlignment="Top" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="195,308,0,0" Name="ScanCodeTB" VerticalAlignment="Top" Width="310" KeyUp="ScanCodeTB_KeyUp" />
-        <Label Content="Scan Area:" Height="28" HorizontalAlignment="Left" Margin="103,342,0,0" Name="label13" VerticalAlignment="Top" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="211,344,0,0" Name="CurrentAreaTB" VerticalAlignment="Top" Width="120" />
-        <CheckBox Content="Auto Clear" Height="16" IsChecked="True" HorizontalAlignment="Left" Margin="530,314,0,0" Name="AutoCleanScanCB" VerticalAlignment="Top" />
-        <Button Content="Clear" Height="23" HorizontalAlignment="Left" Margin="620,311,0,0" Name="CleanScanBtn" VerticalAlignment="Top" Width="75" Click="CleanScanBtn_Click" />
+        <Label Content="Scan Bar" Height="28" HorizontalAlignment="Left" Margin="83,279,0,0" Name="label9" VerticalAlignment="Top" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="175,283,0,0" Name="ScanCodeTB" VerticalAlignment="Top" Width="310" KeyUp="ScanCodeTB_KeyUp" />
+        <Label Content="Scan Area:" Height="28" HorizontalAlignment="Left" Margin="83,317,0,0" Name="label13" VerticalAlignment="Top" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="175,319,0,0" Name="CurrentAreaTB" VerticalAlignment="Top" Width="120" />
+        <CheckBox Content="Auto Clear" Height="16" IsChecked="True" HorizontalAlignment="Left" Margin="510,289,0,0" Name="AutoCleanScanCB" VerticalAlignment="Top" />
+        <Button Content="Clear" Height="23" HorizontalAlignment="Left" Margin="600,286,0,0" Name="CleanScanBtn" VerticalAlignment="Top" Width="75" Click="CleanScanBtn_Click" />
         <Button Content="START"      Height="61" 
-                HorizontalAlignment="Left" Margin="757,283,0,0" Name="StartProduceBtn"  
+                HorizontalAlignment="Left" Margin="782,283,0,0" Name="StartProduceBtn"  
                 VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                 Width="100" IsEnabled="False" Click="StartProduceBtn_Click" />
         <Button Content="!ABORT!" Height="60" 
-                HorizontalAlignment="Left" Margin="795,23,0,0"
-                Name="AbortBtn" VerticalAlignment="Top" Width="87" Foreground="#FFF21919" FontWeight="Bold" FontSize="14" Click="AbortBtn_Click" />
+                HorizontalAlignment="Left" Margin="839,0,0,0"
+                Name="AbortBtn" VerticalAlignment="Top" Width="87" 
+                Foreground="#FFF21919" FontWeight="Bold" FontSize="14" Click="AbortBtn_Click" />
+        <Button Content="Mirror" 
+                Height="60" HorizontalAlignment="Left" Margin="710,0,0,0" Name="MirrorBtn"
+                VerticalAlignment="Top" Width="87" Click="MirrorBtn_Click" />
     </Grid>
     
 </Window>

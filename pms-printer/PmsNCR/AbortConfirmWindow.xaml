@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="AbortConfirmWindow" Height="175" Width="427" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Label Content="Order:" Height="29" HorizontalAlignment="Left" Margin="20,13,0,0" Name="label1" VerticalAlignment="Top" Width="65" />
+        <Label Content="Job:" Height="29" HorizontalAlignment="Left" Margin="20,13,0,0" Name="label1" VerticalAlignment="Top" Width="65" />
         <Label Content="Label" Height="37" HorizontalAlignment="Left" Margin="85,8,0,0" Name="OrderLab" VerticalAlignment="Top" Width="173" FontSize="18" />
          
         <Button Content="ABORT" Height="30" HorizontalAlignment="Right" Margin="0,54,47,0" Name="AbortBtn" 

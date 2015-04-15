@@ -12,9 +12,10 @@ namespace PmsNCRWcf
     public interface IOrderService
     {
        Msg< OrderItemCheck> GetOrderItemForCheck(string machineNr);
-       Msg<string> GetOrderItemForProduce(int orderItemId);
+       Msg<string> GetOrderItemForProduce(int orderItemId,bool mirror=false);
        Msg<string> ChangeOrderItemState(string orderItemNr, OrderItemState state);
        Msg<OrderItem> ProducePiece(string orderItemNr, int producedQty);
        Msg<List<OrderItemCheck>> GetOrderPreviewList(string machineNr);
+       Msg<List<OrderItemCheck>> GetOrderPassedList(string machineNr);
     }
 }
