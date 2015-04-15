@@ -22,6 +22,8 @@ module FileHandler
                 #part = Part.find_by_nr(row['Wire Nr'])
                 params = {}
                 params =  params.merge({nr: row['Nr'], name: row['Name'], description: row['Description'], stand_time: row['Stand Time'],product_id:product.id, process_template_id: process_template.id})
+
+                #pe = ProcessEntity.where({product_id:product.id,nr:params[:nr]}).first
                 process_entity = ProcessEntity.new(params)
                 process_entity.process_template = process_template
                 process_entity.save
