@@ -5,7 +5,9 @@ class PartsController < ApplicationController
   # GET /parts
   # GET /parts.json
   def index
-    @parts = Part.paginate(:page => params[:page])
+    #@parts = Part.paginate(:page => params[:page])
+    @q = Part.ransack(params[:q])
+    @parts = @q.result.paginate(:page => params[:page])
     respond_to do |format|
       format.html
       format.csv { send_data @parts.to_csv }
@@ -73,15 +75,8 @@ class PartsController < ApplicationController
 
   # GET /parts/search
   # GET /parts/search.json
-=begin
   def search
-    @part = Part.send("find_by_"+params[:attr],params[:val])
-    respond_to do |format|
-      format.json { render json: {result: false, content: "Not Found!"}} unless @part
-      format.json { render json: {result: true, content: @part.as_json(include: :process_entities)}}
-    end
   end
-=end
 
   # POST /parts/1/add_process_entitties
   def add_process_entities
@@ -120,11 +115,11 @@ class PartsController < ApplicationController
 
     render json: msg
   end
-  
+
   def import
     if request.post?
       msg = Message.new
-      begin 
+      begin
         file=params[:files][0]
         fd = FileData.new(data: file,original_name:file.original_filename,path:$upload_data_file_path,path_name:"#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
         fd.save

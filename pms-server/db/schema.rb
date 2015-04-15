@@ -344,6 +344,15 @@ ActiveRecord::Schema.define(version: 20150413080347) do
     t.datetime "updated_at"
   end
 
+  create_table "storages", force: true do |t|
+    t.string   "nr"
+    t.integer  "warehouse_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "storages", ["warehouse_id"], name: "index_storages_on_warehouse_id", using: :btree
+
   create_table "tools", force: true do |t|
     t.string   "nr"
     t.integer  "resource_group_id"
@@ -371,5 +380,12 @@ ActiveRecord::Schema.define(version: 20150413080347) do
   end
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
+
+  create_table "warehouses", force: true do |t|
+    t.string   "nr"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end

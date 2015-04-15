@@ -54,6 +54,7 @@
                 <DataGridTextColumn Header="No." Binding="{Binding Path=No}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="JobNr" Binding="{Binding Path=ItemNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="OrderNr" Binding="{Binding Path=OrderNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                <DataGridTextColumn Header="ProductNr" Binding="{Binding Path=ProductNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="Kanban" Binding="{Binding Path=KanbanNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="Quantity" Binding="{Binding Path=KanbanQuantity}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="Bundle" Binding="{Binding Path=KanbanBundle}" ElementStyle="{StaticResource contentCenterStyle}"/>
@@ -70,7 +71,8 @@
                 </DataGrid.Columns>
             </DataGrid>
         <StackPanel Grid.Column="1">
-            <ComboBox Name="OrderStateCB"  Margin="20,6,0,0" Height="52"   Width="87" FontStretch="Normal" VerticalContentAlignment="Center">
+            <ComboBox Name="OrderStateCB"  Margin="20,6,0,0" Height="52"
+                      Width="87" FontStretch="Normal" VerticalContentAlignment="Center">
                 <ComboBoxItem Content="NextOrder" IsSelected="True"></ComboBoxItem>
                 <ComboBoxItem Content="PassedOrder"></ComboBoxItem>
             </ComboBox>
