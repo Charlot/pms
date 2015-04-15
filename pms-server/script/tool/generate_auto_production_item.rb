@@ -4,6 +4,7 @@ puts "----------------------------------------------".red
 
 #ProductionOrder.destroy_all
 #ProductionOrderItem.destroy_all
+
 product=Part.find_by_nr('93NMA001A')
 Kanban.where(ktype: KanbanType::WHITE, product_id: product.id).each_with_index { |k, index|
   @kanban = k
