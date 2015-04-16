@@ -59,6 +59,12 @@ class Kanban < ActiveRecord::Base
     data.join('\n')
   end
 
+  def process_list
+    process_entities.collect{|pe|
+      pe.nr
+    }.join(",")
+  end
+
   def update_part_bom
     #TODO Kanban Update Part Bom
   end
