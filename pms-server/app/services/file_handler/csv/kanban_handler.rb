@@ -80,6 +80,13 @@ module FileHandler
                     kanban.without_versioning do
                       kanban.update(params)
                     end
+
+                    #
+                    kanban.kanban_process_entities.destroy_all
+                    process_nrs = row['Process List'].split(',')
+                    kanban_process_entities = ProcessEntity.where({nr: process_nrs, product_id: product.id}).collect { |pe| KanbanProcessEntity.new({process_entity_id: pe.id}) }
+                    kanban.kanban_process_entities = kanban_process_entities
+                    kanban.save
                   end
                 end
               end
