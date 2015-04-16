@@ -3,8 +3,8 @@ class ProcessEntity < ActiveRecord::Base
   validates_uniqueness_of :nr, :scope => :product_id
 
   belongs_to :process_template
-  #belongs_to :workstation_type
-  #belongs_to :cost_center
+  belongs_to :workstation_type
+  belongs_to :cost_center
   belongs_to :product, class_name: 'Part'
   has_many :kanban_process_entities, dependent: :destroy
   has_many :kanbans, through: :kanban_process_entities

@@ -18,16 +18,17 @@ module FileHandler
               row.strip
               product = Part.find_by_nr(row['Product Nr'])
 
-              route_list = row['Process List'].split(',')
-              puts "================="
-              pes = []
-              ProcessEntity.where(nr: route_list, product_id: product.id).each { |pe| pes << pe.id }
-              kanbans = Kanban.joins(:kanban_process_entities).where(kanban_process_entities: {process_entity_id: pes}).distinct
-              if kanbans.count != 1
-                puts "!!!!!!!!!!!!!!!!!!!!!!!!!".red
-              else
-                list << kanbans.first.nr
-              end
+                route_list = row['Process List'].split(',')
+                puts "================="
+                pes = []
+                ProcessEntity.where(nr:route_list,product_id:product.id).each{|pe| pes << pe.id}
+                kanbans = Kanban.joins(:kanban_process_entities).where(kanban_process_entities:{process_entity_id:pes}).distinct
+                if kanbans.count != 1
+                  puts "!!!!!!!!!!!!!!!!!!!!!!!!!".red
+                  puts "#{kanbans.collect{|k|k.nr}.join(",")}".red
+                else
+                  list << kanbans.first.nr
+                end
             end
             msg.result = false
             puts list.count
@@ -79,6 +80,13 @@ module FileHandler
                     kanban.without_versioning do
                       kanban.update(params)
                     end
+
+                    #
+                    kanban.kanban_process_entities.destroy_all
+                    process_nrs = row['Process List'].split(',')
+                    kanban_process_entities = ProcessEntity.where({nr: process_nrs, product_id: product.id}).collect { |pe| KanbanProcessEntity.new({process_entity_id: pe.id}) }
+                    kanban.kanban_process_entities = kanban_process_entities
+                    kanban.save
                   end
                 end
               end
