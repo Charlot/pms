@@ -32,7 +32,7 @@ module Printer
           wire_nr: @kanban.wire_nr,
           customer_nr: @kanban.product_custom_nr,
           card_quantity: @kanban.quantity,
-          safe_quantity: @kanban.safety_stock.to_i,
+          safe_quantity: "",#@kanban.safety_stock.to_i,
           card_number: @kanban.copies,
           work_time: @kanban.task_time,
           send_position: @kanban.des_storage,

@@ -27,6 +27,61 @@ module FileHandler
 
                 if pe
                   puts "找到了".green
+                  pe.update(params.except(:nr))
+                  if row['Wire Nr'] && !pe.parsed_wire_nr.blank? && pe.parsed_wire_nr != row['Wire Nr']
+                    pe.wire.update(nr:"#{product.nr}_#{row['Wire Nr']}")
+                  end
+
+                  custom_fields_val = row['Template Fields'].split(',')
+
+                  pe.custom_fields.each_with_index { |cf, index|
+                    cv = pe.custom_values.where(custom_field_id:cf.id).first
+
+                    if CustomFieldFormatType.part?(cf.field_format)
+                      if cf.name == "default_wire_nr"
+                      else
+
+                        if custom_fields_val[index].blank?
+                          if cv
+                            cv.destroy
+                          end
+                          next
+                        end
+
+                        if Part.find_by_nr(custom_fields_val[index])
+                          if cv
+                            cv.update(value: cf.get_field_format_value(custom_fields_val[index]))
+                          else
+                            cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
+                            pe.custom_values<<cv
+                          end
+                        else
+                          if cv
+                            cv.update(value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index]}"))
+                          else
+                            cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index]}"))
+                            pe.custom_values<<cv
+                          end
+                        end
+                      end
+                    else
+                      if cv
+                        cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
+                        pe.custom_values<<cv
+                      else
+                        cv.update(value:cf.get_field_format_value(custom_fields_val[index]))
+                      end
+                    end
+                  }
+                  pe.process_parts.destroy_all
+
+                  pe.custom_values.each_with_index do |cv, index|
+                    cf=cv.custom_field
+                    if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
+                      pe.process_parts<<ProcessPart.new(part_id: cv.value, quantity: 1)
+                    end
+                  end
+                  pe.save
                 else
                   puts "未找到".green
                   process_entity = ProcessEntity.new(params)
