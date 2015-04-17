@@ -1,13 +1,13 @@
 <% if true#page_title(current_model,current_action) %>
 <div class="row" xmlns="http://www.w3.org/1999/html">
-  <div class="col-md-2">
+  <div class="col-md-1">
     <%= render partial: 'shared/sidebar' if @hide_sidebar.nil? %>
   </div>
-  <div class="col-md-10">
+  <div class="col-md-11">
     <div class="row" id="result">
       <div class="panel panel-success">
         <div class="panel-heading ">
-          <h1><%= page_title(current_model,current_action)%></h1>
+          <h2><%= page_title(current_model,current_action)%></h2>
         </div>
         <div class="panel-body">
           <div class="row">
@@ -21,3 +21,10 @@
   </div>
 </div>
 <% end %>
+<script type="text/javascript">
+    $(document).ready(function() {
+        /* Activating Best In Place */
+        jQuery(".best_in_place").best_in_place();
+        $('.best_in_place').bind("ajax:success", function () {$(this).closest('tr').effect('highlight'); });
+    });
+</script>

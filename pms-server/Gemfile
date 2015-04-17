@@ -69,10 +69,10 @@ gem 'colorize'
 # For REST API Call
 gem 'rest_client'
 
-gem 'will_paginate', '~> 3.0'
+gem 'will_paginate', '3.0.7'
 
 #Search
-#gem 'sunspot_rails'
-#gem 'sunspot_solr'
-#gem 'progress_bar'
-#gem 'ransack'
+gem 'scoped_search'
+
+#Editable table
+gem 'best_in_place', '~> 3.0.1'

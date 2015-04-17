@@ -17,6 +17,9 @@ class ProcessEntity < ActiveRecord::Base
 
   acts_as_customizable
 
+  scoped_search on: :nr
+  scoped_search in: :product, on: :nr
+
   # after_create :build_process_parts
 
   #

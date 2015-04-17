@@ -95,12 +95,13 @@ class KanbansController < ApplicationController
     respond_to do |format|
       puts "======="
       puts kanban_params.to_json
-      if @kanban.can_update? && @kanban.update(kanban_params)
+      #if @kanban.can_update? && @kanban.update(kanban_params)
+      if @kanban.update(kanban_params)
         format.html { redirect_to @kanban, notice: 'Kanban was successfully updated.' }
-        format.json { render :show, status: :ok, location: @kanban }
+        format.json {  respond_with_bip(@kanban) }
       else
         format.html { render :edit, notice: 'State Error' }
-        format.json { render json: @kanban.errors, status: :unprocessable_entity }
+        format.json { respond_with_bip(@kanban) }
       end
     end
   end
@@ -181,14 +182,18 @@ class KanbansController < ApplicationController
 
   # GET /kanbans/search.json
   # Search by part_nr and product_nr
+=begin
   def search
     msg = Message.new
-    @kanbans = Kanban.search(params[:part_nr], params[:product_nr]).paginate(:page => params[:page])
+    @q = params[:q]
+
+    @kanbans = Kanban.search_for(params[:q]).paginate(:page => params[:page])
     msg.result = true
     msg.content = @kanbans
 
-    render partial: 'list'
+    render :index
   end
+=end
 
   # GET /kanbans/add_routing_template
   def add_routing_template
@@ -240,7 +245,7 @@ class KanbansController < ApplicationController
   def export
     msg = Message.new
     begin
-      msg = FileHandler::Csv::KanbanHandler.export(request.user_agent.downcase)
+      msg = FileHandler::Excel::KanbanHandler.export
     rescue => e
       msg.content = e.message
     end
@@ -260,8 +265,8 @@ class KanbansController < ApplicationController
         file=params[:files][0]
         fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
         fd.save
-        file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
-        msg = FileHandler::Csv::KanbanHandler.import(file)
+        #file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
+        msg = FileHandler::Excel::KanbanHandler.import(fd.full_path)
       rescue => e
         msg.content = e.message
       end
@@ -324,6 +329,11 @@ class KanbansController < ApplicationController
     end
   end
 
+  # GET
+  def management
+
+  end
+
   # POST /kanbans/scan.json
   def scan
     #parse code
@@ -378,7 +388,7 @@ class KanbansController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def kanban_params
     #params[:kanban]
-    params.require(:kanban).permit(:id, :state, :remark, :quantity,
+    params.require(:kanban).permit(:id, :state, :remark, :quantity,:bundle,
                                    :safety_stock, :source_warehouse,
                                    :source_storage, :des_warehouse,
                                    :des_storage, :print_time, :part_id,
