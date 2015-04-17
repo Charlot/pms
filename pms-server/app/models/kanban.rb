@@ -172,7 +172,7 @@ class Kanban < ActiveRecord::Base
 
   # part_nr,product_nr
   def self.search(part_nr="", product_nr="")
-    joins(:product).where('parts.nr LIKE ?', "%#{product_nr}%")
+    kanbans = joins(:product).where('parts.nr LIKE ?', "%#{product_nr}%")
   end
 
   #
