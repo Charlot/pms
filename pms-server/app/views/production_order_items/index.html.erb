@@ -65,7 +65,7 @@
         <td><%= production_order_item.machine.nr if production_order_item.machine %></td>
         <td><%= production_order_item.machine_time %></td>
         <td><%= production_order_item.production_order.nr if production_order_item.production_order %></td>
-        <td><%= production_order_item.optimise_at.localtime %></td>
+        <td><%= production_order_item.optimise_at %></td>
         <td><%= production_order_item.optimise_index %></td>
         <td><%= link_to 'Show', production_order_item %></td>
         <td><%= link_to 'Edit', edit_production_order_item_path(production_order_item) %></td>
