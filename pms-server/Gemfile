@@ -73,3 +73,6 @@ gem 'will_paginate', '3.0.7'
 
 #Search
 gem 'scoped_search'
+
+#Editable table
+gem 'best_in_place', '~> 3.0.1'

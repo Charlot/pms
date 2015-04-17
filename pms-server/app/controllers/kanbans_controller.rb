@@ -95,12 +95,13 @@ class KanbansController < ApplicationController
     respond_to do |format|
       puts "======="
       puts kanban_params.to_json
-      if @kanban.can_update? && @kanban.update(kanban_params)
+      #if @kanban.can_update? && @kanban.update(kanban_params)
+      if @kanban.update(kanban_params)
         format.html { redirect_to @kanban, notice: 'Kanban was successfully updated.' }
-        format.json { render :show, status: :ok, location: @kanban }
+        format.json {  respond_with_bip(@kanban) }
       else
         format.html { render :edit, notice: 'State Error' }
-        format.json { render json: @kanban.errors, status: :unprocessable_entity }
+        format.json { respond_with_bip(@kanban) }
       end
     end
   end
@@ -387,7 +388,7 @@ class KanbansController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def kanban_params
     #params[:kanban]
-    params.require(:kanban).permit(:id, :state, :remark, :quantity,
+    params.require(:kanban).permit(:id, :state, :remark, :quantity,:bundle,
                                    :safety_stock, :source_warehouse,
                                    :source_storage, :des_warehouse,
                                    :des_storage, :print_time, :part_id,

@@ -19,6 +19,7 @@
     <th><%= KanbanDesc::PRODUCT_NR %></th>
     <th>卡量</th>
     <th>捆扎数</th>
+    <th>步骤</th>
     <th><%= KanbanDesc::TASK_TIME %></th>
     <th><%= KanbanDesc::PRINT_DATE %></th>
     <th><%= KanbanDesc::STATE %></th>
@@ -37,8 +38,13 @@
         <td><%= KanbanType.display(kanban.ktype) %></td>
         <td><%= kanban.wire_nr %></td>
         <td><%= kanban.product_nr %></td>
-        <td><%= kanban.quantity%></td>
-        <td><%= kanban.bundle%></td>
+        <td>
+          <%= best_in_place kanban, :quantity, as: :input%>
+        </td>
+        <td>
+          <%= best_in_place kanban, :bundle, as: :input%>
+        </td>
+        <td><%= kanban.process_list%></td>
         <td><%= kanban.task_time %></td>
         <td><%= kanban.print_time %></td>
         <td>
