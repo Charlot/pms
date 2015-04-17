@@ -95,10 +95,10 @@ class KanbansController < ApplicationController
     respond_to do |format|
       puts "======="
       puts kanban_params.to_json
-      #if @kanban.can_update? && @kanban.update(kanban_params)
-      if @kanban.update(kanban_params)
+      if @kanban.can_update? && @kanban.update(kanban_params)
+      #if @kanban.update(kanban_params)
         format.html { redirect_to @kanban, notice: 'Kanban was successfully updated.' }
-        format.json {  respond_with_bip(@kanban) }
+        format.json { respond_with_bip(@kanban) }
       else
         format.html { render :edit, notice: 'State Error' }
         format.json { respond_with_bip(@kanban) }
@@ -242,10 +242,11 @@ class KanbansController < ApplicationController
   end
 
   #GET
+=begin
   def export
     msg = Message.new
     begin
-      msg = FileHandler::Excel::KanbanHandler.export
+      msg = FileHandler::Excel::KanbanHandler.export(params[:q])
     rescue => e
       msg.content = e.message
     end
@@ -253,9 +254,9 @@ class KanbansController < ApplicationController
       send_file msg.content
     else
       render json: msg
-
     end
   end
+=end
 
   # GET/POST
   def import

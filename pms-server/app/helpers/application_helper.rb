@@ -15,6 +15,15 @@ module ApplicationHelper
     end
   end
 
+  def export
+    msg = "FileHandler::Excel::#{params[:model]}Handler".constantize.export(params[:q])
+    if msg.result
+      send_file msg.content
+    else
+      render json: msg
+    end
+  end
+
   def scope_search
     model = params[:model].classify.constantize
     @q = params[:q]

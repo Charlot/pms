@@ -8,7 +8,7 @@ module FileHandler
     		'Destination Storage','Process List','Operate'
     	]
 
-      def self.export
+      def self.export q = nil
         msg = Message.new
         begin
           tmp_file = full_tmp_path('kanbans.xlsx') unless tmp_file
@@ -16,7 +16,8 @@ module FileHandler
           p = Axlsx::Package.new
           p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
             sheet.add_row HEADERS
-            Kanban.all.each do |k|
+
+            Kanban.search_for(q).each do |k|
               sheet.add_row [
                                 k.nr,
                                 k.quantity,
@@ -34,6 +35,7 @@ module FileHandler
                                 k.process_list
                             ]
             end
+
           end
           p.use_shared_strings = true
           p.serialize(tmp_file)
