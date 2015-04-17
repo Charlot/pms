@@ -18,6 +18,8 @@ class Kanban < ActiveRecord::Base
 
   accepts_nested_attributes_for :kanban_process_entities, allow_destroy: true
 
+  scoped_search in: :product,on: :nr
+
   #before_create :generate_id
 
   # after_create :create_part_bom

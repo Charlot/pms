@@ -15,6 +15,14 @@ module ApplicationHelper
     end
   end
 
+  def scope_search
+    model = params[:model].classify.constantize
+    @q = params[:q]
+    resultes = model.search_for(@q).paginate(:page=>params[:page])
+    instance_variable_set("@#{params[:controller]}",resultes)
+    render :index
+  end
+
 
   def form_search
     @condition=params[@model]

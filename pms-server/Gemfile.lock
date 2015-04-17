@@ -149,6 +149,8 @@ GEM
       sass (~> 3.2.2)
       sprockets (~> 2.8, < 3.0)
       sprockets-rails (~> 2.0)
+    scoped_search (3.2.0)
+      activerecord (>= 3.2.0)
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
@@ -213,6 +215,7 @@ DEPENDENCIES
   rest_client
   roo
   sass-rails (~> 4.0.3)
+  scoped_search
   sdoc (~> 0.4.0)
   spring
   therubyracer

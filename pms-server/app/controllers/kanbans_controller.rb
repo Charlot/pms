@@ -181,14 +181,18 @@ class KanbansController < ApplicationController
 
   # GET /kanbans/search.json
   # Search by part_nr and product_nr
+=begin
   def search
     msg = Message.new
-    @kanbans = Kanban.search(params[:part_nr], params[:product_nr]).paginate(:page => params[:page])
+    @q = params[:q]
+
+    @kanbans = Kanban.search_for(params[:q]).paginate(:page => params[:page])
     msg.result = true
     msg.content = @kanbans
 
-    render partial: 'list'
+    render :index
   end
+=end
 
   # GET /kanbans/add_routing_template
   def add_routing_template
@@ -322,6 +326,11 @@ class KanbansController < ApplicationController
       end
       render json: {result:true,content:""}
     end
+  end
+
+  # GET
+  def management
+
   end
 
   # POST /kanbans/scan.json

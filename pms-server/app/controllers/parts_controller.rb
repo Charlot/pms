@@ -75,8 +75,10 @@ class PartsController < ApplicationController
 
   # GET /parts/search
   # GET /parts/search.json
+=begin
   def search
   end
+=end
 
   # POST /parts/1/add_process_entitties
   def add_process_entities
