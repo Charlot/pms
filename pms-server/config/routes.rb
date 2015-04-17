@@ -90,6 +90,7 @@ Rails.application.routes.draw do
     end
     collection do
       get :search
+      get :scope_search
       get :export_auto
       get :export_semi
       match :import_auto, to: :import_auto, via: [:get, :post]

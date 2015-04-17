@@ -6,19 +6,18 @@ class Kanban < ActiveRecord::Base
 
   #belongs_to :part
   belongs_to :product, class_name: 'Part'
-  #delegate :process_entities,to: :part
   has_many :kanban_process_entities, dependent: :destroy
   has_many :process_entities, through: :kanban_process_entities
+  has_many :custom_values, through: :process_entities
   delegate :nr, to: :part, prefix: true, allow_nil: true
   delegate :nr, to: :product, prefix: true, allow_nil: true
   delegate :custom_nr, to: :product, prefix: true, allow_nil: true
-  #delegate :custom_nr, to: :part, prefix: true,allow_nil: true
-  #has_many :production_order, as: :orderable
   has_many :production_order_items
 
   accepts_nested_attributes_for :kanban_process_entities, allow_destroy: true
 
   scoped_search in: :product,on: :nr
+  scoped_search in: :process_entities, on: :nr
 
   #before_create :generate_id
 
