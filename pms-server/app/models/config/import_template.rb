@@ -6,6 +6,7 @@ class ImportTemplate
   PROCESS_ENTITY_SEMI_AUTO_CSV_TEMPLATE='process_entity_semi_auto.csv'
   KANBAN_CSV_TEMPLATE='kanban.csv'
   KANBAN_EXCEL_TEMPLATE='kanban.xlsx'
+  KANBAN_SCAN_EXCEL_TEMPLATE='kanban_scan.xlsx'
   MACHINE_CSV_TEMPLATE='machine.csv'
   MACHINE_COMBINATION_CSV_TEMPLATE='machine_combination.csv'
   TOOL_CSV_TEMPLATE='tool.csv'

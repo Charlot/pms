@@ -141,6 +141,7 @@ Rails.application.routes.draw do
       match :import_update, to: :import_update, via: [:get, :post]
       match :import_to_get_kanban_list, to: :import_to_get_kanban_list,via: [:get,:post]
       match :scan_finish, to: :scan_finish, via: [:get,:post]
+      match :import_to_scan, to: :import_to_scan, via: [:get,:post]
     end
   end
 

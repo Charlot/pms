@@ -96,7 +96,7 @@ class KanbansController < ApplicationController
       puts "======="
       puts kanban_params.to_json
       if @kanban.can_update? && @kanban.update(kanban_params)
-      #if @kanban.update(kanban_params)
+        #if @kanban.update(kanban_params)
         format.html { redirect_to @kanban, notice: 'Kanban was successfully updated.' }
         format.json { respond_with_bip(@kanban) }
       else
@@ -198,12 +198,12 @@ class KanbansController < ApplicationController
   # GET /kanbans/add_routing_template
   def add_routing_template
     case params[:type].to_i
-    when KanbanType::WHITE
-      render partial: 'add_auto_routing'
-    when KanbanType::BLUE
-      render partial: 'add_semi_auto_routing'
-    else
-      render partial: 'add_auto_routing'
+      when KanbanType::WHITE
+        render partial: 'add_auto_routing'
+      when KanbanType::BLUE
+        render partial: 'add_semi_auto_routing'
+      else
+        render partial: 'add_auto_routing'
     end
   end
 
@@ -285,6 +285,22 @@ class KanbansController < ApplicationController
     end
   end
 
+  def import_to_scan
+    if request.post?
+      msg = Message.new
+      begin
+        file=params[:files][0]
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd.save
+        #file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
+        msg = FileHandler::Excel::KanbanHandler.import_scan(fd.full_path)
+      rescue => e
+        msg.content = e.message
+      end
+      render json: msg
+    end
+  end
+
   def scan_finish
     @hide_sidebar = true
     if request.post?
@@ -304,29 +320,29 @@ class KanbansController < ApplicationController
       #check product order items
       order_items = []
       if @kanban.ktype == KanbanType::WHITE
-        unless ((order_items = @kanban.production_order_items.where(state:ProductionOrderItemState.wait_scan_states)).count == 1)
-          render json: {result: false,content: "Kanban 未结束生产!"} and return
+        unless ((order_items = @kanban.production_order_items.where(state: ProductionOrderItemState.wait_scan_states)).count == 1)
+          render json: {result: false, content: "Kanban 未结束生产!"} and return
         end
       else
         #如果是蓝卡，直接诶销卡
-        order_items = @kanban.production_order_items.where(state:ProductionOrderItemState.wait_scan_states)
+        order_items = @kanban.production_order_items.where(state: ProductionOrderItemState.wait_scan_states)
       end
 
-      render json: {result:false,content:"为找到生产订单！"} and return if order_items == 0
+      render json: {result: false, content: "为找到生产订单！"} and return if order_items == 0
 
       ProductionOrderItem.transaction do
         begin
           order_items.each do |order_item|
             #TODO 移库
             #
-            order_item.update({state:ProductionOrderItemState::SCANNED})
+            order_item.update({state: ProductionOrderItemState::SCANNED})
           end
         rescue => e
           puts e.backtrace
-          render json: {result:false,content: e.message} and return
+          render json: {result: false, content: e.message} and return
         end
       end
-      render json: {result:true,content:""}
+      render json: {result: true, content: ""}
     end
   end
 
@@ -359,7 +375,7 @@ class KanbansController < ApplicationController
     #2015-3-10 李其
     #不做扫描之后验证是否已经扫入，由工作人员控制
     #注释了这段代码，暂时不实现标注唯一的一张纸质看板卡
-    if ProductionOrderItem.where("kanban_id = ? AND state = ?",@kanban.id,ProductionOrderItemState::INIT).count > 0
+    if ProductionOrderItem.where("kanban_id = ? AND state= ?", @kanban.id, ProductionOrderItemState::INIT).count > 0
       render json: {result: false, content: "Kanban Order has been scaned!"} and return
     end
 
@@ -389,7 +405,7 @@ class KanbansController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def kanban_params
     #params[:kanban]
-    params.require(:kanban).permit(:id, :state, :remark, :quantity,:bundle,
+    params.require(:kanban).permit(:id, :state, :remark, :quantity, :bundle,
                                    :safety_stock, :source_warehouse,
                                    :source_storage, :des_warehouse,
                                    :des_storage, :print_time, :part_id,

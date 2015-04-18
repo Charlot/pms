@@ -72,7 +72,7 @@ class Kanban < ActiveRecord::Base
   end
 
   def can_update?
-    if [KanbanState::INIT, KanbanState::LOCKED].include?(state)
+    if [KanbanState::INIT, KanbanState::LOCKED, KanbanState::RELEASED].include?(state)
       true
     else
       false
