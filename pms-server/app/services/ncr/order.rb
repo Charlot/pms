@@ -20,7 +20,9 @@ module Ncr
               #                          accept: :json)
               # rb=JSON.parse(response.body)
               # if rb['Result']
+              # if (kb=Kanban.find_by_id(item.kanban_id)) && kb.quantity<200
               item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_SUCCEED)
+              # end
                 # else
                 #   item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_FAIL, message: rb['Content'])
                 # end

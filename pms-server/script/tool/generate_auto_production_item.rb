@@ -4,8 +4,11 @@ puts "----------------------------------------------".red
 
 #ProductionOrder.destroy_all
 #ProductionOrderItem.destroy_all
-
-product=Part.find_by_nr('93NMA001A')
+i=0
+%w(93NFL001A).each do |nrr|
+#%w(93B984701 93S351313 93S351602 93S351706).each do |nrr|
+  puts "#########{nrr}".blue
+  product=Part.find_by_nr(nrr)
 Kanban.where(ktype: KanbanType::WHITE, product_id: product.id).each_with_index { |k, index|
   @kanban = k
 
@@ -22,6 +25,12 @@ Kanban.where(ktype: KanbanType::WHITE, product_id: product.id).each_with_index {
 
 
   process_entity = @kanban.process_entities.first
+
+    if process_entity.process_template.code=='1040'
+      next
+    end
+
+  
   if process_entity && process_entity.process_parts.count > 0
     can_create = true
     parts = []
@@ -44,9 +53,10 @@ Kanban.where(ktype: KanbanType::WHITE, product_id: product.id).each_with_index {
         next
       end
 
-      puts "新建订单成功：#{@kanban.nr},#{parts.join('-')}".green
+      puts "#{i+=1} 新建订单成功：#{@kanban.nr},#{parts.join('-')}".green
     end
   else
     puts "步骤不存在！或步骤不消耗零件!".red
   end
 }
+end
