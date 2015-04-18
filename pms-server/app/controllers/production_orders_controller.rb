@@ -37,6 +37,15 @@ class ProductionOrdersController < ApplicationController
     end
   end
 
+  # GET /production_orders/preview
+  def preview
+    @machine = params[:machine_nr].nil? ? Machine.first : Machine.find_by_nr(params[:machine_nr])
+    @production_order_items = ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(@machine).all)
+    item = @production_order_items.first
+    puts "^^^^^^^^^^^^^^^^^^^^"
+    puts item[:No]
+  end
+
   # PATCH/PUT /production_orders/1
   # PATCH/PUT /production_orders/1.json
   def update

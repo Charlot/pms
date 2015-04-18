@@ -22,7 +22,14 @@
         </li>
 
         <li class="<%= 'active' if current_controller?({controller: 'production_order_items'})%>"><a href="<%= production_order_items_path %>">生产任务</a></li>
-        <li class="<%= 'active' if current_controller?({controller: 'production_orders'})%>"><a href="<%= production_orders_path %>">生产订单</a></li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">生产订单<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="manage">
+            <li class="<%= 'active' if current_controller?({controller: 'production_orders'})%>"><a href="<%= production_orders_path %>">订单列表</a></li>
+            <li class="<%= 'active' if current_controller?({controller: 'production_orders'})%>"><a href="<%= preview_production_orders_path %>">订单预览</a></li>
+          </ul>
+        </li>
 
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">基础数据<span class="caret"></span></a>

@@ -19,8 +19,16 @@ class ProcessEntity < ActiveRecord::Base
 
   scoped_search on: :nr
   scoped_search in: :product, on: :nr
+  #scoped_search in: :custom_values, on: :value, ext_method: :find_by_parts
 
   # after_create :build_process_parts
+
+  def self.find_by_parts key,operator,value
+    conditions = sanitize_sql_for_conditions(["parts.nr #{operator} ?", value_to_sql(operator, value)])
+    parts = Part.where(conditions).select('parts.id').map(&:id)
+
+    { :conditions => "custom_values.value IN(#{parts.join(',')})" }
+  end
 
   #
   def wire

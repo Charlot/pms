@@ -1,0 +1,55 @@
+<%= form_tag(preview_production_orders_path,method: 'get') do%>
+    <div class="row">
+      <div class="col-md-2">
+        <%= select_tag(:machine_nr, options_for_select(Machine.all.collect{|m|[m.nr,m.nr]},@machine.nr),class:'form-control',include_blank: false)%>
+      </div>
+      <div class="col-md-2">
+        <%= submit_tag('Preview',class:'btn btn-default')%>
+      </div>
+    </div>
+
+<%end%>
+
+<h2>Preview Orders</h2>
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+  <tr>
+    <th>#</th>
+    <th>Nr</th>
+    <th>Kanban Nr</th>
+    <th>State</th>
+    <th>Product Nr</th>
+    <th>Wire Nr</th>
+    <th>Quantity</th>
+    <th>Bundle</th>
+    <th>Component</th>
+    <th>T1</th>
+    <th>M1</th>
+    <th>T2</th>
+    <th>M2</th>
+    <th>S1</th>
+    <th>S2</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @production_order_items.each do |item|%>
+      <tr>
+        <td><%= item[:No]%></td>
+        <td><%= item[:ItemNr]%></td>
+        <td><%= item[:KanbanNr]%></td>
+        <td><%= ProductionOrderItemState.display(item[:State])%></td>
+        <td><%= item[:ProductNr]%></td>
+        <td><%= item[:KanbanWireNr]%></td>
+        <td><%= item[:KanbanQuantity]%></td>
+        <td><%= item[:KanbanBundle]%></td>
+        <td><%= item[:WireNr]%></td>
+        <td><%= item[:Terminal1Nr]%></td>
+        <td><%= item[:Tool1Nr]%></td>
+        <td><%= item[:Terminal2Nr]%></td>
+        <td><%= item[:Tool2Nr]%></td>
+        <td><%= item[:Seal1Nr]%></td>
+        <td><%= item[:Seal2Nr]%></td>
+      </tr>
+  <%end%>
+  </tbody>
+</table>

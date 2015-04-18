@@ -39,6 +39,10 @@ Rails.application.routes.draw do
 
   resources :production_orders do
     resources :production_order_items
+
+    collection do
+      get :preview
+    end
   end
 
   resources :settings
