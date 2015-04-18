@@ -23,10 +23,6 @@ class ProcessEntitiesController < ApplicationController
   def edit
   end
 
-
-  def search
-  end
-
   # GET /process_entities/1/simple
   def simple
     render partial: 'simple',locals:{process_entity:@process_entity}

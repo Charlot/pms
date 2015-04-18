@@ -14,16 +14,15 @@
   <tr>
     <th>#</th>
     <th><%= KanbanDesc::NR %></th>
-    <th> 条形码信息</th>
     <th><%= KanbanDesc::TYPE %></th>
     <th><%= KanbanDesc::WIRE_NR %></th>
     <th><%= KanbanDesc::PRODUCT_NR %></th>
-    <th><%= KanbanDesc::CUSTOMER_NR %></th>
-    <th><%= KanbanDesc::VERSION %></th>
+    <th>卡量</th>
+    <th>捆扎数</th>
+    <th>步骤</th>
     <th><%= KanbanDesc::TASK_TIME %></th>
     <th><%= KanbanDesc::PRINT_DATE %></th>
     <th><%= KanbanDesc::STATE %></th>
-    <th><%= KanbanDesc::QUANTITY %></th>
     <th><%= KanbanDesc::SOURCE_POSITION %></th>
     <th><%= KanbanDesc::DES_POSITION %></th>
     <th>历史</th>
@@ -35,20 +34,22 @@
   <% @kanbans.each_with_index do |kanban, index| %>
       <tr>
         <td><%= index + 1 %></td>
-        <td><%= kanban.nr %></td>
-        <td><%= kanban.printed_2DCode%></td>
+        <td><%= kanban.nr %> , <%= kanban.printed_2DCode%></td>
         <td><%= KanbanType.display(kanban.ktype) %></td>
         <td><%= kanban.wire_nr %></td>
         <td><%= kanban.product_nr %></td>
-        <td><%= kanban.product_custom_nr %></td>
-        <td><%= kanban.version_now %></td>
+        <td>
+          <%= best_in_place kanban, :quantity, as: :input%>
+        </td>
+        <td>
+          <%= best_in_place kanban, :bundle, as: :input%>
+        </td>
+        <td><%= kanban.process_list%></td>
         <td><%= kanban.task_time %></td>
         <td><%= kanban.print_time %></td>
         <td>
           <span class="label <%= kanban_states_class(kanban.state) %>"><%= KanbanState.display(kanban.state) %></span>
         </td>
-        <td><%= kanban.quantity %>|<%= kanban.bundle%></td>
-
         <td><%= "#{kanban.source_warehouse} | #{kanban.source_storage}" %></td>
         <td><%= "#{kanban.des_warehouse} | #{kanban.des_storage}" %></td>
         <td><%= link_to '修改历史', history_kanban_path(kanban) %></td>

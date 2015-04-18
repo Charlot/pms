@@ -1,12 +1,7 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <%= render partial: 'search' %>
-    <%= link_to "导出与看板错误数据",export_routing_error_kanbans_path,class:'btn btn-warning'%>
-    <%= link_to "导入并更新",import_update_kanbans_path,class:"btn btn-default"%>
-    <%= link_to "导入获得看板列表",import_to_get_kanban_list_kanbans_path,class:"btn btn-default"%>
-    <%= link_to "导出看板",export_kanbans_path,class:"btn btn-info",data:{confirm:"数据量较大，确定导出?"}%>
-  </div>
-  <div class="panel-body" id="search_Kanban_Res">
-    <%= render partial: 'list' %>
-  </div>
-</div>
+<%= render partial: 'shared/search' %>
+<%= link_to "导出", export_kanbans_path({q:@q,model:current_model}), class: "btn btn-default", data: {confirm: "数据量较大，确定导出?"} %>
+<%= link_to "导出与看板错误数据", export_routing_error_kanbans_path, class: 'btn btn-warning' %>
+<%= link_to "导入并更新", import_update_kanbans_path, class: "btn btn-default" %>
+<%= link_to "导入获得看板列表", import_to_get_kanban_list_kanbans_path, class: "btn btn-default" %>
+
+<%= render partial: 'list' %>
