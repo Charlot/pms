@@ -18,6 +18,7 @@ module FileHandler
             sheet.add_row HEADERS
 
             Kanban.search_for(q).each do |k|
+              puts "#{k.nr.to_s}".red
               sheet.add_row [
                                 k.nr,
                                 k.quantity,
@@ -33,7 +34,7 @@ module FileHandler
                                 k.des_warehouse,
                                 k.des_storage,
                                 k.process_list
-                            ]
+                            ],types:[:string,nil,nil,nil,nil,:string,:string]
             end
 
           end
