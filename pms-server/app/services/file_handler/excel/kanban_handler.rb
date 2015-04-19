@@ -4,8 +4,8 @@ module FileHandler
     	HEADERS=[
     		'Nr','Quantity','Safety Stock','Copies',
     		'Remark','Wire Nr','Product Nr','Type',
-    		'Bundle','Source Warehouse','Source Storage','Destination Warehouse',
-    		'Destination Storage','Process List','Operate'
+    		'Bundle','Destination Warehouse',
+    		'Destination Storage','Process List','Operator'
     	]
 
       def self.export q = nil
@@ -18,7 +18,6 @@ module FileHandler
             sheet.add_row HEADERS
 
             Kanban.search_for(q).each do |k|
-              puts "#{k.nr.to_s}".red
               sheet.add_row [
                                 k.nr,
                                 k.quantity,
@@ -29,8 +28,6 @@ module FileHandler
                                 k.product_nr,
                                 k.ktype,
                                 k.bundle,
-                                k.source_warehouse,
-                                k.source_storage,
                                 k.des_warehouse,
                                 k.des_storage,
                                 k.process_list
@@ -123,7 +120,7 @@ module FileHandler
                 puts "新建订单成功：#{@kanban.nr},#{parts.join('-')}".green
               end
             else
-              puts "步骤不存在！或步骤不消耗零件!".red
+              msg.contents<< "Row:#{line}步骤不存在！或步骤不消耗零件!"
             end
           end
         end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150413080347) do
+ActiveRecord::Schema.define(version: 20150419083942) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -278,6 +278,7 @@ ActiveRecord::Schema.define(version: 20150413080347) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "wire_from",   default: 0
   end
 
   add_index "process_templates", ["code"], name: "index_process_templates_on_code", using: :btree

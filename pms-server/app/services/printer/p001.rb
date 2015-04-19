@@ -27,7 +27,7 @@ module Printer
           kanban_2dcode:@kanban.printed_2DCode,
           #TODO kanban remark
           remark1:@kanban.remark,
-          remark2:@kanban.gathered_material+"\\n"+@kanban.remark2
+          remark2:@kanban.gathered_material+","+@kanban.remark2
       }
 
       heads = []

@@ -10,6 +10,8 @@ class ProcessEntity < ActiveRecord::Base
   has_many :kanbans, through: :kanban_process_entities
   has_many :process_parts
   has_many :parts, through: :process_parts
+  has_many :custom_values, as: :custom_fieldable
+
   delegate :custom_fields, to: :process_template,allow_nil: true
   delegate :nr,to: :product,prefix: true, allow_nil: true
   delegate :code, to: :process_template, prefix: true, allow_nil: true
@@ -19,15 +21,17 @@ class ProcessEntity < ActiveRecord::Base
 
   scoped_search on: :nr
   scoped_search in: :product, on: :nr
-  #scoped_search in: :custom_values, on: :value, ext_method: :find_by_parts
+  scoped_search in: :custom_values, on: :value, ext_method: :find_by_parts
 
   # after_create :build_process_parts
 
   def self.find_by_parts key,operator,value
-    conditions = sanitize_sql_for_conditions(["parts.nr #{operator} ?", value_to_sql(operator, value)])
-    parts = Part.where(conditions).select('parts.id').map(&:id)
+    parts = Part.where("nr LIKE '%_#{value}%'").map(&:id)
+    process = ProcessEntity.joins(custom_values: :custom_field).where(
+        "custom_values.value IN (#{parts.join(',')}) AND custom_fields.name = 'default_wire_nr'"
+    ).map(&:id)
 
-    { :conditions => "custom_values.value IN(#{parts.join(',')})" }
+    {conditions: "process_entities.id IN(#{process.join(',')})"}
   end
 
   #

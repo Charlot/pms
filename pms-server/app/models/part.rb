@@ -51,26 +51,29 @@ class Part < ActiveRecord::Base
   end
 
   #这表示一个Part可能会被送往的位置
-  def positions(kanban_id,product_id)
+  def positions(kanban_id,product_id,process_entity)
     if PartType.is_material?(self.type)
       pp = PartPosition.find_by_part_id(self.id)
       pp.nil? ? ["N/A"]:[pp.storage]
     else
-      #ProcessPart.where(part_id:self.id).each{|pp|
-      #  puts pp.part.nr
-      #}
 
-      #ProcessEntity.joins(:custom_values).where({custom_values: {value:self.id}}).each{|pe|
-      #  puts pe.nr
-      #}
+      kanbans = []
 
-      #puts "=============".red
-      kanbans = Kanban.joins(process_entities: :process_parts)
-          .where("process_parts.part_id = ? AND kanbans.ktype != ? AND kanbans.des_storage is not NULL AND kanbans.id != ?",self.id,KanbanType::WHITE,kanban_id)
+      case process_entity.process_template.wire_from
+        when WireFromType::SEMI_AUTO
+          puts "SEMI_AUTO".red
+          kanbans = Kanban.joins(process_entities: :process_parts).where(
+              "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND process_parts.part_id = ?",KanbanType::BLUE,kanban_id,product_id,self.id
+          ).distinct
+        when WireFromType::AUTO
+          puts "SEMI_AUTO".red
+          kanbans = Kanban.joins(process_entities: :custom_values).where(
+              "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ?",KanbanType::BLUE,kanban_id,product_id,self.id
+          ).distinct
+        else
+      end
       kanbans.each{|k| puts "#{k.nr}".red}
-      #puts "=============".red
       kanbans.collect{|k|k.des_storage}
-      #[]
     end
   end
 

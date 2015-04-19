@@ -19,6 +19,7 @@ class Kanban < ActiveRecord::Base
   scoped_search on: :nr
   scoped_search in: :product,on: :nr
   scoped_search in: :process_entities, on: :nr
+  scoped_search in: :process_entities, on: :nr, ext_method: :find_by_wire_nr
 
   #before_create :generate_id
 
@@ -27,6 +28,19 @@ class Kanban < ActiveRecord::Base
   # after_update :update_part_bom
 
   has_paper_trail
+
+  def self.find_by_wire_nr key,operator,value
+    parts = Part.where("nr LIKE '%_#{value}%'").map(&:id)
+    if parts.count > 0
+      process = ProcessEntity.joins(custom_values: :custom_field).where(
+          "custom_values.value IN (#{parts.join(',')}) AND custom_fields.name = 'default_wire_nr'"
+      ).map(&:id)
+      kanbans = Kanban.joins(:process_entities).where("process_entities.id IN(#{process.join(',')})").map(&:id)
+      {conditions: "kanbans.id IN(#{kanbans.join(',')})"}
+    else
+      {conditions: "kanbans.id > 0"}
+    end
+  end
 
   def create_part_bom
     #TODO Kanban Update Part Bom
@@ -55,10 +69,10 @@ class Kanban < ActiveRecord::Base
     process_entities.each { |pe|
       pe.process_parts.each { |pp|
         part = pp.part
-        data << [part.parsed_nr, part.positions(self.id,self.product_id).join(",")].join(":")
+        data << [part.parsed_nr, part.positions(self.id,self.product_id,pe).join(",")].join(":")
       }
     }
-    data.join('\n')
+    data.join(',')
   end
 
   def process_list
