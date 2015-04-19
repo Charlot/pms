@@ -143,10 +143,7 @@ module FileHandler
         book = Roo::Excelx.new file.full_path
         book.default_sheet = book.sheets.first
 
-
         validate_msg = validate_import(file)
-
-
         if validate_msg.result
 
           #validate file

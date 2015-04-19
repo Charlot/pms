@@ -21,8 +21,7 @@ module FileHandler
                 row.strip
                 process_template = ProcessTemplate.find_by_code(row['Template Code'])
                 product = Part.find_by_nr(row['Product Nr'])
-                #part = Part.find_by_nr(row['Wire Nr'])
-                part = Part.create({nr:"#{row['Product Nr']}_#{row['Wire NO']}",type:PartType::PRODUCT_SEMIFINISHED})
+
                 params = {}
                 params = params.merge({
                                           nr:row['Nr'],
@@ -35,8 +34,6 @@ module FileHandler
 
                 pe = ProcessEntity.where({nr:params[:nr],product_id:product.id}).first
                 if pe
-                  puts "===============".red
-                  puts "#{pe.nr}".red
                   pe.update(params.except(:nr))
 
                   custom_fields = {}
@@ -75,6 +72,7 @@ module FileHandler
                     end
                   end
                 else
+                  part = Part.create({nr:"#{row['Product Nr']}_#{row['Wire NO']}",type:PartType::PRODUCT_SEMIFINISHED})
                   #TODO add WorkStation Type and Cost Center
                   process_entity = ProcessEntity.new(params)
                   process_entity.process_template = process_template

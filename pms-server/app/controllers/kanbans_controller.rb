@@ -346,8 +346,7 @@ class KanbansController < ApplicationController
   def kanban_params
     #params[:kanban]
     params.require(:kanban).permit(:id, :state, :remark, :quantity, :bundle,
-                                   :safety_stock, :source_warehouse,
-                                   :source_storage, :des_warehouse,
+                                   :safety_stock, :des_warehouse,
                                    :des_storage, :print_time, :part_id,
                                    :version, :ktype, :copies, :product_id
     )
