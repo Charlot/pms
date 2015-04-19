@@ -1,14 +1,12 @@
 module FileHandler
   module Excel
     class KanbanHandler<Base
-      EXPORT_HEADERS=[
+      HEADERS=[
           'Nr', 'Quantity', 'Safety Stock', 'Copies',
           'Remark', 'Wire Nr', 'Product Nr', 'Type',
           'Bundle', 'Destination Warehouse',
-          'Destination Storage', 'Process List'
+          'Destination Storage', 'Process List','Operator'
       ]
-
-      IMPORT_HEADERS=EXPORT_HEADERS-['Wire Nr'] << ['Operator']
 
       def self.export q = nil
         msg = Message.new
@@ -17,9 +15,14 @@ module FileHandler
 
           p = Axlsx::Package.new
           p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
-            sheet.add_row EXPORT_HEADERS
-
-            Kanban.search_for(q).each do |k|
+            sheet.add_row HEADERS
+            kanbans = []
+            if q.nil?
+              kanbans= Kanban.all
+            else
+              kanbans = Kanban.search_for(q)
+            end
+            kanbans.each do |k|
               sheet.add_row [
                                 k.nr,
                                 k.quantity,
@@ -32,10 +35,10 @@ module FileHandler
                                 k.bundle,
                                 k.des_warehouse,
                                 k.des_storage,
-                                k.process_list
+                                k.process_list,
+                                'update'
                             ], types: [:string, nil, nil, nil, nil, :string, :string]
             end
-
           end
           p.use_shared_strings = true
           p.serialize(tmp_file)
@@ -60,7 +63,7 @@ module FileHandler
         2.upto(book.last_row) do |line|
           row = {}
           header.each_with_index do |k, i|
-            row[k] = book.cell(line, i+1).strip # Strip
+            row[k] = book.cell(line, i+1).to_s.strip # Strip
           end
 
           product = Part.where({nr: row['Product Nr'], type: PartType::PRODUCT}).first
@@ -137,19 +140,22 @@ module FileHandler
 
       def self.import file
         msg = Message.new
-        book = Roo::Excelx.new file
+        book = Roo::Excelx.new file.full_path
         book.default_sheet = book.sheets.first
+
 
         validate_msg = validate_import(file)
 
+
         if validate_msg.result
+
           #validate file
           begin
             Kanban.transaction do
               2.upto(book.last_row) do |line|
                 row = {}
-                IMPORT_HEADERS.each_with_index do |k, i|
-                  row[k] = book.cell(line, i+1).strip
+                HEADERS.each_with_index do |k, i|
+                  row[k] = book.cell(line, i+1).to_s.strip
                 end
 
                 product = Part.find_by_nr(row['Product Nr'])
@@ -159,26 +165,26 @@ module FileHandler
                   row['Bundle'] = row['Quantity']
                 end
 
+                params = {}
+                HEADERS.each { |header|
+                  unless (row[header].nil? || header_to_attr(header).nil?)
+                    params[header_to_attr(header)] = row[header]
+                  end
+                }
+                params[:product_id] = product.id
+
                 case row['Operator']
-                  when 'new'
-                    kanban = Kanban.new({quantity: row['Quantity'], safety_stock: row['Safety Stock'], copies: row['Copies'], remark: row['Remark'],
-                                         product_id: product.id, ktype: row['Type'], bundle: row['Bundle'],
-                                         source_warehouse: row['Source Warehouse'], source_storage: row['Source Storage'], des_warehouse: row['Destination Warehouse'],
-                                         des_storage: row['Destination Storage'], state: KanbanState::RELEASED})
+                  when 'new',''
+                    kanban = Kanban.new(params)
                     process_nrs = row['Process List'].split(',')
                     kanban_process_entities = ProcessEntity.where({nr: process_nrs, product_id: product.id}).collect { |pe| KanbanProcessEntity.new({process_entity_id: pe.id}) }
                     kanban.kanban_process_entities = kanban_process_entities
+                    kanban.state = KanbanState::RELEASED
                     kanban.save
                   when 'update'
-                    params = {}
-                    IMPORT_HEADERS.each { |header|
-                      unless (row[header].nil? || header_to_attr(header).nil?)
-                        params[header_to_attr(header)] = row[header]
-                      end
-                    }
-                    params[:product_id] = product.id
                     kanban = Kanban.find_by_nr(row['Nr'])
                     kanban.update(params)
+                    # 暴力法，一律删除然后重新创建
                     kanban.kanban_process_entities.destroy_all
                     process_nrs = row['Process List'].split(',')
                     kanban_process_entities = ProcessEntity.where({nr: process_nrs, product_id: product.id}).collect { |pe| KanbanProcessEntity.new({process_entity_id: pe.id}) }
@@ -193,6 +199,7 @@ module FileHandler
             msg.result = true
             msg.content = "导入看板成功"
           rescue => e
+            puts e.backtrace
             msg.result = false
             msg.content = e.message
           end
@@ -204,19 +211,19 @@ module FileHandler
       end
 
       def self.validate_import file
-        tmp_file=full_tmp_path(file.file_name)
-        msg = Message.new
-        book = Roo::Excelx.new file
+        tmp_file=full_tmp_path(file.original_name)
+        msg = Message.new(result:true)
+        book = Roo::Excelx.new file.full_path
         book.default_sheet = book.sheets.first
 
         p = Axlsx::Package.new
         p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
-          sheet.add_row IMPORT_HEADERS+['Error Msg']
+          sheet.add_row HEADERS+['Error Msg']
           #validate file
           2.upto(book.last_row) do |line|
             row = {}
-            IMPORT_HEADERS.each_with_index do |k, i|
-              row[k] = book.cell(line, i+1).strip
+            HEADERS.each_with_index do |k, i|
+              row[k] = book.cell(line, i+1).to_s.strip
             end
 
             mssg = validate_row(row, line)
@@ -233,7 +240,6 @@ module FileHandler
         end
         p.use_shared_strings = true
         p.serialize(tmp_file)
-
         msg
       end
 
@@ -253,7 +259,7 @@ module FileHandler
             unless kanban
               msg.contents << "Row:#{line},Kanban不存在"
             end
-          when 'new'
+          when 'new',''
           else
             msg.contents << "Row:#{line},#{row['Operator']},操作错误"
         end
@@ -279,7 +285,7 @@ module FileHandler
         unless msg.result=(msg.contents.size==0)
           msg.content=msg.contents.join('/')
         end
-        return msg
+        msg
       end
 
       def self.header_to_attr header
