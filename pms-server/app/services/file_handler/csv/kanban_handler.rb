@@ -13,6 +13,7 @@ module FileHandler
         begin
           list = []
           validate_msg = validate_import(file)
+=begin
           if validate_msg.result
             CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
               row.strip
@@ -37,6 +38,7 @@ module FileHandler
             msg.result = false
             msg.content = validate_msg.content
           end
+=end
         rescue => e
           puts e.backtrace
           msg.content = e.message
@@ -49,6 +51,7 @@ module FileHandler
         begin
           validate_msg = validate_import(file)
           if validate_msg.result
+=begin
             Kanban.transaction do
               CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
                 row.strip
@@ -91,6 +94,7 @@ module FileHandler
                 end
               end
             end
+=end
             msg.result = true
             msg.content = 'Kanban 上传成功'
           else
@@ -144,6 +148,7 @@ module FileHandler
         begin
           validate_msg = validate_import(file)
           if validate_msg.result
+=begin
             Kanban.transaction do
               CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
                 row.strip
@@ -174,6 +179,7 @@ module FileHandler
                 end
               end
             end
+=end
             msg.result = true
             msg.content = 'Kanban 上传成共'
           else
@@ -277,7 +283,7 @@ module FileHandler
         end
 
         #如果是更新KANBAN，不能更新总成号和线号
-        if kanban && (row["Product Nr"] != kanban.product_nr || "#{row['Product Nr']}_#{row['Wire Nr']}" != kanban.part_nr)
+        if kanban && (row["Product Nr"] != kanban.product_nr || "#{row['Product Nr']}_#{row['Wire Nr']}" != kanban.wire_nr)
           msg.contents << "Wire Nr: #{row['Wire Nr']},Product Nr: #{row['Product nr']} 不能修改"
         end
 
@@ -300,9 +306,9 @@ module FileHandler
           msg.contents << "Process List: #{nrs}，工艺不存在!"
         end
 
-        if kanban.nil? && row['Wire Nr'].present? &&Part.where({nr: "#{row['Product Nr']}_#{row['Wire Nr']}"}).count <= 0
-          msg.contents << "Wire Nr:#{row['Wire Nr']} 不存在"
-        end
+        #if kanban.nil? && row['Wire Nr'].present? &&Part.where({nr: "#{row['Product Nr']}_#{row['Wire Nr']}"}).count <= 0
+        #  msg.contents << "Wire Nr:#{row['Wire Nr']} 不存在"
+        #end
 
         #验证看板类型
         unless KanbanType.has_value?(row['Type'].to_i)

@@ -19,6 +19,7 @@
     <th>Kanban Nr</th>
     <th>State</th>
     <th>Product Nr</th>
+    <th>Order</th>
     <th>Wire Nr</th>
     <th>Quantity</th>
     <th>Bundle</th>
@@ -39,6 +40,7 @@
         <td><%= item[:KanbanNr]%></td>
         <td><%= ProductionOrderItemState.display(item[:State])%></td>
         <td><%= item[:ProductNr]%></td>
+        <td><%= item[:OrderNr]%></td>
         <td><%= item[:KanbanWireNr]%></td>
         <td><%= item[:KanbanQuantity]%></td>
         <td><%= item[:KanbanBundle]%></td>

@@ -207,56 +207,7 @@ class KanbansController < ApplicationController
     end
   end
 
-  # GET/POST
-  def import_update
-    if request.post?
-      msg = Message.new
-      begin
-        file=params[:files][0]
-        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
-        fd.save
-        file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
-        msg = FileHandler::Csv::KanbanHandler.import_update(file)
-      rescue => e
-        msg.content = e.message
-      end
-      render json: msg
-    end
-  end
 
-  #GET/POST
-  def import_to_get_kanban_list
-    if request.post?
-      msg = Message.new
-      begin
-        file=params[:files][0]
-        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
-        fd.save
-        file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
-        msg = FileHandler::Csv::KanbanHandler.import_to_get_kanban_list(file)
-      rescue => e
-        msg.content = e.message
-      end
-      render json: msg
-    end
-  end
-
-  #GET
-=begin
-  def export
-    msg = Message.new
-    begin
-      msg = FileHandler::Excel::KanbanHandler.export(params[:q])
-    rescue => e
-      msg.content = e.message
-    end
-    if msg.result
-      send_file msg.content
-    else
-      render json: msg
-    end
-  end
-=end
 
   # GET/POST
   def import
@@ -271,16 +222,6 @@ class KanbansController < ApplicationController
       rescue => e
         msg.content = e.message
       end
-      render json: msg
-    end
-  end
-
-  def export_routing_error
-    msg = FileHandler::Csv::KanbanHandler.export_routing_error(request.user_agent.downcase)
-    #render json: msg
-    if msg.result
-      send_file msg.content
-    else
       render json: msg
     end
   end
