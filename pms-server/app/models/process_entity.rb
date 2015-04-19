@@ -27,11 +27,16 @@ class ProcessEntity < ActiveRecord::Base
 
   def self.find_by_parts key,operator,value
     parts = Part.where("nr LIKE '%_#{value}%'").map(&:id)
-    process = ProcessEntity.joins(custom_values: :custom_field).where(
-        "custom_values.value IN (#{parts.join(',')}) AND custom_fields.name = 'default_wire_nr'"
-    ).map(&:id)
 
-    {conditions: "process_entities.id IN(#{process.join(',')})"}
+    if parts.count > 0
+      process = ProcessEntity.joins(custom_values: :custom_field).where(
+        "custom_values.value IN (#{parts.join(',')}) AND custom_fields.field_format = 'part'"
+      ).map(&:id)
+      if process.count > 0
+        return {conditions: "process_entities.id IN(#{process.join(',')})"}
+      end
+    end
+    {conditions: "process_entities.nr LIKE '%#{value}%'"}
   end
 
   #

@@ -56,23 +56,22 @@ class Part < ActiveRecord::Base
       pp = PartPosition.find_by_part_id(self.id)
       pp.nil? ? ["N/A"]:[pp.storage]
     else
-
       kanbans = []
-
+      puts "#{self.nr}".red
       case process_entity.process_template.wire_from
         when WireFromType::SEMI_AUTO
-          puts "SEMI_AUTO".red
+          puts "#{process_entity.nr},#{process_entity.process_template.wire_from},SEMI_AUTO".red
           kanbans = Kanban.joins(process_entities: :process_parts).where(
               "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND process_parts.part_id = ?",KanbanType::BLUE,kanban_id,product_id,self.id
           ).distinct
         when WireFromType::AUTO
-          puts "SEMI_AUTO".red
-          kanbans = Kanban.joins(process_entities: :custom_values).where(
-              "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ?",KanbanType::BLUE,kanban_id,product_id,self.id
+          puts "#{process_entity.nr},#{process_entity.process_template.wire_from},AUTO".red
+          kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
+              "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",KanbanType::WHITE,kanban_id,product_id,self.id
           ).distinct
         else
       end
-      kanbans.each{|k| puts "#{k.nr}".red}
+      puts "#{kanbans.collect{|k| k.nr}.join(',')}".red
       kanbans.collect{|k|k.des_storage}
     end
   end

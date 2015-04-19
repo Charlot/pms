@@ -33,12 +33,16 @@ class Kanban < ActiveRecord::Base
     parts = Part.where("nr LIKE '%_#{value}%'").map(&:id)
     if parts.count > 0
       process = ProcessEntity.joins(custom_values: :custom_field).where(
-          "custom_values.value IN (#{parts.join(',')}) AND custom_fields.name = 'default_wire_nr'"
+          "custom_values.value IN (#{parts.join(',')}) AND custom_fields.field_format = 'part'"
       ).map(&:id)
-      kanbans = Kanban.joins(:process_entities).where("process_entities.id IN(#{process.join(',')})").map(&:id)
-      {conditions: "kanbans.id IN(#{kanbans.join(',')})"}
+      if process.count > 0
+        kanbans = Kanban.joins(:process_entities).where("process_entities.id IN(#{process.join(',')})").map(&:id)
+      end
+      if kanbans.count > 0
+        return {conditions: "kanbans.id IN(#{kanbans.join(',')})"}
+      end
     else
-      {conditions: "kanbans.id > 0"}
+      {conditions: "kanbans.nr like '%#{value}%'"}
     end
   end
 

@@ -5,9 +5,9 @@ class WireFromType<BaseType
   def self.display(type)
     case type
       when SEMI_AUTO
-        '来自半自动'
+        '半自动'
       when AUTO
-        '来自全自动'
+        '全自动'
       else
         ''
     end

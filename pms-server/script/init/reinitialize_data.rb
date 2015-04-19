@@ -56,7 +56,7 @@ puts "======================".yellow
 ProcessEntity.all.each{|pe|
   if pe.value_default_wire_nr
     pe.process_parts.each{|pa|
-      if pa.part.nr == pe.value_default_wire_nr
+      if pa.part && pa.part.nr == pe.value_default_wire_nr
         pa.destroy
         puts "删除了#{pa.part.nr}"
       end
@@ -120,7 +120,7 @@ KanbanProcessEntity.all.each do |kpe|
   if process_entity.kanbans.count > 1
     k = process_entity.kanbans.first
     process_entity.kanbans.each{|kanban|
-      if k.process_entities.count < kanban.process_entities.count
+      if k.process_entities.count >= kanban.process_entities.count
         k = kanban
       end
       puts "#{kanban.nr}:#{kanban.process_entities.collect{|pe|pe.nr}.join(',')}"

@@ -119,6 +119,7 @@ Rails.application.routes.draw do
       post :semiautoimport
       post :manual_import
       match :import, to: :import, via: [:get, :post]
+      get :scope_search
     end
   end
 
