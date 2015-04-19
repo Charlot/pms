@@ -249,21 +249,24 @@ module FileHandler
           when 'delete'
             kanban = Kanban.find_by_nr(row['Nr'])
             unless kanban
-              msg.contents << "Row:#{line}:#{row['Nr']},Kanban不存在"
+              msg.contents << "Nr:#{row['Nr']},Kanban不存在"
             end
           when 'update'
             kanban = Kanban.find_by_nr(row['Nr'])
             unless kanban
-              msg.contents << "Row:#{line},Kanban不存在"
+              msg.contents << "Nr:#{row['Nr']},Kanban不存在"
             end
           when 'new',''
+            if row['Nr'].present?
+              msg.contents << "Nr:#{row['Nr']},新建时，不能输入Nr"
+            end
           else
-            msg.contents << "Row:#{line},#{row['Operator']},操作错误"
+            msg.contents << "Operator,#{row['Operator']},操作错误"
         end
 
         # 验证总成号
         unless product
-          msg.contents<<"Row:#{line},#{Row['Product Nr']},总成号不存在"
+          msg.contents<<"Product Nr:#{Row['Product Nr']},总成号不存在"
         end
 
         # 验证工艺
