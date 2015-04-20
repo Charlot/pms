@@ -65,6 +65,9 @@ module FileHandler
                 params = params.merge({nr: row['Nr'], name: row['Name'], description: row['Description'], stand_time: row['Stand Time'], product_id: product.id, process_template_id: process_template.id})
 
                 pe = ProcessEntity.where({product_id: product.id, nr: params[:nr]}).first
+
+                wire = Part.where({nr: "#{product.nr}_#{row['Wire Nr']}", type: PartType::PRODUCT_SEMIFINISHED}).first if row['Wire Nr']
+
                 case row['Operator']
                   when 'new', ''
                     puts "未找到".green
@@ -73,6 +76,7 @@ module FileHandler
                     process_entity.save
 
                     wire = Part.create({nr: "#{product.nr}_#{row['Wire Nr']}", type: PartType::PRODUCT_SEMIFINISHED}) if row['Wire Nr']
+
                     custom_fields_val = row['Template Fields'].split(',')
                     process_entity.custom_fields.each_with_index do |cf, index|
                       cv = nil
@@ -108,6 +112,11 @@ module FileHandler
                     end
                   when 'update'
                     puts "找到了".green
+
+                    if wire.nil? && row['Wire Nr'].present?
+                      wire = Part.create({nr: "#{product.nr}_#{row['Wire Nr']}", type: PartType::PRODUCT_SEMIFINISHED})
+                    end
+
                     pe.update(params.except(:nr))
                     if row['Wire Nr'] && !pe.parsed_wire_nr.blank? && pe.parsed_wire_nr != row['Wire Nr']
                       pe.wire.update(nr: "#{product.nr}_#{row['Wire Nr']}")
@@ -168,8 +177,11 @@ module FileHandler
                 end
               end
             end
+            msg.result = true
+            msg.content = "导入半自动步骤成功"
           else
-
+            msg.result = fasle
+            msg.content = validate_msg.content
           end
         rescue => e
           puts e.backtrace
