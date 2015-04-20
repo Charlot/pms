@@ -10,31 +10,18 @@ module FileHandler
       def self.export(q)
         msg = Message.new
         begin
-          tmp_file = full_tmp_path('process_entity_auto.xlsx') unless tmp_file
+          tmp_file = full_tmp_path('process_entity_semi_auto.xlsx') unless tmp_file
 
           p = Axlsx::Package.new
           p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
             sheet.add_row HEADERS
             process_entities = []
             if q.nil?
-              process_entities= ProcessEntity.joins(:process_template).where(process_templates: {type: ProcessType::AUTO})
+              process_entities= ProcessEntity.joins(:process_template).where(process_templates: {type: ProcessType::SEMI_AUTO})
             else
-              process_entities = ProcessEntity.search_for(q)
+              process_entities = ProcessEntity.search_for(q).select{|pe| pe.process_template_type == ProcessType::SEMI_AUTO}
             end
             process_entities.each do |pe|
-              parts_info = {}
-
-              ['t1', 't2', 's1', 's2'].each { |cf|
-                value = pe.send("value_#{cf}")
-                if value && part = Part.find_by_id(value)
-                  parts_info["#{cf}_custom_nr".to_sym] = part.custom_nr
-                  parts_info["#{cf}_nr".to_sym] = part.nr
-                else
-                  parts_info["#{cf}_custom_nr".to_sym]= nil
-                  parts_info["#{cf}_nr".to_sym] = nil
-                end
-              }
-              wire = Part.find_by_id(pe.value_wire_nr)
               sheet.add_row [
                                 pe.nr,
                                 pe.name,
@@ -42,31 +29,12 @@ module FileHandler
                                 pe.stand_time,
                                 pe.product_nr,
                                 pe.process_template_code,
-                                nil,
-                                nil,
+                                pe.workstation_type,
+                                pe.cost_center,
+                                pe.template_fields.join(","),
                                 pe.parsed_wire_nr,
-                                (wire.nr if wire),
-                                pe.value_wire_qty_factor,
-                                pe.value_default_bundle_qty,
-                                parts_info[:t1_nr],
-                                pe.value_t1_qty_factor,
-                                pe.value_t1_strip_length,
-                                parts_info[:t2_nr],
-                                pe.value_t2_qty_factor,
-                                pe.value_t2_strip_length,
-                                parts_info[:s1_nr],
-                                pe.value_s1_qty_factor,
-                                parts_info[:s2_nr],
-                                pe.value_s2_qty_factor,
-                                'update'
-                            ], types: [
-                                 :string,:string,:string,:float,:string,:string,nil,nil,
-                                 :string,:string,nil,nil,:string,nil,nil,
-                                 :string,nil,nil,
-                                 :string,nil,nil,
-                                 :string,nil,
-                                 :string,nil
-                             ]
+                                "update"
+                            ], types: [:string,:string,:string,:float]
             end
           end
           p.use_shared_strings = true

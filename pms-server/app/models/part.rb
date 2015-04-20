@@ -78,7 +78,8 @@ class Part < ActiveRecord::Base
 
   def parsed_nr
     if type == PartType::PRODUCT_SEMIFINISHED && nr.include?("_")
-      nr.split("_").last
+      nrs = nr.split("_")
+      (nrs-[nrs.first]).join("")
     else
       nr
     end

@@ -44,6 +44,20 @@ class ProcessEntitiesController < ApplicationController
     end
   end
 
+  def export_semi
+    msg = Message.new
+    begin
+      msg = FileHandler::Excel::ProcessEntitySemiAutoHandler.export(params[:q])
+    rescue => e
+      msg.content = e.message
+    end
+    if msg.result
+      send_file msg.content
+    else
+      render json: msg
+    end
+  end
+
   # GET POST
   def import_auto
     if request.post?

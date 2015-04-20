@@ -142,7 +142,7 @@ module FileHandler
             if q.nil?
               process_entities= ProcessEntity.joins(:process_template).where(process_templates: {type: ProcessType::AUTO})
             else
-              process_entities = ProcessEntity.search_for(q)
+              process_entities = ProcessEntity.search_for(q).select{|pe| pe.process_template_type == ProcessType::AUTO}
             end
             process_entities.each do |pe|
               parts_info = {}

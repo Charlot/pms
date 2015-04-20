@@ -2,6 +2,7 @@
 <%= link_to '导入全自动工艺',import_auto_process_entities_path,:class=>'btn btn-default'%>
 <%= link_to '导入半自动工艺',import_semi_auto_process_entities_path,:class=>'btn btn-default'%>
 <%= link_to '导出全自动工艺',export_auto_process_entities_path({q:@q,model:current_model}), :class => 'btn btn-default',data:{confirm:"数据量较大，确定？"}%>
+<%= link_to '导出半自动工艺',export_semi_process_entities_path({q:@q,model:current_model}), :class => 'btn btn-default',data:{confirm:"数据量较大，确定？"}%>
 <%= link_to '导出未使用的工艺',export_unused_process_entities_path,:class=>'btn btn-warning'%>
 <div class="digg_pagination">
   <div class="page_info">

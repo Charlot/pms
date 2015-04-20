@@ -39,6 +39,21 @@ class ProcessEntity < ActiveRecord::Base
     {conditions: "process_entities.nr LIKE '%#{value}%'"}
   end
 
+  def template_fields
+    if self.process_template_type == ProcessType::SEMI_AUTO
+      self.custom_values.collect do |cv|
+        if cv.custom_field.field_format == 'part' && cv.custom_field.name != "default_wire_nr"
+          wire = Part.find_by_id(cv.value)
+          wire.nil? ? "":wire.parsed_nr
+        else
+          cv.value
+        end
+      end
+    else
+      ["错误"]
+    end
+  end
+
   #
   def wire
     if self.value_default_wire_nr && (part = Part.find_by_id(self.value_default_wire_nr))
@@ -48,12 +63,7 @@ class ProcessEntity < ActiveRecord::Base
   end
 
   def parsed_wire_nr
-    if wire
-      nrs = wire.nr.split("_")
-      (nrs-[nrs.first]).join("")
-    else
-      ''
-    end
+    wire.parsed_nr if wire
   end
 
   def wire_component
