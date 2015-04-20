@@ -18,9 +18,9 @@ module FileHandler
             sheet.add_row HEADERS
             kanbans = []
             if q.nil?
-              kanbans= Kanban.all
+              kanbans= Kanban.where("state is not ?",KanbanState::DELETED).all
             else
-              kanbans = Kanban.search_for(q)
+              kanbans = Kanban.search_for(q).select{|k| [KanbanState::INIT,KanbanState::RELEASED,KanbanState::LOCKED].include? k.state }
             end
             kanbans.each do |k|
               sheet.add_row [
