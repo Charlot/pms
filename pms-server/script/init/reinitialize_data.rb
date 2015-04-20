@@ -30,7 +30,7 @@ end
 puts "======================".yellow
 puts "2.修复Routing数据".yellow
 puts "======================".yellow
-ProcessEntity.joins(:process_template).each do |pe|
+ProcessEntity.joins(:process_template).where("process_templates.type = ?",ProcessType::AUTO).each do |pe|
   pe.custom_values.each{|cv|
     if cv.custom_field.name == "default_wire_nr"
       wire_nr =  "#{pe.product_nr}_#{cv.value}"
