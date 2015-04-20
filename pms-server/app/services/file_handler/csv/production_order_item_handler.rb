@@ -3,7 +3,7 @@ module FileHandler
   module Csv
     class ProductionOrderItemHandler<Base
       EXPORT_CSV_HEADERS=%w(No OrderItemNr Kanban Machine OrderNr PartNr Material)
-      STATE_EXPORT_CSV_HEADERS=%w(No ItemNr OrderNr State OptimiseIndex Machine  KanbanNr ProductNr KanbanWireNr KanbanQuantity KanbanBundle ProducedQty WireNr Diameter WireLength Terminal1Nr Tool1Nr Terminal1StripLength Terminal2Nr Tool1Nr Terminal2StripLength Seal1Nr Seal2Nr)
+      STATE_EXPORT_CSV_HEADERS=%w(No ItemNr OrderNr State OptimiseIndex Machine  KanbanNr ProductNr KanbanWireNr KanbanQuantity KanbanBundle ProducedQty WireNr Diameter WireLength Terminal1Nr Tool1Nr Terminal1StripLength Terminal2Nr Tool2Nr Terminal2StripLength Seal1Nr Seal2Nr)
 
       def export_optimized(items, user_agent, tmp_path=nil)
         msg=Message.new
@@ -40,9 +40,10 @@ module FileHandler
                    headers: STATE_EXPORT_CSV_HEADERS,
                    col_sep: SEPARATOR, encoding: ProductionOrderItemHandler.get_encoding(user_agent)) do |csv|
 
-            q= ProductionOrderItem.joins(:machine).order(machine_id: :asc, production_order_id: :asc,optimise_index: :asc)
+            q= ProductionOrderItem.joins(:machine).order(machine_id: :asc, production_order_id: :asc, optimise_index: :asc)
             q= q.where(machines: {nr: params[:machine_nr]}) unless params[:machine_nr].blank?
             q= q.where(state: params[:state]) unless params[:state].blank?
+            q=q.where(production_order_id: params[:production_order_id]) unless params[:production_order_id].blank?
 
             begin
               q=q.where(updated_at: [Time.parse(params[:start_time]).utc..Time.parse(params[:end_time]).utc]) unless params[:start_time].blank? || params[:end_time].blank?
