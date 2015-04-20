@@ -52,6 +52,7 @@ module FileHandler
                     custom_fields.each do |k, v|
                       if cf = process_entity.custom_fields.find { |cf| cf.name == k.to_s }
                         if cf.name == "default_wire_nr"
+                          puts "#{product.nr}_#{v}".red
                           cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: cf.is_for_out_stock, value: cf.get_field_format_value("#{product.nr}_#{v}"))
                         else
                           cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: cf.is_for_out_stock, value: cf.get_field_format_value(v))
@@ -68,6 +69,10 @@ module FileHandler
                     end
                   when 'update'
                     pe = ProcessEntity.where({nr: params[:nr], product_id: product.id}).first
+                    wire = Part.where({nr:"#{product.nr}_#{row['Wire NO']}",type:PartType::PRODUCT_SEMIFINISHED}).first
+                    if wire.nil?
+                      part = Part.create({nr: "#{row['Product Nr']}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED})
+                    end
                     pe.update(params.except(:nr))
 
                     custom_fields = {}
@@ -80,6 +85,7 @@ module FileHandler
                         if cv = pe.custom_values.where({custom_field_id: cf.id}).first
                           #找到了，更新
                           #puts "找到了".red
+                          puts "#{product.nr}_#{v}".green
                           if cf.name == "default_wire_nr"
                             cv = cv.update(value: cf.get_field_format_value("#{product.nr}_#{v}"))
                           else
@@ -246,7 +252,7 @@ module FileHandler
         case row['Operator']
           when 'new', ''
             if wire
-              msg.contents << "Wire NO:#{row['Wire No']}已经存在"
+              msg.contents << "Wire NO:#{row['Wire NO']}已经存在"
             end
             if pe.count > 0
               msg.contents << "Nr :#{row['Nr']}已经存在"
@@ -255,6 +261,10 @@ module FileHandler
             if pe.count <= 0
               msg.content << "Nr: #{row['Nr']}未找到"
             end
+
+            #unless wire
+              #msg.contents << "Wire NO:#{row['Wire NO']}不存在"
+            #end
           when 'delete'
             if pe.count <= 0
               msg.content << "Nr: #{row['Nr']}未找到"

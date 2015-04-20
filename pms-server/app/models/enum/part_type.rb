@@ -30,8 +30,6 @@ class PartType<BaseType
   end
 
   def self.is_material?(type)
-    constants.select{|c|
-      c if c.to_s =~/MATERIAL_/
-    }.collect{|c| const_get(c)}.include?(type.to_i)
+    [MATERIAL_WIRE,MATERIAL_TERMINAL,MATERIAL_SEAL,MATERIAL_OTHER].include?(type.to_i)
   end
 end
