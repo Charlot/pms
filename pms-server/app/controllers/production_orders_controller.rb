@@ -47,9 +47,9 @@ class ProductionOrdersController < ApplicationController
       @production_order_items = ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(@machine).all)
     end
 
-    item = @production_order_items.first
-    puts "^^^^^^^^^^^^^^^^^^^^"
-    puts item[:No]
+    #item = @production_order_items.first
+    #puts "^^^^^^^^^^^^^^^^^^^^"
+    #puts item[:No]
   end
 
   # PATCH/PUT /production_orders/1
