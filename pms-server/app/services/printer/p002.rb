@@ -24,6 +24,7 @@ module Printer
           parts_info["#{cf}_nr".to_sym] = nil
         end
       }
+
       #应该是固定的，消耗的原材料，填入
       head={
           kanban_nr: @kanban.nr,
@@ -36,7 +37,6 @@ module Printer
           card_number: @kanban.copies,
           work_time: @kanban.task_time,
           send_position: @kanban.des_storage,
-          # wire_description: @kanban.wire_description,
           wire_description: wire_desc,
 
           kanban_2dcode: @kanban.printed_2DCode,

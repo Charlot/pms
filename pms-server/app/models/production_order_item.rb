@@ -20,9 +20,14 @@ class ProductionOrderItem < ActiveRecord::Base
         .order(production_order_id: :asc, optimise_index: :asc).first
   end
 
-  def self.for_produce(machine)
-    where(state: ProductionOrderItemState.wait_produce_states, machine_id: machine.id)
-        .order(production_order_id: :asc, optimise_index: :asc)
+  def self.for_produce(machine=nil)
+    if machine
+      where(state: ProductionOrderItemState.wait_produce_states, machine_id: machine.id)
+          .order(production_order_id: :asc, optimise_index: :asc)
+    else
+      where(state: ProductionOrderItemState.wait_produce_states)
+          .order(production_order_id: :asc, optimise_index: :asc)
+    end
   end
 
   def self.for_passed(machine)

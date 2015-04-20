@@ -40,7 +40,13 @@ class ProductionOrdersController < ApplicationController
   # GET /production_orders/preview
   def preview
     @machine = params[:machine_nr].nil? ? Machine.first : Machine.find_by_nr(params[:machine_nr])
-    @production_order_items = ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(@machine).all)
+    if params[:machine_nr] == 'All'
+      @machine_nr = 'All'
+      @production_order_items = ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce.all)
+    else
+      @production_order_items = ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(@machine).all)
+    end
+
     item = @production_order_items.first
     puts "^^^^^^^^^^^^^^^^^^^^"
     puts item[:No]
