@@ -3,8 +3,8 @@ module FileHandler
     class ProcessEntitySemiAutoHandler<Base
       HEADERS=[
           'Nr', 'Name', 'Description', 'Stand Time',
-          'Product Nr','Template Code', 'WorkStation Type',
-          'Cost Center', 'Template Fields','Wire Nr','Operator'
+          'Product Nr', 'Template Code', 'WorkStation Type',
+          'Cost Center', 'Template Fields', 'Wire Nr', 'Operator'
       ]
 
       def self.export(q)
@@ -19,7 +19,7 @@ module FileHandler
             if q.nil?
               process_entities= ProcessEntity.joins(:process_template).where(process_templates: {type: ProcessType::SEMI_AUTO})
             else
-              process_entities = ProcessEntity.search_for(q).select{|pe| pe.process_template_type == ProcessType::SEMI_AUTO}
+              process_entities = ProcessEntity.search_for(q).select { |pe| pe.process_template_type == ProcessType::SEMI_AUTO }
             end
             process_entities.each do |pe|
               sheet.add_row [
@@ -34,7 +34,7 @@ module FileHandler
                                 pe.template_fields.join(","),
                                 pe.parsed_wire_nr,
                                 "update"
-                            ], types: [:string,:string,:string,:float]
+                            ], types: [:string, :string, :string, :float]
             end
           end
           p.use_shared_strings = true
@@ -58,12 +58,114 @@ module FileHandler
           if validate_msg.result
             ProcessEntity.transaction do
               2.upto(book.last_row) do |line|
-                row = {}
-                HEADERS.each_with_index do |k,i|
-                  row[k] = book.cell(line,i+1).to_s.strip
+                process_template = ProcessTemplate.find_by_code(row['Template Code'])
+                product = Part.find_by_nr(row['Product Nr'])
+
+                params = {}
+                params = params.merge({nr: row['Nr'], name: row['Name'], description: row['Description'], stand_time: row['Stand Time'], product_id: product.id, process_template_id: process_template.id})
+
+                pe = ProcessEntity.where({product_id: product.id, nr: params[:nr]}).first
+                case row['Operator']
+                  when 'new', ''
+                    puts "未找到".green
+                    process_entity = ProcessEntity.new(params)
+                    process_entity.process_template = process_template
+                    process_entity.save
+
+                    wire = Part.create({nr: "#{product.nr}_#{row['Wire Nr']}", type: PartType::PRODUCT_SEMIFINISHED}) if row['Wire Nr']
+                    custom_fields_val = row['Template Fields'].split(',')
+                    process_entity.custom_fields.each_with_index do |cf, index|
+                      cv = nil
+                      if CustomFieldFormatType.part?(cf.field_format)
+                        if cf.name == "default_wire_nr" && row['Wire Nr']
+                          cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: false, value: cf.get_field_format_value("#{product.nr}_#{row['Wire Nr']}"))
+                        else
+
+                          if custom_fields_val[index].blank?
+                            next
+                          end
+
+                          if Part.find_by_nr(custom_fields_val[index])
+                            cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
+                          else
+                            puts row['Template Fields']
+                            puts "===================="
+                            puts custom_fields_val[index]
+                            cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index]}"))
+                          end
+                        end
+                      else
+                        cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
+                      end
+                      process_entity.custom_values<<cv if cv
+                    end
+
+                    process_entity.custom_values.each_with_index do |cv, index|
+                      cf=cv.custom_field
+                      if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
+                        process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: 1)
+                      end
+                    end
+                  when 'update'
+                    puts "找到了".green
+                    pe.update(params.except(:nr))
+                    if row['Wire Nr'] && !pe.parsed_wire_nr.blank? && pe.parsed_wire_nr != row['Wire Nr']
+                      pe.wire.update(nr: "#{product.nr}_#{row['Wire Nr']}")
+                    end
+
+                    custom_fields_val = row['Template Fields'].split(',')
+
+                    pe.custom_fields.each_with_index { |cf, index|
+                      cv = pe.custom_values.where(custom_field_id: cf.id).first
+
+                      if CustomFieldFormatType.part?(cf.field_format)
+                        if cf.name == "default_wire_nr"
+                        else
+
+                          if custom_fields_val[index].blank?
+                            if cv
+                              cv.destroy
+                            end
+                            next
+                          end
+
+                          if Part.find_by_nr(custom_fields_val[index])
+                            if cv
+                              cv.update(value: cf.get_field_format_value(custom_fields_val[index]))
+                            else
+                              cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
+                              pe.custom_values<<cv
+                            end
+                          else
+                            if cv
+                              cv.update(value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index]}"))
+                            else
+                              cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index]}"))
+                              pe.custom_values<<cv
+                            end
+                          end
+                        end
+                      else
+                        if cv
+                          cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
+                          pe.custom_values<<cv
+                        else
+                          cv.update(value: cf.get_field_format_value(custom_fields_val[index]))
+                        end
+                      end
+                    }
+                    pe.process_parts.destroy_all
+
+                    pe.custom_values.each_with_index do |cv, index|
+                      cf=cv.custom_field
+                      if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
+                        pe.process_parts<<ProcessPart.new(part_id: cv.value, quantity: 1)
+                      end
+                    end
+                    pe.save
+                  when 'delete'
+                    pe.destroy
                 end
-
-
               end
             end
           else
@@ -110,11 +212,11 @@ module FileHandler
         msg
       end
 
-      def self.validate_row(row,line)
-        msg = Message.new({result:true,contents:[]})
+      def self.validate_row(row, line)
+        msg = Message.new({result: true, contents: []})
 
         #验证总成号
-        product = Part.where({nr:row['Product Nr'],type:PartType::PRODUCT}).first
+        product = Part.where({nr: row['Product Nr'], type: PartType::PRODUCT}).first
 
         if product.nil?
           msg.contents << "Product Nr: #{row['Product Nr']}不存在"
@@ -127,12 +229,12 @@ module FileHandler
         end
 
         #验证步骤号
-        pe = ProcessEntity.where({nr:row['Nr'],product_id:product.id})
+        pe = ProcessEntity.where({nr: row['Nr'], product_id: product.id})
 
         #验证生成的线号
-        wire = Part.where({nr:"#{row['Product Nr']}~#{row['Wire Nr']}"},type:PartType::PRODUCT_SEMIFINISHED)
+        wire = Part.where({nr: "#{row['Product Nr']}~#{row['Wire Nr']}"}, type: PartType::PRODUCT_SEMIFINISHED)
         case row['Operator']
-          when 'new',''
+          when 'new', ''
             if pe.count > 0
               msg.contents << "Nr:#{row['Nr']},步骤已存在"
             end
@@ -150,7 +252,7 @@ module FileHandler
         end
 
         #验证属性
-        custom_fields_val = row['Template Fields'].split(',').collect{|cfv|cfv.strip}
+        custom_fields_val = row['Template Fields'].split(',').collect { |cfv| cfv.strip }
         template.custom_fields.each_with_index do |cf, index|
           if CustomFieldFormatType.part?(cf.field_format)
             if cf.name == "default_wire_nr" || custom_fields_val[index].blank?
@@ -159,7 +261,7 @@ module FileHandler
 
             if Part.find_by_nr(custom_fields_val[index])
               next
-            elsif  Part.find_by_nr("#{product.nr}_#{custom_fields_val[index]}")
+            elsif Part.find_by_nr("#{product.nr}_#{custom_fields_val[index]}")
               next
             else
               msg.contents << "Template Fildes: #{custom_fields_val[index]} 未找到"
