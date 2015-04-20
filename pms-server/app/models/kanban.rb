@@ -76,7 +76,7 @@ class Kanban < ActiveRecord::Base
         data << [part.parsed_nr, part.positions(self.id,self.product_id,pe).join(",")].join(":")
       }
     }
-    data.join(',')
+    data.join('      ')
   end
 
   def process_list
