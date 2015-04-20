@@ -40,18 +40,24 @@ class ProcessEntity < ActiveRecord::Base
   end
 
   def template_fields
+    a = []
     if self.process_template_type == ProcessType::SEMI_AUTO
-      self.custom_values.collect do |cv|
-        if cv.custom_field.field_format == 'part' && cv.custom_field.name != "default_wire_nr"
+      a = self.custom_values.collect do |cv|
+        if cv.custom_field.name == "default_wire_nr"
+          next
+        end
+
+        if cv.custom_field.field_format == 'part'
           wire = Part.find_by_id(cv.value)
           wire.nil? ? "":wire.parsed_nr
         else
-          cv.value
+          cv.value.nil? ? next : cv.value
         end
       end
     else
-      ["错误"]
+     a= ["错误"]
     end
+    a.compact
   end
 
   #

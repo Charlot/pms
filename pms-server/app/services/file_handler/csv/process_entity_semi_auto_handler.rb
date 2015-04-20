@@ -169,8 +169,7 @@ module FileHandler
           msg.contents << "Product Nr: #{row['Product Nr']}不存在"
         end
 
-        #验证步骤号
-        pe = ProcessEntity.where({nr:row['Nr'],product_id:product.id})
+
 
         #验证模板
         template = ProcessTemplate.find_by_code(row['Template Code'])
