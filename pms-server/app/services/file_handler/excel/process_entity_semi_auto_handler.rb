@@ -34,7 +34,7 @@ module FileHandler
                                 pe.template_fields.join(","),
                                 pe.parsed_wire_nr,
                                 "update"
-                            ], types: [:string, :string, :string, :float]
+                            ], types: [:string, :string, :string, :float,:string,:string]
             end
           end
           p.use_shared_strings = true
@@ -58,6 +58,12 @@ module FileHandler
           if validate_msg.result
             ProcessEntity.transaction do
               2.upto(book.last_row) do |line|
+
+                row = {}
+                HEADERS.each_with_index do |k, i|
+                  row[k] = book.cell(line, i+1).to_s.strip
+                end
+
                 process_template = ProcessTemplate.find_by_code(row['Template Code'])
                 product = Part.find_by_nr(row['Product Nr'])
 
@@ -180,7 +186,7 @@ module FileHandler
             msg.result = true
             msg.content = "导入半自动步骤成功"
           else
-            msg.result = fasle
+            msg.result = false
             msg.content = validate_msg.content
           end
         rescue => e
@@ -235,6 +241,8 @@ module FileHandler
         end
 
         #验证模板
+        puts row
+        puts row['Template Code']
         template = ProcessTemplate.find_by_code(row['Template Code'])
         if template.nil?
           msg.contents << "Template Code: #{row['Template Code']}不存在"
