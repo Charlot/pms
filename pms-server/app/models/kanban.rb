@@ -73,7 +73,7 @@ class Kanban < ActiveRecord::Base
     process_entities.each { |pe|
       pe.process_parts.each { |pp|
         part = pp.part
-        data << [part.parsed_nr, part.positions(self.id,self.product_id,pe).join(",")].join(":")
+        data << [part.parsed_nr, part.positions(self.id,self.product_id,pe).join(",")].join(":") if part
       }
     }
     data.join('      ')
