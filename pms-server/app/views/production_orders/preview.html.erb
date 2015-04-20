@@ -1,7 +1,7 @@
 <%= form_tag(preview_production_orders_path,method: 'get') do%>
     <div class="row">
       <div class="col-md-2">
-        <%= select_tag(:machine_nr, options_for_select(['All','All'] << Machine.all.collect{|m|[m.nr,m.nr]},((@machine && @machine.nr)||@machine_nr)),class:'form-control',include_blank: false)%>
+        <%= select_tag(:machine_nr, options_for_select(Machine.all.collect{|m|[m.nr,m.nr]} << ['All','All'],((@machine && @machine.nr)||@machine_nr)),class:'form-control',include_blank: false)%>
       </div>
       <div class="col-md-2">
         <%= submit_tag('Preview',class:'btn btn-default')%>
