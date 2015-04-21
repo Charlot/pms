@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150421071557) do
+ActiveRecord::Schema.define(version: 20150421090942) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -152,7 +152,7 @@ ActiveRecord::Schema.define(version: 20150421071557) do
     t.integer  "oee_code_id"
     t.integer  "machine_type_id"
     t.float    "length"
-    t.float    "time"
+    t.float    "time",            default: 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
