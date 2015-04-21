@@ -19,7 +19,8 @@ module Enum
         WAREHOUSE: {NAME: PageInfo.warehouse,actions:['new','index']},
         STORAGE: {NAME: PageInfo.storage,actions:['new','index']},
         OEE_CODE: {NAME: PageInfo.oeecode,actions:['new','index']},
-        MACHINE_TYPE: {NAME: PageInfo.machinetype,actions:['new','index']}
+        MACHINE_TYPE: {NAME: PageInfo.machinetype,actions:['new','index']},
+        MACHINE_TIME_RULE: {NAME: PageInfo.machinetimerule,actions:['new','index']}
     }
 
     class<<self
