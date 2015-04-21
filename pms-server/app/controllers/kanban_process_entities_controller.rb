@@ -69,6 +69,6 @@ class KanbanProcessEntitiesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def kanban_process_entity_params
-      params.require(:kanban_process_entity).permit(:Kanban_id, :ProcessEntity_id)
+      params.require(:kanban_process_entity).permit(:kanban_id, :process_entity_id,:position)
     end
 end
