@@ -110,9 +110,12 @@ class ProductionOrderItemsController < ApplicationController
       if msg.result
         send_file msg.content
       else
+        @content = msg.to_json
         render 'shared/error'
+        #render json: msg
       end
     else
+      @content = "未找到"
       render 'shared/error'
     end
   end
@@ -123,7 +126,9 @@ class ProductionOrderItemsController < ApplicationController
       if msg.result
         send_file msg.content
       else
+        @content = msg.to_json
         render 'shared/error'
+        #render json: msg
       end
     end
   end
