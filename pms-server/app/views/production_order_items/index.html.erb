@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 <% if has_optimise_items %>
     <%= form_tag('/production_order_items/optimise', method: 'post') do %>
-        <input type="button" value="优化" class="btn btn-info"  onclick="if(confirm('optimise?')){form.submit();}"/>
+        <input type="button" value="优化" class="btn btn-info" onclick="if(confirm('optimise?')){form.submit();}"/>
     <% end %>
 <% end %>
 <hr>
@@ -24,11 +24,15 @@
         <span>机器号：
           <input type="text" name="machine_nr" value="<%= @machine_nr %>"/>
         </span>
+                <span>任务号：
+          <input type="text" name="production_order_item_nr" value="<%= @production_order_item_nr %>"/>
+        </span>
         <!--<span>状态：-->
-          <!--<%= select_tag 'state',options_for_select(production_order_item_state_options),selected: @state, include_blank: true %>-->
+        <!--<%= select_tag 'state', options_for_select(production_order_item_state_options), selected: @state, include_blank: true %>-->
         <!--</span>-->
       </div>
       <input type="hidden" name="production_order_id" value="<%= @production_order.id if @production_order %>"/>
+
       <div>
         <input type="submit" value="查找" class="btn btn-primary" name="search"/>
       </div>
@@ -64,9 +68,9 @@
   </thead>
 
   <tbody>
-  <%@production_order_items.each_with_index do |production_order_item,i|%>
+  <% @production_order_items.each_with_index do |production_order_item, i| %>
       <tr>
-        <td><%= i+1 %></td>
+        <td><%= @page*WillPaginate.per_page + i+1 %></td>
         <td><%= production_order_item.nr %></td>
         <td><%= ProductionOrderItemState.display production_order_item.state %></td>
         <td><%= production_order_item.code %></td>
