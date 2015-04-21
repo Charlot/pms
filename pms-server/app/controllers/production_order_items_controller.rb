@@ -11,6 +11,7 @@ class ProductionOrderItemsController < ApplicationController
     else
       @production_order_items = ProductionOrderItem.for_optimise.paginate(:page => params[:page])
     end
+    @page = params[:page].blank? ? 0 : (params[:page].to_i-1)
   end
 
   # GET /production_order_items/1
@@ -147,7 +148,12 @@ class ProductionOrderItemsController < ApplicationController
       @production_order_items= @production_order_items.joins(:machine).where(machines: {nr: params[:machine_nr]})
       @machine_nr=params[:machine_nr]
     end
+    if params.has_key?(:production_order_item_nr) && params[:production_order_item_nr].length>0
+      @production_order_items= @production_order_items.where("production_order_items.nr like '%#{params[:production_order_item_nr]}%'")
+      @production_order_item_nr=params[:production_order_item_nr]
+    end
     @production_order_items= @production_order_items.paginate(:page => params[:page])
+    @page = params[:page].blank? ? 0 : (params[:page].to_i-1)
     render :index
   end
 

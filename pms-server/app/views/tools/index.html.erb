@@ -1,8 +1,14 @@
-<%= render partial: 'shared/search'%>
-
+<%= render partial: 'shared/search' %>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @tools %>
+  </div>
+  <%= will_paginate @tools, :container => false %>
+</div>
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
+    <th>#</th>
     <th>Nr</th>
     <th>Resource group</th>
     <th>Part</th>
@@ -16,8 +22,9 @@
   </thead>
 
   <tbody>
-  <% @tools.each do |tool| %>
+  <% @tools.each_with_index do |tool, i| %>
       <tr>
+        <td><%= i+1 %></td>
         <td><%= tool.nr %></td>
         <td><%= tool.resource_group_tool.nr if tool.resource_group_tool %></td>
         <td><%= tool.part.nr if tool.part %></td>
