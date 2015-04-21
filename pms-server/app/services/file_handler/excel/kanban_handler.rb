@@ -11,7 +11,7 @@ module FileHandler
       def self.export q = nil
         msg = Message.new
         begin
-          tmp_file = full_tmp_path('kanbans.xlsx') unless tmp_file
+          tmp_file = full_export_path("(#{q})Kanban.xlsx") unless tmp_file
 
           p = Axlsx::Package.new
           p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|

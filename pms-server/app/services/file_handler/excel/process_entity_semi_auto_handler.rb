@@ -10,7 +10,7 @@ module FileHandler
       def self.export(q)
         msg = Message.new
         begin
-          tmp_file = full_tmp_path('process_entity_semi_auto.xlsx') unless tmp_file
+          tmp_file = full_export_path("(#{q})RoutingSemiAuto.xlsx") unless tmp_file
 
           p = Axlsx::Package.new
           p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
