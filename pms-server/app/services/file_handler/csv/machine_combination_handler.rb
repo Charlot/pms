@@ -49,6 +49,7 @@ module FileHandler
             MachineCombination.transaction do
               CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
                 row.strip
+                puts "#{row}".red
                 params = {}
                 machine = Machine.find_by_nr(row['Machine Nr'])
                 params[:machine_id] = machine.id
@@ -65,7 +66,7 @@ module FileHandler
 
                 if machine_combination
                   puts "更新".red
-                  machine_combination.update(params)
+                  #machine_combination.update(params)
                 else
                   puts "新建".red
                   MachineCombination.create(params)
@@ -80,6 +81,7 @@ module FileHandler
           end
         rescue => e
           puts e.backtrace
+          msg.result = false
           msg.content = e.message
         end
         return msg
