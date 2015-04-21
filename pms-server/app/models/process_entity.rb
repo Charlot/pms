@@ -51,7 +51,7 @@ class ProcessEntity < ActiveRecord::Base
         if cf.field_format == 'part'
           if cv
             wire = Part.find_by_id(cv.value)
-            wire.parsed_nr
+            wire.nil? ? "":wire.parsed_nr
           else
             ""
           end
