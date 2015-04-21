@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150419083942) do
+ActiveRecord::Schema.define(version: 20150421012246) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -188,6 +188,13 @@ ActiveRecord::Schema.define(version: 20150419083942) do
   end
 
   add_index "measure_units", ["code"], name: "index_measure_units_on_code", using: :btree
+
+  create_table "oee_codes", force: true do |t|
+    t.string   "nr"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "part_boms", force: true do |t|
     t.integer  "part_id"

@@ -34,6 +34,7 @@
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">基础数据<span class="caret"></span></a>
           <ul class="dropdown-menu" role="manage">
+            <li class="<%= 'active' if current_controller?({controller: 'oee_codes'})%>"><a href="<%= oee_codes_path%>">OeeCode</a></li>
             <li class="<%= 'active' if current_controller?({controller: 'departments'})%>"><a href="<%= departments_path %>">部门</a></li>
             <li class="<%= 'active' if current_controller?({controller: 'warehouses'})%>"><a href="<%= warehouses_path%>">仓库</a></li>
             <li class="<%= 'active' if current_controller?({controller: 'measure_units'})%>"><a href="<%= measure_units_path %>">单位</a></li>

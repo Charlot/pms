@@ -1,7 +1,20 @@
 <p id="notice"><%= notice %></p>
 <% if has_optimise_items %>
     <%= form_tag('/production_order_items/optimise', method: 'post') do %>
-        <input type="button" value="OPTIMISE" onclick="if(confirm('optimise?')){form.submit();}"/>
+        <input type="button" value="优化" class="btn btn-info"  onclick="if(confirm('optimise?')){form.submit();}"/>
+    <% end %>
+<% end %>
+<hr>
+<% if @optimised && has_distribute_items(@production_order) %>
+    <%= form_tag('/production_order_items/distribute', method: 'post') do %>
+        <%= hidden_field_tag :production_order_id, @production_order.id %>
+        <input type="button" value="分发" class="btn btn-info" onclick="if(confirm('distribute?')){form.submit();}"/>
+    <% end %>
+<% end %>
+<% if @production_order %>
+    <%= form_tag('/production_order_items/export', method: 'post') do %>
+        <%= hidden_field_tag :production_order_id, @production_order.id %>
+        <input type="button" value="导出" class="btn btn-default" onclick="if(confirm('export?')){form.submit();}"/>
     <% end %>
 <% end %>
 <div>
@@ -76,20 +89,7 @@
 </table>
 <br>
 
-<hr/>
-<% if @optimised && has_distribute_items(@production_order) %>
-    <%= form_tag('/production_order_items/distribute', method: 'post') do %>
-        <%= hidden_field_tag :production_order_id, @production_order.id %>
-        <input type="button" value="DISTRIBUTE" onclick="if(confirm('distribute?')){form.submit();}"/>
-    <% end %>
-    <br/>
-<% end %>
-<% if @production_order %>
-    <%= form_tag('/production_order_items/export', method: 'post') do %>
-        <%= hidden_field_tag :production_order_id, @production_order.id %>
-        <input type="button" value="EXPORT" onclick="if(confirm('export?')){form.submit();}"/>
-    <% end %>
-<% end %>
+
 <hr/>
 <div class="digg_pagination">
   <%= will_paginate @production_order_items, :container => false %>

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :oee_codes
+
   resources :warehouses do
     resources :storages
   end
