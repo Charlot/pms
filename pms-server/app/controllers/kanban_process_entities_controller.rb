@@ -43,10 +43,10 @@ class KanbanProcessEntitiesController < ApplicationController
     respond_to do |format|
       if @kanban_process_entity.update(kanban_process_entity_params)
         format.html { redirect_to @kanban_process_entity, notice: 'Kanban process entity was successfully updated.' }
-        format.json { render :show, status: :ok, location: @kanban_process_entity }
+        format.json { respond_with_bip(@kanban_process_entity) }
       else
         format.html { render :edit }
-        format.json { render json: @kanban_process_entity.errors, status: :unprocessable_entity }
+        format.json { respond_with_bip(@kanban_process_entity) }
       end
     end
   end
