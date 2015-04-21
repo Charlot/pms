@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  resources :machine_types
+
+  resources :oee_codes
+
   resources :warehouses do
     resources :storages
   end
@@ -49,6 +53,7 @@ Rails.application.routes.draw do
 
   resources :tools do
     collection do
+      get :scope_search
       match :import, to: :import, via: [:get, :post]
     end
   end

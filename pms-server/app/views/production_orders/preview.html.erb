@@ -18,6 +18,7 @@
     <th>Order</th>
     <th>Optimize Index</th>
     <th>Machine Nr</th>
+    <th>Component Length</th>
     <th>Nr</th>
     <th>Kanban Nr</th>
     <th>State</th>
@@ -40,13 +41,16 @@
       <tr>
         <td><%= item[:No]%></td>
         <th>
-          <%= best_in_place order_item,:production_order_id,as: :select,collection: ProductionOrder.all.collect { |option| [option.id,option.nr]}.to_h%>
+          <%= best_in_place order_item,:production_order_id,as: :select,collection: ProductionOrder.all.collect { |option| [option.id,option.nr]}.to_h %>
         </th>
         <th>
           <%= best_in_place order_item,:optimise_index, as: :input%>
         </th>
         <th>
-          <%= best_in_place order_item,:machine_id, as: :select,collection: Machine.all.collect{|machine| [machine.id,machine.nr]}.to_h%>
+          <%= best_in_place order_item,:machine_id, as: :select,collection: Machine.all.collect{|machine| [machine.id,machine.nr]}.to_h %>
+        </th>
+        <th>
+          <%= %>
         </th>
         <td><%= item[:ItemNr]%></td>
         <td><%= item[:KanbanNr]%></td>

@@ -17,7 +17,9 @@ module Enum
         MASTER_BOM_ITEM: {name: PageInfo.masterbomitem, actions: ['new', 'index', 'import','transport']},
         DEPARTMENT: {NAME: PageInfo.department, actions: ['new','index']},
         WAREHOUSE: {NAME: PageInfo.warehouse,actions:['new','index']},
-        STORAGE: {NAME: PageInfo.storage,actions:['new','index']}
+        STORAGE: {NAME: PageInfo.storage,actions:['new','index']},
+        OEE_CODE: {NAME: PageInfo.oeecode,actions:['new','index']},
+        MACHINE_TYPE: {NAME: PageInfo.machinetype,actions:['new','index']}
     }
 
     class<<self

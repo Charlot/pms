@@ -10,7 +10,7 @@ module FileHandler
       def self.export(q)
         msg = Message.new
         begin
-          tmp_file = full_tmp_path('process_entity_semi_auto.xlsx') unless tmp_file
+          tmp_file = full_export_path("(#{q})RoutingSemiAuto.xlsx") unless tmp_file
 
           p = Axlsx::Package.new
           p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
@@ -34,7 +34,7 @@ module FileHandler
                                 pe.template_fields.join(","),
                                 pe.parsed_wire_nr,
                                 "update"
-                            ], types: [:string, :string, :string, :float]
+                            ], types: [:string, :string, :string, :float,:string,:string]
             end
           end
           p.use_shared_strings = true
@@ -58,6 +58,12 @@ module FileHandler
           if validate_msg.result
             ProcessEntity.transaction do
               2.upto(book.last_row) do |line|
+
+                row = {}
+                HEADERS.each_with_index do |k, i|
+                  row[k] = book.cell(line, i+1).to_s.strip
+                end
+
                 process_template = ProcessTemplate.find_by_code(row['Template Code'])
                 product = Part.find_by_nr(row['Product Nr'])
 
@@ -180,7 +186,7 @@ module FileHandler
             msg.result = true
             msg.content = "导入半自动步骤成功"
           else
-            msg.result = fasle
+            msg.result = false
             msg.content = validate_msg.content
           end
         rescue => e
@@ -198,6 +204,9 @@ module FileHandler
         book.default_sheet = book.sheets.first
 
         p = Axlsx::Package.new
+
+        wire_hash = {}
+
         p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
           sheet.add_row HEADERS+['Error Msg']
           #validate file
@@ -207,7 +216,7 @@ module FileHandler
               row[k] = book.cell(line, i+1).to_s.strip
             end
 
-            mssg = validate_row(row, line)
+            mssg = validate_row(row, line,wire_hash)
             if mssg.result
               sheet.add_row row.values
             else
@@ -224,7 +233,7 @@ module FileHandler
         msg
       end
 
-      def self.validate_row(row, line)
+      def self.validate_row(row, line,wire_hash)
         msg = Message.new({result: true, contents: []})
 
         #验证总成号
@@ -235,6 +244,8 @@ module FileHandler
         end
 
         #验证模板
+        puts row
+        puts row['Template Code']
         template = ProcessTemplate.find_by_code(row['Template Code'])
         if template.nil?
           msg.contents << "Template Code: #{row['Template Code']}不存在"
@@ -244,7 +255,7 @@ module FileHandler
         pe = ProcessEntity.where({nr: row['Nr'], product_id: product.id})
 
         #验证生成的线号
-        wire = Part.where({nr: "#{row['Product Nr']}~#{row['Wire Nr']}"}, type: PartType::PRODUCT_SEMIFINISHED)
+        wire = Part.where({nr: "#{row['Product Nr']}_#{row['Wire Nr']}"}, type: PartType::PRODUCT_SEMIFINISHED)
         case row['Operator']
           when 'new', ''
             if pe.count > 0
@@ -263,6 +274,11 @@ module FileHandler
             end
         end
 
+        #Wire
+        if wire.present?
+          wire_hash[wire.nr] = 0
+        end
+
         #验证属性
         custom_fields_val = row['Template Fields'].split(',').collect { |cfv| cfv.strip }
         template.custom_fields.each_with_index do |cf, index|
@@ -273,7 +289,7 @@ module FileHandler
 
             if Part.find_by_nr(custom_fields_val[index])
               next
-            elsif Part.find_by_nr("#{product.nr}_#{custom_fields_val[index]}")
+            elsif (Part.find_by_nr("#{product.nr}_#{custom_fields_val[index]}") ||wire_hash["#{product.nr}_#{custom_fields_val[index]}"])
               next
             else
               msg.contents << "Template Fildes: #{custom_fields_val[index]} 未找到"

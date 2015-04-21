@@ -27,6 +27,11 @@
     </div>
 
     <div class="field">
+      <%= f.label :machine_type_id%><br/>
+      <%= f.select(:machine_type_id, machine_type_options, {include_blank: false}) %>
+    </div>
+
+    <div class="field">
       <%= f.label :description %><br>
       <%= f.text_field :description %>
     </div>

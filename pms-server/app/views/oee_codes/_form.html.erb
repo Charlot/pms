@@ -1,0 +1,26 @@
+<%= form_for(@oee_code) do |f| %>
+  <% if @oee_code.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@oee_code.errors.count, "error") %> prohibited this oee_code from being saved:</h2>
+
+      <ul>
+      <% @oee_code.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+    <div class="field">
+      <%= f.label :nr%>
+      <%= f.text_field :nr%>
+    </div>
+    <div class="field">
+      <%= f.label :description%>
+      <%= f.text_field :description%>
+    </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

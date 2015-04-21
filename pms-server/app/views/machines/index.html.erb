@@ -7,6 +7,7 @@
     <th>Nr</th>
     <th>Name</th>
     <th>IP</th>
+    <th>Type</th>
     <th>Description</th>
     <th>Resource group</th>
     <th>Print Time</th>
@@ -23,6 +24,9 @@
         <td><%= machine.nr %></td>
         <td><%= machine.name %></td>
         <td><%= machine.ip %></td>
+        <td>
+          <%= best_in_place machine,:machine_type_id,as: :select,collection: MachineType.all.collect{|mt| [mt.id,mt.nr]}.to_h%>
+        </td>
         <td><%= machine.description %></td>
         <td><%= machine.resource_group_machine.nr if machine.resource_group_machine %></td>
         <td><%= machine.print_time %></td>

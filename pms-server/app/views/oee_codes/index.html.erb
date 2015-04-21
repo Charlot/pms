@@ -1,0 +1,22 @@
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Nr</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @oee_codes.each do |oee_code| %>
+      <tr>
+        <td><%= oee_code.nr %></td>
+        <td><%= oee_code.description%></td>
+        <td><%= link_to '详情', oee_code %></td>
+        <td><%= link_to '编辑', edit_oee_code_path(oee_code) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
