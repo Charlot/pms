@@ -28,7 +28,7 @@ module FileHandler
                                 pe.description,
                                 pe.stand_time,
                                 pe.product_nr,
-                                pe.process_template_code,
+                                pe.process_template_code.to_i.to_s,
                                 pe.workstation_type,
                                 pe.cost_center,
                                 pe.template_fields.join(","),
