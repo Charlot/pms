@@ -14,13 +14,13 @@ module Enum
     class<<self
       @@models.each { |k, v|
         method_name = k.to_s.split("_").map(&:capitalize).join
-        puts "#{method_name}".blue
+        #puts "#{method_name}".blue
         define_method(method_name.downcase.to_sym) {
           v
         }
         @@actions.each { |action|
           m = k.to_s.split("_").map(&:capitalize).join
-          puts "#{m}_#{action}".red
+          #puts "#{m}_#{action}".red
           define_method("#{m}_#{action}".to_sym) {
             model = self.send(m.downcase)
             action_content(model, action)
