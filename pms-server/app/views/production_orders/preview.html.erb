@@ -18,14 +18,8 @@
     <th>Order</th>
     <th>Optimize Index</th>
     <th>Machine Nr</th>
-    <th>Component Length</th>
-    <th>Nr</th>
-    <th>Kanban Nr</th>
-    <th>State</th>
     <th>Product Nr</th>
     <th>Wire Nr</th>
-    <th>Quantity</th>
-    <th>Bundle</th>
     <th>Component</th>
     <th>T1</th>
     <th>M1</th>
@@ -33,6 +27,12 @@
     <th>M2</th>
     <th>S1</th>
     <th>S2</th>
+    <th>Nr</th>
+    <th>Kanban Nr</th>
+    <th>Quantity</th>
+    <th>Bundle</th>
+
+    <th>State</th>
   </tr>
   </thead>
   <tbody>
@@ -49,16 +49,8 @@
         <th>
           <%= best_in_place order_item,:machine_id, as: :select,collection: Machine.all.collect{|machine| [machine.id,machine.nr]}.to_h %>
         </th>
-        <th>
-          <%= %>
-        </th>
-        <td><%= item[:ItemNr]%></td>
-        <td><%= item[:KanbanNr]%></td>
-        <td><%= ProductionOrderItemState.display(item[:State])%></td>
-        <th><%= item[:ProductNr]%></th>
+        <td><%= item[:ProductNr]%></td>
         <th><%= item[:KanbanWireNr]%></th>
-        <td><%= item[:KanbanQuantity]%></td>
-        <td><%= item[:KanbanBundle]%></td>
         <td><%= item[:WireNr]%></td>
         <td><%= item[:Terminal1Nr]%></td>
         <td><%= item[:Tool1Nr]%></td>
@@ -66,6 +58,12 @@
         <td><%= item[:Tool2Nr]%></td>
         <td><%= item[:Seal1Nr]%></td>
         <td><%= item[:Seal2Nr]%></td>
+        <td><%= item[:ItemNr]%></td>
+        <td><%= item[:KanbanNr]%></td>
+        <td><%= item[:KanbanQuantity]%></td>
+        <td><%= item[:KanbanBundle]%></td>
+
+        <td><%= ProductionOrderItemState.display(item[:State])%></td>
       </tr>
   <%end%>
   </tbody>
