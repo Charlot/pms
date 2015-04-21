@@ -76,7 +76,7 @@ ActiveRecord::Schema.define(version: 20150421071557) do
     t.integer  "process_entity_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "order",             default: 0
+    t.integer  "position",          default: 0
   end
 
   add_index "kanban_process_entities", ["kanban_id"], name: "index_kanban_process_entities_on_kanban_id", using: :btree
