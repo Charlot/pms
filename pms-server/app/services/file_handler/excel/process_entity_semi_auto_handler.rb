@@ -72,7 +72,7 @@ module FileHandler
 
                 pe = ProcessEntity.where({product_id: product.id, nr: params[:nr]}).first
 
-                wire = Part.where({nr: "#{product.nr}_#{row['Wire Nr']}", type: PartType::PRODUCT_SEMIFINISHED}).first if row['Wire Nr']
+                wire = Part.where({nr: "#{product.nr}_#{row['Wire Nr']}", type: PartType::PRODUCT_SEMIFINISHED}).first if row['Wire Nr'].present?
 
                 case row['Operator']
                   when 'new', ''
@@ -82,14 +82,14 @@ module FileHandler
                     process_entity.save
 
                     if wire.nil?
-                      wire = Part.create({nr: "#{product.nr}_#{row['Wire Nr']}", type: PartType::PRODUCT_SEMIFINISHED}) if row['Wire Nr']
+                      wire = Part.create({nr: "#{product.nr}_#{row['Wire Nr']}", type: PartType::PRODUCT_SEMIFINISHED}) if row['Wire Nr'].present?
                     end
 
                     custom_fields_val = row['Template Fields'].split(',')
                     process_entity.custom_fields.each_with_index do |cf, index|
                       cv = nil
                       if CustomFieldFormatType.part?(cf.field_format)
-                        if cf.name == "default_wire_nr" && row['Wire Nr']
+                        if cf.name == "default_wire_nr" && row['Wire Nr'].present?
                           cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: false, value: cf.get_field_format_value("#{product.nr}_#{row['Wire Nr']}"))
                         else
 
@@ -126,7 +126,7 @@ module FileHandler
                     end
 
                     pe.update(params.except(:nr))
-                    if row['Wire Nr'] && !pe.parsed_wire_nr.blank? && pe.parsed_wire_nr != row['Wire Nr']
+                    if row['Wire Nr'].present? && !pe.parsed_wire_nr.blank? && pe.parsed_wire_nr != row['Wire Nr']
                       pe.wire.update(nr: "#{product.nr}_#{row['Wire Nr']}")
                     end
 

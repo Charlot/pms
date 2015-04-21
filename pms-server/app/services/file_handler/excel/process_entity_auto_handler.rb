@@ -38,7 +38,7 @@ module FileHandler
 
                 case row['Operator']
                   when 'new', ''
-                    part = Part.create({nr: "#{row['Product Nr']}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED})
+                    part = Part.create({nr: "#{row['Product Nr']}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED}) if row['Wire NO'].present?
                     #TODO add WorkStation Type and Cost Center
                     process_entity = ProcessEntity.new(params)
                     process_entity.process_template = process_template
