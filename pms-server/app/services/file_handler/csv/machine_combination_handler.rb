@@ -61,12 +61,13 @@ module FileHandler
                 }
 
                 puts params
-
                 machine_combination = MachineCombination.where(params).first
 
                 if machine_combination
+                  puts "更新".red
                   machine_combination.update(params)
                 else
+                  puts "新建".red
                   MachineCombination.create(params)
                 end
               end
