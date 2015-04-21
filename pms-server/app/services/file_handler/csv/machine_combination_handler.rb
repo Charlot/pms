@@ -5,6 +5,42 @@ module FileHandler
       IMPORT_HEADERS=['Machine Nr', 'W1', 'T1', 'T2', 'S1', 'S2']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
+      def self.export(user_agent)
+        msg = Message.new
+        begin
+          tmp_file = MachineCombinationHandler.full_tmp_path('机器组合.csv') unless tmp_file
+
+          CSV.open(tmp_file, 'wb', write_headers: true,
+                   headers: IMPORT_HEADERS,
+                   col_sep: SEPARATOR, encoding: MachineCombinationHandler.get_encoding(user_agent)) do |csv|
+            MachineCombination.all.each_with_index do |mc,i|
+              parts = {}
+              ['w1','t1','t2','s1','s2'].each do |p|
+                part = Part.find_by_id(mc.send(p))
+                if part
+                  parts[p] = part.nr
+                else
+                  parts[p] = nil
+                end
+              end
+              csv<<[
+                  mc.machine_nr,
+                  parts['w1'],
+                  parts['t1'],
+                  parts['t2'],
+                  parts['s1'],
+                  parts['s2']
+              ]
+            end
+          end
+          msg.result =true
+          msg.content =tmp_file
+        rescue => e
+          msg.content =e.message
+        end
+        msg
+      end
+
       def self.import(file)
         msg = Message.new
         begin
@@ -13,16 +49,26 @@ module FileHandler
             MachineCombination.transaction do
               CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
                 row.strip
+                params = {}
                 machine = Machine.find_by_nr(row['Machine Nr'])
-                machine_combination = MachineCombination.new
+                params[:machine_id] = machine.id
+
                 ['W1', 'T1', 'T2', 'S1', 'S2'].each { |header|
                   if row[header].present?
                     part = Part.find_by_nr(row[header])
-                    machine_combination.send("#{header.downcase}=", part.id)
+                    params["#{header.downcase}".to_sym] = part.id
                   end
                 }
-                machine_combination.machine = machine
-                machine_combination.save
+
+                puts params
+
+                machine_combination = MachineCombination.where(params).first
+
+                if machine_combination
+                  machine_combination.update(params)
+                else
+                  MachineCombination.create(params)
+                end
               end
             end
             msg.result = true

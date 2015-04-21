@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :machine_time_rules
+
   resources :machine_types
 
   resources :oee_codes
@@ -68,6 +70,7 @@ Rails.application.routes.draw do
 
   resources :machine_combinations do
     collection do
+      get :export
       match :import, to: :import, via: [:get, :post]
     end
   end

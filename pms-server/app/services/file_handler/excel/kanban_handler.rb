@@ -174,7 +174,12 @@ module FileHandler
                   when 'new',''
                     kanban = Kanban.new(params)
                     process_nrs = row['Process List'].split(',')
-                    kanban_process_entities = ProcessEntity.where({nr: process_nrs, product_id: product.id}).collect { |pe| KanbanProcessEntity.new({process_entity_id: pe.id}) }
+
+                    kanban_process_entities = []
+                    process_nrs.each_with_index { |pr, i|
+                      pe = ProcessEntity.where({nr:pr,product_id:product.id}).first
+                      kanban_process_entities << KanbanProcessEntity.new({process_entity_id: pe.id,position:i})
+                    }
                     kanban.kanban_process_entities = kanban_process_entities
                     kanban.state = KanbanState::RELEASED
                     kanban.save
@@ -183,8 +188,15 @@ module FileHandler
                     kanban.update(params)
                     # 暴力法，一律删除然后重新创建
                     kanban.kanban_process_entities.destroy_all
+
                     process_nrs = row['Process List'].split(',')
-                    kanban_process_entities = ProcessEntity.where({nr: process_nrs, product_id: product.id}).collect { |pe| KanbanProcessEntity.new({process_entity_id: pe.id}) }
+                    kanban_process_entities = []
+                    process_nrs.each_with_index { |pr, i|
+                      pe = ProcessEntity.where({nr:pr,product_id:product.id}).first
+                      kanban_process_entities << KanbanProcessEntity.new({process_entity_id: pe.id,position:i})
+                    }
+                    #process_nrs = row['Process List'].split(',')
+                    #kanban_process_entities = ProcessEntity.where({nr: process_nrs, product_id: product.id}).collect { |pe| KanbanProcessEntity.new({process_entity_id: pe.id}) }
                     kanban.kanban_process_entities = kanban_process_entities
                     kanban.save
                   when 'delete'

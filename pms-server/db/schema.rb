@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150421024016) do
+ActiveRecord::Schema.define(version: 20150421071557) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -76,6 +76,7 @@ ActiveRecord::Schema.define(version: 20150421024016) do
     t.integer  "process_entity_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "position",          default: 0
   end
 
   add_index "kanban_process_entities", ["kanban_id"], name: "index_kanban_process_entities_on_kanban_id", using: :btree
@@ -146,6 +147,18 @@ ActiveRecord::Schema.define(version: 20150421024016) do
   end
 
   add_index "machine_scopes", ["machine_id"], name: "index_machine_scopes_on_machine_id", using: :btree
+
+  create_table "machine_time_rules", force: true do |t|
+    t.integer  "oee_code_id"
+    t.integer  "machine_type_id"
+    t.float    "length"
+    t.float    "time"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "machine_time_rules", ["machine_type_id"], name: "index_machine_time_rules_on_machine_type_id", using: :btree
+  add_index "machine_time_rules", ["oee_code_id"], name: "index_machine_time_rules_on_oee_code_id", using: :btree
 
   create_table "machine_types", force: true do |t|
     t.string   "nr"
