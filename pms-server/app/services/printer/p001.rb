@@ -35,7 +35,7 @@ module Printer
         heads<<{Key:k,Value:head[k]}
       end
 
-      @kanban.kanban_process_entities.order(order: :asc).each do |kpe|
+      @kanban.kanban_process_entities.each do |kpe|
         pe = kpe.process_entity
         bodies =[]
         body = {
