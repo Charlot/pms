@@ -1,0 +1,33 @@
+<%= form_for(@machine_time_rule) do |f| %>
+  <% if @machine_time_rule.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@machine_time_rule.errors.count, "error") %> prohibited this machine_time_rule from being saved:</h2>
+
+      <ul>
+      <% @machine_time_rule.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :oee_code_id %><br>
+    <%= f.text_field :oee_code_id %>
+  </div>
+  <div class="field">
+    <%= f.label :machine_type_id %><br>
+    <%= f.text_field :machine_type_id %>
+  </div>
+  <div class="field">
+    <%= f.label :length %><br>
+    <%= f.text_field :length %>
+  </div>
+  <div class="field">
+    <%= f.label :time %><br>
+    <%= f.text_field :time %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

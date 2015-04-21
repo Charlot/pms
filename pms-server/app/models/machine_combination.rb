@@ -1,5 +1,7 @@
 class MachineCombination < ActiveRecord::Base
   belongs_to :machine
+  delegate :nr,to: :machine,prefix: true,allow_nil: true
+
   MATCH_INDEX={w1: 0, t1: 1, t2: 2, s1: 3, s2: 4, wd1: 5, w2: 6, t3: 7, t4: 8, s3: 9, s4: 10, wd2: 11}
   PROCESS_ENTITY_MATCH_MAP={wire_nr: 0, t1: 1, t2: 2, s1: 3, s2: 4, w2: 6, t3: 7, t4: 8, s3: 9, s4: 10}
 

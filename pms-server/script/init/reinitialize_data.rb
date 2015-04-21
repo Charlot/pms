@@ -148,7 +148,7 @@ puts "======================".yellow
 puts "8.新建Oee Code 工时代码".yellow
 puts "======================".yellow
 oee_codes.each_with_index do |oee,i|
-  if o= OeeCode.find_by_nr(oee).present?
+  if (o= OeeCode.find_by_nr(oee)).present?
     o.update({description:oee_des[i]})
   else
     o = OeeCode.create({nr:oee,description:oee_des[i]})

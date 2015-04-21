@@ -25,7 +25,12 @@ module V1
           # 加载最新Order
           get :first_wait_produce do
             if machine=Machine.find_by_nr(params[:machine_nr])
-              return ProductionOrderItemPresenter.new(ProductionOrderItem.first_wait_produce(machine)).to_check_material_order
+              order = ProductionOrderItem.first_wait_produce(machine)
+              if order
+                return ProductionOrderItemPresenter.new(order).to_check_material_order
+              else
+                return {}
+              end
             end
           end
 
