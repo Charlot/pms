@@ -40,7 +40,7 @@ module Printer
         bodies =[]
         body = {
             route_nr:pe.process_template.code,
-            route_name:pe.name,
+            route_name:pe.name.to_i.to_s,
             route_desc:pe.template_text,
             work_time_of_route:pe.stand_time,
             consume_date: kpe.id#TODO route consume data
