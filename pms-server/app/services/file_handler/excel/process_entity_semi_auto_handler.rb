@@ -64,7 +64,7 @@ module FileHandler
                   row[k] = book.cell(line, i+1).to_s.strip
                 end
 
-                process_template = ProcessTemplate.find_by_code(row['Template Code'])
+                process_template = ProcessTemplate.find_by_code(row['Template Code'].to_i.to_s)
                 product = Part.find_by_nr(row['Product Nr'])
 
                 params = {}
@@ -72,7 +72,7 @@ module FileHandler
 
                 pe = ProcessEntity.where({product_id: product.id, nr: params[:nr]}).first
 
-                wire = Part.where({nr: "#{product.nr}_#{row['Wire Nr']}", type: PartType::PRODUCT_SEMIFINISHED}).first if row['Wire Nr']
+                wire = Part.where({nr: "#{product.nr}_#{row['Wire Nr']}", type: PartType::PRODUCT_SEMIFINISHED}).first if row['Wire Nr'].present?
 
                 case row['Operator']
                   when 'new', ''
@@ -81,13 +81,15 @@ module FileHandler
                     process_entity.process_template = process_template
                     process_entity.save
 
-                    wire = Part.create({nr: "#{product.nr}_#{row['Wire Nr']}", type: PartType::PRODUCT_SEMIFINISHED}) if row['Wire Nr']
+                    if wire.nil?
+                      wire = Part.create({nr: "#{product.nr}_#{row['Wire Nr']}", type: PartType::PRODUCT_SEMIFINISHED}) if row['Wire Nr'].present?
+                    end
 
                     custom_fields_val = row['Template Fields'].split(',')
                     process_entity.custom_fields.each_with_index do |cf, index|
                       cv = nil
                       if CustomFieldFormatType.part?(cf.field_format)
-                        if cf.name == "default_wire_nr" && row['Wire Nr']
+                        if cf.name == "default_wire_nr" && row['Wire Nr'].present?
                           cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: false, value: cf.get_field_format_value("#{product.nr}_#{row['Wire Nr']}"))
                         else
 
@@ -124,7 +126,7 @@ module FileHandler
                     end
 
                     pe.update(params.except(:nr))
-                    if row['Wire Nr'] && !pe.parsed_wire_nr.blank? && pe.parsed_wire_nr != row['Wire Nr']
+                    if row['Wire Nr'].present? && !pe.parsed_wire_nr.blank? && pe.parsed_wire_nr != row['Wire Nr']
                       pe.wire.update(nr: "#{product.nr}_#{row['Wire Nr']}")
                     end
 
@@ -246,7 +248,7 @@ module FileHandler
         #验证模板
         puts row
         puts row['Template Code']
-        template = ProcessTemplate.find_by_code(row['Template Code'])
+        template = ProcessTemplate.find_by_code(row['Template Code'].to_i.to_s)
         if template.nil?
           msg.contents << "Template Code: #{row['Template Code']}不存在"
         end
@@ -255,15 +257,15 @@ module FileHandler
         pe = ProcessEntity.where({nr: row['Nr'], product_id: product.id})
 
         #验证生成的线号
-        wire = Part.where({nr: "#{row['Product Nr']}_#{row['Wire Nr']}"}, type: PartType::PRODUCT_SEMIFINISHED)
+        wire = Part.where({nr: "#{row['Product Nr']}_#{row['Wire Nr']}"}, type: PartType::PRODUCT_SEMIFINISHED).first
         case row['Operator']
           when 'new', ''
             if pe.count > 0
               msg.contents << "Nr:#{row['Nr']},步骤已存在"
             end
-            if wire
-              msg.contents << "Wire Nr:#{row['Wire Nr']},线号已存在"
-            end
+            #if wire
+            #  msg.contents << "Wire Nr:#{row['Wire Nr']},线号已存在"
+            #end
           when 'update'
             if pe.count <= 0
               msg.contents << "Nr:#{row['Nr']},步骤不存在"
