@@ -41,7 +41,7 @@
       <tr>
         <td><%= item[:No]%></td>
         <th>
-          <%= best_in_place order_item,:production_order_id,as: :select,collection: ProductionOrder.all.collect { |option| [option.id,option.nr]}.to_h %>
+          <%= best_in_place order_item,:production_order_id,as: :select,collection: production_order_bip_options(order_item.production_order).to_h %>
         </th>
         <th>
           <%= best_in_place order_item,:optimise_index, as: :input%>
