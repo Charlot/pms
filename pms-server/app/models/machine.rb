@@ -5,7 +5,7 @@ class Machine < ActiveRecord::Base
   has_many :machine_combinations
   has_many :production_order_items
 
-  delegate :nr, to: :machine_type,prefix:true ,allow_nil: true
+  delegate :nr, to: :machine_type, prefix: true, allow_nil: true
 
   OPTIMISE_TIME_MATCH_MAP={wire_nr: :wire_time, t1: :terminal_time, t2: :terminal_time,
                            s1: :seal_time, s2: :seal_time,
@@ -35,25 +35,29 @@ class Machine < ActiveRecord::Base
       current_item.update_attributes(optimise_index: current_index,
                                      state: ProductionOrderItemState::OPTIMISE_SUCCEED)
       current_index+=1
-      current_index=sort_order_item_compare(current_item, current_index)
-      sort_next_index_items(current_item, current_index)
+      current_index, compared_item=sort_order_item_compare(current_item, current_index)
+      sort_next_index_items(compared_item, current_index)
     end
   end
 
-  def sort_next_index_items(prev_item, current_index)
-    if current_item=self.for_optimise_order_items.order(machine_time: :asc).first
-      current_item.update_attributes(optimise_index: current_index,
-                                     state: ProductionOrderItemState::OPTIMISE_SUCCEED)
-      current_index+=1
-
-      current_index= sort_order_item_compare(current_item, current_index)
-      sort_next_index_items(current_item, current_index)
+  def sort_next_index_items(current_item, current_index)
+    if current_item
+      current_index, compared_item= sort_order_item_compare(current_item, current_index)
+      sort_next_index_items(compared_item, current_index)
     end
+    # if current_item=self.for_optimise_order_items.order(machine_time: :asc).first
+    #   current_item.update_attributes(optimise_index: current_index,
+    #                                  state: ProductionOrderItemState::OPTIMISE_SUCCEED)
+    #   current_index+=1
+    #
+    #   current_index= sort_order_item_compare(current_item, current_index)
+    #   sort_next_index_items(current_item, current_index)
+    # end
   end
 
   def sort_order_item_compare(current_item, current_index)
     puts '--------------------------------------------------compare'
-    items=self.for_optimise_order_items(current_item.machine_time).where.not(id: current_item.id)
+    items=self.for_optimise_order_items.where.not(id: current_item.id)
     puts "count: #{items.count}"
     puts '--------------------------------------------------compare end'
     if items.count>0
@@ -75,37 +79,67 @@ class Machine < ActiveRecord::Base
           optimise_index+=self.wire_time
         end
 
-        if current_process.value_t1 != item_process.value_t1
-          optimise_index+=self.terminal_time
-        end
+        t_arr=[current_process.value_t1, current_process.value_t2, item_process.value_t1, item_process.value_t2]
+        optimise_index+=(self.terminal_time*(t_arr.uniq.size-2))
 
-        if current_process.value_t2 != item_process.value_t2
-          optimise_index+=self.terminal_time
-        end
 
-        if current_process.value_s1 != item_process.value_s1
-          optimise_index+=self.seal_time
-        end
+        s_arr=[current_process.value_s1, current_process.value_s2, item_process.value_s1, item_process.value_s2]
+        optimise_index+=(self.seal_time*(s_arr.uniq.size-2))
 
-        if current_process.value_s2 != item_process.value_s2
-          optimise_index+=self.seal_time
-        end
-        if optimise_index==0
-          compares[item]=optimise_index
-        end
+        # if !((t1==tc1 && t2==tc2) || (t1==tc2 && t2==tc1))
+        #
+        # end
+
+        # puts '________________________________________________________________________________t1'
+        # puts "#{current_process.value_t1}:#{item_process.value_t1}".red
+        #
+        # puts '________________________________________________________________________________t1 end'
+        #
+        #
+        # if current_process.value_t1 != item_process.value_t1
+        #   optimise_index+=self.terminal_time
+        # end
+        #
+        # puts '________________________________________________________________________________t2'
+        # puts "#{current_process.value_t2}:#{item_process.value_t2}".red
+        #
+        # puts '________________________________________________________________________________t2 end'
+        #
+        # if current_process.value_t2 != item_process.value_t2
+        #   optimise_index+=self.terminal_time
+        # end
+
+        # if current_process.value_s1 != item_process.value_s1
+        #   optimise_index+=self.seal_time
+        # end
+        #
+        # if current_process.value_s2 != item_process.value_s2
+        #   optimise_index+=self.seal_time
+        # end
+        # if optimise_index==0
+        compares[item]=optimise_index
+        break if optimise_index==0
+        # end
       end
 
-      puts '88888888888888888888888888888888'
+
+      puts '88888888888888888888888888888888'.yellow
       puts compares.keys.count
-      puts compares.sort_by { |k, v| v }.to_json
-      puts '99999999999999999999999999999999'
-      compares.sort_by { |k, v| v }.flatten.select { |i| i.is_a?(ProductionOrderItem) }.each do |item|
-        item.update_attributes(optimise_index: current_index,
-                               state: ProductionOrderItemState::OPTIMISE_SUCCEED)
+      # puts compares.sort_by { |k, v| v }.to_json
+      puts '9999999999999999999999999999999'.yellow
+      compared_item=nil
+      if compared_item_arr= compares.sort_by { |k, v| v }.first
+        compared_item=compared_item_arr[0]
+        compared_item.update_attributes(optimise_index: current_index, state: ProductionOrderItemState::OPTIMISE_SUCCEED)
         current_index+=1
       end
+      # compares.sort_by { |k, v| v }.flatten.select { |i| i.is_a?(ProductionOrderItem) }.each do |item|
+      #   item.update_attributes(optimise_index: current_index,
+      #                          state: ProductionOrderItemState::OPTIMISE_SUCCEED)
+      #   current_index+=1
+      # end
     end
-    return current_index
+    return current_index, compared_item
   end
 
 
