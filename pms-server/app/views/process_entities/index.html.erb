@@ -15,12 +15,12 @@
   <tr>
     <th>Nr</th>
     <th>Name</th>
-    <th>Process Type</th>
     <th>Product Nr</th>
+    <th>生成的线号</th>
+    <th>Process Type</th>
     <th>Description</th>
     <th>Stand time</th>
     <th>Template Code</th>
-    <th>生成的线号</th>
     <th colspan="3"></th>
   </tr>
   </thead>
@@ -32,6 +32,7 @@
         <td><%= process_entity.name %></td>
         <th><%= process_entity.product_nr%></th>
         <th><%= process_entity.parsed_wire_nr%></th>
+        <Td><%= ProcessType.display(process_entity.process_template_type)%></Td>
         <td><%= process_entity.description %></td>
         <td><%= process_entity.stand_time %></td>
         <td><%= process_entity.process_template_code %></td>
