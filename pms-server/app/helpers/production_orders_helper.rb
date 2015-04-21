@@ -1,6 +1,6 @@
 module ProductionOrdersHelper
   def production_order_options
-    ProductionOrder.offset(offset).limit(4).collect { |p| [p.nr, p.id] }
+    ProductionOrder.offset(offset).limit(30).collect { |p| [p.nr, p.id] }
   end
 
   # best in place options
