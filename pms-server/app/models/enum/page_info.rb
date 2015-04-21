@@ -6,7 +6,7 @@ module Enum
                 RESOURCE_GROUP_TOOL: "模具组", TOOL: "模具", SETTING: "设置", MASTER_BOM_ITEM: 'Master BOM',
                 PART_POSITION: "Cutting原材料库存",
                 DEPARTMENT: "部门",WAREHOUSE: "仓库",STORAGE:"库位",
-                OEE_CODE: "OeeCode"
+                OEE_CODE: "OeeCode",MACHINE_TYPE: "机器类型"
     }
 
     @@actions = ["new", "index", "show", "edit", "import", "panel",'transport']

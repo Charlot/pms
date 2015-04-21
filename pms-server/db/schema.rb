@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150421012246) do
+ActiveRecord::Schema.define(version: 20150421024016) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -147,6 +147,13 @@ ActiveRecord::Schema.define(version: 20150421012246) do
 
   add_index "machine_scopes", ["machine_id"], name: "index_machine_scopes_on_machine_id", using: :btree
 
+  create_table "machine_types", force: true do |t|
+    t.string   "nr"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "machines", force: true do |t|
     t.string   "nr"
     t.string   "name"
@@ -160,8 +167,10 @@ ActiveRecord::Schema.define(version: 20150421012246) do
     t.float    "wire_time",         default: 5.0
     t.integer  "status",            default: 0
     t.string   "ip"
+    t.integer  "machine_type_id"
   end
 
+  add_index "machines", ["machine_type_id"], name: "index_machines_on_machine_type_id", using: :btree
   add_index "machines", ["nr"], name: "index_machines_on_nr", using: :btree
   add_index "machines", ["resource_group_id"], name: "index_machines_on_resource_group_id", using: :btree
 

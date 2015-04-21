@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nr:</strong>
+  <%= @machine_type.nr %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @machine_type.description %>
+</p>
+
+<%= link_to 'Edit', edit_machine_type_path(@machine_type) %> |
+<%= link_to 'Back', machine_types_path %>

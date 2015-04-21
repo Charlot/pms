@@ -18,7 +18,8 @@ module Enum
         DEPARTMENT: {NAME: PageInfo.department, actions: ['new','index']},
         WAREHOUSE: {NAME: PageInfo.warehouse,actions:['new','index']},
         STORAGE: {NAME: PageInfo.storage,actions:['new','index']},
-        OEE_CODE: {NAME: PageInfo.oeecode,actions:['new','index']}
+        OEE_CODE: {NAME: PageInfo.oeecode,actions:['new','index']},
+        MACHINE_TYPE: {NAME: PageInfo.machinetype,actions:['new','index']}
     }
 
     class<<self

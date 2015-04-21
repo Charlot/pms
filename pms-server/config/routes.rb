@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :machine_types
+
   resources :oee_codes
 
   resources :warehouses do

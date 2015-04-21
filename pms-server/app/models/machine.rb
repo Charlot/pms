@@ -1,8 +1,12 @@
 class Machine < ActiveRecord::Base
   belongs_to :resource_group_machine, foreign_key: :resource_group_id
+  belongs_to :machine_type
   has_one :machine_scope
   has_many :machine_combinations
   has_many :production_order_items
+
+  delegate :nr, to: :machine_type,prefix:true ,allow_nil: true
+
   OPTIMISE_TIME_MATCH_MAP={wire_nr: :wire_time, t1: :terminal_time, t2: :terminal_time,
                            s1: :seal_time, s2: :seal_time,
                            w2: :wire_time, t3: :terminal_time, t4: :terminal_time, s3: :seal_time, s4: :seal_time}
