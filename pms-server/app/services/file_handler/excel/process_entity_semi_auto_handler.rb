@@ -64,7 +64,7 @@ module FileHandler
                   row[k] = book.cell(line, i+1).to_s.strip
                 end
 
-                process_template = ProcessTemplate.find_by_code(row['Template Code'])
+                process_template = ProcessTemplate.find_by_code(row['Template Code'].to_i.to_s)
                 product = Part.find_by_nr(row['Product Nr'])
 
                 params = {}
@@ -81,7 +81,9 @@ module FileHandler
                     process_entity.process_template = process_template
                     process_entity.save
 
-                    wire = Part.create({nr: "#{product.nr}_#{row['Wire Nr']}", type: PartType::PRODUCT_SEMIFINISHED}) if row['Wire Nr']
+                    if wire.nil?
+                      wire = Part.create({nr: "#{product.nr}_#{row['Wire Nr']}", type: PartType::PRODUCT_SEMIFINISHED}) if row['Wire Nr']
+                    end
 
                     custom_fields_val = row['Template Fields'].split(',')
                     process_entity.custom_fields.each_with_index do |cf, index|
@@ -246,7 +248,7 @@ module FileHandler
         #验证模板
         puts row
         puts row['Template Code']
-        template = ProcessTemplate.find_by_code(row['Template Code'])
+        template = ProcessTemplate.find_by_code(row['Template Code'].to_i.to_s)
         if template.nil?
           msg.contents << "Template Code: #{row['Template Code']}不存在"
         end
@@ -261,9 +263,9 @@ module FileHandler
             if pe.count > 0
               msg.contents << "Nr:#{row['Nr']},步骤已存在"
             end
-            if wire
-              msg.contents << "Wire Nr:#{row['Wire Nr']},线号已存在"
-            end
+            #if wire
+            #  msg.contents << "Wire Nr:#{row['Wire Nr']},线号已存在"
+            #end
           when 'update'
             if pe.count <= 0
               msg.contents << "Nr:#{row['Nr']},步骤不存在"
