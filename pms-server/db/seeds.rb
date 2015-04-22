@@ -20,6 +20,19 @@ puts 'update machine time'
 Machine.update_all(print_time: 45, seal_time: 40, terminal_time: 15, wire_time: 5)
 
 puts 'Create users'
-unless user = User.find_by_user_name("admin")
-  user = User.create({user_name:"admin",password:"123456@",password_confirmation:"123456@"})
+User.transaction do
+  unless admin = User.find_by_user_name("admin")
+    admin = User.create({user_name: "admin", password: "123456@", password_confirmation: "123456@"})
+    admin.add_role :admin
+  end
+
+  unless user = User.find_by_user_name("av")
+    av = User.create({user_name: "av", password: "av123456@", password_confirmation: "av123456@"})
+    av.add_role :av
+  end
+
+  unless cutting = User.find_by_user_name("cutting")
+    cutting = User.create({user_name: "cutting", password: "cutting", password_confirmation: "cutting"})
+    cutting.add_role :cutting
+  end
 end
