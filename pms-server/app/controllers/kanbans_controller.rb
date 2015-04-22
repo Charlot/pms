@@ -12,16 +12,19 @@ class KanbansController < ApplicationController
   # GET /kanbans/1
   # GET /kanbans/1.json
   def show
+    authorize(@kanban)
   end
 
   # GET /kanbans/new
   def new
     @kanban = Kanban.new
+    authorize(@kanban)
     2.times { @kanban.kanban_process_entities.build }
   end
 
   # GET /kanbans/1/edit
   def edit
+    authorize(@kanban)
   end
 
   # POST /kanbans
@@ -29,7 +32,7 @@ class KanbansController < ApplicationController
   def create
     ActiveRecord::Base.transaction do
       @kanban = Kanban.new(kanban_params)
-
+      authorize(@kanban)
     end
     respond_to do |format|
       if @kanban.save
@@ -49,6 +52,7 @@ class KanbansController < ApplicationController
 
   #POST /kanbans/1/add_process_entities
   def add_process_entities
+    authorize(@kanban)
     msg = Message.new
     msg.result = false
     if @kanban.process_entities.ids.include?(params[:process_entities])
@@ -76,6 +80,7 @@ class KanbansController < ApplicationController
 
   # DELETE /kanbans/1/delete_process_entities
   def delete_process_entities
+    authorize(@kanban)
     msg = Message.new
     msg.result = true
 
@@ -92,6 +97,7 @@ class KanbansController < ApplicationController
   # PATCH/PUT /kanbans/1
   # PATCH/PUT /kanbans/1.json
   def update
+    authorize(@kanban)
     respond_to do |format|
       puts "======="
       puts kanban_params.to_json
@@ -109,8 +115,8 @@ class KanbansController < ApplicationController
   # DELETE /kanbans/1
   # DELETE /kanbans/1.json
   def destroy
+    authorize(@kanban)
     redirect_to kanbans_url, notice: 'State Error.' and return if @kanban.can_destroy?
-
     @kanban.destroy
     respond_to do |format|
       format.html { redirect_to kanbans_url, notice: 'Kanban was successfully destroyed.' }
@@ -121,6 +127,7 @@ class KanbansController < ApplicationController
   # POST /kanbans/1/finish_production
   # POST /kanbans/1/finish_production.json
   def finish_production
+    authorize(Kanban)
     msg = Message.new
     #end_product = {part_id: @kanban.part_id, quantity: @kanban.quantity}
     #raw_materials = []
@@ -134,15 +141,15 @@ class KanbansController < ApplicationController
   # GET /kanbans/1/history
   # GET /kanbans/1/history.json
   def history
+    authorize(@kanban)
     @versions = @kanban.versions
   end
 
   # POST /kanbans/1/release
   # POST /kanbans/1/release.json
   def release
-    #TODO Release kanban
+    authorize(@kanban)
     redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state, KanbanState::RELEASED)
-
     @kanban.without_versioning do
       if @kanban.update(state: KanbanState::RELEASED)
         redirect_to @kanban, notice: 'Kanban was successfully released.'
@@ -155,7 +162,7 @@ class KanbansController < ApplicationController
   # POST /kanbans/1/lock
   # POST /kanbans/1/lock.json
   def lock
-    #TODO Lock kanban
+    authorize(@kanban)
     redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state, KanbanState::LOCKED)
     @kanban.without_versioning do
       if @kanban.update(state: KanbanState::LOCKED)
@@ -169,7 +176,7 @@ class KanbansController < ApplicationController
   # DELETE /kanbans/1/discard
   # DELETE /kanbasn/1/discard.json
   def discard
-    #TODO Delete kanban
+    authorize(@kanban)
     redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state, KanbanState::DELETED)
     @kanban.without_versioning do
       if @kanban.update(state: KanbanState::DELETED)
@@ -197,6 +204,7 @@ class KanbansController < ApplicationController
 
   # GET /kanbans/add_routing_template
   def add_routing_template
+    authorize(Kanban)
     case params[:type].to_i
       when KanbanType::WHITE
         render partial: 'add_auto_routing'
@@ -211,6 +219,7 @@ class KanbansController < ApplicationController
 
   # GET/POST
   def import
+    authorize(Kanban)
     if request.post?
       msg = Message.new
       begin
@@ -226,6 +235,8 @@ class KanbansController < ApplicationController
   end
 
   def import_to_scan
+    @hide_sidebar = true
+    authorize(Kanban)
     if request.post?
       msg = Message.new
       begin
@@ -242,6 +253,7 @@ class KanbansController < ApplicationController
   end
 
   def import_to_get_kanban_list
+    authorize(Kanban)
     if request.post?
       msg = Message.new
       # begin
@@ -259,6 +271,7 @@ class KanbansController < ApplicationController
 
   def scan_finish
     @hide_sidebar = true
+    authorize(Kanban)
     if request.post?
       #parse code
       parsed_code = Kanban.parse_printed_2DCode(params[:code])
@@ -304,7 +317,7 @@ class KanbansController < ApplicationController
 
   # GET
   def management
-
+    authorize(Kanban)
   end
 
   # POST /kanbans/scan.json
@@ -314,6 +327,7 @@ class KanbansController < ApplicationController
     render json: {result: false, content: "输入错误"} and return unless parsed_code
 
     @kanban = Kanban.find_by_id(parsed_code[:id])
+    authorize(@kanban)
 
     #check Kanban State
     render json: {result: false, content: "看板未发布"} and return unless @kanban.state == KanbanState::RELEASED
@@ -353,6 +367,7 @@ class KanbansController < ApplicationController
   # GET /kanbans/panel.json
   def panel
     @hide_sidebar= true
+    authorize(Kanban)
   end
 
   private

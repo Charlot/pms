@@ -40,10 +40,9 @@
         <td><%= process_entity.description %></td>
         <td><%= process_entity.stand_time %></td>
         <td><%= process_entity.process_template_code %></td>
-        <td><%= ProcessType.display process_entity.process_template_type %></td>
-        <td><%= link_to '详情', process_entity %></td>
-        <td><%= link_to '编辑', edit_process_entity_path(process_entity) %></td>
-        <td><%= link_to '删除', process_entity, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <td><%= link_to '详情', process_entity ,class:'btn btn-default'%></td>
+        <td><%= link_to '编辑', edit_process_entity_path(process_entity),class:'btn btn-default' %></td>
+        <td><%= link_to '删除', process_entity, method: :delete, data: {confirm: 'Are you sure?'},class:'btn btn-default' %></td>
       </tr>
   <% end %>
   </tbody>

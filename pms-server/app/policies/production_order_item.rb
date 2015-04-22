@@ -4,27 +4,27 @@ class ProductionOrderItemPolicy<ApplicationPolicy
   end
 
   def new?
-    user.has_role? [:av,:cutting]
+    user.has_any_role? [:av,:cutting]
   end
 
   def create?
-    user.has_role? [:av,:cutting]
+    user.has_any_role? [:av,:cutting]
   end
 
   def update?
-    user.has_role? [:av,:cutting]
+    user.has_any_role? [:av,:cutting]
   end
 
   def destroy?
-    user.has_role? [:av,:cutting]
+    user.has_any_role? [:av,:cutting]
   end
 
   def optimise?
-    user.has_role? [:av,:cutting]
+    user.has_any_role? [:av,:cutting]
   end
 
   def distribute
-    user.has_role? [:av,:cutting]
+    user.has_any_role? [:av,:cutting]
   end
 
   def export
