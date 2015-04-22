@@ -15,6 +15,8 @@ class Part < ActiveRecord::Base
   has_one :tool
   validates :nr, presence: true, uniqueness: {message: 'part nr should be uniq'}
 
+  has_paper_trail
+
   scoped_search on: [:nr]
 
   after_save :update_cv_strip_length

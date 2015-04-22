@@ -19,6 +19,8 @@ class ProcessEntity < ActiveRecord::Base
 
   acts_as_customizable
 
+  has_paper_trail
+
   scoped_search on: :nr
   scoped_search in: :product, on: :nr
   scoped_search in: :custom_values, on: :value, ext_method: :find_by_parts
