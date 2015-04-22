@@ -53,6 +53,7 @@
           <ul class="dropdown-menu" role="manage">
             <li class="<%= 'active' if current_controller?({controller: 'resource_group_machines'})%>"><a href="<%= resource_group_machines_path %>">机器组</a></li>
             <li class="<%= 'active' if current_controller?({controller: 'machine_types'})%>"><a href="<%= machine_types_path%>">机器类型</a></li>
+            <li><a href="<%= machine_time_rules_path%>">机器工时规则</a></li>
             <li class="<%= 'active' if current_controller?({controller: 'machines'})%>"><a href="<%= machines_path %>">机器</a></li>
             <li class="<%= 'active' if current_controller?({controller: 'resource_group_tools'})%>"><a href="<%= resource_group_tools_path %>">模具组</a></li>
             <li class="<%= 'active' if current_controller?({controller: 'tools'})%>"><a href="<%= tools_path %>">模具</a></li>

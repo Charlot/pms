@@ -4,7 +4,7 @@ class ToolsController < ApplicationController
   # GET /tools
   # GET /tools.json
   def index
-    @tools = Tool.all
+    @tools = Tool.paginate(:page => params[:page])
   end
 
   # GET /tools/1

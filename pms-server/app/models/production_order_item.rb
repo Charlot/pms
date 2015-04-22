@@ -62,7 +62,7 @@ class ProductionOrderItem < ActiveRecord::Base
 
             item.update(machine_id: node.machine_id,
                         machine_time: Machine.find_by_id(node.machine_id).optimise_time_by_kanban(item.kanban),
-                        optimise_at: optimise_at
+                        optimise_at: optimise_at,state: ProductionOrderItemState::OPTIMISE_SUCCEED
             )
             order.production_order_items<<item
             success_count+=1

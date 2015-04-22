@@ -34,7 +34,7 @@ module FileHandler
                                 pe.template_fields.join(","),
                                 pe.parsed_wire_nr,
                                 "update"
-                            ], types: [:string, :string, :string, :float,:string,:string]
+                            ], types: [:string, :string, :string, :float, :string, :string]
             end
           end
           p.use_shared_strings = true
@@ -85,26 +85,28 @@ module FileHandler
                       wire = Part.create({nr: "#{product.nr}_#{row['Wire Nr']}", type: PartType::PRODUCT_SEMIFINISHED}) if row['Wire Nr'].present?
                     end
 
+                    #default wire nr
+                    cf = process_entity.custom_fields.where(name: "default_wire_nr").first
+
+                    if cf && row['Wire Nr'].present?
+                      cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: false, value: cf.get_field_format_value("#{product.nr}_#{row['Wire Nr']}"))
+                    end
+
+                    process_entity.custom_values << cv
+
+                    #template fields
                     custom_fields_val = row['Template Fields'].split(',')
-                    process_entity.custom_fields.each_with_index do |cf, index|
+                    process_entity.custom_fields.select { |cf| cf.name != "default_wire_nr" }.each_with_index do |cf, index|
                       cv = nil
                       if CustomFieldFormatType.part?(cf.field_format)
-                        if cf.name == "default_wire_nr" && row['Wire Nr'].present?
-                          cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: false, value: cf.get_field_format_value("#{product.nr}_#{row['Wire Nr']}"))
+                        if custom_fields_val[index].blank?
+                          next
+                        end
+
+                        if Part.find_by_nr(custom_fields_val[index])
+                          cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
                         else
-
-                          if custom_fields_val[index].blank?
-                            next
-                          end
-
-                          if Part.find_by_nr(custom_fields_val[index])
-                            cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
-                          else
-                            puts row['Template Fields']
-                            puts "===================="
-                            puts custom_fields_val[index]
-                            cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index]}"))
-                          end
+                          cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index]}"))
                         end
                       else
                         cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
@@ -132,34 +134,31 @@ module FileHandler
 
                     custom_fields_val = row['Template Fields'].split(',')
 
-                    pe.custom_fields.each_with_index { |cf, index|
+                    pe.custom_fields.select { |cf| cf.name != "default_wire_nr" }.each_with_index { |cf, index|
                       cv = pe.custom_values.where(custom_field_id: cf.id).first
 
                       if CustomFieldFormatType.part?(cf.field_format)
-                        if cf.name == "default_wire_nr"
-                        else
 
-                          if custom_fields_val[index].blank?
-                            if cv
-                              cv.destroy
-                            end
-                            next
+                        if custom_fields_val[index].blank?
+                          if cv
+                            cv.destroy
                           end
+                          next
+                        end
 
-                          if Part.find_by_nr(custom_fields_val[index])
-                            if cv
-                              cv.update(value: cf.get_field_format_value(custom_fields_val[index]))
-                            else
-                              cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
-                              pe.custom_values<<cv
-                            end
+                        if Part.find_by_nr(custom_fields_val[index])
+                          if cv
+                            cv.update(value: cf.get_field_format_value(custom_fields_val[index]))
                           else
-                            if cv
-                              cv.update(value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index]}"))
-                            else
-                              cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index]}"))
-                              pe.custom_values<<cv
-                            end
+                            cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
+                            pe.custom_values<<cv
+                          end
+                        else
+                          if cv
+                            cv.update(value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index]}"))
+                          else
+                            cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value("#{product.nr}_#{custom_fields_val[index]}"))
+                            pe.custom_values<<cv
                           end
                         end
                       else
@@ -218,7 +217,7 @@ module FileHandler
               row[k] = book.cell(line, i+1).to_s.strip
             end
 
-            mssg = validate_row(row, line,wire_hash)
+            mssg = validate_row(row, line, wire_hash)
             if mssg.result
               sheet.add_row row.values
             else
@@ -235,7 +234,7 @@ module FileHandler
         msg
       end
 
-      def self.validate_row(row, line,wire_hash)
+      def self.validate_row(row, line, wire_hash)
         msg = Message.new({result: true, contents: []})
 
         #验证总成号
@@ -263,9 +262,9 @@ module FileHandler
             if pe.count > 0
               msg.contents << "Nr:#{row['Nr']},步骤已存在"
             end
-            #if wire
-            #  msg.contents << "Wire Nr:#{row['Wire Nr']},线号已存在"
-            #end
+          #if wire
+          #  msg.contents << "Wire Nr:#{row['Wire Nr']},线号已存在"
+          #end
           when 'update'
             if pe.count <= 0
               msg.contents << "Nr:#{row['Nr']},步骤不存在"
@@ -282,8 +281,21 @@ module FileHandler
         end
 
         #验证属性
-        custom_fields_val = row['Template Fields'].split(',').collect { |cfv| cfv.strip }
-        template.custom_fields.each_with_index do |cf, index|
+        custom_fields_val = row['Template Fields'].split(',', -1).collect { |cfv| cfv.strip }
+
+        cfs = template.custom_fields.select { |cf| cf.name != "default_wire_nr" }
+
+        puts "======".red
+        puts cfs.count
+        puts row['Template Fields']
+        puts custom_fields_val.count
+        puts custom_fields_val.to_json
+
+        if cfs.count != custom_fields_val.count
+          msg.contents << "Template Fildes: 逗号数量错误!"
+        end
+
+        template.custom_fields.select { |cf| cf.name != "default_wire_nr" }.each_with_index do |cf, index|
           if CustomFieldFormatType.part?(cf.field_format)
             if cf.name == "default_wire_nr" || custom_fields_val[index].blank?
               next

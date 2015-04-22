@@ -4,7 +4,7 @@ class ProductionOrdersController < ApplicationController
   # GET /production_orders
   # GET /production_orders.json
   def index
-    @production_orders = ProductionOrder.all
+    @production_orders = ProductionOrder.paginate(:page => params[:page])
   end
 
   # GET /production_orders/1
