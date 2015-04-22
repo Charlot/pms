@@ -17,15 +17,18 @@ class PartsController < ApplicationController
   # GET /parts/1
   # GET /parts/1.json
   def show
+    authorize @part
   end
 
   # GET /parts/new
   def new
     @part = Part.new
+    authorize @part
   end
 
   # GET /parts/1/edit
   def edit
+    authorize @part
   end
 
   # POST /parts
@@ -52,7 +55,7 @@ class PartsController < ApplicationController
   # PATCH/PUT /parts/1
   # PATCH/PUT /parts/1.json
   def update
-    #authorize @part,:update?
+    authorize @part
     respond_to do |format|
       if @part.update(part_params)
         format.html { redirect_to @part, notice: 'Part was successfully updated.' }

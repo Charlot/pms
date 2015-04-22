@@ -1,5 +1,14 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: {
+                 sessions: 'users/sessions'
+                   }
+
+  resources :users do
+    collection do
+      get :scope_search
+    end
+  end
+
   resources :machine_time_rules
 
   resources :machine_types

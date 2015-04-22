@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :authentication_keys => [:user_name]
 
+  scoped_search on: :name
+
   def ensure_autnehtication_token!
     if authentication_token.blank?
       self.authentication_token = generate_authentication_token
@@ -14,6 +16,10 @@ class User < ActiveRecord::Base
 
   def email_required?
     false
+  end
+
+  def role_name
+    roles.collect{|role| role.name}
   end
 
   private

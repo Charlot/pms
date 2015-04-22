@@ -5,10 +5,14 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session, only: Proc.new {|c| c.request.format.json?}
   include ApplicationHelper
 
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
   before_filter :set_model
   before_filter :configure_permitted_parameters, if: :devise_controller?
   before_filter :authenticate_user_from_token!
   before_filter :authenticate_user!
+
+  after_action :verify_authorized, :except => :index
 
   layout :layout_by_resource
 
@@ -42,12 +46,17 @@ class ApplicationController < ActionController::Base
   private
   def authenticate_user_from_token!
     # Need to pass email and token every request
-    user_email = params[:user_email].presence
-    user = user_email && User.find_by_email(user_email)
+    user_name = params[:user_name].presence
+    user = user_name && User.find_by_user_name(user_name)
 
     if user && Devise.secure_compare(user.authentication_token, params[:user_token])
       sign_in user, store: false
     end
+  end
+
+  def user_not_authorized
+    flash[:alert] = "You are not authorized to perform this action."
+    redirect_to(request.referrer || root_path)
   end
 
 end

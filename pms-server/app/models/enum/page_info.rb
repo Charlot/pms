@@ -7,7 +7,8 @@ module Enum
                 PART_POSITION: "Cutting原材料库存",
                 DEPARTMENT: "部门",WAREHOUSE: "仓库",STORAGE:"库位",
                 OEE_CODE: "OeeCode",MACHINE_TYPE: "机器类型",
-                MACHINE_TIME_RULE: "机器工时规则"
+                MACHINE_TIME_RULE: "机器工时规则",
+                USER: "用户"
     }
 
     @@actions = ["new", "index", "show", "edit", "import", "panel",'transport']

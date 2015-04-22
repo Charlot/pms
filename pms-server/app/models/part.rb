@@ -59,58 +59,18 @@ class Part < ActiveRecord::Base
       kanbans = []
       puts "#{self.nr}".red
 
-<<<<<<< HEAD
-      #先找半自动的线
-=======
->>>>>>> 2e6335a6fd585fa06056c4a79261c5a2c15ae768
       kanbans = Kanban.joins(process_entities: :process_parts).where(
           "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND process_parts.part_id = ?",KanbanType::BLUE,kanban_id,product_id,self.id
       ).distinct
 
-<<<<<<< HEAD
-      #再找全自动的线
-=======
->>>>>>> 2e6335a6fd585fa06056c4a79261c5a2c15ae768
       if kanbans.count <=0
         kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
             "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",KanbanType::WHITE,kanban_id,product_id,self.id
         ).distinct
-<<<<<<< HEAD
       end
 
-=begin
-      case process_entity.process_template.wire_from
-        when WireFromType::SEMI_AUTO
-          puts "#{process_entity.nr},#{process_entity.process_template.wire_from},SEMI_AUTO".red
-          kanbans = Kanban.joins(process_entities: :process_parts).where(
-              "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND process_parts.part_id = ?",KanbanType::BLUE,kanban_id,product_id,self.id
-          ).distinct
-        when WireFromType::AUTO
-          puts "#{process_entity.nr},#{process_entity.process_template.wire_from},AUTO".red
-          kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
-              "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",KanbanType::WHITE,kanban_id,product_id,self.id
-          ).distinct
-        else
-      end
-=end
-=======
-      end
-
-      # case process_entity.process_template.wire_from
-      #   when WireFromType::SEMI_AUTO
-      #     puts "#{process_entity.nr},#{process_entity.process_template.wire_from},SEMI_AUTO".red
-      #     kanbans = Kanban.joins(process_entities: :process_parts).where(
-      #         "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND process_parts.part_id = ?",KanbanType::BLUE,kanban_id,product_id,self.id
-      #     ).distinct
-      #   when WireFromType::AUTO
-      #     puts "#{process_entity.nr},#{process_entity.process_template.wire_from},AUTO".red
-      #     kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
-      #         "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",KanbanType::WHITE,kanban_id,product_id,self.id
-      #     ).distinct
-      #   else
-      # end
->>>>>>> 2e6335a6fd585fa06056c4a79261c5a2c15ae768
       puts "#{kanbans.collect{|k| k.nr}.join(',')}".red
+
       kanbans.collect{|k|k.des_storage}
     end
   end
