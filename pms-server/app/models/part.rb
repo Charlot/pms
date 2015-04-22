@@ -58,19 +58,30 @@ class Part < ActiveRecord::Base
     else
       kanbans = []
       puts "#{self.nr}".red
-      case process_entity.process_template.wire_from
-        when WireFromType::SEMI_AUTO
-          puts "#{process_entity.nr},#{process_entity.process_template.wire_from},SEMI_AUTO".red
-          kanbans = Kanban.joins(process_entities: :process_parts).where(
-              "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND process_parts.part_id = ?",KanbanType::BLUE,kanban_id,product_id,self.id
-          ).distinct
-        when WireFromType::AUTO
-          puts "#{process_entity.nr},#{process_entity.process_template.wire_from},AUTO".red
-          kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
-              "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",KanbanType::WHITE,kanban_id,product_id,self.id
-          ).distinct
-        else
+
+      kanbans = Kanban.joins(process_entities: :process_parts).where(
+          "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND process_parts.part_id = ?",KanbanType::BLUE,kanban_id,product_id,self.id
+      ).distinct
+
+      if kanbans.count <=0
+        kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
+            "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",KanbanType::WHITE,kanban_id,product_id,self.id
+        ).distinct
       end
+
+      # case process_entity.process_template.wire_from
+      #   when WireFromType::SEMI_AUTO
+      #     puts "#{process_entity.nr},#{process_entity.process_template.wire_from},SEMI_AUTO".red
+      #     kanbans = Kanban.joins(process_entities: :process_parts).where(
+      #         "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND process_parts.part_id = ?",KanbanType::BLUE,kanban_id,product_id,self.id
+      #     ).distinct
+      #   when WireFromType::AUTO
+      #     puts "#{process_entity.nr},#{process_entity.process_template.wire_from},AUTO".red
+      #     kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
+      #         "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",KanbanType::WHITE,kanban_id,product_id,self.id
+      #     ).distinct
+      #   else
+      # end
       puts "#{kanbans.collect{|k| k.nr}.join(',')}".red
       kanbans.collect{|k|k.des_storage}
     end

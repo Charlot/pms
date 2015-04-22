@@ -10,39 +10,43 @@ module FileHandler
 
       def self.import_to_get_kanban_list(file)
         msg = Message.new
-        begin
-          list = []
-          validate_msg = validate_import(file)
-=begin
-          if validate_msg.result
-            CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
-              row.strip
-              product = Part.find_by_nr(row['Product Nr'])
-
-                route_list = row['Process List'].split(',')
-                puts "================="
-                pes = []
-                ProcessEntity.where(nr:route_list,product_id:product.id).each{|pe| pes << pe.id}
-                kanbans = Kanban.joins(:kanban_process_entities).where(kanban_process_entities:{process_entity_id:pes}).distinct
-                if kanbans.count != 1
-                  puts "!!!!!!!!!!!!!!!!!!!!!!!!!".red
-                  puts "#{kanbans.collect{|k|k.nr}.join(",")}".red
-                else
-                  list << kanbans.first.nr
-                end
+        # begin
+        list = []
+        # validate_msg = validate_import(file)
+        # if validate_msg.result
+        CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+          row.strip
+          product = Part.find_by_nr(row['Product Nr'])
+          wire=Part.find_by_nr("#{row['Product Nr']}_#{row['Wire Nr']}")
+          # if !product.nil? && !wire.nil?
+            puts '-------------------------------------------'.red
+            Kanban.search_for("#{row['Wire Nr']} #{row['Product Nr']}").each do |k|
+              list<<k.nr
             end
-            msg.result = false
-            puts list.count
-            msg.content = list.join(";")
-          else
-            msg.result = false
-            msg.content = validate_msg.content
-          end
-=end
-        rescue => e
-          puts e.backtrace
-          msg.content = e.message
+          # end
+          # route_list = row['Process List'].split(',')
+          # puts "================="
+          # pes = []
+          # ProcessEntity.where(nr:route_list,product_id:product.id).each{|pe| pes << pe.id}
+          # kanbans = Kanban.joins(:kanban_process_entities).where(kanban_process_entities:{process_entity_id:pes}).distinct
+          # if kanbans.count != 1
+          #   puts "!!!!!!!!!!!!!!!!!!!!!!!!!".red
+          #   puts "#{kanbans.collect{|k|k.nr}.join(",")}".red
+          # else
+          #   list << kanbans.first.nr
+          # end
         end
+        msg.result = true
+        puts list.count
+        msg.content = list.join(";")
+        # else
+        #   msg.result = false
+        #   msg.content = validate_msg.content
+        # end
+        # rescue => e
+        #   puts e.backtrace
+        #   msg.content = e.message
+        # end
         return msg
       end
 

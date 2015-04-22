@@ -44,6 +44,8 @@ module Enum
           "导入#{model}"
         when 'state_export'
           "状态导出#{model}"
+        when 'import_to_get_kanban_list'
+          "获取看板列表"
         when "panel"
           "#{model}控制面板"
         when 'transport'

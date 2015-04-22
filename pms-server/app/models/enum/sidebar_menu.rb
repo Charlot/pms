@@ -1,7 +1,7 @@
 module Enum
   class SidebarMenu
     @@sidebar_menu = {
-        KANBAN: {name: PageInfo.kanban, actions: ["new", "index", "import"]},
+        KANBAN: {name: PageInfo.kanban, actions: ["new", "index", "import",'import_to_get_kanban_list']},
         PRODUCTION_ORDER: {name: PageInfo.productionorder, actions: ["new", "index"]},
         PRODUCTION_ORDER_ITEM: {name: PageInfo.productionorderitem, actions: ["new", "index","state_export"]},
         PART: {name: PageInfo.part, actions: ["new", "index", "import"]},

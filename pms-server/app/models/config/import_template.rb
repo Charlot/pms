@@ -9,6 +9,7 @@ class ImportTemplate
   KANBAN_CSV_TEMPLATE='kanban.csv'
   KANBAN_EXCEL_TEMPLATE='kanban.xlsx'
   KANBAN_SCAN_EXCEL_TEMPLATE='kanban_scan.xlsx'
+  KANBAN_GET_LIST_CSV_TEMPLATE='get_kanban_list.csv'
   MACHINE_CSV_TEMPLATE='machine.csv'
   MACHINE_COMBINATION_CSV_TEMPLATE='machine_combination.csv'
   TOOL_CSV_TEMPLATE='tool.csv'
