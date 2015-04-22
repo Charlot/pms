@@ -1,18 +1,18 @@
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
-  #include Pundit
+  include Pundit
   protect_from_forgery with: :null_session, only: Proc.new {|c| c.request.format.json?}
   include ApplicationHelper
 
-  #rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   before_filter :set_model
   before_filter :configure_permitted_parameters, if: :devise_controller?
   before_filter :authenticate_user_from_token!
   before_filter :authenticate_user!
 
-  #after_action :verify_authorized, :except => :index
+  after_action :verify_authorized, :except => :index
 
   layout :layout_by_resource
 
