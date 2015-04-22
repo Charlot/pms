@@ -18,6 +18,7 @@
     <th>Order</th>
     <th>Optimize Index</th>
     <th>Machine Nr</th>
+    <th>State</th>
     <th>Product Nr</th>
     <th>Wire Nr</th>
     <th>Component</th>
@@ -32,7 +33,6 @@
     <th>Quantity</th>
     <th>Bundle</th>
 
-    <th>State</th>
   </tr>
   </thead>
   <tbody>
@@ -49,6 +49,7 @@
         <th>
           <%= best_in_place order_item,:machine_id, as: :select,collection: Machine.all.collect{|machine| [machine.id,machine.nr]}.to_h %>
         </th>
+        <td><%= best_in_place order_item,:state, as: :select,collection:ProductionOrderItemState.to_select.collect{|s| [s.value,s.display]}.to_h%></td>
         <td><%= item[:ProductNr]%></td>
         <th><%= item[:KanbanWireNr]%></th>
         <td><%= item[:WireNr]%></td>
@@ -62,8 +63,6 @@
         <td><%= item[:KanbanNr]%></td>
         <td><%= item[:KanbanQuantity]%></td>
         <td><%= item[:KanbanBundle]%></td>
-
-        <td><%= ProductionOrderItemState.display(item[:State])%></td>
       </tr>
   <%end%>
   </tbody>

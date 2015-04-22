@@ -93,6 +93,11 @@ module FileHandler
                       process_entity.custom_values << cv
                     end
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 2e6335a6fd585fa06056c4a79261c5a2c15ae768
                     #template fields
                     custom_fields_val = row['Template Fields'].split(',')
                     process_entity.custom_fields.select { |cf| cf.name != "default_wire_nr" }.each_with_index do |cf, index|
