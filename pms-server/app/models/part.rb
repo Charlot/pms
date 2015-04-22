@@ -58,6 +58,20 @@ class Part < ActiveRecord::Base
     else
       kanbans = []
       puts "#{self.nr}".red
+
+      #先找半自动的线
+      kanbans = Kanban.joins(process_entities: :process_parts).where(
+          "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND process_parts.part_id = ?",KanbanType::BLUE,kanban_id,product_id,self.id
+      ).distinct
+
+      #再找全自动的线
+      if kanbans.count <=0
+        kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
+            "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",KanbanType::WHITE,kanban_id,product_id,self.id
+        ).distinct
+      end
+
+=begin
       case process_entity.process_template.wire_from
         when WireFromType::SEMI_AUTO
           puts "#{process_entity.nr},#{process_entity.process_template.wire_from},SEMI_AUTO".red
@@ -71,6 +85,7 @@ class Part < ActiveRecord::Base
           ).distinct
         else
       end
+=end
       puts "#{kanbans.collect{|k| k.nr}.join(',')}".red
       kanbans.collect{|k|k.des_storage}
     end

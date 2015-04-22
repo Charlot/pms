@@ -83,3 +83,6 @@ gem 'devise'
 
 # Role
 gem 'rolify'
+
+# Authorization
+gem 'pundit'
