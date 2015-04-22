@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150413080347) do
+ActiveRecord::Schema.define(version: 20150422070738) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -76,6 +76,7 @@ ActiveRecord::Schema.define(version: 20150413080347) do
     t.integer  "process_entity_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "position",          default: 0
   end
 
   add_index "kanban_process_entities", ["kanban_id"], name: "index_kanban_process_entities_on_kanban_id", using: :btree
@@ -147,6 +148,25 @@ ActiveRecord::Schema.define(version: 20150413080347) do
 
   add_index "machine_scopes", ["machine_id"], name: "index_machine_scopes_on_machine_id", using: :btree
 
+  create_table "machine_time_rules", force: true do |t|
+    t.integer  "oee_code_id"
+    t.integer  "machine_type_id"
+    t.float    "length"
+    t.float    "time",            default: 0.0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "machine_time_rules", ["machine_type_id"], name: "index_machine_time_rules_on_machine_type_id", using: :btree
+  add_index "machine_time_rules", ["oee_code_id"], name: "index_machine_time_rules_on_oee_code_id", using: :btree
+
+  create_table "machine_types", force: true do |t|
+    t.string   "nr"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "machines", force: true do |t|
     t.string   "nr"
     t.string   "name"
@@ -160,8 +180,10 @@ ActiveRecord::Schema.define(version: 20150413080347) do
     t.float    "wire_time",         default: 5.0
     t.integer  "status",            default: 0
     t.string   "ip"
+    t.integer  "machine_type_id"
   end
 
+  add_index "machines", ["machine_type_id"], name: "index_machines_on_machine_type_id", using: :btree
   add_index "machines", ["nr"], name: "index_machines_on_nr", using: :btree
   add_index "machines", ["resource_group_id"], name: "index_machines_on_resource_group_id", using: :btree
 
@@ -188,6 +210,13 @@ ActiveRecord::Schema.define(version: 20150413080347) do
   end
 
   add_index "measure_units", ["code"], name: "index_measure_units_on_code", using: :btree
+
+  create_table "oee_codes", force: true do |t|
+    t.string   "nr"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "part_boms", force: true do |t|
     t.integer  "part_id"
@@ -278,6 +307,7 @@ ActiveRecord::Schema.define(version: 20150413080347) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "wire_from",   default: 0
   end
 
   add_index "process_templates", ["code"], name: "index_process_templates_on_code", using: :btree
@@ -336,6 +366,17 @@ ActiveRecord::Schema.define(version: 20150413080347) do
   add_index "resource_groups", ["nr"], name: "index_resource_groups_on_nr", using: :btree
   add_index "resource_groups", ["type"], name: "index_resource_groups_on_type", using: :btree
 
+  create_table "roles", force: true do |t|
+    t.string   "name"
+    t.integer  "resource_id"
+    t.string   "resource_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", using: :btree
+  add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
+
   create_table "settings", force: true do |t|
     t.string   "name"
     t.string   "value"
@@ -369,6 +410,32 @@ ActiveRecord::Schema.define(version: 20150413080347) do
   add_index "tools", ["nr"], name: "index_tools_on_nr", using: :btree
   add_index "tools", ["part_id"], name: "index_tools_on_part_id", using: :btree
   add_index "tools", ["resource_group_id"], name: "index_tools_on_resource_group_id", using: :btree
+
+  create_table "users", force: true do |t|
+    t.string   "email",                  default: ""
+    t.string   "encrypted_password",     default: "", null: false
+    t.string   "user_name",              default: ""
+    t.string   "name",                   default: ""
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "users_roles", id: false, force: true do |t|
+    t.integer "user_id"
+    t.integer "role_id"
+  end
+
+  add_index "users_roles", ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id", using: :btree
 
   create_table "versions", force: true do |t|
     t.string   "item_type",  null: false

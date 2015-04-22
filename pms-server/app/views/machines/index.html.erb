@@ -1,5 +1,6 @@
 
-<%= link_to '导入机器规则',import_machine_combinations_path%>
+<%= link_to '导入机器规则',import_machine_combinations_path, class:'btn btn-default'%>
+<%= link_to '导出机器规则',export_machine_combinations_path,data:{confirm:"确定？"},class:'btn btn-default'%>
 <p id="notice"><%= notice %></p>
 <table class="table table-bordered table-striped table-hover">
   <thead>
@@ -7,6 +8,7 @@
     <th>Nr</th>
     <th>Name</th>
     <th>IP</th>
+    <th>Type</th>
     <th>Description</th>
     <th>Resource group</th>
     <th>Print Time</th>
@@ -23,6 +25,9 @@
         <td><%= machine.nr %></td>
         <td><%= machine.name %></td>
         <td><%= machine.ip %></td>
+        <td>
+          <%= best_in_place machine,:machine_type_id,as: :select,collection: MachineType.all.collect{|mt| [mt.id,mt.nr]}.to_h%>
+        </td>
         <td><%= machine.description %></td>
         <td><%= machine.resource_group_machine.nr if machine.resource_group_machine %></td>
         <td><%= machine.print_time %></td>

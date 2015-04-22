@@ -27,7 +27,7 @@ module Printer
           kanban_2dcode:@kanban.printed_2DCode,
           #TODO kanban remark
           remark1:@kanban.remark,
-          remark2:@kanban.gathered_material+"\\n"+@kanban.remark2
+          remark2:@kanban.gathered_material+"      "+@kanban.remark2
       }
 
       heads = []
@@ -40,10 +40,9 @@ module Printer
         bodies =[]
         body = {
             route_nr:pe.process_template.code,
-            route_name:pe.name,
+            route_name:pe.name.to_i.to_s,
             route_desc:pe.template_text,
             work_time_of_route:pe.stand_time,
-            #Consume Date是什么东西？
             consume_date: kpe.id#TODO route consume data
         }
 

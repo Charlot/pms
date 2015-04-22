@@ -15,6 +15,8 @@ class Part < ActiveRecord::Base
   has_one :tool
   validates :nr, presence: true, uniqueness: {message: 'part nr should be uniq'}
 
+  has_paper_trail
+
   scoped_search on: [:nr]
 
   after_save :update_cv_strip_length
@@ -51,32 +53,34 @@ class Part < ActiveRecord::Base
   end
 
   #这表示一个Part可能会被送往的位置
-  def positions(kanban_id,product_id)
+  def positions(kanban_id,product_id,process_entity)
     if PartType.is_material?(self.type)
       pp = PartPosition.find_by_part_id(self.id)
       pp.nil? ? ["N/A"]:[pp.storage]
     else
-      #ProcessPart.where(part_id:self.id).each{|pp|
-      #  puts pp.part.nr
-      #}
+      kanbans = []
+      puts "#{self.nr}".red
 
-      #ProcessEntity.joins(:custom_values).where({custom_values: {value:self.id}}).each{|pe|
-      #  puts pe.nr
-      #}
+      kanbans = Kanban.joins(process_entities: :process_parts).where(
+          "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND process_parts.part_id = ?",KanbanType::BLUE,kanban_id,product_id,self.id
+      ).distinct
 
-      #puts "=============".red
-      kanbans = Kanban.joins(process_entities: :process_parts)
-          .where("process_parts.part_id = ? AND kanbans.ktype != ? AND kanbans.des_storage is not NULL AND kanbans.id != ?",self.id,KanbanType::WHITE,kanban_id)
-      kanbans.each{|k| puts "#{k.nr}".red}
-      #puts "=============".red
+      if kanbans.count <=0
+        kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
+            "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",KanbanType::WHITE,kanban_id,product_id,self.id
+        ).distinct
+      end
+
+      puts "#{kanbans.collect{|k| k.nr}.join(',')}".red
+
       kanbans.collect{|k|k.des_storage}
-      #[]
     end
   end
 
   def parsed_nr
     if type == PartType::PRODUCT_SEMIFINISHED && nr.include?("_")
-      nr.split("_").last
+      nrs = nr.split("_")
+      (nrs-[nrs.first]).join("_")
     else
       nr
     end

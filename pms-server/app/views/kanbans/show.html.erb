@@ -47,14 +47,6 @@
               <ins><%= @kanban.safety_stock %></ins>
             </li>
             <li class="list-group-item">
-              <label><%= KanbanDesc::SOURCE_WAREHOUSE %>:</label>
-              <ins><%= @kanban.source_warehouse %></ins>
-            </li>
-            <li class="list-group-item">
-              <label><%= KanbanDesc::SOURCE_STORAGE %>:</label>
-              <ins><%= @kanban.source_storage %></ins>
-            </li>
-            <li class="list-group-item">
               <label><%= KanbanDesc::DES_WAREHOUSE %>:</label>
               <ins><%= @kanban.des_warehouse %></ins>
             </li>
@@ -99,8 +91,10 @@
     </div>
     <div class="panel-body">
       <ul class="list-group">
-        <% @kanban.process_entities.each do |pe| %>
-            <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
+        <% @kanban.kanban_process_entities.each do |kpe| %>
+            <label>顺序:</label>
+            <%= best_in_place kpe,:position ,as: :input%>
+            <%= render partial: 'process_entities/simple', locals: {process_entity: kpe.process_entity} %>
         <% end %>
       </ul>
     </div>

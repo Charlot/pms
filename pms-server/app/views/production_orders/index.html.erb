@@ -1,7 +1,13 @@
-
-    <table class="table table-bordered table-striped table-hover">
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @production_orders %>
+  </div>
+  <%= will_paginate @production_orders, :container => false %>
+</div>
+<table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
+    <th>#</th>
     <th>Nr</th>
     <th>State</th>
     <th colspan="3"></th>
@@ -9,8 +15,9 @@
   </thead>
 
   <tbody>
-  <% @production_orders.each do |production_order| %>
+  <% @production_orders.each_with_index do |production_order, i| %>
       <tr>
+        <td><%= i+1 %></td>
         <td><%= production_order.nr %></td>
         <td><%= production_order.state %></td>
         <td><%= link_to 'Show', production_order_production_order_items_path(production_order) %></td>

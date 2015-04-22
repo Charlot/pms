@@ -6,7 +6,7 @@ class Kanban < ActiveRecord::Base
 
   #belongs_to :part
   belongs_to :product, class_name: 'Part'
-  has_many :kanban_process_entities, dependent: :destroy
+  has_many :kanban_process_entities, -> { order('position ASC') }, dependent: :destroy
   has_many :process_entities, through: :kanban_process_entities
   has_many :custom_values, through: :process_entities
   delegate :nr, to: :part, prefix: true, allow_nil: true
@@ -16,8 +16,10 @@ class Kanban < ActiveRecord::Base
 
   accepts_nested_attributes_for :kanban_process_entities, allow_destroy: true
 
+  scoped_search on: :nr
   scoped_search in: :product,on: :nr
   scoped_search in: :process_entities, on: :nr
+  scoped_search in: :process_entities, on: :nr, ext_method: :find_by_wire_nr
 
   #before_create :generate_id
 
@@ -26,6 +28,23 @@ class Kanban < ActiveRecord::Base
   # after_update :update_part_bom
 
   has_paper_trail
+
+  def self.find_by_wire_nr key,operator,value
+    parts = Part.where("nr LIKE '%_#{value}%'").map(&:id)
+    if parts.count > 0
+      process = ProcessEntity.joins(custom_values: :custom_field).where(
+          "custom_values.value IN (#{parts.join(',')}) AND custom_fields.field_format = 'part'"
+      ).map(&:id)
+      if process.count > 0
+        kanbans = Kanban.joins(:process_entities).where("process_entities.id IN(#{process.join(',')})").map(&:id)
+      end
+      if kanbans.count > 0
+        return {conditions: "kanbans.id IN(#{kanbans.join(',')})"}
+      end
+    else
+      {conditions: "kanbans.nr like '%#{value}%'"}
+    end
+  end
 
   def create_part_bom
     #TODO Kanban Update Part Bom
@@ -54,10 +73,10 @@ class Kanban < ActiveRecord::Base
     process_entities.each { |pe|
       pe.process_parts.each { |pp|
         part = pp.part
-        data << [part.parsed_nr, part.positions(self.id,self.product_id).join(",")].join(":")
+        data << [part.parsed_nr, part.positions(self.id,self.product_id,pe).join(",")].join(":") if part
       }
     }
-    data.join('\n')
+    data.join('      ')
   end
 
   def process_list
@@ -71,7 +90,7 @@ class Kanban < ActiveRecord::Base
   end
 
   def can_update?
-    if [KanbanState::INIT, KanbanState::LOCKED].include?(state)
+    if [KanbanState::INIT, KanbanState::LOCKED, KanbanState::RELEASED].include?(state)
       true
     else
       false
@@ -179,7 +198,7 @@ class Kanban < ActiveRecord::Base
 
   # part_nr,product_nr
   def self.search(part_nr="", product_nr="")
-    joins(:product).where('parts.nr LIKE ?', "%#{product_nr}%")
+    kanbans = joins(:product).where('parts.nr LIKE ?', "%#{product_nr}%")
   end
 
   #

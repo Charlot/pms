@@ -81,6 +81,16 @@ class MachineCombinationsController < ApplicationController
     end
   end
 
+  # GET
+  def export
+    msg = FileHandler::Csv::MachineCombinationHandler.export(request.user_agent.downcase)
+    if msg.result
+      send_file msg.content
+    else
+      render json: msg
+    end
+  end
+
   private
   def set_machine
     unless (@machine=Machine.find_by_id(params[:machine_id])) && (@machine_scope=@machine.machine_scope)

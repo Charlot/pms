@@ -1,4 +1,20 @@
 Rails.application.routes.draw do
+  devise_for :users, controllers: {
+                 sessions: 'users/sessions'
+                   }
+
+  resources :users do
+    collection do
+      get :scope_search
+    end
+  end
+
+  resources :machine_time_rules
+
+  resources :machine_types
+
+  resources :oee_codes
+
   resources :warehouses do
     resources :storages
   end
@@ -39,12 +55,17 @@ Rails.application.routes.draw do
 
   resources :production_orders do
     resources :production_order_items
+
+    collection do
+      get :preview
+    end
   end
 
   resources :settings
 
   resources :tools do
     collection do
+      get :scope_search
       match :import, to: :import, via: [:get, :post]
     end
   end
@@ -59,6 +80,7 @@ Rails.application.routes.draw do
 
   resources :machine_combinations do
     collection do
+      get :export
       match :import, to: :import, via: [:get, :post]
     end
   end
@@ -115,6 +137,7 @@ Rails.application.routes.draw do
       post :semiautoimport
       post :manual_import
       match :import, to: :import, via: [:get, :post]
+      get :scope_search
     end
   end
 
@@ -134,13 +157,12 @@ Rails.application.routes.draw do
       post :scan
       get :panel
       get :scope_search
-      get :export_routing_error
       get :export
       get :management
       match :import, to: :import, via: [:get, :post]
-      match :import_update, to: :import_update, via: [:get, :post]
-      match :import_to_get_kanban_list, to: :import_to_get_kanban_list,via: [:get,:post]
       match :scan_finish, to: :scan_finish, via: [:get,:post]
+      match :import_to_scan, to: :import_to_scan, via: [:get,:post]
+      match :import_to_get_kanban_list, to: :import_to_get_kanban_list, via: [:get, :post]
     end
   end
 

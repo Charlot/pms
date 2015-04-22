@@ -8,6 +8,9 @@
         <span>状态：
           <%= select_tag 'state', options_for_select(production_order_item_state_options), include_blank: true %>
         </span>
+        <span>订单号：
+          <%= select_tag 'production_order_id', options_for_select(production_order_options), include_blank: true %>
+        </span>
         <span>
         时间：  <input type="text" name="start_time" class="datepicker"/>~<input type="text" name="end_time" class="datepicker"/>
         </span>

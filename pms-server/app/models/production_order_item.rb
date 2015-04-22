@@ -4,6 +4,8 @@ class ProductionOrderItem < ActiveRecord::Base
   belongs_to :production_order
   belongs_to :machine
 
+  has_paper_trail
+
   def self.for_optimise
     joins(:kanban).where(kanbans: {ktype: KanbanType::WHITE}, state: ProductionOrderItemState.optimise_states)
   end
@@ -20,9 +22,14 @@ class ProductionOrderItem < ActiveRecord::Base
         .order(production_order_id: :asc, optimise_index: :asc).first
   end
 
-  def self.for_produce(machine)
-    where(state: ProductionOrderItemState.wait_produce_states, machine_id: machine.id)
-        .order(production_order_id: :asc, optimise_index: :asc)
+  def self.for_produce(machine=nil)
+    if machine
+      where(state: ProductionOrderItemState.wait_produce_states, machine_id: machine.id)
+          .order(production_order_id: :asc, optimise_index: :asc)
+    else
+      where(state: ProductionOrderItemState.wait_produce_states)
+          .order(production_order_id: :asc, optimise_index: :asc)
+    end
   end
 
   def self.for_passed(machine)
@@ -57,7 +64,7 @@ class ProductionOrderItem < ActiveRecord::Base
 
             item.update(machine_id: node.machine_id,
                         machine_time: Machine.find_by_id(node.machine_id).optimise_time_by_kanban(item.kanban),
-                        optimise_at: optimise_at
+                        optimise_at: optimise_at,state: ProductionOrderItemState::OPTIMISE_SUCCEED
             )
             order.production_order_items<<item
             success_count+=1

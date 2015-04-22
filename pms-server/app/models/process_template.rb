@@ -12,6 +12,11 @@ class ProcessTemplate < ActiveRecord::Base
   after_create :parse_cf_into_template, if: Proc.new { |p| ProcessType.semi_auto?(p.type) }
   acts_as_customizable
 
+  has_paper_trail
+
+  scoped_search on: :code
+  scoped_search on: :name
+
   def custom_field_type
     @custom_field_type ||= (self.id.nil? ? nil : "#{self.id}_#{self.class.name}")
   end

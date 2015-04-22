@@ -1,0 +1,28 @@
+
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Oee code</th>
+      <th>Machine type</th>
+      <th>Length</th>
+      <th>Time</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @machine_time_rules.each do |machine_time_rule| %>
+      <tr>
+        <td><%= machine_time_rule.oee_code %></td>
+        <td><%= machine_time_rule.machine_type %></td>
+        <td><%= machine_time_rule.length %></td>
+        <td><%= machine_time_rule.time %></td>
+        <td><%= link_to 'Show', machine_time_rule %></td>
+        <td><%= link_to 'Edit', edit_machine_time_rule_path(machine_time_rule) %></td>
+        <td><%= link_to 'Destroy', machine_time_rule, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
