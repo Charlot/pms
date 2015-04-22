@@ -15,7 +15,19 @@ class ApplicationPolicy
     scope.where(:id => record.id).exists?
   end
 
-  def search
+  def search?
+    true
+  end
+
+  def export?
+    true
+  end
+
+  def scope_search?
+    true
+  end
+
+  def form_search?
     true
   end
 

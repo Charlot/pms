@@ -10,4 +10,8 @@ class ProductionOrderPolicy<ApplicationPolicy
   def create?
     user.has_any_role? :cutting,:av
   end
+
+  def preview?
+    user.has_any_role? :cutting,:av
+  end
 end
