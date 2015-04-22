@@ -55,6 +55,7 @@
     <th>Code</th>
     <th>Kanban</th>
     <th>Wire</th>
+    <th></th>
     <th>Kanban Quantity</th>
     <th>Kanban Bundle</th>
     <th>Produced Quantity</th>
@@ -76,6 +77,7 @@
         <td><%= production_order_item.code %></td>
         <td><%= link_to production_order_item.kanban.nr, kanban_path(production_order_item.kanban) %></td>
         <td><%= production_order_item.kanban.wire_nr %></td>
+        <td><%= production_order_item.kanban.product_nr%></td>
         <td><%= production_order_item.kanban.quantity %></td>
         <td><%= production_order_item.kanban.bundle %></td>
         <td><%= production_order_item.produced_qty %></td>

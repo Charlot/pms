@@ -90,9 +90,8 @@ module FileHandler
 
                     if cf && row['Wire Nr'].present?
                       cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: false, value: cf.get_field_format_value("#{product.nr}_#{row['Wire Nr']}"))
+                      process_entity.custom_values << cv
                     end
-
-                    process_entity.custom_values << cv
 
                     #template fields
                     custom_fields_val = row['Template Fields'].split(',')

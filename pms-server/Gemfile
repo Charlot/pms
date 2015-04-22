@@ -77,3 +77,6 @@ gem 'scoped_search'
 
 #Editable table
 gem 'best_in_place', '~> 3.0.1'
+
+# Auth
+gem 'devise'

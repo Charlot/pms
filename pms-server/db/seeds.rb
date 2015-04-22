@@ -18,3 +18,8 @@ end
 
 puts 'update machine time'
 Machine.update_all(print_time: 45, seal_time: 40, terminal_time: 15, wire_time: 5)
+
+puts 'Create users'
+unless user = User.find_by_user_name("admin")
+  user = User.create({user_name:"admin",password:"123456@",password_confirmation:"123456@"})
+end
