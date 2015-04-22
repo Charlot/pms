@@ -47,7 +47,7 @@ class KanbansController < ApplicationController
 
   #GET /kanbans/1/manage_routing
   def manage_routing
-
+    authorize(Kanban)
   end
 
   #POST /kanbans/1/add_process_entities

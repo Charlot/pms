@@ -9,7 +9,7 @@
           <h2 ><%= page_title(current_model,current_action)%></h2>
         </div>
         <div class="panel-body">
-          <p class="hidden" id="flash-message"><%if flash.count > 0%><%= flash.collect{|name,msg| msg}.join(";")%><%end%></p>
+          <p class="hidden" id="flash-message"><%if flash.select{|name,msg| name=="alert" }.count > 0%><%= flash.collect{|name,msg| msg}.join(";")%><%end%></p>
           <div class="row">
             <div class="col-md-12">
               <%= yield %>
