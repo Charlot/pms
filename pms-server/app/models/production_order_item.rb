@@ -39,7 +39,7 @@ class ProductionOrderItem < ActiveRecord::Base
     where(production_order_id: production_order.id)
         .joins(:kanban)
         .joins(:production_order)
-        .joins(:machine).order(machine_id: :asc, production_order_id: :asc,optimise_index: :asc)
+        .joins(:machine).order(machine_id: :asc, production_order_id: :asc, optimise_index: :asc)
         .select('production_orders.nr as production_order_nr,kanbans.nr as kanban_nr,machines.nr as machine_nr,production_order_items.*')
   end
 
@@ -59,13 +59,15 @@ class ProductionOrderItem < ActiveRecord::Base
             #             optimise_at: optimise_at,
             #             state: ProductionOrderItemState::OPTIMISE_SUCCEED)
             #
+            if machine=Machine.find_by_id(node.machine_id)
+              item.update(machine_id: node.machine_id,
+                          machine_time: machine.optimise_time_by_kanban(item.kanban),
+                          optimise_at: optimise_at, state: ProductionOrderItemState::OPTIMISE_SUCCEED
+              )
 
-            item.update(machine_id: node.machine_id,
-                        machine_time: Machine.find_by_id(node.machine_id).optimise_time_by_kanban(item.kanban),
-                        optimise_at: optimise_at,state: ProductionOrderItemState::OPTIMISE_SUCCEED
-            )
-            order.production_order_items<<item
-            success_count+=1
+              order.production_order_items<<item
+              success_count+=1
+            end
           else
             item.update(state: ProductionOrderItemState::OPTIMISE_FAIL)
           end
