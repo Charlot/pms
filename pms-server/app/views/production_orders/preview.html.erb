@@ -15,24 +15,26 @@
   <thead>
   <tr>
     <th>#</th>
-    <th>Order</th>
+    <th>订单批次号</th>
     <th>Optimize Index</th>
-    <th>Machine Nr</th>
-    <th>State</th>
-    <th>Product Nr</th>
-    <th>Wire Nr</th>
-    <th>Component</th>
-    <th>T1</th>
-    <th>M1</th>
-    <th>T2</th>
-    <th>M2</th>
-    <th>S1</th>
-    <th>S2</th>
-    <th>Nr</th>
-    <th>Kanban Nr</th>
-    <th>Quantity</th>
-    <th>Bundle</th>
-
+    <th>机器号</th>
+    <th>状态</th>
+    <th>总成号</th>
+    <th>线号</th>
+    <th>原材料线号</th>
+    <th>线长</th>
+    <th>截面</th>
+    <th>端子1</th>
+    <th>模具1</th>
+    <th>端子2</th>
+    <th>模具2</th>
+    <th>防水圈1</th>
+    <th>防水圈2</th>
+    <th>任务号</th>
+    <th>看板</th>
+    <th>看板量</th>
+    <th>捆扎数</th>
+    <th><span class="red-bold">编辑</span></th>
   </tr>
   </thead>
   <tbody>
@@ -53,6 +55,8 @@
         <td><%= item[:ProductNr]%></td>
         <th><%= item[:KanbanWireNr]%></th>
         <td><%= item[:WireNr]%></td>
+        <td><%= item[:WireLength]%></td>
+        <td><%= item[:Diameter]%></td>
         <td><%= item[:Terminal1Nr]%></td>
         <td><%= item[:Tool1Nr]%></td>
         <td><%= item[:Terminal2Nr]%></td>
@@ -63,6 +67,7 @@
         <td><%= item[:KanbanNr]%></td>
         <td><%= item[:KanbanQuantity]%></td>
         <td><%= item[:KanbanBundle]%></td>
+        <td><%= link_to 'Edit', edit_production_order_item_path(item[:Id]) %></td>
       </tr>
   <%end%>
   </tbody>

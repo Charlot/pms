@@ -3,7 +3,7 @@ module FileHandler
   module Csv
     class ProductionOrderItemHandler<Base
       # EXPORT_CSV_HEADERS=%w(No OrderItemNr Kanban Machine OrderNr PartNr Material)
-      STATE_EXPORT_CSV_HEADERS=%w(No ItemNr OrderNr State OptimiseIndex Machine  KanbanNr ProductNr KanbanWireNr KanbanQuantity KanbanBundle ProducedQty WireNr Diameter WireLength Terminal1Nr Tool1Nr Terminal1StripLength Terminal2Nr Tool2Nr Terminal2StripLength Seal1Nr Seal2Nr)
+      STATE_EXPORT_CSV_HEADERS=%w(No ItemNr OrderNr State OptimiseIndex Machine  KanbanNr ProductNr KanbanWireNr KanbanQuantity KanbanBundle ProducedQty WireNr Diameter WireLength Terminal1Nr Tool1Nr Terminal1StripLength Terminal2Nr Tool2Nr Terminal2StripLength Seal1Nr Seal2Nr UpdateTime)
       EXPORT_CSV_HEADERS=STATE_EXPORT_CSV_HEADERS
       def export_optimized(items, user_agent, tmp_path=nil)
         msg=Message.new
@@ -11,7 +11,7 @@ module FileHandler
           tmp_file = ProductionOrderItemHandler.full_tmp_path('优化数据.csv') unless tmp_file
           CSV.open(tmp_file, 'wb', write_headers: true,
                    headers: EXPORT_CSV_HEADERS,
-                   col_sep: SEPARATOR, encoding: ProductionOrderItemHandler.get_encoding(user_agent)) do |csv|
+                   col_sep: ProductionOrderItemHandler::SEPARATOR, encoding: ProductionOrderItemHandler.get_encoding(user_agent)) do |csv|
             # items.each_with_index do |item, i|
             #   material = item.kanban.material.collect { |p| "#{p.nr}|#{PartType.display(p.type)}" }.join(";")
             #   csv<<[i+1,

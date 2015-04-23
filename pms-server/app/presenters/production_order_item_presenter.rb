@@ -71,6 +71,7 @@ class ProductionOrderItemPresenter<Presenter
         Tool2Nr: tool2.nil? ? nil : tool2.nr,
         Seal1Nr: s1.nil? ? nil : s1.nr,
         Seal2Nr: s2.nil? ? nil : s1.nr,
+        UpdateTime:@production_order_item.updated_at.localtime
     }
 
     # {

@@ -36,3 +36,7 @@
 .navbar {
     position: relative;
 }
+.red-bold{
+    color: red;
+    font-weight: bold;
+}
