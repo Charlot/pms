@@ -29,9 +29,17 @@ class Machine < ActiveRecord::Base
     q
   end
 
+  def for_sort_order_items(machine_time=nil)
+    q=production_order_items.where(state: ProductionOrderItemState::OPTIMISE_SUCCEED)
+    q= q.where(machine_time: machine_time) unless machine_time.nil?
+    q
+  end
+
+
   def sort_order_item
     current_index=1
-    if current_item=self.for_optimise_order_items.order(machine_time: :asc).first
+    if current_item=self.for_sort_order_items.order(machine_time: :asc).first
+      # raise 'nnnnn'
       current_item.update_attributes(optimise_index: current_index,
                                      state: ProductionOrderItemState::OPTIMISE_SUCCEED)
       current_index+=1
@@ -57,7 +65,7 @@ class Machine < ActiveRecord::Base
 
   def sort_order_item_compare(current_item, current_index)
     puts '--------------------------------------------------compare'
-    items=self.for_optimise_order_items.where.not(id: current_item.id)
+    items=self.for_sort_order_items.where.not(id: current_item.id)
     puts "count: #{items.count}"
     puts '--------------------------------------------------compare end'
     if items.count>0
@@ -118,14 +126,14 @@ class Machine < ActiveRecord::Base
         # end
         # if optimise_index==0
         compares[item]=optimise_index
-        break if optimise_index==0
+        # break if optimise_index==0
         # end
       end
 
 
       puts '88888888888888888888888888888888'.yellow
       puts compares.keys.count
-      # puts compares.sort_by { |k, v| v }.to_json
+      puts compares.sort_by { |k, v| v }.to_json
       puts '9999999999999999999999999999999'.yellow
       compared_item=nil
       if compared_item_arr= compares.sort_by { |k, v| v }.first
