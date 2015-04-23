@@ -44,7 +44,7 @@ class ProductionOrderItem < ActiveRecord::Base
   end
 
   def self.optimise
-    ProductionOrderItem.transaction do
+    # ProductionOrderItem.transaction do
       optimise_at=Time.now
       items=for_optimise
       success_count=0
@@ -62,7 +62,8 @@ class ProductionOrderItem < ActiveRecord::Base
             if machine=Machine.find_by_id(node.machine_id)
               item.update(machine_id: node.machine_id,
                           machine_time: machine.optimise_time_by_kanban(item.kanban),
-                          optimise_at: optimise_at, state: ProductionOrderItemState::OPTIMISE_SUCCEED
+                          optimise_at: optimise_at
+              # , state: ProductionOrderItemState::OPTIMISE_SUCCEED
               )
 
               order.production_order_items<<item
@@ -78,7 +79,7 @@ class ProductionOrderItem < ActiveRecord::Base
           return order
         end
       end
-    end
+    # end
   end
 
   def self.optimise_order
