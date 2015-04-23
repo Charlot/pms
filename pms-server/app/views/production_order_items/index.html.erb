@@ -33,9 +33,9 @@
           <input type="text" name="wire_nr" value="<%= @wire_nr %>"/>
         </span>
 
-        <!--<span>状态：-->
-        <!--<%= select_tag 'state', options_for_select(production_order_item_state_options), selected: @state, include_blank: true %>-->
-        <!--</span>-->
+        <span>状态：
+        <%= select_tag 'state', options_for_select(production_order_item_state_options,@state), include_blank: true %>
+        </span>
       </div>
       <input type="hidden" name="production_order_id" value="<%= @production_order.id if @production_order %>"/>
 

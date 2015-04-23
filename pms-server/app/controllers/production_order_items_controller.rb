@@ -159,6 +159,11 @@ class ProductionOrderItemsController < ApplicationController
       @production_order_items=@production_order_items.joins(:kanban).where(kanbans:{id:ids}) if ids.count>0
       @wire_nr=params[:wire_nr]
     end
+
+    unless params[:state].blank?
+      @production_order_items=@production_order_items.where(state:params[:state])
+      @state=params[:state]
+    end
     @production_order_items= @production_order_items.paginate(:page => params[:page])
     @page = params[:page].blank? ? 0 : (params[:page].to_i-1)
     render :index
