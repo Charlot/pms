@@ -11,7 +11,7 @@ module FileHandler
           tmp_file = ProductionOrderItemHandler.full_tmp_path('优化数据.csv') unless tmp_file
           CSV.open(tmp_file, 'wb', write_headers: true,
                    headers: EXPORT_CSV_HEADERS,
-                   col_sep: ProductionOrderItemHandler::SEPARATOR, encoding: ProductionOrderItemHandler.get_encoding(user_agent)) do |csv|
+                   col_sep: ';', encoding: ProductionOrderItemHandler.get_encoding(user_agent)) do |csv|
             # items.each_with_index do |item, i|
             #   material = item.kanban.material.collect { |p| "#{p.nr}|#{PartType.display(p.type)}" }.join(";")
             #   csv<<[i+1,
