@@ -34,6 +34,7 @@ class ProductionOrderItemPresenter<Presenter
     machine=Machine.find_by_id(@production_order_item.machine_id)
     process_entity=kanban.process_entities.first
     wire=Part.find_by_id(process_entity.value_wire_nr)
+    puts "#{self.to_json}------#{kanban.to_json}==============#{process_entity.value_wire_nr}".red
     t1=Part.find_by_id(process_entity.value_t1)
     tool1=t1.nil? ? nil : t1.tool
 

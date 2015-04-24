@@ -46,7 +46,8 @@ module Printer
             consume_date: kpe.id#TODO route consume data
         }
 
-        pe.process_parts.first($ROUTE_PART_COUNT).each_with_index { |pp,index |
+        ii=0
+        pe.process_parts.where.not(part_id: nil).each_with_index { |pp,index |
           if pe.value_default_wire_nr.nil? || pe.value_default_wire_nr != pp.part.nr
             if pp.part.type == PartType::PRODUCT_SEMIFINISHED && pp.part.nr.include?("_")
               body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr.split("_").last
@@ -56,7 +57,8 @@ module Printer
             body["wiredesc#{index+1}_of_route".to_sym] = pp.part.custom_nr
             body["wire_quantity#{index+1}_of_route".to_sym] = pp.quantity
             body["unit_of_wire#{index+1}".to_sym] = pp.unit
-          end
+            ii+=1
+          end if pp.part && ii<$ROUTE_PART_COUNT
         }
 
         BODY.each do |k|

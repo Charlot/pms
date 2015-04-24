@@ -320,6 +320,7 @@ class KanbansController < ApplicationController
 
     #check version of Kanban
     render json: {result: false, content: "看板未找到：#{parsed_code.to_json}"} and return unless @kanban
+    render json:{result:false,content:'看板为兰卡，不可以投！'} and return if @kanban.ktype==KanbanType::BLUE
     render json: {result: false, content: "看板版本错误#{parsed_code[:version_nr]}"} and return unless (version = @kanban.versions.where(id: parsed_code[:version_nr]))
     #last_version = @kanban.versions.last
     #need_update = last_version.created_at > version.created_at
