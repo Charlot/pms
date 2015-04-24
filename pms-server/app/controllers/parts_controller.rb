@@ -36,6 +36,7 @@ class PartsController < ApplicationController
   def create
     msg = Message.new
     @part = Part.new(part_params)
+    authorize(@part)
 
     respond_to do |format|
       if @part.save
@@ -85,6 +86,7 @@ class PartsController < ApplicationController
 =end
 
   # POST /parts/1/add_process_entitties
+=begin
   def add_process_entities
     if (@part.kanbans.select { |k| k.can_update? == false}).count>0
       render json:{ result: false,content:"不能修改Routing，因为有关联该Part的KANBAN正在生产!"} and return
@@ -100,8 +102,10 @@ class PartsController < ApplicationController
       render json: {result:false,content:{}}
     end
   end
+=end
 
   # DELETE /parts/1/delete_process_entities
+=begin
   def delete_process_entities
     msg = Message.new
     msg.result = true
@@ -121,8 +125,10 @@ class PartsController < ApplicationController
 
     render json: msg
   end
+=end
 
   def import
+    authorize(Part)
     if request.post?
       msg = Message.new
       begin
@@ -142,6 +148,7 @@ class PartsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_part
       @part = Part.find(params[:id])
+      authorize(@part)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
