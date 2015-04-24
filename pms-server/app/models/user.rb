@@ -23,15 +23,15 @@ class User < ActiveRecord::Base
   end
 
   def av?
-    user.has_role? :av
+    has_role? :av
   end
 
   def admin?
-    user.has_role? :av
+    has_role? :admin
   end
 
   def cutting?
-    user.has_role? :cutting
+    has_role? :cutting
   end
 
   private

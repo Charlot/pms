@@ -1,0 +1,3 @@
+class MasterBomItemPolicy<ApplicationPolicy
+  
+end

@@ -15,6 +15,7 @@ class PartPositionsController < ApplicationController
   # GET /part_positions/new
   def new
     @part_position = PartPosition.new
+    authorize(@part_position)
   end
 
   # GET /part_positions/1/edit
@@ -25,6 +26,7 @@ class PartPositionsController < ApplicationController
   # POST /part_positions.json
   def create
     @part_position = PartPosition.new(part_position_params)
+    authorize(@part_position)
 
     respond_to do |format|
       if @part_position.save
@@ -63,6 +65,7 @@ class PartPositionsController < ApplicationController
 
   # GET/POST
   def import
+    authorize(PartPosition)
     if request.post?
     msg = Message.new
     begin
@@ -82,6 +85,7 @@ class PartPositionsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_part_position
       @part_position = PartPosition.find(params[:id])
+      authorize(@part_position)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

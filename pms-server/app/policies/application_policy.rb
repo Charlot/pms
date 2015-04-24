@@ -35,6 +35,10 @@ class ApplicationPolicy
     false
   end
 
+  def import?
+    update?
+  end
+
   def new?
     create?
   end
