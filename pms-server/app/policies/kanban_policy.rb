@@ -1,26 +1,26 @@
 class KanbanPolicy<ApplicationPolicy
-  def new?
-    user.has_role? :av
+  def update?
+    user.av?
   end
 
-  def update?
-    user.has_role? :av
+  def create?
+    user.av?
   end
 
   def manage_routing?
-    user.has_role? :av
+    update?
   end
 
   def add_process_entities?
-    user.has_role? :av
+    update?
   end
 
   def delete_process_entities?
-    user.has_role? :av
+    update?
   end
 
   def destroy?
-    user.has_role? :av
+    user.av?
   end
 
   def finish_production?
@@ -32,23 +32,23 @@ class KanbanPolicy<ApplicationPolicy
   end
 
   def release?
-    user.has_role? :av
+    user.av?
   end
 
   def lock?
-    user.has_role? :av
+    user.av?
   end
 
   def discard?
-    user.has_role? :av
+    user.av?
   end
 
   def add_routing_template?
-    user.has_role? :av
+    user.av?
   end
 
   def import?
-    user.has_role? :av
+    user.av?
   end
 
   def import_to_scan?
@@ -60,18 +60,19 @@ class KanbanPolicy<ApplicationPolicy
   end
 
   def scan_finish?
-    user.has_any_role? :av,:cutting
+    #user.has_any_role? :av,:cutting
+    user.av? || user.admin?
   end
 
   def management?
-    user.has_role? :av
+    user.av?
   end
 
   def scan?
-    user.has_any_role? :av,:cutting
+    user.av? || user.admin?
   end
 
   def panel?
-    user.has_any_role? :av,:cutting
+    user.av? || user.admin?
   end
 end

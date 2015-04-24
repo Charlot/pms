@@ -22,6 +22,18 @@ class User < ActiveRecord::Base
     roles.collect{|role| role.name}
   end
 
+  def av?
+    user.has_role? :av
+  end
+
+  def admin?
+    user.has_role? :av
+  end
+
+  def cutting?
+    user.has_role? :cutting
+  end
+
   private
   def generate_authentication_token
     loop do

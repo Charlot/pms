@@ -1,7 +1,7 @@
 class KanbansController < ApplicationController
   before_action :set_kanban, only: [:show, :edit, :update, :destroy,
                                     :add_process_entities, :delete_process_entities,
-                                    :finish_production, :history, :release, :lock, :discard, :manage, :manage_routing]
+                                    :finish_production, :history, :release, :lock, :discard, :manage_routing]
 
   # GET /kanbans
   # GET /kanbans.json
@@ -12,7 +12,6 @@ class KanbansController < ApplicationController
   # GET /kanbans/1
   # GET /kanbans/1.json
   def show
-    authorize(@kanban)
   end
 
   # GET /kanbans/new
@@ -24,7 +23,6 @@ class KanbansController < ApplicationController
 
   # GET /kanbans/1/edit
   def edit
-    authorize(@kanban)
   end
 
   # POST /kanbans
@@ -32,8 +30,8 @@ class KanbansController < ApplicationController
   def create
     ActiveRecord::Base.transaction do
       @kanban = Kanban.new(kanban_params)
-      authorize(@kanban)
     end
+    authorize(@kanban)
     respond_to do |format|
       if @kanban.save
         format.html { redirect_to @kanban, notice: 'Kanban was successfully created.' }
@@ -47,12 +45,11 @@ class KanbansController < ApplicationController
 
   #GET /kanbans/1/manage_routing
   def manage_routing
-    authorize(Kanban)
+    #authorize(Kanban)
   end
 
   #POST /kanbans/1/add_process_entities
   def add_process_entities
-    authorize(@kanban)
     msg = Message.new
     msg.result = false
     if @kanban.process_entities.ids.include?(params[:process_entities])
@@ -80,7 +77,6 @@ class KanbansController < ApplicationController
 
   # DELETE /kanbans/1/delete_process_entities
   def delete_process_entities
-    authorize(@kanban)
     msg = Message.new
     msg.result = true
 
@@ -97,7 +93,6 @@ class KanbansController < ApplicationController
   # PATCH/PUT /kanbans/1
   # PATCH/PUT /kanbans/1.json
   def update
-    authorize(@kanban)
     respond_to do |format|
       puts "======="
       puts kanban_params.to_json
@@ -115,7 +110,6 @@ class KanbansController < ApplicationController
   # DELETE /kanbans/1
   # DELETE /kanbans/1.json
   def destroy
-    authorize(@kanban)
     redirect_to kanbans_url, notice: 'State Error.' and return if @kanban.can_destroy?
     @kanban.destroy
     respond_to do |format|
@@ -127,7 +121,6 @@ class KanbansController < ApplicationController
   # POST /kanbans/1/finish_production
   # POST /kanbans/1/finish_production.json
   def finish_production
-    authorize(Kanban)
     msg = Message.new
     #end_product = {part_id: @kanban.part_id, quantity: @kanban.quantity}
     #raw_materials = []
@@ -141,14 +134,12 @@ class KanbansController < ApplicationController
   # GET /kanbans/1/history
   # GET /kanbans/1/history.json
   def history
-    authorize(@kanban)
     @versions = @kanban.versions
   end
 
   # POST /kanbans/1/release
   # POST /kanbans/1/release.json
   def release
-    authorize(@kanban)
     redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state, KanbanState::RELEASED)
     @kanban.without_versioning do
       if @kanban.update(state: KanbanState::RELEASED)
@@ -162,7 +153,6 @@ class KanbansController < ApplicationController
   # POST /kanbans/1/lock
   # POST /kanbans/1/lock.json
   def lock
-    authorize(@kanban)
     redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state, KanbanState::LOCKED)
     @kanban.without_versioning do
       if @kanban.update(state: KanbanState::LOCKED)
@@ -176,7 +166,6 @@ class KanbansController < ApplicationController
   # DELETE /kanbans/1/discard
   # DELETE /kanbasn/1/discard.json
   def discard
-    authorize(@kanban)
     redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state, KanbanState::DELETED)
     @kanban.without_versioning do
       if @kanban.update(state: KanbanState::DELETED)
@@ -374,6 +363,7 @@ class KanbansController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_kanban
     @kanban = Kanban.find(params[:id])
+    authorize(@kanban)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

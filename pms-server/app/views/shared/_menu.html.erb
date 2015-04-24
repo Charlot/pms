@@ -74,6 +74,7 @@
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
+        <li><a><%= current_user.user_name%></a></li>
         <li><%= link_to '退出', destroy_user_session_path, method: :delete %></li>
       </ul>
     </div>
