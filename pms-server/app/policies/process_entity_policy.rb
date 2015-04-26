@@ -1,22 +1,10 @@
 class ProcessEntityPolicy<ApplicationPolicy
-  def show?
-    true
-  end
-
-  def new?
-    user_has_role? :av
-  end
-
   def update?
-    user.has_role? :av
+    user.av?
   end
 
   def destroy?
-    user.has_role? :av
-  end
-
-  def edit?
-    user.has_role? :av
+    update?
   end
 
   def simple?
@@ -24,10 +12,22 @@ class ProcessEntityPolicy<ApplicationPolicy
   end
 
   def import_auto?
-    user.has_role? :av
+    update?
   end
 
   def import_semi_auto?
-    user.has_role? :av
+    update?
+  end
+
+  def export_auto?
+    true
+  end
+
+  def export_semi?
+    true
+  end
+
+  def export_unused?
+    true
   end
 end

@@ -15,6 +15,7 @@ class MasterBomItemsController < ApplicationController
   # GET /master_bom_items/new
   def new
     @master_bom_item = MasterBomItem.new
+    authorize(@master_bom_item)
   end
 
   # GET /master_bom_items/1/edit
@@ -25,6 +26,7 @@ class MasterBomItemsController < ApplicationController
   # POST /master_bom_items.json
   def create
     @master_bom_item = MasterBomItem.new(master_bom_item_params)
+    authorize(@master_bom_item)
 
     respond_to do |format|
       if @master_bom_item.save
@@ -63,6 +65,7 @@ class MasterBomItemsController < ApplicationController
 
 
   def import
+    authorize(MasterBomItem)
     if request.post?
       msg = Message.new
       begin
@@ -79,6 +82,7 @@ class MasterBomItemsController < ApplicationController
   end
 
   def transport
+    authorize(MasterBomItem)
     if request.post?
       msg = Message.new
       begin
@@ -99,6 +103,7 @@ class MasterBomItemsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_master_bom_item
       @master_bom_item = MasterBomItem.find(params[:id])
+      authorize(@master_bom_item)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
