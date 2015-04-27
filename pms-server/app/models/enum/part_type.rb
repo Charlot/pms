@@ -6,22 +6,60 @@ class PartType<BaseType
   PRODUCT_SEMIFINISHED=4 #半成品
   PRODUCT=5 #成品
 
+
   def self.display type
     case type
-    when MATERIAL_WIRE
-      'Material Wire'
-    when MATERIAL_TERMINAL
-      'Material Contact'
-    when MATERIAL_SEAL
-      'Material Seal'
-    when MATERIAL_OTHER
-      'Material Other'
-    when PRODUCT_SEMIFINISHED
-      'Product Semi'
-    when PRODUCT
-      'Product'
+      when MATERIAL_WIRE
+        '原材料线'
+      when MATERIAL_TERMINAL
+        '端子'
+      when MATERIAL_SEAL
+        '防水圈'
+      when MATERIAL_OTHER
+        '其它原材料'
+      when PRODUCT_SEMIFINISHED
+        '半成品'
+      when PRODUCT
+        '成品'
     end
   end
+
+
+  def self.get_value_by_display display
+    case display
+      when '原材料线'
+        MATERIAL_WIRE
+      when '端子'
+        MATERIAL_TERMINAL
+      when '防水圈'
+        MATERIAL_SEAL
+      when '其它原材料'
+        MATERIAL_OTHER
+      when '半成品'
+        PRODUCT_SEMIFINISHED
+      when '成品'
+        PRODUCT
+    end
+  end
+
+  #
+  # def self.display type
+  #   case type
+  #   when MATERIAL_WIRE
+  #     'Material Wire'
+  #   when MATERIAL_TERMINAL
+  #     'Material Contact'
+  #   when MATERIAL_SEAL
+  #     'Material Seal'
+  #   when MATERIAL_OTHER
+  #     'Material Other'
+  #   when PRODUCT_SEMIFINISHED
+  #     'Product Semi'
+  #   when PRODUCT
+  #     'Product'
+  #   end
+  # end
+
 
   def self.list_value
     self.constants.collect { |c|
@@ -30,6 +68,6 @@ class PartType<BaseType
   end
 
   def self.is_material?(type)
-    [MATERIAL_WIRE,MATERIAL_TERMINAL,MATERIAL_SEAL,MATERIAL_OTHER].include?(type.to_i)
+    [MATERIAL_WIRE, MATERIAL_TERMINAL, MATERIAL_SEAL, MATERIAL_OTHER].include?(type.to_i)
   end
 end

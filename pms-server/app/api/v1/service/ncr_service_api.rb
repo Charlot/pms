@@ -57,6 +57,10 @@ module V1
 
           put :update_state do
             if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
+              # 当任务结束时，不可以使用API改变状态
+              if item.state==ProductionOrderItemState::TERMINATED
+                return false
+              end
               return item.update(state: params[:state])
             end
           end

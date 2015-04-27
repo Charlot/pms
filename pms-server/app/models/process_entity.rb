@@ -12,8 +12,8 @@ class ProcessEntity < ActiveRecord::Base
   has_many :parts, through: :process_parts
   has_many :custom_values, as: :custom_fieldable
 
-  delegate :custom_fields, to: :process_template,allow_nil: true
-  delegate :nr,to: :product,prefix: true, allow_nil: true
+  delegate :custom_fields, to: :process_template, allow_nil: true
+  delegate :nr, to: :product, prefix: true, allow_nil: true
   delegate :code, to: :process_template, prefix: true, allow_nil: true
   delegate :type, to: :process_template, prefix: true, allow_nil: true
 
@@ -25,12 +25,12 @@ class ProcessEntity < ActiveRecord::Base
 
   # after_create :build_process_parts
 
-  def self.find_by_parts key,operator,value
+  def self.find_by_parts key, operator, value
     parts = Part.where("nr LIKE '%_#{value}%'").map(&:id)
 
     if parts.count > 0
       process = ProcessEntity.joins(custom_values: :custom_field).where(
-        "custom_values.value IN (#{parts.join(',')}) AND custom_fields.field_format = 'part'"
+          "custom_values.value IN (#{parts.join(',')}) AND custom_fields.field_format = 'part'"
       ).map(&:id)
       if process.count > 0
         return {conditions: "process_entities.id IN(#{process.join(',')})"}
@@ -46,12 +46,12 @@ class ProcessEntity < ActiveRecord::Base
         if cf.name == "default_wire_nr"
           next
         end
-        cv = self.custom_values.where(custom_field_id:cf.id).first
+        cv = self.custom_values.where(custom_field_id: cf.id).first
 
         if cf.field_format == 'part'
           if cv
             wire = Part.find_by_id(cv.value)
-            wire.nil? ? "":wire.parsed_nr
+            wire.nil? ? "" : wire.parsed_nr
           else
             ""
           end
@@ -64,7 +64,7 @@ class ProcessEntity < ActiveRecord::Base
         end
       end
     else
-     a= ["错误"]
+      a= ["错误"]
     end
     puts a.to_json
     puts a.compact.to_json
@@ -137,7 +137,7 @@ class ProcessEntity < ActiveRecord::Base
         end
       end
     else
-      ""
+      ''
     end
   end
 end

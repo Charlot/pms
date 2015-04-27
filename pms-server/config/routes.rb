@@ -175,7 +175,7 @@ Rails.application.routes.draw do
       get :search
       get :scope_search
       match :import, to: :import, via: [:get, :post]
-      #post :import
+      get :export
       match :search, to: :search, via: [:get, :post]
     end
   end
