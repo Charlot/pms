@@ -111,7 +111,7 @@ module FileHandler
                       end
                     end
                   when 'delete'
-                    pe = PProcessEntity.where({nr: params[:nr], product_id: product.id}).first
+                    pe = ProcessEntity.where({nr: params[:nr], product_id: product.id}).first
                     pe.destroy
                 end
               end
