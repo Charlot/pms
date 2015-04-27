@@ -47,7 +47,7 @@ module FileHandler
           tmp_file = ProductionOrderItemHandler.full_tmp_path('订单数据.csv') unless tmp_file
           CSV.open(tmp_file, 'wb', write_headers: true,
                    headers: STATE_EXPORT_CSV_HEADERS,
-                   col_sep: SEPARATOR, encoding: ProductionOrderItemHandler.get_encoding(user_agent)) do |csv|
+                   col_sep: ';', encoding: ProductionOrderItemHandler.get_encoding(user_agent)) do |csv|
 
             q= ProductionOrderItem.joins(:machine).order(machine_id: :asc, production_order_id: :asc, optimise_index: :asc)
             q= q.where(machines: {nr: params[:machine_nr]}) unless params[:machine_nr].blank?
