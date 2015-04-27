@@ -38,7 +38,13 @@ module FileHandler
 
                 case row['Operator']
                   when 'new', ''
-                    part = Part.create({nr: "#{row['Product Nr']}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED}) if row['Wire NO'].present?
+                    if row['Wire NO'].present?
+                      part = Part.where({nr: "#{row['Product Nr']}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED}).first
+                      if part.nil?
+                        part = Part.create({nr: "#{row['Product Nr']}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED})
+                      end
+                    end
+
                     #TODO add WorkStation Type and Cost Center
                     process_entity = ProcessEntity.new(params)
                     process_entity.process_template = process_template
@@ -251,9 +257,9 @@ module FileHandler
 
         case row['Operator']
           when 'new', ''
-            if wire
-              msg.contents << "Wire NO:#{row['Wire NO']}已经存在"
-            end
+            #if wire
+            #  msg.contents << "Wire NO:#{row['Wire NO']}已经存在"
+            #end
             if pe.count > 0
               msg.contents << "Nr :#{row['Nr']}已经存在"
             end
