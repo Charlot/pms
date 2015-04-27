@@ -24,7 +24,7 @@ module FileHandler
                   row[k] = book.cell(line, i+1).to_s.strip
                 end
 
-                process_template = ProcessTemplate.find_by_code(row['Template Code'])
+                process_template = ProcessTemplate.find_by_code(row['Template Code'].to_i.to_s)
                 product = Part.find_by_nr(row['Product Nr'])
                 params = {}
                 params = params.merge({
@@ -278,9 +278,9 @@ module FileHandler
         end
 
         #验证模板
-        template = ProcessTemplate.find_by_code(row['Template Code'])
+        template = ProcessTemplate.find_by_code(row['Template Code'].to_i.to_s)
         if template.nil?
-          msg.contents << "Template Code: #{row['Template Code']}不存在"
+          msg.contents << "Template Code: #{row['Template Code'].to_i.to_s}不存在"
         end
 
         #验证步骤属性
