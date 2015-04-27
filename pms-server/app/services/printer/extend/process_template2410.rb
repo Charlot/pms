@@ -8,7 +8,7 @@ module Printer
         puts "***#{cfs.to_s}"
         puts "---#{cfvs.to_s}"
         if template.template
-          total=0
+          total=BigDecimal.new(0)
           info_text= pe.process_template.template.gsub(/{\d+}/).each do |v|
             puts "#####{v}"
             if cf=cfs.detect { |f|
@@ -20,7 +20,7 @@ module Printer
                 if (auto_pe = ProcessEntity.joins(custom_values: :custom_field).where(
                     {product_id: pe.product_id, custom_fields: {name: "default_wire_nr"}, custom_values: {value: part.id}}
                 ).first) && (p=Part.find_by_id(auto_pe.value_wire_nr))
-                  total+=p.cross_section
+                  total+=BigDecimal.new(p.cross_section.to_s)
                   p.cross_section.to_zero_s#+p.nr
                 else
                   ''
@@ -35,7 +35,7 @@ module Printer
           info_text
           # puts "~~~~~~~~~~~~~~~~~~~~~~#{info_text}".yellow
           if m=info_text.match(/\d+.*\d+/)
-            m[0].sub(/\[\]/,"[#{total}]")
+            m[0].sub(/\[\]/,"[#{total.to_s}]")
           else
             ''
           end
