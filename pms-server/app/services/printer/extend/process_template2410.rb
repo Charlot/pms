@@ -21,7 +21,7 @@ module Printer
                     {product_id: pe.product_id, custom_fields: {name: "default_wire_nr"}, custom_values: {value: part.id}}
                 ).first) && (p=Part.find_by_id(auto_pe.value_wire_nr))
                   total+=p.cross_section
-                  p.cross_section.to_zero_s+p.nr
+                  p.cross_section.to_zero_s#+p.nr
                 else
                   ''
                 end
