@@ -26,7 +26,7 @@ class ProductionOrderItem < ActiveRecord::Base
       where(state: ProductionOrderItemState.wait_produce_states, machine_id: machine.id)
           .order(production_order_id: :asc, optimise_index: :asc)
     else
-      where(state: ProductionOrderItemState.wait_produce_states)
+      joins(:machine).where(state: ProductionOrderItemState.wait_produce_states)
           .order(production_order_id: :asc, optimise_index: :asc)
     end
   end

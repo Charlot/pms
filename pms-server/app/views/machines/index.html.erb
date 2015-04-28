@@ -1,6 +1,5 @@
-
-<%= link_to '导入机器规则',import_machine_combinations_path, class:'btn btn-default'%>
-<%= link_to '导出机器规则',export_machine_combinations_path,data:{confirm:"确定？"},class:'btn btn-default'%>
+<%= link_to '导入机器规则', import_machine_combinations_path, class: 'btn btn-default' %>
+<%= link_to '导出机器规则', export_machine_combinations_path, data: {confirm: "确定？"}, class: 'btn btn-default' %>
 <p id="notice"><%= notice %></p>
 <table class="table table-bordered table-striped table-hover">
   <thead>
@@ -16,19 +15,20 @@
     <th>Seal Time</th>
     <th>Terminal Time</th>
     <th>Wire Time</th>
+    <th>Wire Length Time</th>
     <th colspan="4"></th>
   </tr>
   </thead>
 
   <tbody>
-  <% @machines.each_with_index  do |machine,i| %>
+  <% @machines.each_with_index do |machine, i| %>
       <tr>
-        <td><%=i+1%></td>
+        <td><%= i+1 %></td>
         <td><%= machine.nr %></td>
         <td><%= machine.name %></td>
         <td><%= machine.ip %></td>
         <td>
-          <%= best_in_place machine,:machine_type_id,as: :select,collection: MachineType.all.collect{|mt| [mt.id,mt.nr]}.to_h%>
+          <%= best_in_place machine, :machine_type_id, as: :select, collection: MachineType.all.collect { |mt| [mt.id, mt.nr] }.to_h %>
         </td>
         <td><%= machine.description %></td>
         <td><%= machine.resource_group_machine.nr if machine.resource_group_machine %></td>
@@ -36,6 +36,7 @@
         <td><%= machine.seal_time %></td>
         <td><%= machine.terminal_time %></td>
         <td><%= machine.wire_time %></td>
+        <td><%= machine.wire_length_time %></td>
         <td><%= link_to 'Show', machine %></td>
         <td><%= link_to 'Edit', edit_machine_path(machine) %></td>
         <!--<td><%= link_to 'Destroy', machine, method: :delete, data: {confirm: 'Are you sure?'} %></td>-->

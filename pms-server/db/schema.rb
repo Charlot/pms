@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150425140716) do
+ActiveRecord::Schema.define(version: 20150427160244) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -181,6 +181,7 @@ ActiveRecord::Schema.define(version: 20150425140716) do
     t.integer  "status",            default: 0
     t.string   "ip"
     t.integer  "machine_type_id"
+    t.float    "wire_length_time",  default: 2.0
   end
 
   add_index "machines", ["machine_type_id"], name: "index_machines_on_machine_type_id", using: :btree
