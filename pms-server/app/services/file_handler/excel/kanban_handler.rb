@@ -86,10 +86,7 @@ module FileHandler
               {product_id: product.id, custom_fields: {name: "default_wire_nr"}, custom_values: {value: wire.id}, kanbans: {ktype: KanbanType::WHITE}}
           ).first
 
-          #kanban = pe.kanbans.where(ktype: KanbanType::WHITE).first
-          #raise row['Wire Nr'] unless kanban
           if pe && (@kanban=pe.kanbans.where(ktype: KanbanType::WHITE).first)
-
             @kanban = pe.kanbans.where(ktype: KanbanType::WHITE).first
             if @kanban.quantity <= 0
               next

@@ -85,6 +85,10 @@ class Machine < ActiveRecord::Base
           optimise_index+=self.wire_time
         end
 
+        if current_process.value_wire_qty_factor!=item_process.value_wire_qty_factor
+          optimise_index+=self.wire_length_time
+        end
+
         t_arr=[current_process.value_t1, current_process.value_t2, item_process.value_t1, item_process.value_t2]
         optimise_index+=(self.terminal_time*(t_arr.uniq.size-2))
 
