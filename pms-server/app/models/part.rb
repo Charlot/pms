@@ -77,7 +77,10 @@ class Part < ActiveRecord::Base
 
       store = kanban.des_storage.split(" ").first
 
-      if store.present? && (["FC","MC","TC"].include? store)
+      cutting_storage = ["FC","MC","TC"]
+      assembly_storage = ["XF","XM","XT"]
+
+      if store.present? && (cutting_storage.include? store)
         kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
             "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'", KanbanType::WHITE, kanban_id, product_id, self.id
         ).distinct
@@ -86,10 +89,22 @@ class Part < ActiveRecord::Base
             "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND process_parts.part_id = ?",KanbanType::BLUE,kanban_id,product_id,self.id
         ).distinct
 
-        if kanbans.count <=0
+        kks = []
+        kanbans.each{|k|
+          store = k.des_storage.split(" ").first
+          unless assembly_storage.include?(store)
+            kks << k
+          end
+        }
+
+        puts kks
+
+        if kks.count <=0
           kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
               "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",KanbanType::WHITE,kanban_id,product_id,self.id
           ).distinct
+        else
+          kanbans = kks
         end
       end
 
