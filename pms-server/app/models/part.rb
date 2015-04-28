@@ -63,7 +63,7 @@ class Part < ActiveRecord::Base
 
       store = kanban.des_storage.split(" ").first
 
-      if store.present? && (["FC"].include? store)
+      if store.present? && (["FC","MC","TC"].include? store)
         kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
             "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",KanbanType::WHITE,kanban_id,product_id,self.id
         ).distinct
