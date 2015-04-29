@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root :to => 'welcome#index'
+
   devise_for :users, controllers: {
                  sessions: 'users/sessions'
                    }
@@ -166,7 +168,7 @@ Rails.application.routes.draw do
     end
   end
 
-  root :to => 'welcome#index'
+
 
   resources :part_boms do
     collection do
