@@ -323,13 +323,14 @@ class KanbansController < ApplicationController
 
     #check version of Kanban
     render json: {result: false, content: "看板未找到：#{parsed_code.to_json}"} and return unless @kanban
+    render json:{result:false,content:'看板为兰卡，不可以投！'} and return if @kanban.ktype==KanbanType::BLUE
     render json: {result: false, content: "看板版本错误#{parsed_code[:version_nr]}"} and return unless (version = @kanban.versions.where(id: parsed_code[:version_nr]))
     #last_version = @kanban.versions.last
     #need_update = last_version.created_at > version.created_at
     need_update = @kanban.versions.count > parsed_code[:version_nr].to_i
 
     #response dependent on Kanban type
-    render json: {result: false, content: "看板已经更新，请重新打印!"} and return if need_update && @kanban.type == KanbanType::BLUE
+    render json: {result: false, content: "看板已经更新，请重新打印!"} and return if need_update && @kanban.ktype == KanbanType::BLUE
 
     #check kanban quantity and bundle
     render json: {result: false, content: "看板数量为0，不能扫描！"} and return if @kanban.quantity == 0
@@ -338,7 +339,7 @@ class KanbansController < ApplicationController
     #不做扫描之后验证是否已经扫入，由工作人员控制
     #注释了这段代码，暂时不实现标注唯一的一张纸质看板卡
     if ProductionOrderItem.where("kanban_id = ? AND state= ?", @kanban.id, ProductionOrderItemState::INIT).count > 0
-      render json: {result: false, content: "Kanban Order has been scaned!"} and return
+      render json: {result: false, content: "卡已投过，不可重复投卡"} and return
     end
 
     unless (@order = ProductionOrderItem.create(kanban_id: @kanban.id, code: params[:code]))

@@ -22,14 +22,20 @@
     <div>
       <div>
         <span>机器号：
-          <input type="text" name="machine_nr" value="<%= @machine_nr %>"/>
+          <%= @machine_nr %>
+          <%= select_tag :machine_id, options_for_select(machine_options, @machine_id), selected: @machine_id, include_blank: true %>
         </span>
                 <span>任务号：
           <input type="text" name="production_order_item_nr" value="<%= @production_order_item_nr %>"/>
         </span>
-        <!--<span>状态：-->
-        <!--<%= select_tag 'state', options_for_select(production_order_item_state_options), selected: @state, include_blank: true %>-->
-        <!--</span>-->
+
+         <span>线号：
+          <input type="text" name="wire_nr" value="<%= @wire_nr %>"/>
+        </span>
+
+        <span>状态：
+        <%= select_tag 'state', options_for_select(production_order_item_state_options,@state), include_blank: true %>
+        </span>
       </div>
       <input type="hidden" name="production_order_id" value="<%= @production_order.id if @production_order %>"/>
 
@@ -54,16 +60,18 @@
     <th>State</th>
     <th>Code</th>
     <th>Kanban</th>
+    <th>ProductNr</th>
     <th>Wire</th>
     <th></th>
     <th>Kanban Quantity</th>
     <th>Kanban Bundle</th>
     <th>Produced Quantity</th>
     <th>Machine</th>
-    <th>TotalTime</th>
+    <!--<th>TotalTime</th>-->
     <th>Production order</th>
     <th>OptimiseAt</th>
     <th>OptimiseIndex</th>
+    <th>UpdatedAt</th>
     <th colspan="3"></th>
   </tr>
   </thead>
@@ -76,16 +84,18 @@
         <td><%= ProductionOrderItemState.display production_order_item.state %></td>
         <td><%= production_order_item.code %></td>
         <td><%= link_to production_order_item.kanban.nr, kanban_path(production_order_item.kanban) %></td>
+        <td><%= production_order_item.kanban.product.nr  %></td>
         <td><%= production_order_item.kanban.wire_nr %></td>
         <td><%= production_order_item.kanban.product_nr%></td>
         <td><%= production_order_item.kanban.quantity %></td>
         <td><%= production_order_item.kanban.bundle %></td>
         <td><%= production_order_item.produced_qty %></td>
         <td><%= production_order_item.machine.nr if production_order_item.machine %></td>
-        <td><%= production_order_item.machine_time %></td>
+        <!--<td><%= production_order_item.machine_time %></td>-->
         <td><%= production_order_item.production_order.nr if production_order_item.production_order %></td>
-        <td><%= production_order_item.optimise_at %></td>
+        <td><%= production_order_item.optimise_at.localtime if production_order_item.optimise_at %></td>
         <td><%= production_order_item.optimise_index %></td>
+        <td><%=production_order_item.updated_at.localtime%>
         <td><%= link_to 'Show', production_order_item %></td>
         <td><%= link_to 'Edit', edit_production_order_item_path(production_order_item) %></td>
         <td><%= link_to 'Destroy', production_order_item, method: :delete, data: {confirm: 'Are you sure?'} %></td>

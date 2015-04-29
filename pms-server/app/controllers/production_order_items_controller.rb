@@ -151,16 +151,28 @@ class ProductionOrderItemsController < ApplicationController
       @production_order_items=@production_order.production_order_items.order(machine_id: :asc, optimise_index: :asc)
       @optimised=true
     else
-      @production_order_items = ProductionOrderItem.for_optimise
+      @production_order_items = ProductionOrderItem.all
     end
 
-    if params.has_key?(:machine_nr) && params[:machine_nr].length>0
-      @production_order_items= @production_order_items.joins(:machine).where(machines: {nr: params[:machine_nr]})
-      @machine_nr=params[:machine_nr]
+    if params.has_key?(:machine_id) && params[:machine_id].length>0
+      @production_order_items= @production_order_items.where(machine_id: params[:machine_id])
+      @machine_id= params[:machine_id]
     end
+
     if params.has_key?(:production_order_item_nr) && params[:production_order_item_nr].length>0
       @production_order_items= @production_order_items.where("production_order_items.nr like '%#{params[:production_order_item_nr]}%'")
       @production_order_item_nr=params[:production_order_item_nr]
+    end
+
+    unless params[:wire_nr].blank?
+      ids= Kanban.search_for(params[:wire_nr]).pluck(:id)
+      @production_order_items=@production_order_items.joins(:kanban).where(kanbans:{id:ids}) if ids.count>0
+      @wire_nr=params[:wire_nr]
+    end
+
+    unless params[:state].blank?
+      @production_order_items=@production_order_items.where(state:params[:state])
+      @state=params[:state]
     end
     @production_order_items= @production_order_items.paginate(:page => params[:page])
     @page = params[:page].blank? ? 0 : (params[:page].to_i-1)

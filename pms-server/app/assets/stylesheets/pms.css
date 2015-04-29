@@ -92,6 +92,10 @@ body {
 .config-pane p span {
     padding: 15px;
 }
-.config-panel table{
+.config-panel table {
     max-width: 780px;
+}
+.red-bold{
+    color: red;
+    font-weight: bold;
 }

@@ -24,7 +24,7 @@ module FileHandler
                   row[k] = book.cell(line, i+1).to_s.strip
                 end
 
-                process_template = ProcessTemplate.find_by_code(row['Template Code'])
+                process_template = ProcessTemplate.find_by_code(row['Template Code'].to_i.to_s)
                 product = Part.find_by_nr(row['Product Nr'])
                 params = {}
                 params = params.merge({
@@ -38,7 +38,13 @@ module FileHandler
 
                 case row['Operator']
                   when 'new', ''
-                    part = Part.create({nr: "#{row['Product Nr']}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED}) if row['Wire NO'].present?
+                    if row['Wire NO'].present?
+                      part = Part.where({nr: "#{row['Product Nr']}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED}).first
+                      if part.nil?
+                        part = Part.create({nr: "#{row['Product Nr']}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED})
+                      end
+                    end
+
                     #TODO add WorkStation Type and Cost Center
                     process_entity = ProcessEntity.new(params)
                     process_entity.process_template = process_template
@@ -111,7 +117,7 @@ module FileHandler
                       end
                     end
                   when 'delete'
-                    pe = PProcessEntity.where({nr: params[:nr], product_id: product.id}).first
+                    pe = ProcessEntity.where({nr: params[:nr], product_id: product.id}).first
                     pe.destroy
                 end
               end
@@ -251,9 +257,9 @@ module FileHandler
 
         case row['Operator']
           when 'new', ''
-            if wire
-              msg.contents << "Wire NO:#{row['Wire NO']}已经存在"
-            end
+            #if wire
+            #  msg.contents << "Wire NO:#{row['Wire NO']}已经存在"
+            #end
             if pe.count > 0
               msg.contents << "Nr :#{row['Nr']}已经存在"
             end
@@ -272,9 +278,9 @@ module FileHandler
         end
 
         #验证模板
-        template = ProcessTemplate.find_by_code(row['Template Code'])
+        template = ProcessTemplate.find_by_code(row['Template Code'].to_i.to_s)
         if template.nil?
-          msg.contents << "Template Code: #{row['Template Code']}不存在"
+          msg.contents << "Template Code: #{row['Template Code'].to_i.to_s}不存在"
         end
 
         #验证步骤属性

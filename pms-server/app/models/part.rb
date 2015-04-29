@@ -61,14 +61,24 @@ class Part < ActiveRecord::Base
       kanbans = []
       puts "#{self.nr}".red
 
-      kanbans = Kanban.joins(process_entities: :process_parts).where(
-          "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND process_parts.part_id = ?",KanbanType::BLUE,kanban_id,product_id,self.id
-      ).distinct
+      kanban = Kanban.find_by_id(kanban_id)
 
-      if kanbans.count <=0
+      store = kanban.des_storage.split(" ").first
+
+      if store.present? && (["FC","MC","TC"].include? store)
         kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
             "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",KanbanType::WHITE,kanban_id,product_id,self.id
         ).distinct
+      else
+        kanbans = Kanban.joins(process_entities: :process_parts).where(
+            "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND process_parts.part_id = ?",KanbanType::BLUE,kanban_id,product_id,self.id
+        ).distinct
+
+        if kanbans.count <=0
+          kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
+              "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",KanbanType::WHITE,kanban_id,product_id,self.id
+          ).distinct
+        end
       end
 
       puts "#{kanbans.collect{|k| k.nr}.join(',')}".red
