@@ -1,0 +1,37 @@
+<h1>Listing ncr_api_logs</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Machine nr</th>
+      <th>Order item nr</th>
+      <th>Log type</th>
+      <th>Order item state</th>
+      <th>Order item qty</th>
+      <th>Params detail</th>
+      <th>Return detail</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @ncr_api_logs.each do |ncr_api_log| %>
+      <tr>
+        <td><%= ncr_api_log.machine_nr %></td>
+        <td><%= ncr_api_log.order_item_nr %></td>
+        <td><%= ncr_api_log.log_type %></td>
+        <td><%= ncr_api_log.order_item_state %></td>
+        <td><%= ncr_api_log.order_item_qty %></td>
+        <td><%= ncr_api_log.params_detail %></td>
+        <td><%= ncr_api_log.return_detail %></td>
+        <td><%= link_to 'Show', ncr_api_log %></td>
+        <td><%= link_to 'Edit', edit_ncr_api_log_path(ncr_api_log) %></td>
+        <td><%= link_to 'Destroy', ncr_api_log, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Ncr api log', new_ncr_api_log_path %>

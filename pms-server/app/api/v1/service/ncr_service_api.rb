@@ -27,10 +27,15 @@ module V1
             if machine=Machine.find_by_nr(params[:machine_nr])
               order = ProductionOrderItem.first_wait_produce(machine)
               if order
-                return ProductionOrderItemPresenter.new(order).to_check_material_order
+                r= ProductionOrderItemPresenter.new(order).to_check_material_order
               else
-                return {}
+                r= {}
               end
+              NcrLogWorker.perform_async({machine_nr: params[:machine_nr],
+                                          log_type: NcrApiLogType::MACHINE_MATERIAL_CHECK,
+                                          return_detail: r.to_json,
+                                          params_detail: params.to_json})
+              return r
             end
           end
 
@@ -58,10 +63,18 @@ module V1
           put :update_state do
             if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
               # 当任务结束时，不可以使用API改变状态
+              r=false
               if item.state==ProductionOrderItemState::TERMINATED
-                return false
+                r= false
+              else
+                r= item.update(state: params[:state])
               end
-              return item.update(state: params[:state])
+
+              NcrLogWorker.perform_async({order_item_nr: params[:order_item_nr],
+                                          log_type: NcrApiLogType::ORDER_UPDATE_STATE,
+                                          order_item_state: params[:state],
+                                          return_detail: r, params_detail: params.to_json})
+              return r
             end
           end
 
@@ -70,11 +83,18 @@ module V1
               if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
                 # TODO generate bundle storage
                 item.update(produced_qty: params[:produced_qty])
-                return ProductionOrderItemPresenter.new(item).to_bundle_produce_order
+                r= ProductionOrderItemPresenter.new(item).to_bundle_produce_order
+
+                NcrLogWorker.perform_async({order_item_nr: params[:order_item_nr],
+                                            log_type: NcrApiLogType::MACHINE_OUT_PUT_QTY,
+                                            return_detail: r.to_json,
+                                            order_item_qty: params[:produced_qty],
+                                            params_detail: params.to_json})
+
+                return r
               end
             end
           end
-
         end
 
         namespace :printer do

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :ncr_api_logs
+
   resources :machine_time_rules
 
   resources :machine_types
@@ -150,8 +152,8 @@ Rails.application.routes.draw do
       get :export
       get :management
       match :import, to: :import, via: [:get, :post]
-      match :scan_finish, to: :scan_finish, via: [:get,:post]
-      match :import_to_scan, to: :import_to_scan, via: [:get,:post]
+      match :scan_finish, to: :scan_finish, via: [:get, :post]
+      match :import_to_scan, to: :import_to_scan, via: [:get, :post]
       match :import_to_get_kanban_list, to: :import_to_get_kanban_list, via: [:get, :post]
     end
   end
@@ -180,6 +182,13 @@ Rails.application.routes.draw do
     end
   end
   resources :files
+
+
+  require 'sidekiq/web'
+  # authenticate :user, lambda { |u| u.is_sys } do
+  mount Sidekiq::Web => '/sidekiq'
+  # end
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

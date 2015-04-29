@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  machine_nr: MyString
+  order_item_nr: MyString
+  log_type: 1
+  order_item_state: 1
+  order_item_qty: 1.5
+  params_detail: MyText
+  return_detail: MyText
+
+two:
+  machine_nr: MyString
+  order_item_nr: MyString
+  log_type: 1
+  order_item_state: 1
+  order_item_qty: 1.5
+  params_detail: MyText
+  return_detail: MyText
