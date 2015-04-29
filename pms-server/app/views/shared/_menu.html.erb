@@ -27,7 +27,11 @@
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">生产订单<span class="caret"></span></a>
           <ul class="dropdown-menu" role="manage">
             <li><a href="<%= production_orders_path %>">订单列表</a></li>
-            <li><a href="<%= preview_production_orders_path %>">订单预览</a></li>
+
+            <% if policy(ProductionOrder).preview?%>
+                <li><a href="<%= preview_production_orders_path %>">订单预览</a></li>
+            <% end %>
+
           </ul>
         </li>
 
