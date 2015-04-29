@@ -5,7 +5,7 @@ module FileHandler
           'Nr', 'Quantity', 'Safety Stock', 'Copies',
           'Remark', 'Wire Nr', 'Product Nr', 'Type',
           'Bundle', 'Destination Warehouse',
-          'Destination Storage', 'Process List','Operator'
+          'Destination Storage', 'Process List', 'Operator'
       ]
 
       def self.export q = nil
@@ -20,7 +20,7 @@ module FileHandler
             if q.nil?
               kanbans= Kanban.where.not(state: KanbanState::DELETED).all
             else
-              kanbans = Kanban.search_for(q).select{|k| [KanbanState::INIT,KanbanState::RELEASED,KanbanState::LOCKED].include? k.state }
+              kanbans = Kanban.search_for(q).select { |k| [KanbanState::INIT, KanbanState::RELEASED, KanbanState::LOCKED].include? k.state }
             end
             kanbans.each do |k|
               sheet.add_row [
@@ -81,15 +81,13 @@ module FileHandler
             next
           end
 
-          pe = ProcessEntity.joins(custom_values: :custom_field).where(
-              {product_id: product.id, custom_fields: {name: "default_wire_nr"}, custom_values: {value: wire.id}}
+
+          pe=ProcessEntity.joins(custom_values: :custom_field).joins(:kanbans).where(
+              {product_id: product.id, custom_fields: {name: "default_wire_nr"}, custom_values: {value: wire.id}, kanbans: {ktype: KanbanType::WHITE}}
           ).first
 
-          kanban = pe.kanbans.first
-
-          if kanban
-
-            @kanban = kanban
+          if pe && (@kanban=pe.kanbans.where(ktype: KanbanType::WHITE).first)
+            @kanban = pe.kanbans.where(ktype: KanbanType::WHITE).first
             if @kanban.quantity <= 0
               next
             end
@@ -171,14 +169,14 @@ module FileHandler
                 params[:product_id] = product.id
 
                 case row['Operator']
-                  when 'new',''
+                  when 'new', ''
                     kanban = Kanban.new(params)
                     process_nrs = row['Process List'].split(',')
 
                     kanban_process_entities = []
                     process_nrs.each_with_index { |pr, i|
-                      pe = ProcessEntity.where({nr:pr,product_id:product.id}).first
-                      kanban_process_entities << KanbanProcessEntity.new({process_entity_id: pe.id,position:i})
+                      pe = ProcessEntity.where({nr: pr, product_id: product.id}).first
+                      kanban_process_entities << KanbanProcessEntity.new({process_entity_id: pe.id, position: i})
                     }
                     kanban.kanban_process_entities = kanban_process_entities
                     kanban.state = KanbanState::RELEASED
@@ -192,8 +190,8 @@ module FileHandler
                     process_nrs = row['Process List'].split(',')
                     kanban_process_entities = []
                     process_nrs.each_with_index { |pr, i|
-                      pe = ProcessEntity.where({nr:pr,product_id:product.id}).first
-                      kanban_process_entities << KanbanProcessEntity.new({process_entity_id: pe.id,position:i})
+                      pe = ProcessEntity.where({nr: pr, product_id: product.id}).first
+                      kanban_process_entities << KanbanProcessEntity.new({process_entity_id: pe.id, position: i})
                     }
                     #process_nrs = row['Process List'].split(',')
                     #kanban_process_entities = ProcessEntity.where({nr: process_nrs, product_id: product.id}).collect { |pe| KanbanProcessEntity.new({process_entity_id: pe.id}) }
@@ -221,7 +219,7 @@ module FileHandler
 
       def self.validate_import file
         tmp_file=full_tmp_path(file.original_name)
-        msg = Message.new(result:true)
+        msg = Message.new(result: true)
         book = Roo::Excelx.new file.full_path
         book.default_sheet = book.sheets.first
 
@@ -268,7 +266,7 @@ module FileHandler
             unless kanban
               msg.contents << "Nr:#{row['Nr']},Kanban不存在"
             end
-          when 'new',''
+          when 'new', ''
             if row['Nr'].present?
               msg.contents << "Nr:#{row['Nr']},新建时，不能输入Nr"
             end

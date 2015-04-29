@@ -21,7 +21,8 @@ module Enum
         OEE_CODE: {NAME: PageInfo.oeecode,actions:['new','index']},
         MACHINE_TYPE: {NAME: PageInfo.machinetype,actions:['new','index']},
         MACHINE_TIME_RULE: {NAME: PageInfo.machinetimerule,actions:['new','index']},
-        USER: {NAME: PageInfo.user,actions:['new','index']}
+        USER: {NAME: PageInfo.user,actions:['new','index']},
+        POSITION:{NAME:PageInfo.position,actions:['new','index']}
     }
 
     class<<self

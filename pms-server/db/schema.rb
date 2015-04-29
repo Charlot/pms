@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150422070738) do
+ActiveRecord::Schema.define(version: 20150429085827) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -181,6 +181,7 @@ ActiveRecord::Schema.define(version: 20150422070738) do
     t.integer  "status",            default: 0
     t.string   "ip"
     t.integer  "machine_type_id"
+    t.float    "wire_length_time",  default: 2.0
   end
 
   add_index "machines", ["machine_type_id"], name: "index_machines_on_machine_type_id", using: :btree
@@ -210,6 +211,18 @@ ActiveRecord::Schema.define(version: 20150422070738) do
   end
 
   add_index "measure_units", ["code"], name: "index_measure_units_on_code", using: :btree
+
+  create_table "ncr_api_logs", force: true do |t|
+    t.string   "machine_nr"
+    t.string   "order_item_nr"
+    t.integer  "log_type"
+    t.integer  "order_item_state"
+    t.float    "order_item_qty"
+    t.text     "params_detail"
+    t.text     "return_detail"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "oee_codes", force: true do |t|
     t.string   "nr"
@@ -269,6 +282,15 @@ ActiveRecord::Schema.define(version: 20150422070738) do
   add_index "parts", ["resource_group_id"], name: "index_parts_on_resource_group_id", using: :btree
   add_index "parts", ["type"], name: "index_parts_on_type", using: :btree
 
+  create_table "positions", force: true do |t|
+    t.string   "detail"
+    t.integer  "warehouse_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "positions", ["warehouse_id"], name: "index_positions_on_warehouse_id", using: :btree
+
   create_table "process_entities", force: true do |t|
     t.string   "nr",                                null: false
     t.string   "name"
@@ -280,6 +302,7 @@ ActiveRecord::Schema.define(version: 20150422070738) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "product_id",                        null: false
+    t.text     "remark"
   end
 
   add_index "process_entities", ["cost_center_id"], name: "index_process_entities_on_cost_center_id", using: :btree
@@ -390,6 +413,9 @@ ActiveRecord::Schema.define(version: 20150422070738) do
     t.integer  "warehouse_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "part_id"
+    t.integer  "position_id"
+    t.integer  "quantity"
   end
 
   add_index "storages", ["warehouse_id"], name: "index_storages_on_warehouse_id", using: :btree

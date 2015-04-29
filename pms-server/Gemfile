@@ -86,3 +86,7 @@ gem 'rolify'
 
 # Authorization
 gem 'pundit'
+#
+gem 'sidekiq'
+gem 'sinatra',require: false
+gem 'whenever'

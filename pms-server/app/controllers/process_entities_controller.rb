@@ -213,6 +213,6 @@ class ProcessEntitiesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def process_entity_params
-    params.require(:process_entity).permit(:nr, :name, :description, :stand_time, :process_template_id, :workstation_type_id, :cost_center_id)
+    params.require(:process_entity).permit(:nr, :name, :description, :stand_time, :process_template_id,:remark, :workstation_type_id, :cost_center_id)
   end
 end

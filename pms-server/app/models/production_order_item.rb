@@ -27,7 +27,7 @@ class ProductionOrderItem < ActiveRecord::Base
       where(state: ProductionOrderItemState.wait_produce_states, machine_id: machine.id)
           .order(production_order_id: :asc, optimise_index: :asc)
     else
-      where(state: ProductionOrderItemState.wait_produce_states)
+      joins(:machine).where(state: ProductionOrderItemState.wait_produce_states)
           .order(production_order_id: :asc, optimise_index: :asc)
     end
   end
@@ -47,40 +47,40 @@ class ProductionOrderItem < ActiveRecord::Base
 
   def self.optimise
     # ProductionOrderItem.transaction do
-      optimise_at=Time.now
-      items=for_optimise
-      success_count=0
-      if items.count>0
-        order= ProductionOrder.new
-        combinations=MachineCombination.load_combinations
-        items.each do |item|
-          if node= combinations.match(MachineCombination.init_node_by_kanban(item.kanban))
+    optimise_at=Time.now
+    items=for_optimise
+    success_count=0
+    if items.count>0
+      order= ProductionOrder.new
+      combinations=MachineCombination.load_combinations
+      items.each do |item|
+        if node= combinations.match(MachineCombination.init_node_by_kanban(item.kanban))
 
-            # item.update(machine_id: node.machine_id,
-            #             optimise_index: Machine.find_by_id(node.machine_id).optimise_time_by_kanban(item.kanban),
-            #             optimise_at: optimise_at,
-            #             state: ProductionOrderItemState::OPTIMISE_SUCCEED)
-            #
-            if machine=Machine.find_by_id(node.machine_id)
-              item.update(machine_id: node.machine_id,
-                          machine_time: machine.optimise_time_by_kanban(item.kanban),
-                          optimise_at: optimise_at
-              # , state: ProductionOrderItemState::OPTIMISE_SUCCEED
-              )
+          # item.update(machine_id: node.machine_id,
+          #             optimise_index: Machine.find_by_id(node.machine_id).optimise_time_by_kanban(item.kanban),
+          #             optimise_at: optimise_at,
+          #             state: ProductionOrderItemState::OPTIMISE_SUCCEED)
+          #
+          if machine=Machine.find_by_id(node.machine_id)
+            item.update(machine_id: node.machine_id,
+                        machine_time: machine.optimise_time_by_kanban(item.kanban),
+                        optimise_at: optimise_at
+            # , state: ProductionOrderItemState::OPTIMISE_SUCCEED
+            )
 
-              order.production_order_items<<item
-              success_count+=1
-            end
-          else
-            item.update(state: ProductionOrderItemState::OPTIMISE_FAIL)
+            order.production_order_items<<item
+            success_count+=1
           end
-        end
-        self.optimise_order
-        if success_count>0
-          order.save
-          return order
+        else
+          item.update(state: ProductionOrderItemState::OPTIMISE_FAIL)
         end
       end
+      self.optimise_order
+      if success_count>0
+        order.save
+        return order
+      end
+    end
     # end
   end
 

@@ -4,7 +4,7 @@ module FileHandler
       HEADERS=[
           'Nr', 'Name', 'Description', 'Stand Time',
           'Product Nr', 'Template Code', 'WorkStation Type',
-          'Cost Center', 'Template Fields', 'Wire Nr', 'Operator'
+          'Cost Center', 'Template Fields', 'Wire Nr', 'Remark', 'Operator'
       ]
 
       def self.export(q)
@@ -33,8 +33,9 @@ module FileHandler
                                 pe.cost_center,
                                 pe.template_fields.join(","),
                                 pe.parsed_wire_nr,
+                                pe.remark,
                                 "update"
-                            ], types: [:string, :string, :string, :float, :string, :string]
+                            ], types: [:string, :string, :string, :float, :string, :string, :string]
             end
           end
           p.use_shared_strings = true
@@ -68,7 +69,7 @@ module FileHandler
                 product = Part.find_by_nr(row['Product Nr'])
 
                 params = {}
-                params = params.merge({nr: row['Nr'], name: row['Name'], description: row['Description'], stand_time: row['Stand Time'], product_id: product.id, process_template_id: process_template.id})
+                params = params.merge({nr: row['Nr'], name: row['Name'], description: row['Description'], stand_time: row['Stand Time'], remark: row['Remark'], product_id: product.id, process_template_id: process_template.id})
 
                 pe = ProcessEntity.where({product_id: product.id, nr: params[:nr]}).first
 
@@ -93,11 +94,6 @@ module FileHandler
                       process_entity.custom_values << cv
                     end
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 2e6335a6fd585fa06056c4a79261c5a2c15ae768
                     #template fields
                     custom_fields_val = row['Template Fields'].split(',')
                     process_entity.custom_fields.select { |cf| cf.name != "default_wire_nr" }.each_with_index do |cf, index|
