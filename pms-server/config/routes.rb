@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :positions
+
   resources :machine_time_rules
 
   resources :machine_types
@@ -6,8 +8,10 @@ Rails.application.routes.draw do
   resources :oee_codes
 
   resources :warehouses do
-    resources :storages
+    resources :positions
   end
+
+  resources :storages
 
 
   resources :part_positions do

@@ -20,7 +20,8 @@ module Enum
         STORAGE: {NAME: PageInfo.storage,actions:['new','index']},
         OEE_CODE: {NAME: PageInfo.oeecode,actions:['new','index']},
         MACHINE_TYPE: {NAME: PageInfo.machinetype,actions:['new','index']},
-        MACHINE_TIME_RULE: {NAME: PageInfo.machinetimerule,actions:['new','index']}
+        MACHINE_TIME_RULE: {NAME: PageInfo.machinetimerule,actions:['new','index']},
+        POSITION:{NAME:PageInfo.position,actions:['new','index']}
     }
 
     class<<self

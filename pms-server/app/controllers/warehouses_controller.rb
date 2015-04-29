@@ -43,10 +43,10 @@ class WarehousesController < ApplicationController
     respond_to do |format|
       if @warehouse.update(warehouse_params)
         format.html { redirect_to @warehouse, notice: 'Warehouse was successfully updated.' }
-        format.json { render :show, status: :ok, location: @warehouse }
+        format.json { respond_with_bip(@warehouse) }
       else
         format.html { render :edit }
-        format.json { render json: @warehouse.errors, status: :unprocessable_entity }
+        format.json { respond_with_bip(@warehouse)}
       end
     end
   end

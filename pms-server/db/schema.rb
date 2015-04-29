@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150421090942) do
+ActiveRecord::Schema.define(version: 20150429084030) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -269,6 +269,15 @@ ActiveRecord::Schema.define(version: 20150421090942) do
   add_index "parts", ["resource_group_id"], name: "index_parts_on_resource_group_id", using: :btree
   add_index "parts", ["type"], name: "index_parts_on_type", using: :btree
 
+  create_table "positions", force: true do |t|
+    t.string   "detail"
+    t.integer  "warehouse_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "positions", ["warehouse_id"], name: "index_positions_on_warehouse_id", using: :btree
+
   create_table "process_entities", force: true do |t|
     t.string   "nr",                                null: false
     t.string   "name"
@@ -280,6 +289,7 @@ ActiveRecord::Schema.define(version: 20150421090942) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "product_id",                        null: false
+    t.text     "remark"
   end
 
   add_index "process_entities", ["cost_center_id"], name: "index_process_entities_on_cost_center_id", using: :btree
@@ -366,6 +376,17 @@ ActiveRecord::Schema.define(version: 20150421090942) do
   add_index "resource_groups", ["nr"], name: "index_resource_groups_on_nr", using: :btree
   add_index "resource_groups", ["type"], name: "index_resource_groups_on_type", using: :btree
 
+  create_table "roles", force: true do |t|
+    t.string   "name"
+    t.integer  "resource_id"
+    t.string   "resource_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id", using: :btree
+  add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
+
   create_table "settings", force: true do |t|
     t.string   "name"
     t.string   "value"
@@ -379,6 +400,9 @@ ActiveRecord::Schema.define(version: 20150421090942) do
     t.integer  "warehouse_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "part_id"
+    t.integer  "position_id"
+    t.integer  "quantity"
   end
 
   add_index "storages", ["warehouse_id"], name: "index_storages_on_warehouse_id", using: :btree
@@ -399,6 +423,32 @@ ActiveRecord::Schema.define(version: 20150421090942) do
   add_index "tools", ["nr"], name: "index_tools_on_nr", using: :btree
   add_index "tools", ["part_id"], name: "index_tools_on_part_id", using: :btree
   add_index "tools", ["resource_group_id"], name: "index_tools_on_resource_group_id", using: :btree
+
+  create_table "users", force: true do |t|
+    t.string   "email",                  default: ""
+    t.string   "encrypted_password",     default: "", null: false
+    t.string   "user_name",              default: ""
+    t.string   "name",                   default: ""
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  create_table "users_roles", id: false, force: true do |t|
+    t.integer "user_id"
+    t.integer "role_id"
+  end
+
+  add_index "users_roles", ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id", using: :btree
 
   create_table "versions", force: true do |t|
     t.string   "item_type",  null: false

@@ -1,8 +1,10 @@
-<table>
+<table class="table table-bordered table-striped table-hover">
   <thead>
     <tr>
       <th>Nr</th>
-      <th>Warehouse</th>
+      <th>Part</th>
+      <th>Position</th>
+      <th>Quantity</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -11,7 +13,9 @@
     <% @storages.each do |storage| %>
       <tr>
         <td><%= storage.nr %></td>
-        <td><%= storage.warehouse %></td>
+        <td><%= storage.part_nr%></td>
+        <td><%= storage.position_detail%></td>
+        <td><%= storage.quantity%></td>
         <td><%= link_to 'Show', storage %></td>
         <td><%= link_to 'Edit', edit_storage_path(storage) %></td>
         <td><%= link_to 'Destroy', storage, method: :delete, data: { confirm: 'Are you sure?' } %></td>

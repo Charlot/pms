@@ -155,3 +155,25 @@ oee_codes.each_with_index do |oee,i|
   end
   o.save
 end
+
+puts "======================".yellow
+puts "9.看板库位信息".yellow
+puts "======================".yellow
+["PA01","SR01","SRPL","3PL"].each do |wh|
+  if warehouse = Warehouse.find_by_nr(wh)
+
+  else
+    warehouse = Warehouse.create({nr:wh})
+    puts "新建仓库#{wh}"
+  end
+end
+
+
+cutting = Warehouse.find_by_nr("SR01")
+assembly = Warehouse.find_by_nr("3PL")
+
+cutting_array = [""]
+
+Kanban.all.each do |k|
+
+end
