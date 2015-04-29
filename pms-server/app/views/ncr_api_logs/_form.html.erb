@@ -1,0 +1,45 @@
+<%= form_for(@ncr_api_log) do |f| %>
+  <% if @ncr_api_log.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@ncr_api_log.errors.count, "error") %> prohibited this ncr_api_log from being saved:</h2>
+
+      <ul>
+      <% @ncr_api_log.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :machine_nr %><br>
+    <%= f.text_field :machine_nr %>
+  </div>
+  <div class="field">
+    <%= f.label :order_item_nr %><br>
+    <%= f.text_field :order_item_nr %>
+  </div>
+  <div class="field">
+    <%= f.label :log_type %><br>
+    <%= f.number_field :log_type %>
+  </div>
+  <div class="field">
+    <%= f.label :order_item_state %><br>
+    <%= f.number_field :order_item_state %>
+  </div>
+  <div class="field">
+    <%= f.label :order_item_qty %><br>
+    <%= f.text_field :order_item_qty %>
+  </div>
+  <div class="field">
+    <%= f.label :params_detail %><br>
+    <%= f.text_area :params_detail %>
+  </div>
+  <div class="field">
+    <%= f.label :return_detail %><br>
+    <%= f.text_area :return_detail %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

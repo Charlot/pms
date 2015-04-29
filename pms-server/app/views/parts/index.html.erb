@@ -1,4 +1,6 @@
 <%= render partial: 'shared/search'%>
+<%= link_to '导出零件',export_parts_path,:class=>'btn btn-info'%>
+
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @parts %>

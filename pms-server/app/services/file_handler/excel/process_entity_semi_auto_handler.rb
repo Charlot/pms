@@ -4,7 +4,7 @@ module FileHandler
       HEADERS=[
           'Nr', 'Name', 'Description', 'Stand Time',
           'Product Nr', 'Template Code', 'WorkStation Type',
-          'Cost Center', 'Template Fields', 'Wire Nr', 'Operator'
+          'Cost Center', 'Template Fields', 'Wire Nr', 'Remark', 'Operator'
       ]
 
       def self.export(q)
@@ -33,8 +33,9 @@ module FileHandler
                                 pe.cost_center,
                                 pe.template_fields.join(","),
                                 pe.parsed_wire_nr,
+                                pe.remark,
                                 "update"
-                            ], types: [:string, :string, :string, :float, :string, :string]
+                            ], types: [:string, :string, :string, :float, :string, :string, :string]
             end
           end
           p.use_shared_strings = true
@@ -68,7 +69,7 @@ module FileHandler
                 product = Part.find_by_nr(row['Product Nr'])
 
                 params = {}
-                params = params.merge({nr: row['Nr'], name: row['Name'], description: row['Description'], stand_time: row['Stand Time'], product_id: product.id, process_template_id: process_template.id})
+                params = params.merge({nr: row['Nr'], name: row['Name'], description: row['Description'], stand_time: row['Stand Time'], remark: row['Remark'], product_id: product.id, process_template_id: process_template.id})
 
                 pe = ProcessEntity.where({product_id: product.id, nr: params[:nr]}).first
 
@@ -92,7 +93,6 @@ module FileHandler
                       cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: false, value: cf.get_field_format_value("#{product.nr}_#{row['Wire Nr']}"))
                       process_entity.custom_values << cv
                     end
-
 
 
                     #template fields
