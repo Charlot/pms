@@ -63,6 +63,12 @@
                 <li><a href="<%= tools_path %>">模具</a></li>
               </ul>
             </li>
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">库存<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="manage">
+                <li><a href="<%= storages_path%>">库存</a></li>
+              </ul>
+            </li>
 
         <% end %>
         <% if current_user.has_role? :admin %>
@@ -78,12 +84,6 @@
         <% end %>
 
       </ul>
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">库存<span class="caret"></span></a>
-        <ul class="dropdown-menu" role="manage">
-          <li><a href="<%= storages_path%>">库存</a></li>
-        </ul>
-      </li>
 
       <ul class="nav navbar-nav navbar-right">
         <li><a><%= current_user.user_name%></a></li>
