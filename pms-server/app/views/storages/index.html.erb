@@ -1,8 +1,10 @@
+<%= render partial: 'shared/search' %>
 <table class="table table-bordered table-striped table-hover">
   <thead>
     <tr>
       <th>Nr</th>
       <th>Part</th>
+      <th>Detail</th>
       <th>Position</th>
       <th>Quantity</th>
       <th colspan="3"></th>
@@ -13,6 +15,7 @@
     <% @storages.each do |storage| %>
       <tr>
         <td><%= storage.nr %></td>
+        <td><%= storage.part_parsed_nr%></td>
         <td><%= storage.part_nr%></td>
         <td><%= storage.position_detail%></td>
         <td><%= storage.quantity%></td>

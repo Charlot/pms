@@ -12,7 +12,11 @@ Rails.application.routes.draw do
     resources :positions
   end
 
-  resources :storages
+  resources :storages do
+    collection do
+      get :scope_search
+    end
+  end
 
 
   resources :part_positions do

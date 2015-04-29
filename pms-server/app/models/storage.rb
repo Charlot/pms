@@ -4,9 +4,13 @@ class Storage < ActiveRecord::Base
   belongs_to :position
 
   delegate :nr, to: :part,prefix: true, allow_nil: true
+  delegate :parsed_nr, to: :part, prefix: true, allow_nil: true
   delegate :detail, to: :position, prefix: true, allow_nil: true
 
   validates_uniqueness_of :part_id, :scope => :position_id
+
+  scoped_search in: :part,on: :nr
+  scoped_search in: :position,on: :detail
 
   def self.add(part_nr,quantity,position_detail=nil)
     part = Part.find_by_nr(part_nr)
