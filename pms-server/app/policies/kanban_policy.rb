@@ -3,10 +3,6 @@ class KanbanPolicy<ApplicationPolicy
     user.av?
   end
 
-  def create?
-    user.av?
-  end
-
   def manage_routing?
     update?
   end
@@ -17,10 +13,6 @@ class KanbanPolicy<ApplicationPolicy
 
   def delete_process_entities?
     update?
-  end
-
-  def destroy?
-    user.av?
   end
 
   def finish_production?

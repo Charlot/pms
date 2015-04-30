@@ -3,10 +3,6 @@ class ProcessEntityPolicy<ApplicationPolicy
     user.av?
   end
 
-  def destroy?
-    update?
-  end
-
   def simple?
     true
   end

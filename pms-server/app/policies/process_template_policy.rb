@@ -3,14 +3,6 @@ class ProcessTemplatePolicy<ApplicationPolicy
     user.av?
   end
 
-  def create?
-    update?
-  end
-
-  def destroy?
-    update?
-  end
-
   def template?
     true
   end

@@ -12,6 +12,8 @@ class Storage < ActiveRecord::Base
   scoped_search in: :part,on: :nr
   scoped_search in: :position,on: :detail
 
+  has_paper_trail
+
   def self.add(part_nr,quantity,position_detail=nil)
     part = Part.find_by_nr(part_nr)
     raise "Part not found" if part.nil?
