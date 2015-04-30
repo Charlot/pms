@@ -26,6 +26,7 @@ class ResourceGroupToolsController < ApplicationController
   # POST /resource_group_tools.json
   def create
     @resource_group_tool = ResourceGroupTool.new(resource_group_tool_params.except(:resource_group_part))
+    authorize(@resource_group_tool)
     unless resource_group_tool_params[:resource_group_part].blank?
       @resource_group_part=@resource_group_tool.build_resource_group_part
       @resource_group_part.part=Part.find_by_nr(resource_group_tool_params[:resource_group_part])

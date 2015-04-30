@@ -16,6 +16,7 @@ class ResourceGroupPartsController < ApplicationController
   end
 
   def group_by_part
+    authorize(ResourceGroupPart)
     @msg=Message.new
     if (part=Part.find_by_nr(params[:part])) && (rp=part.resource_group_part)
       @msg.content=rp.resource_group_tool
@@ -27,6 +28,7 @@ class ResourceGroupPartsController < ApplicationController
   # GET /resource_group_parts/new
   def new
     @resource_group_part = ResourceGroupPart.new
+    authorize(@resource_group_part)
   end
 
   # GET /resource_group_parts/1/edit
@@ -36,6 +38,7 @@ class ResourceGroupPartsController < ApplicationController
   # POST /resource_group_parts
   # POST /resource_group_parts.json
   def create
+    authorize(ResourceGroupPart)
     respond_to do |format|
       if @resource_group_part.errors.blank? && @resource_group_part.save
         flash.clear
@@ -80,10 +83,12 @@ class ResourceGroupPartsController < ApplicationController
     unless (@resource_group_tool=ResourceGroupTool.find_by_id(params[:resource_group_tool_id]))
       redirect_to resource_group_tools_path, notice: 'Please select a ResourceGroupTool'
     end
+    authorize(@resource_group_tool)
   end
 
   def set_resource_group_parts
     @resource_group_parts = ResourceGroupTool.find_by_id(params[:resource_group_tool_id]).resource_group_parts
+    authorize(@resource_group_parts)
   end
 
   # Use callbacks to share common setup or constraints between actions.

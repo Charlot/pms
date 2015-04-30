@@ -26,7 +26,7 @@ class StoragesController < ApplicationController
   # POST /storages.json
   def create
     @storage = Storage.new(storage_params)
-
+    authorize(@storage)
     respond_to do |format|
       if @storage.save
         format.html { redirect_to @storage, notice: 'Storage was successfully created.' }

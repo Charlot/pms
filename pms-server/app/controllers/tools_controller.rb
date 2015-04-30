@@ -26,6 +26,7 @@ class ToolsController < ApplicationController
   # POST /tools.json
   def create
     @tool = Tool.new(tool_params.except(:part))
+    authorize(@tool)
     unless tool_params[:part].blank?
       if part= Part.find_by_nr(tool_params[:part])
         @tool.part=part

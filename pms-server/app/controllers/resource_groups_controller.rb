@@ -26,7 +26,7 @@ class ResourceGroupsController < ApplicationController
   # POST /resource_groups.json
   def create
     @resource_group = ResourceGroup.new(resource_group_params)
-
+    authorize(@resource_group)
     respond_to do |format|
       if @resource_group.save
         format.html { redirect_to @resource_group, notice: 'Resource group was successfully created.' }
