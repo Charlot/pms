@@ -15,6 +15,7 @@ class ResourceGroupToolsController < ApplicationController
   # GET /resource_group_tools/new
   def new
     @resource_group_tool = ResourceGroupTool.new
+    authorize(@resource_group_tool)
   end
 
   # GET /resource_group_tools/1/edit
@@ -74,6 +75,7 @@ class ResourceGroupToolsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_resource_group_tool
     @resource_group_tool = ResourceGroupTool.find(params[:id])
+    authorize(@resource_group_tool)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

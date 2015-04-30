@@ -15,6 +15,7 @@ class WarehousesController < ApplicationController
   # GET /warehouses/new
   def new
     @warehouse = Warehouse.new
+    authorize(@warehouse)
   end
 
   # GET /warehouses/1/edit
@@ -65,6 +66,7 @@ class WarehousesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_warehouse
       @warehouse = Warehouse.find(params[:id])
+      authorize(@warehouse)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

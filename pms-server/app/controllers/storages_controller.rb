@@ -15,6 +15,7 @@ class StoragesController < ApplicationController
   # GET /storages/new
   def new
     @storage = Storage.new
+    authorize(@storage)
   end
 
   # GET /storages/1/edit
@@ -65,6 +66,7 @@ class StoragesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_storage
       @storage = Storage.find(params[:id])
+      authorize(@storage)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

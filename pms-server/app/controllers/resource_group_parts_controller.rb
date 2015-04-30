@@ -89,6 +89,7 @@ class ResourceGroupPartsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_resource_group_part
     @resource_group_part = ResourceGroupPart.find(params[:id])
+    authorize(@resource_group_part)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

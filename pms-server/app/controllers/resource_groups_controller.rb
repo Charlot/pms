@@ -15,6 +15,7 @@ class ResourceGroupsController < ApplicationController
   # GET /resource_groups/new
   def new
     @resource_group = ResourceGroup.new
+    authorize(@resource_group)
   end
 
   # GET /resource_groups/1/edit
@@ -65,6 +66,7 @@ class ResourceGroupsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_resource_group
       @resource_group = ResourceGroup.find(params[:id])
+      authorize(@resource_group)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
