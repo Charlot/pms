@@ -11,9 +11,11 @@ class PartBomsController < ApplicationController
   # GET /part_boms/1.json
   def show
     @bom=PartBom.detail_by_part_id(params[:id])
+    authorize(@bom)
   end
 
   def search
+    authorize(PartBom)
     if @part=Part.find_by_nr(params[:part_nr])
       @bom=PartBom.detail_by_part(@part)
     end
@@ -21,6 +23,7 @@ class PartBomsController < ApplicationController
   end
 
   def import
+    authorize(PartBom)
     if request.post?
       msg=Message.new
       begin
@@ -39,6 +42,7 @@ class PartBomsController < ApplicationController
   # GET /part_boms/new
   def new
     @part_bom = PartBom.new
+    authorize(@part_bom)
   end
 
   # GET /part_boms/1/edit
@@ -49,7 +53,7 @@ class PartBomsController < ApplicationController
   # POST /part_boms.json
   def create
     @part_bom = PartBom.new(part_bom_params)
-
+    authorize(@part_bom)
     respond_to do |format|
       if @part_bom.save
         format.html { redirect_to @part_bom, notice: 'Part bom was successfully created.' }
@@ -90,6 +94,7 @@ class PartBomsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_part_bom
     @part_bom = PartBom.find(params[:id])
+    authorize(@part_bom)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
