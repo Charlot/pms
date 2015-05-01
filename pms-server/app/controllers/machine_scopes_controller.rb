@@ -15,6 +15,7 @@ class MachineScopesController < ApplicationController
   # GET /machine_scopes/new
   def new
     @machine_scope = MachineScope.new
+    authorize(@machine_scope)
   end
 
   # GET /machine_scopes/1/edit
@@ -25,7 +26,7 @@ class MachineScopesController < ApplicationController
   # POST /machine_scopes.json
   def create
     @machine_scope = MachineScope.new(machine_scope_params)
-
+    authorize(@machine_scope)
     respond_to do |format|
       if @machine_scope.save
         format.html { redirect_to @machine_scope, notice: 'Machine scope was successfully created.' }
@@ -71,6 +72,7 @@ class MachineScopesController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_machine_scope
     @machine_scope = params.has_key?(:machine_id) ? Machine.find_by_id(params[:machine_id]).machine_scope : MachineScope.find(params[:id])
+    authorize(@machine_scope)
     @machine=@machine_scope.machine
   end
 

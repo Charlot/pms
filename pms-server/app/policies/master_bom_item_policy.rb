@@ -1,6 +1,6 @@
 class MasterBomItemPolicy<ApplicationPolicy
   def update?
-    user.av?
+    user.av? || user.system?
   end
   def transport?
     update?

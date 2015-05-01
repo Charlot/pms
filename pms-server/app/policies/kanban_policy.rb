@@ -1,6 +1,6 @@
 class KanbanPolicy<ApplicationPolicy
   def update?
-    user.av?
+    user.av? || user.system?
   end
 
   def manage_routing?
@@ -16,7 +16,7 @@ class KanbanPolicy<ApplicationPolicy
   end
 
   def finish_production?
-    user.has_any_role? :av,:cutting
+    user.av? || user.cutting?
   end
 
   def history?

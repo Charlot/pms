@@ -50,7 +50,7 @@
           </ul>
         </li>
 
-        <% if current_user.has_role? :av %>
+        <% if current_user.av? || current_user.system?%>
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">机器与模具<span class="caret"></span></a>
               <ul class="dropdown-menu" role="manage">
@@ -71,7 +71,7 @@
             </li>
 
         <% end %>
-        <% if current_user.has_role? :admin %>
+        <% if current_user.admin? || current_user.system? %>
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">管理<span class="caret"></span></a>
               <ul class="dropdown-menu" role="manage">

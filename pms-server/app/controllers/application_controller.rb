@@ -16,6 +16,18 @@ class ApplicationController < ActionController::Base
 
   layout :layout_by_resource
 
+=begin
+  def authorize_pundit
+    m = self.class.name.gsub(/Controller/, '').classify
+    begin
+      mc = Object.const_get(m)
+      authorize(mc)
+    rescue => e
+      puts e.message
+    end
+  end
+=end
+
   def set_model
     @model=self.class.name.gsub(/Controller/, '').tableize.singularize
   end

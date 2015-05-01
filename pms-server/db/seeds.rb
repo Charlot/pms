@@ -35,4 +35,9 @@ User.transaction do
     cutting = User.create({user_name: "cutting", password: "123456", password_confirmation: "123456"})
     cutting.add_role :cutting
   end
+
+  unless system = User.find_by_user_name("system")
+    system = User.create({user_name: "system", password:"123456",password_confirmation:"123456"})
+    system.add_role :system
+  end
 end

@@ -15,6 +15,7 @@ class MachineTimeRulesController < ApplicationController
   # GET /machine_time_rules/new
   def new
     @machine_time_rule = MachineTimeRule.new
+    authorize(@machine_time_rule)
   end
 
   # GET /machine_time_rules/1/edit
@@ -25,7 +26,7 @@ class MachineTimeRulesController < ApplicationController
   # POST /machine_time_rules.json
   def create
     @machine_time_rule = MachineTimeRule.new(machine_time_rule_params)
-
+    authorize(@machine_time_rule)
     respond_to do |format|
       if @machine_time_rule.save
         format.html { redirect_to @machine_time_rule, notice: 'Machine time rule was successfully created.' }
@@ -65,6 +66,7 @@ class MachineTimeRulesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_machine_time_rule
       @machine_time_rule = MachineTimeRule.find(params[:id])
+      authorize(@machine_time_rule)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

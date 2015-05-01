@@ -1,4 +1,4 @@
-class PartBomPolicy<ApplicationPolicy
+class NcrApiLogPolicy<ApplicationPolicy
 	def update?
 		user.av? || user.system?
 	end

@@ -1,5 +1,5 @@
 class PartPositionPolicy<ApplicationPolicy
   def update?
-    user.av?
+    user.av? || user.system?
   end
 end

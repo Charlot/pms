@@ -34,6 +34,10 @@ class User < ActiveRecord::Base
     has_role? :cutting
   end
 
+  def system?
+    has_role? :system
+  end
+
   private
   def generate_authentication_token
     loop do
