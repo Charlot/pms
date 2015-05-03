@@ -13,8 +13,8 @@
   <tbody>
     <% @machine_time_rules.each do |machine_time_rule| %>
       <tr>
-        <td><%= machine_time_rule.oee_code %></td>
-        <td><%= machine_time_rule.machine_type %></td>
+        <td><%= machine_time_rule.oee_code_nr %></td>
+        <td><%= machine_time_rule.machine_type_nr %></td>
         <td><%= machine_time_rule.length %></td>
         <td><%= machine_time_rule.time %></td>
         <td><%= link_to 'Show', machine_time_rule %></td>

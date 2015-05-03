@@ -13,7 +13,11 @@ Rails.application.routes.draw do
   resources :positions
   resources :ncr_api_logs
 
-  resources :machine_time_rules
+  resources :machine_time_rules do
+    collection do
+      match :import, to: :import,via: [:get,:post]
+    end
+  end
 
   resources :machine_types
 
