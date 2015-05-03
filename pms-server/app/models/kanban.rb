@@ -55,6 +55,16 @@ class Kanban < ActiveRecord::Base
     # end
   end
 
+  def process_parts
+    parts = {}
+    process_entities.each do |pe|
+      pe.process_parts.each{|pp|
+        parts[pp.part_id] = pp.quantity
+      }
+    end
+    parts
+  end
+
   def destroy_part_bom
     # 要考虑相同KB的量，如果KB具有多张，则要特殊处理
     # part=self.part
