@@ -1,5 +1,5 @@
 class UserPolicy<ApplicationPolicy
-  def create?
-    user.admin?
+  def update?
+    user.admin? || user.system?
   end
 end

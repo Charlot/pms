@@ -1,0 +1,18 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User Name:</strong>
+  <%= @user.user_name %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @user.email%>
+</p>
+
+<p>
+  <strong>Role:</strong>
+  <%= @user.role_name.join(" | ")%>
+</p>
+
+<%= link_to 'Edit', edit_user_path(@user) %>
