@@ -168,8 +168,11 @@ puts "======================".yellow
   end
 end
 
+# 新建库位信息
+# 通过看板和Cutting零件位置来创建库位
 
 cutting = Warehouse.find_by_nr("SR01")
+cutting_material = Warehouse.find_by_nr("SRPL")
 assembly = Warehouse.find_by_nr("3PL")
 
 cutting_array = ["FC","MC","TC"]
@@ -194,5 +197,14 @@ Kanban.all.each do |k|
       pos = Position.create({detail:k.des_storage,warehouse_id:assembly.id})
       puts "新建库位#{pos.detail},#{assembly.nr}".green
     end
+  end
+end
+
+PartPosition.all.each do |pp|
+  store = pp.storage
+  pos = Position.find_by_detail(store)
+  if pos.nil?
+    pos = Position.create({detail:store,warehouse_id:cutting_material.id})
+    puts "新建库位#{pos.detail},#{cutting_material.nr}".green
   end
 end
