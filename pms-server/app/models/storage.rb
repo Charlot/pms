@@ -14,16 +14,19 @@ class Storage < ActiveRecord::Base
 
   has_paper_trail
 
+  # 添加库存
+  # 参数: 零件号（完整的零件号，针对线号而言），数量，以及位置
+  # 返回storage实例
   def self.add(part_nr,quantity,position_detail=nil)
     part = Part.find_by_nr(part_nr)
     raise "Part not found" if part.nil?
-
+    storage = nil
     if position_detail.nil?
       storage = where({part_id:part.id,position_id: nil}).first
       if storage
         storage.update(quantity:storage.quantity+quantity)
       else
-        create({part_id:part.id,quantity:quantity})
+        storage = create({part_id:part.id,quantity:quantity})
       end
     end
 
@@ -35,13 +38,18 @@ class Storage < ActiveRecord::Base
     if storage
       storage.update(quantity:(storage.quantity+quantity))
     else
-      create({part_id:part.id,position_id:position.id,quantity:quantity})
+      storage = create({part_id:part.id,position_id:position.id,quantity:quantity})
     end
+    storage
   end
 
+  # 删除库存
+  # 抛出异常或者返回storage实例
   def self.reduce(part_nr,quantity,position_detail=nil)
     part = Part.find_by_nr(part_nr)
     raise "Part not found" if part.nil?
+
+    storage = nil
 
     if position_detail
       storage = where({part_id:part.id,position_id: nil}).first
@@ -70,5 +78,7 @@ class Storage < ActiveRecord::Base
     else
       raise "Storage not found"
     end
+
+    storage
   end
 end

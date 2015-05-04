@@ -192,7 +192,7 @@ class Kanban < ActiveRecord::Base
   def printed_2DCode
     "#{id}/#{version_now}"
   end
-  
+
   def task_time
     sum = (self.process_entities.inject(0) { |sum, pe| sum+=pe.stand_time if pe.stand_time })
     self.quantity * (sum.nil? ? 0 : sum)
