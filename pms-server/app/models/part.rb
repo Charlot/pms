@@ -65,12 +65,14 @@ class Part < ActiveRecord::Base
     end
   end
 
-  #这表示一个Part可能会被送往的位置
+  # 获得某个步骤中使用的零件的库位
   def positions(kanban_id, product_id, process_entity)
+    #如果是零件，则直接在PartPosition中查找
     if PartType.is_material?(self.type)
       pp = PartPosition.find_by_part_id(self.id)
       pp.nil? ? ["N/A"] : [pp.storage]
     else
+      #如果不是
       kanbans = []
       puts "#{self.nr}".red
 
@@ -81,15 +83,22 @@ class Part < ActiveRecord::Base
       cutting_storage = ["FC","MC","TC"]
       assembly_storage = ["XF","XM","XT"]
 
+      # 如果当前看板卡的宋辽位置在cutting_storage 中
+      # 也就是送往半自动线架再加工的
+      # 那么，找生产该零件的白卡的送料位置
       if store.present? && (cutting_storage.include? store)
         kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
             "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'", KanbanType::WHITE, kanban_id, product_id, self.id
         ).distinct
       else
+        # 如果是送往总装的
+        # 那么，先找蓝卡
         kanbans = Kanban.joins(process_entities: :process_parts).where(
             "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND process_parts.part_id = ?",KanbanType::BLUE,kanban_id,product_id,self.id
         ).distinct
 
+        # 去除也是送往总装的蓝卡
+        # 因为我们要查找的是，送往半自动线架的蓝卡
         kks = []
         kanbans.each{|k|
           store = k.des_storage.split(" ").first
@@ -100,6 +109,7 @@ class Part < ActiveRecord::Base
 
         puts kks
 
+        # 如果没有找到，则寻找白卡的送料位置
         if kks.count <=0
           kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
               "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",KanbanType::WHITE,kanban_id,product_id,self.id
@@ -126,6 +136,8 @@ class Part < ActiveRecord::Base
     end
   end
 
+  # 线号，比如93AMN001A_279
+  # 则这里显示279
   def parsed_nr
     if type == PartType::PRODUCT_SEMIFINISHED && nr.include?("_")
       nrs = nr.split("_")

@@ -139,6 +139,7 @@ class KanbansController < ApplicationController
 
   # POST /kanbans/1/release
   # POST /kanbans/1/release.json
+  # 发布看板卡
   def release
     redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state, KanbanState::RELEASED)
     @kanban.without_versioning do
@@ -152,6 +153,7 @@ class KanbansController < ApplicationController
 
   # POST /kanbans/1/lock
   # POST /kanbans/1/lock.json
+  # 锁定看板卡
   def lock
     redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state, KanbanState::LOCKED)
     @kanban.without_versioning do
@@ -165,6 +167,7 @@ class KanbansController < ApplicationController
 
   # DELETE /kanbans/1/discard
   # DELETE /kanbasn/1/discard.json
+  # 销毁看板卡
   def discard
     redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state, KanbanState::DELETED)
     @kanban.without_versioning do
@@ -223,6 +226,7 @@ class KanbansController < ApplicationController
     end
   end
 
+  # 导入看板卡进行投卡
   def import_to_scan
     @hide_sidebar = true
     authorize(Kanban)
@@ -258,6 +262,7 @@ class KanbansController < ApplicationController
     end
   end
 
+  # 扫描销卡
   def scan_finish
     @hide_sidebar = true
     authorize(Kanban)
@@ -310,6 +315,7 @@ class KanbansController < ApplicationController
   end
 
   # POST /kanbans/scan.json
+  # 扫描看板卡
   def scan
     #parse code
     parsed_code = Kanban.parse_printed_2DCode(params[:code])
