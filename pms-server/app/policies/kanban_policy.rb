@@ -44,7 +44,7 @@ class KanbanPolicy<ApplicationPolicy
   end
 
   def import_to_scan?
-    user.has_any_role? :av,:cutting
+    user.av? || user.cutting?
   end
 
   def import_to_get_kanban_list
@@ -53,7 +53,7 @@ class KanbanPolicy<ApplicationPolicy
 
   def scan_finish?
     #user.has_any_role? :av,:cutting
-    user.av? || user.admin?
+    user.av? ||user.cutting?
   end
 
   def management?
@@ -61,10 +61,10 @@ class KanbanPolicy<ApplicationPolicy
   end
 
   def scan?
-    user.av? || user.admin?
+    user.av? ||user.cutting?
   end
 
   def panel?
-    user.av? || user.admin?
+    user.av?||user.cutting?
   end
 end
