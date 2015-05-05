@@ -15,6 +15,7 @@ class NcrApiLogsController < ApplicationController
   # GET /ncr_api_logs/new
   def new
     @ncr_api_log = NcrApiLog.new
+    authorize(@ncr_api_log)
   end
 
   # GET /ncr_api_logs/1/edit
@@ -25,7 +26,7 @@ class NcrApiLogsController < ApplicationController
   # POST /ncr_api_logs.json
   def create
     @ncr_api_log = NcrApiLog.new(ncr_api_log_params)
-
+    authorize(@ncr_api_log)
     respond_to do |format|
       if @ncr_api_log.save
         format.html { redirect_to @ncr_api_log, notice: 'Ncr api log was successfully created.' }
@@ -65,6 +66,7 @@ class NcrApiLogsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_ncr_api_log
       @ncr_api_log = NcrApiLog.find(params[:id])
+      authorize(@ncr_api_log)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

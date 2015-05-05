@@ -16,9 +16,19 @@
     <%= f.text_field :nr %>
   </div>
   <div class="field">
-    <%= f.label :warehouse_id %><br>
-    <%= f.text_field :warehouse_id %>
+    <%= f.label :part_id %><br>
+    <%= f.text_field :part_id %>
   </div>
+
+    <div class="field">
+      <%= f.label :position_id%>
+      <%= f.text_field :position_id%>
+    </div>
+
+    <div class="field">
+      <%= f.label :quantity%>
+      <%= f.text_field :quantity%>
+    </div>
   <div class="actions">
     <%= f.submit %>
   </div>

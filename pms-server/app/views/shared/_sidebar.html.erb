@@ -2,9 +2,10 @@
 <nav class="navbar navbar-default navbar-static-top">
   <ul class="nav navbar-nav">
     <% sidebar_info(current_model).each do |menu|%>
-        <li class="<%= 'active' if current_page?({controller:current_controller,action:menu[:action]})%>">
-          <%= link_to menu[:content],controller:current_controller,action:menu[:action]%>
-        </li>
+
+            <li class="<%= 'active' if current_page?({controller:current_controller,action:menu[:action]})%>">
+              <%= link_to menu[:content],controller:current_controller,action:menu[:action]%>
+            </li>
     <%end%>
   </ul>
 </nav>

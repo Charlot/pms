@@ -10,21 +10,25 @@ class ProductionOrdersController < ApplicationController
   # GET /production_orders/1
   # GET /production_orders/1.json
   def show
+    authorize(@production_order)
   end
 
   # GET /production_orders/new
   def new
     @production_order = ProductionOrder.new
+    authorize(@production_order)
   end
 
   # GET /production_orders/1/edit
   def edit
+    authorize(@production_order)
   end
 
   # POST /production_orders
   # POST /production_orders.json
   def create
     @production_order = ProductionOrder.new(production_order_params)
+    authorize(@production_order)
 
     respond_to do |format|
       if @production_order.save
@@ -39,6 +43,7 @@ class ProductionOrdersController < ApplicationController
 
   # GET /production_orders/preview
   def preview
+    authorize(ProductionOrder)
     @machine = params[:machine_nr].nil? ? Machine.first : Machine.find_by_nr(params[:machine_nr])
     if params[:machine_nr] == 'All'
       @machine_nr = 'All'
@@ -55,6 +60,7 @@ class ProductionOrdersController < ApplicationController
   # PATCH/PUT /production_orders/1
   # PATCH/PUT /production_orders/1.json
   def update
+    authorize(@production_order)
     respond_to do |format|
       if @production_order.update(production_order_params)
         format.html { redirect_to @production_order, notice: 'Production order was successfully updated.' }
@@ -69,6 +75,7 @@ class ProductionOrdersController < ApplicationController
   # DELETE /production_orders/1
   # DELETE /production_orders/1.json
   def destroy
+    authorize(@production_order)
     @production_order.destroy
     respond_to do |format|
       format.html { redirect_to production_orders_url, notice: 'Production order was successfully destroyed.' }

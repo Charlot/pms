@@ -1,14 +1,36 @@
 Rails.application.routes.draw do
+  root :to => 'welcome#index'
+
+  devise_for :users, controllers: {
+                 sessions: 'users/sessions'
+                   }
+
+  resources :users do
+    collection do
+      get :scope_search
+    end
+  end
+  resources :positions
   resources :ncr_api_logs
 
-  resources :machine_time_rules
+  resources :machine_time_rules do
+    collection do
+      match :import, to: :import,via: [:get,:post]
+    end
+  end
 
   resources :machine_types
 
   resources :oee_codes
 
   resources :warehouses do
-    resources :storages
+    resources :positions
+  end
+
+  resources :storages do
+    collection do
+      get :scope_search
+    end
   end
 
 
@@ -158,7 +180,7 @@ Rails.application.routes.draw do
     end
   end
 
-  root :to => 'welcome#index'
+
 
   resources :part_boms do
     collection do

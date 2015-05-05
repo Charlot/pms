@@ -15,6 +15,7 @@ class MeasureUnitsController < ApplicationController
   # GET /measure_units/new
   def new
     @measure_unit = MeasureUnit.new
+    authorize(@measure_unit)
   end
 
   # GET /measure_units/1/edit
@@ -25,6 +26,7 @@ class MeasureUnitsController < ApplicationController
   # POST /measure_units.json
   def create
     @measure_unit = MeasureUnit.new(measure_unit_params)
+    authorize(@measure_unit)
 
     respond_to do |format|
       if @measure_unit.save
@@ -65,6 +67,7 @@ class MeasureUnitsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_measure_unit
       @measure_unit = MeasureUnit.find(params[:id])
+      authorize(@measure_unit)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

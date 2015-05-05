@@ -17,22 +17,25 @@ class ProductionOrderItemsController < ApplicationController
   # GET /production_order_items/1
   # GET /production_order_items/1.json
   def show
+    authorize(@production_order_item)
   end
 
   # GET /production_order_items/new
   def new
     @production_order_item = ProductionOrderItem.new
+    authorize(@production_order_item)
   end
 
   # GET /production_order_items/1/edit
   def edit
+    authorize(@production_order_item)
   end
 
   # POST /production_order_items
   # POST /production_order_items.json
   def create
     @production_order_item = ProductionOrderItem.new(production_order_item_params)
-
+    authorize(@production_order_item)
     respond_to do |format|
       if @production_order_item.save
         format.html { redirect_to @production_order_item, notice: 'Production order item was successfully created.' }
@@ -47,6 +50,7 @@ class ProductionOrderItemsController < ApplicationController
   # PATCH/PUT /production_order_items/1
   # PATCH/PUT /production_order_items/1.json
   def update
+    authorize(@production_order_item)
     respond_to do |format|
       if @production_order_item.update(production_order_item_params)
         format.html { redirect_to @production_order_item, notice: 'Production order item was successfully updated.' }
@@ -61,6 +65,7 @@ class ProductionOrderItemsController < ApplicationController
   # DELETE /production_order_items/1
   # DELETE /production_order_items/1.json
   def destroy
+    authorize(@production_order_item)
     @production_order_item.destroy
     respond_to do |format|
       format.html { redirect_to production_order_items_url, notice: 'Production order item was successfully destroyed.' }
@@ -72,6 +77,7 @@ class ProductionOrderItemsController < ApplicationController
   # optimize production order item to machine by machine combinations
   # and create production order
   def optimise
+    authorize(ProductionOrderItem)
     begin
       if ProductionOrderItem.for_optimise.count>0
         if order= ProductionOrderItem.optimise
@@ -91,6 +97,7 @@ class ProductionOrderItemsController < ApplicationController
   # POST
   # distribute production order item to machine
   def distribute
+    authorize(ProductionOrderItem)
     msg=Message.new
     if @production_order=ProductionOrder.find_by_id(params[:production_order_id])
       puts "#{@production_order.class}--------------------------------"
@@ -105,6 +112,7 @@ class ProductionOrderItemsController < ApplicationController
 
   # POST
   def export
+    authorize(ProductionOrderItem)
     if @production_order=ProductionOrder.find_by_id(params[:production_order_id])
       items=ProductionOrderItem.for_export(@production_order)
       msg=FileHandler::Csv::ProductionOrderItemHandler.new.export_optimized(items, request.user_agent)
@@ -122,6 +130,7 @@ class ProductionOrderItemsController < ApplicationController
   end
 
   def state_export
+    authorize(ProductionOrderItem)
     if request.post?
       msg=FileHandler::Csv::ProductionOrderItemHandler.new.export_by_state(params, request.user_agent)
       if msg.result
@@ -135,6 +144,7 @@ class ProductionOrderItemsController < ApplicationController
   end
 
   def search
+    authorize(ProductionOrderItem)
     @production_order_items=nil
     if params.has_key?(:production_order_id) && params[:production_order_id].length>0
       @production_order=ProductionOrder.find_by_id(params[:production_order_id])

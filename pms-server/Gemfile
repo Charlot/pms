@@ -78,6 +78,15 @@ gem 'scoped_search'
 #Editable table
 gem 'best_in_place', '~> 3.0.1'
 
+# Auth
+gem 'devise'
+
+# Role
+gem 'rolify'
+
+# Authorization
+gem 'pundit'
+#
 gem 'sidekiq'
 gem 'sinatra',require: false
 gem 'whenever'

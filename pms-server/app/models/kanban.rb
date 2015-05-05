@@ -55,6 +55,22 @@ class Kanban < ActiveRecord::Base
     # end
   end
 
+  # 看板中消耗额零件
+  # 返回
+  # {
+  # 零件号:数量
+  # }
+  def process_parts
+    parts = {}
+    process_entities.each do |pe|
+      pe.process_parts.each{|pp|
+        parts[pp.part_id] = pp.quantity
+      }
+    end
+    parts
+  end
+
+  #
   def destroy_part_bom
     # 要考虑相同KB的量，如果KB具有多张，则要特殊处理
     # part=self.part
@@ -66,8 +82,7 @@ class Kanban < ActiveRecord::Base
     # end
   end
 
-  #硬编码
-  #只有在2220,2221,2410这几个步骤的时候，才需要现实取料信息
+  # 获得看板中步骤零件的库位
   def gathered_material
     data =[]
     process_entities.each { |pe|
@@ -97,6 +112,7 @@ class Kanban < ActiveRecord::Base
     end
   end
 
+  #获得线长
   def wire_length
     pe = self.process_entities.first
     if pe && pe.respond_to?("value_of_wire_qty_factor")
@@ -114,12 +130,22 @@ class Kanban < ActiveRecord::Base
     end
   end
 
+  # 获得看板卡生产的线号
   def wire_nr
     if (self.ktype == KanbanType::WHITE) && self.process_entities.first && self.process_entities.first.wire
       name = self.process_entities.first.wire.nr.split("_")
       # puts name
       name = (name - [name.first])
       name.join("_")
+    else
+      nil
+    end
+  end
+
+  # 获得看板卡的生产的完整的零件号
+  def full_wire_nr
+    if (self.ktype == KanbanType::WHITE) && self.process_entities.first && self.process_entities.first.wire
+      self.process_entities.first.wire.nr
     else
       nil
     end
@@ -133,6 +159,7 @@ class Kanban < ActiveRecord::Base
     end
   end
 
+  # 电线描述
   def wire_description
     if (self.ktype == KanbanType::WHITE) && self.process_entities.first && self.process_entities.first.wire
       self.process_entities.first.wire.custom_nr
@@ -154,15 +181,18 @@ class Kanban < ActiveRecord::Base
     self[:print_time].localtime.strftime("%Y-%m-%d %H:%M:%S") if self[:print_time]
   end
 
+  # 看板没被更新一次，则版本数量会增加
+  # 详细内容请看 has_paper_trail这个gem包
   def version_now
     self.versions.count
   end
 
+  # 条形码内容
+  # kanban_id/当前版本号
   def printed_2DCode
     "#{id}/#{version_now}"
   end
 
-  # version of kanban
   def task_time
     sum = (self.process_entities.inject(0) { |sum, pe| sum+=pe.stand_time if pe.stand_time })
     self.quantity * (sum.nil? ? 0 : sum)

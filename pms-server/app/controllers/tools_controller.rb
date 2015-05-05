@@ -15,6 +15,7 @@ class ToolsController < ApplicationController
   # GET /tools/new
   def new
     @tool = Tool.new
+    authorize(@tool)
   end
 
   # GET /tools/1/edit
@@ -25,6 +26,7 @@ class ToolsController < ApplicationController
   # POST /tools.json
   def create
     @tool = Tool.new(tool_params.except(:part))
+    authorize(@tool)
     unless tool_params[:part].blank?
       if part= Part.find_by_nr(tool_params[:part])
         @tool.part=part
@@ -65,6 +67,7 @@ class ToolsController < ApplicationController
   end
 
   def import
+    authorize(Tool)
     if request.post?
       msg = Message.new
       begin
@@ -94,6 +97,7 @@ class ToolsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_tool
     @tool = Tool.find(params[:id])
+    authorize(@tool)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

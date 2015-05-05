@@ -4,6 +4,7 @@ class ProductionOrderItem < ActiveRecord::Base
   belongs_to :production_order
   belongs_to :machine
 
+  has_paper_trail
 
   def self.for_optimise
     joins(:kanban).where(kanbans: {ktype: KanbanType::WHITE}, state: ProductionOrderItemState.optimise_states)

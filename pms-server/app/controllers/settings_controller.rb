@@ -15,6 +15,7 @@ class SettingsController < ApplicationController
   # GET /settings/new
   def new
     @setting = Setting.new
+    authorize(@setting)
   end
 
   # GET /settings/1/edit
@@ -25,7 +26,7 @@ class SettingsController < ApplicationController
   # POST /settings.json
   def create
     @setting = Setting.new(setting_params)
-
+    authorize(@setting)
     respond_to do |format|
       if @setting.save
         format.html { redirect_to @setting, notice: 'Setting was successfully created.' }
@@ -65,6 +66,7 @@ class SettingsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_setting
       @setting = Setting.find(params[:id])
+      authorize(@setting)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -36,8 +36,12 @@
         <td><%= part.resource_group_tool.nr if part.resource_group_tool %></td>
         <td><%= part.measure_unit %></td>
         <td><%= link_to '详情', part %></td>
-        <td><%= link_to '编辑', edit_part_path(part) %></td>
-        <td><%= link_to '删除', part, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <% if policy(part).update?%>
+            <td><%= link_to '编辑', edit_part_path(part) %></td>
+        <% end %>
+        <% if policy(part).destroy?%>
+            <td><%= link_to '删除', part, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <% end %>
         <td>
           <%= link_to 'BOM表', part_bom_path(part.id) %>
         </td>

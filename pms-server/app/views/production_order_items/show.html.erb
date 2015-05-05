@@ -33,7 +33,7 @@
 
 <p>
   <strong>Production order:</strong>
-  <%= @production_order_item.production_order.nr if @production_order_item %>
+  <%= @production_order_item.production_order.nr if @production_order_item.production_order %>
 </p>
 
 <%= link_to 'Edit', edit_production_order_item_path(@production_order_item) %> |
