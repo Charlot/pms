@@ -26,32 +26,32 @@ class KanbanPolicy<ApplicationPolicy
   end
 
   def release?
-    user.av?
+    # user.av?
     true
   end
 
   def lock?
-    user.av?
+    # user.av?
     true
   end
 
   def discard?
-    user.av?
+    # user.av?
     true
   end
 
   def add_routing_template?
-    user.av?
+    # user.av?
     true
   end
 
   def import?
-    user.av?
+    # user.av?
     true
   end
 
   def import_to_scan?
-    user.has_any_role? :av,:cutting
+    # user.has_any_role? :av,:cutting
     true
   end
 
@@ -61,22 +61,27 @@ class KanbanPolicy<ApplicationPolicy
 
   def scan_finish?
     #user.has_any_role? :av,:cutting
-    user.av? || user.admin?
+    # user.av? || user.admin?
     true
   end
 
   def management?
-    user.av?
+    # user.av?
     true
   end
 
   def scan?
-    user.av? || user.admin?
+    # user.av? || user.admin?
     true
   end
 
   def panel?
-    user.av? || user.admin?
+    # user.av? || user.admin?
+    true
+  end
+
+  def import_update_quantity?
+    # user.av? || user.admin? || user.system?
     true
   end
 end

@@ -8,6 +8,60 @@ module FileHandler
           'Destination Storage', 'Process List', 'Operator'
       ]
 
+      def self.import_update_quantity(file)
+        msg = Message.new(contents: [])
+
+        header = ['Kanban Nr', 'Wire Nr', 'Product Nr', 'Quantity', 'Bundle']
+
+        book = Roo::Excelx.new file
+        book.default_sheet = book.sheets.first
+
+        2.upto(book.last_row) do |line|
+          row = {}
+          header.each_with_index do |k, i|
+            row[k] = book.cell(line, i+1).to_s.strip # Strip
+          end
+
+          kanban = nil
+
+          if row['Kanban Nr'].present?
+            kanban=Kanban.find_by_nr(row['Kanban Nr'])
+            next unless kanban
+          else
+            product = Part.where({nr: row['Product Nr'], type: PartType::PRODUCT}).first
+            if product.nil?
+              msg.contents << "Row #{line}: 总成号:#{row['Product Nr']}未找到!"
+              puts "总成号未找到"
+              next
+            end
+
+            wire = Part.find_by_nr("#{product.nr}_#{row['Wire Nr']}")
+
+            if wire.nil?
+              msg.contents << "Row #{line}: 线号:#{row['Wire Nr']}未找到!"
+              puts "线号未找到"
+              next
+            end
+
+            pe=ProcessEntity.joins(custom_values: :custom_field).joins(:kanbans).where(
+                {product_id: product.id, custom_fields: {name: "default_wire_nr"}, custom_values: {value: wire.id}, kanbans: {ktype: KanbanType::WHITE}}
+            ).first
+
+            if pe && (kanban=pe.kanbans.where(ktype: KanbanType::WHITE).first)
+              # kanban = pe.kanbans.where(ktype: KanbanType::WHITE).first
+            else
+              next
+              # msg.contents<< "Row:#{line}步骤不存在！或步骤不消耗零件!"
+            end
+          end
+          kanban.update({quantity: row['Quantity'], bundle: row['Bundle']})
+        end
+
+        msg.result = true
+        msg.content = "更新成功!"
+        msg
+      end
+
       def self.export q = nil
         msg = Message.new
         begin
@@ -55,7 +109,7 @@ module FileHandler
       def self.import_scan file
         msg = Message.new(contents: [])
 
-        header = ['Wire Nr', 'Product Nr']
+        header = ['Kanban Nr', 'Wire Nr', 'Product Nr']
 
         book = Roo::Excelx.new file
         book.default_sheet = book.sheets.first
@@ -66,63 +120,70 @@ module FileHandler
             row[k] = book.cell(line, i+1).to_s.strip # Strip
           end
 
-          product = Part.where({nr: row['Product Nr'], type: PartType::PRODUCT}).first
-          if product.nil?
-            msg.contents << "Row #{line}: 总成号:#{row['Product Nr']}未找到!"
-            puts "总成号未找到"
-            next
-          end
+          kanban = nil
 
-          wire = Part.find_by_nr("#{product.nr}_#{row['Wire Nr']}")
-
-          if wire.nil?
-            msg.contents << "Row #{line}: 线号:#{row['Wire Nr']}未找到!"
-            puts "线号未找到"
-            next
-          end
-
-
-          pe=ProcessEntity.joins(custom_values: :custom_field).joins(:kanbans).where(
-              {product_id: product.id, custom_fields: {name: "default_wire_nr"}, custom_values: {value: wire.id}, kanbans: {ktype: KanbanType::WHITE}}
-          ).first
-
-          if pe && (@kanban=pe.kanbans.where(ktype: KanbanType::WHITE).first)
-            @kanban = pe.kanbans.where(ktype: KanbanType::WHITE).first
-            if @kanban.quantity <= 0
+          if row['Kanban Nr'].present?
+            kanban = Kanban.find_by_nr(row['Kanban Nr'])
+          else
+            product = Part.where({nr: row['Product Nr'], type: PartType::PRODUCT}).first
+            if product.nil?
+              msg.contents << "Row #{line}: 总成号:#{row['Product Nr']}未找到!"
+              puts "总成号未找到"
               next
             end
-            if ProductionOrderItem.where(kanban_id: @kanban.id, state: ProductionOrderItemState::INIT).count > 0
-              msg.contents<<"Row:#{line},已投卡"
+            wire = Part.find_by_nr("#{product.nr}_#{row['Wire Nr']}")
+            if wire.nil?
+              msg.contents << "Row #{line}: 线号:#{row['Wire Nr']}未找到!"
+              puts "线号未找到"
               next
             end
 
-            process_entity = @kanban.process_entities.first
-            if process_entity && process_entity.process_parts.count > 0
-              can_create = true
-              parts = []
-              process_entity.process_parts.each { |pe|
-                part = pe.part
-                # if (part.type == PartType::MATERIAL_TERMINAL) && (part.tool == nil)
-                #   can_create = false
-                # end
-                if can_create #&& part.type == PartType::MATERIAL_TERMINAL
-                  parts << part.nr
-                end
-              }
+            pe=ProcessEntity.joins(custom_values: :custom_field).joins(:kanbans).where(
+                {product_id: product.id, custom_fields: {name: "default_wire_nr"}, custom_values: {value: wire.id}, kanbans: {ktype: KanbanType::WHITE}}
+            ).first
 
-              # if process_entity.process_parts.select { |pe| pe.part.type == PartType::MATERIAL_TERMINAL }.count <= 0
+            if pe && (kanban=pe.kanbans.where(ktype: KanbanType::WHITE).first)
+              # kanban = pe.kanbans.where(ktype: KanbanType::WHITE).first
+            else
+              next
+              # msg.contents<< "Row:#{line}步骤不存在！或步骤不消耗零件!"
+            end
+          end
+
+          if kanban.quantity <= 0
+            puts "未找到".red
+            next
+          end
+
+          if ProductionOrderItem.where(kanban_id: kanban.id, state: ProductionOrderItemState::INIT).count > 0
+            msg.contents<<"Row:#{line},已投卡"
+            next
+          end
+
+          process_entity = kanban.process_entities.first
+          if process_entity && process_entity.process_parts.count > 0
+            can_create = true
+            parts = []
+            process_entity.process_parts.each { |pe|
+              part = pe.part
+              # if (part.type == PartType::MATERIAL_TERMINAL) && (part.tool == nil)
               #   can_create = false
               # end
-
-              if can_create
-                unless (@order = ProductionOrderItem.create(kanban_id: @kanban.id, code: @kanban.printed_2DCode))
-                  next
-                end
-
-                puts "新建订单成功：#{@kanban.nr},#{parts.join('-')}".green
+              if can_create #&& part.type == PartType::MATERIAL_TERMINAL
+                parts << part.nr
               end
-            else
-              msg.contents<< "Row:#{line}步骤不存在！或步骤不消耗零件!"
+            }
+
+            # if process_entity.process_parts.select { |pe| pe.part.type == PartType::MATERIAL_TERMINAL }.count <= 0
+            #   can_create = false
+            # end
+
+            if can_create
+              unless (order = ProductionOrderItem.create(kanban_id: kanban.id, code: kanban.printed_2DCode))
+                next
+              end
+
+              puts "新建订单成功：#{kanban.nr},#{parts.join('-')}".green
             end
           end
         end
