@@ -13,13 +13,13 @@ class MachineCombinationsController < ApplicationController
   # GET /machine_combinations/1.json
   def show
     @machine_combination = MachineCombination.new
-    authorize(@machine_combination)
+    # authorize(@machine_combination)
   end
 
   # GET /machine_combinations/new
   def new
     @machine_combination = MachineCombination.new
-    authorize(@machine_combination)
+    # authorize(@machine_combination)
   end
 
   # GET /machine_combinations/1/edit
@@ -29,7 +29,7 @@ class MachineCombinationsController < ApplicationController
   # POST /machine_combinations
   # POST /machine_combinations.json
   def create
-    authorize(MachineCombination)
+    # authorize(MachineCombination)
     respond_to do |format|
       if @machine_combination.errors.empty? && @machine_combination.save
         flash.clear
@@ -69,7 +69,7 @@ class MachineCombinationsController < ApplicationController
 
   # GET/POST /machine_combinations/import
   def import
-    authorize(MachineCombination)
+    # authorize(MachineCombination)
     if request.post?
       msg = Message.new
       begin
@@ -87,7 +87,7 @@ class MachineCombinationsController < ApplicationController
 
   # GET
   def export
-    authorize(MachineCombination)
+    # authorize(MachineCombination)
     msg = FileHandler::Csv::MachineCombinationHandler.export(request.user_agent.downcase)
     if msg.result
       send_file msg.content
@@ -106,7 +106,7 @@ class MachineCombinationsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_machine_combination
     @machine_combination = MachineCombination.find(params[:id])
-    authorize(@machine_combination)
+    # authorize(@machine_combination)
   end
 
   def set_machine_combinations

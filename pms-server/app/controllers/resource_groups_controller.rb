@@ -15,7 +15,7 @@ class ResourceGroupsController < ApplicationController
   # GET /resource_groups/new
   def new
     @resource_group = ResourceGroup.new
-    authorize(@resource_group)
+    # authorize(@resource_group)
   end
 
   # GET /resource_groups/1/edit
@@ -26,7 +26,7 @@ class ResourceGroupsController < ApplicationController
   # POST /resource_groups.json
   def create
     @resource_group = ResourceGroup.new(resource_group_params)
-    authorize(@resource_group)
+    # authorize(@resource_group)
     respond_to do |format|
       if @resource_group.save
         format.html { redirect_to @resource_group, notice: 'Resource group was successfully created.' }
@@ -66,7 +66,7 @@ class ResourceGroupsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_resource_group
       @resource_group = ResourceGroup.find(params[:id])
-      authorize(@resource_group)
+      # authorize(@resource_group)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

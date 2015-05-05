@@ -15,7 +15,7 @@ class MachineTypesController < ApplicationController
   # GET /machine_types/new
   def new
     @machine_type = MachineType.new
-    authorize(@machine_type)
+    # authorize(@machine_type)
   end
 
   # GET /machine_types/1/edit
@@ -26,7 +26,7 @@ class MachineTypesController < ApplicationController
   # POST /machine_types.json
   def create
     @machine_type = MachineType.new(machine_type_params)
-    authorize(@machine_type)
+    # authorize(@machine_type)
     respond_to do |format|
       if @machine_type.save
         format.html { redirect_to @machine_type, notice: 'Machine type was successfully created.' }
@@ -66,7 +66,7 @@ class MachineTypesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_machine_type
       @machine_type = MachineType.find(params[:id])
-      authorize(@machine_type)
+      # authorize(@machine_type)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

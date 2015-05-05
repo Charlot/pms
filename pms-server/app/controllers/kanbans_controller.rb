@@ -17,7 +17,7 @@ class KanbansController < ApplicationController
   # GET /kanbans/new
   def new
     @kanban = Kanban.new
-    authorize(@kanban)
+    # authorize(@kanban)
     2.times { @kanban.kanban_process_entities.build }
   end
 
@@ -31,7 +31,7 @@ class KanbansController < ApplicationController
     ActiveRecord::Base.transaction do
       @kanban = Kanban.new(kanban_params)
     end
-    authorize(@kanban)
+    # authorize(@kanban)
     respond_to do |format|
       if @kanban.save
         format.html { redirect_to @kanban, notice: 'Kanban was successfully created.' }
@@ -196,7 +196,7 @@ class KanbansController < ApplicationController
 
   # GET /kanbans/add_routing_template
   def add_routing_template
-    authorize(Kanban)
+    # authorize(Kanban)
     case params[:type].to_i
       when KanbanType::WHITE
         render partial: 'add_auto_routing'
@@ -211,7 +211,7 @@ class KanbansController < ApplicationController
 
   # GET/POST
   def import
-    authorize(Kanban)
+    # authorize(Kanban)
     if request.post?
       msg = Message.new
       begin
@@ -228,7 +228,7 @@ class KanbansController < ApplicationController
 
   # GET/POST
   def import_update_quantity
-    authorize(Kanban)
+    # authorize(Kanban)
     if request.post?
       msg = Message.new
       begin
@@ -246,7 +246,7 @@ class KanbansController < ApplicationController
   # 导入看板卡进行投卡
   def import_to_scan
     @hide_sidebar = true
-    authorize(Kanban)
+    # authorize(Kanban)
     if request.post?
       msg = Message.new
       begin
@@ -263,7 +263,7 @@ class KanbansController < ApplicationController
   end
 
   def import_to_get_kanban_list
-    authorize(Kanban)
+    # authorize(Kanban)
     if request.post?
       msg = Message.new
       # begin
@@ -282,7 +282,7 @@ class KanbansController < ApplicationController
   # 扫描销卡
   def scan_finish
     @hide_sidebar = true
-    authorize(Kanban)
+    # authorize(Kanban)
     if request.post?
       #parse code
       parsed_code = Kanban.parse_printed_2DCode(params[:code])
@@ -328,7 +328,7 @@ class KanbansController < ApplicationController
 
   # GET
   def management
-    authorize(Kanban)
+    # authorize(Kanban)
   end
 
   # POST /kanbans/scan.json
@@ -339,7 +339,7 @@ class KanbansController < ApplicationController
     render json: {result: false, content: "输入错误"} and return unless parsed_code
 
     @kanban = Kanban.find_by_id(parsed_code[:id])
-    authorize(@kanban)
+    # authorize(@kanban)
 
     #check Kanban State
     render json: {result: false, content: "看板未发布"} and return unless @kanban.state == KanbanState::RELEASED
@@ -380,14 +380,14 @@ class KanbansController < ApplicationController
   # GET /kanbans/panel.json
   def panel
     @hide_sidebar= true
-    authorize(Kanban)
+    # authorize(Kanban)
   end
 
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_kanban
     @kanban = Kanban.find(params[:id])
-    authorize(@kanban)
+    # authorize(@kanban)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

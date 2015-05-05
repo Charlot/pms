@@ -15,7 +15,7 @@ class WarehousesController < ApplicationController
   # GET /warehouses/new
   def new
     @warehouse = Warehouse.new
-    authorize(@warehouse)
+    # authorize(@warehouse)
   end
 
   # GET /warehouses/1/edit
@@ -26,7 +26,7 @@ class WarehousesController < ApplicationController
   # POST /warehouses.json
   def create
     @warehouse = Warehouse.new(warehouse_params)
-    authorize(@warehouse)
+    # authorize(@warehouse)
     respond_to do |format|
       if @warehouse.save
         format.html { redirect_to @warehouse, notice: 'Warehouse was successfully created.' }
@@ -66,7 +66,7 @@ class WarehousesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_warehouse
       @warehouse = Warehouse.find(params[:id])
-      authorize(@warehouse)
+      # authorize(@warehouse)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

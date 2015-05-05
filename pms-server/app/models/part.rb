@@ -19,7 +19,7 @@ class Part < ActiveRecord::Base
   has_paper_trail
   scoped_search on: :nr
 
-  after_save :update_cv_strip_length
+  after_update :update_cv_strip_length
 
   # def self.find_by_part_type key, operator, value
   #   type=PartType.get_value_by_display(value)
@@ -150,6 +150,7 @@ class Part < ActiveRecord::Base
   private
   def update_cv_strip_length
     if self.strip_length_changed?
+
     end
   end
 end

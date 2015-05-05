@@ -61,14 +61,34 @@ class CustomValuesController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_custom_value
-      @custom_value = CustomValue.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def custom_value_params
-      params.require(:custom_value).permit(:customized_type, :customized_id, :custom_field_id, :value)
+  def updates
+    msg=Message.new
+    begin
+      CustomValue.transaction do
+        puts "#{params[:values]}".red
+        params[:values].each do |k, v|
+          if (cv=CustomValue.find_by_id(k)) && (cf=cv.custom_field)
+            cv.update_attributes(value: cf.get_field_format_value(v))
+          end
+        end
+      end
+      msg.result =true
+      msg.content = '更新成功'
+    rescue => e
+      msg.content = e.message
     end
+    render json: msg
+  end
+
+  private
+  # Use callbacks to share common setup or constraints between actions.
+  def set_custom_value
+    @custom_value = CustomValue.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def custom_value_params
+    params.require(:custom_value).permit(:customized_type, :customized_id, :custom_field_id, :value)
+  end
 end

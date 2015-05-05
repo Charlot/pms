@@ -36,7 +36,7 @@ class PartsController < ApplicationController
   def create
     msg = Message.new
     @part = Part.new(part_params)
-    authorize(@part)
+    # authorize(@part)
 
     respond_to do |format|
       if @part.save
@@ -56,7 +56,7 @@ class PartsController < ApplicationController
   # PATCH/PUT /parts/1
   # PATCH/PUT /parts/1.json
   def update
-    authorize @part
+    # authorize @part
     respond_to do |format|
       if @part.update(part_params)
         format.html { redirect_to @part, notice: 'Part was successfully updated.' }
@@ -141,7 +141,7 @@ class PartsController < ApplicationController
   end
 
   def import
-    authorize(Part)
+    # authorize(Part)
     if request.post?
       msg = Message.new
       begin
@@ -161,7 +161,7 @@ class PartsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_part
       @part = Part.find(params[:id])
-      authorize(@part)
+      # authorize(@part)
     end
 
   # Never trust parameters from the scary internet, only allow the white list through.
