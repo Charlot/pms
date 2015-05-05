@@ -8,6 +8,65 @@ module FileHandler
           'Destination Storage', 'Process List', 'Operator'
       ]
 
+      def self.import_update_quantity(file)
+        msg = Message.new(contents: [])
+
+        header = ['Kanban Nr', 'Wire Nr', 'Product Nr','Quantity','Bundle']
+
+        book = Roo::Excelx.new file
+        book.default_sheet = book.sheets.first
+
+        2.upto(book.last_row) do |line|
+          row = {}
+          header.each_with_index do |k, i|
+            row[k] = book.cell(line, i+1).to_s.strip # Strip
+          end
+
+          kanban = nil
+
+          if row['Kanban Nr'].present?
+            kanban = Kanban.find_by_nr(row['Kanban Nr'])
+          else
+            product = Part.where({nr: row['Product Nr'], type: PartType::PRODUCT}).first
+            if product.nil?
+              msg.contents << "Row #{line}: 总成号:#{row['Product Nr']}未找到!"
+              puts "总成号未找到"
+              next
+            end
+
+            wire = Part.find_by_nr("#{product.nr}_#{row['Wire Nr']}")
+
+            if wire.nil?
+              msg.contents << "Row #{line}: 线号:#{row['Wire Nr']}未找到!"
+              puts "线号未找到"
+              next
+            end
+
+            pe=ProcessEntity.joins(custom_values: :custom_field).joins(:kanbans).where(
+                {product_id: product.id, custom_fields: {name: "default_wire_nr"}, custom_values: {value: wire.id}, kanbans: {ktype: KanbanType::WHITE}}
+            ).first
+
+            if pe && (@kanban=pe.kanbans.where(ktype: KanbanType::WHITE).first)
+              kanban = pe.kanbans.where(ktype: KanbanType::WHITE).first
+            else
+              msg.contents<< "Row:#{line}步骤不存在！或步骤不消耗零件!"
+            end
+          end
+
+          @kanban = kanban
+          if @kanban.quantity <= 0
+            puts "未找到".red
+            next
+          end
+
+          @kanban.update({quantity:row['Quantity'],bundle:row['Bundle']})
+        end
+
+        msg.result = true
+        msg.content = "更新成功!"
+        msg
+      end
+
       def self.export q = nil
         msg = Message.new
         begin

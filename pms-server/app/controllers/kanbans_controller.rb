@@ -226,6 +226,23 @@ class KanbansController < ApplicationController
     end
   end
 
+  # GET/POST
+  def import_update_quantity
+    authorize(Kanban)
+    if request.post?
+      msg = Message.new
+      begin
+        file=params[:files][0]
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd.save
+        msg = FileHandler::Excel::KanbanHandler.import_update_quantity(fd.full_path)
+      rescue => e
+        msg.content = e.message
+      end
+      render json: msg
+    end
+  end
+
   # 导入看板卡进行投卡
   def import_to_scan
     @hide_sidebar = true
