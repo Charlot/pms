@@ -40,4 +40,9 @@ User.transaction do
     system = User.create({user_name: "system", password:"123456",password_confirmation:"123456"})
     system.add_role :system
   end
+
+  unless test=User.find_by_user_name("test")
+    test = User.create({user_name: "test", password:"123456",password_confirmation:"123456"})
+    test.add_role :admin
+  end
 end
