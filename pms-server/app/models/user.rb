@@ -18,8 +18,17 @@ class User < ActiveRecord::Base
     false
   end
 
+  def role=
+    raise
+  end
+
+  def role
+    r=roles.first
+    return r.nil? ? nil : r.name
+  end
+
   def role_name
-    roles.collect{|role| role.name}
+    roles.collect { |role| role.name }
   end
 
   def av?

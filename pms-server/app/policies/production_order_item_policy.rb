@@ -2,6 +2,7 @@ class ProductionOrderItemPolicy<ApplicationPolicy
   def update?
     user.av? || user.system? || user.cutting?
     #user.has_any_role? :av,:cutting
+    true
   end
 
   def optimise?

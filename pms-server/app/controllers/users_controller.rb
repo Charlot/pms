@@ -17,7 +17,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         format.html { redirect_to @user,notice: 'User was successfully created.'}
-        format.json { render :shwo, statue: :created, location: @user}
+        format.json { render :show, statue: :created, location: @user}
       else
         format.html { render :new}
         format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -58,6 +58,6 @@ class UsersController < ApplicationController
 
   def set_user
     @user = User.find_by_id(params[:id])
-    authorize(@user)
+   # authorize(@user)
   end
 end

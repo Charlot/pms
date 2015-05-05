@@ -1,6 +1,7 @@
 class ProcessTemplatePolicy<ApplicationPolicy
   def update?
     user.av? || user.system?
+    true
   end
 
   def template?

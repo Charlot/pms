@@ -1,6 +1,7 @@
 class KanbanPolicy<ApplicationPolicy
   def update?
-    user.av? || user.system?
+    true
+    # user.av? || user.system?
   end
 
   def manage_routing?
@@ -16,7 +17,8 @@ class KanbanPolicy<ApplicationPolicy
   end
 
   def finish_production?
-    user.av? || user.cutting?
+    # user.av? || user.cutting?
+    true
   end
 
   def history?
@@ -25,26 +27,32 @@ class KanbanPolicy<ApplicationPolicy
 
   def release?
     user.av?
+    true
   end
 
   def lock?
     user.av?
+    true
   end
 
   def discard?
     user.av?
+    true
   end
 
   def add_routing_template?
     user.av?
+    true
   end
 
   def import?
     user.av?
+    true
   end
 
   def import_to_scan?
     user.has_any_role? :av,:cutting
+    true
   end
 
   def import_to_get_kanban_list
@@ -54,17 +62,21 @@ class KanbanPolicy<ApplicationPolicy
   def scan_finish?
     #user.has_any_role? :av,:cutting
     user.av? || user.admin?
+    true
   end
 
   def management?
     user.av?
+    true
   end
 
   def scan?
     user.av? || user.admin?
+    true
   end
 
   def panel?
     user.av? || user.admin?
+    true
   end
 end

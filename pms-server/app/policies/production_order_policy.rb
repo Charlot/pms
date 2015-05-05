@@ -1,6 +1,7 @@
 class ProductionOrderPolicy<ApplicationPolicy
   def update?
     user.av? || user.system? || user.cutting?
+    true
     #user.has_any_role? :cutting,:av
   end
 
