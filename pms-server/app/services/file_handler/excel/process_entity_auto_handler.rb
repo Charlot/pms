@@ -9,6 +9,7 @@ module FileHandler
           'S1', 'S1 Qty Factor',
           'S2', 'S2 Qty Factor', 'Operator'
       ]
+      STRING_HEADERS=['Component', 'T1', 'T2', 'S1', 'S2']
 
       def self.import(file)
         msg = Message.new
@@ -22,6 +23,9 @@ module FileHandler
                 row = {}
                 HEADERS.each_with_index do |k, i|
                   row[k] = book.cell(line, i+1).to_s.strip
+                  if STRING_HEADERS.include?(k)
+                    row[k]=row[k].sub(/\.0/,'')
+                  end
                 end
 
                 process_template = ProcessTemplate.find_by_code(row['Template Code'].to_i.to_s)
@@ -75,7 +79,7 @@ module FileHandler
                     end
                   when 'update'
                     pe = ProcessEntity.where({nr: params[:nr], product_id: product.id}).first
-                    wire = Part.where({nr:"#{product.nr}_#{row['Wire NO']}",type:PartType::PRODUCT_SEMIFINISHED}).first
+                    wire = Part.where({nr: "#{product.nr}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED}).first
                     if wire.nil?
                       part = Part.create({nr: "#{row['Product Nr']}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED})
                     end
@@ -148,7 +152,7 @@ module FileHandler
             if q.nil?
               process_entities= ProcessEntity.joins(:process_template).where(process_templates: {type: ProcessType::AUTO})
             else
-              process_entities = ProcessEntity.search_for(q).select{|pe| pe.process_template_type == ProcessType::AUTO}
+              process_entities = ProcessEntity.search_for(q).select { |pe| pe.process_template_type == ProcessType::AUTO }
             end
             process_entities.each do |pe|
               parts_info = {}
@@ -189,12 +193,12 @@ module FileHandler
                                 pe.value_s2_qty_factor,
                                 'update'
                             ], types: [
-                                 :string,:string,:string,:float,:string,:string,nil,nil,
-                                 :string,:string,nil,nil,:string,nil,nil,
-                                 :string,nil,nil,
-                                 :string,nil,nil,
-                                 :string,nil,
-                                 :string,nil
+                                 :string, :string, :string, :float, :string, :string, nil, nil,
+                                 :string, :string, nil, nil, :string, nil, nil,
+                                 :string, nil, nil,
+                                 :string, nil, nil,
+                                 :string, nil,
+                                 :string, nil
                              ]
             end
           end
@@ -224,6 +228,9 @@ module FileHandler
             row = {}
             HEADERS.each_with_index do |k, i|
               row[k] = book.cell(line, i+1).to_s.strip
+              if STRING_HEADERS.include?(k)
+                row[k]=row[k].sub(/\.0/,'')
+              end
             end
 
             mssg = validate_row(row, line)
@@ -268,9 +275,9 @@ module FileHandler
               msg.content << "Nr: #{row['Nr']}未找到"
             end
 
-            #unless wire
-              #msg.contents << "Wire NO:#{row['Wire NO']}不存在"
-            #end
+          #unless wire
+          #msg.contents << "Wire NO:#{row['Wire NO']}不存在"
+          #end
           when 'delete'
             if pe.count <= 0
               msg.content << "Nr: #{row['Nr']}未找到"

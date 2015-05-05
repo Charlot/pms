@@ -7,10 +7,13 @@ class CustomFieldPart<CustomField
 
   def validate_validate_query(args)
     args=self.class.parse_args(args)
+    puts "----#{args}".red
     query=field_to_query(args)
+    puts "#{query}".red
     # lt is not safe, should improve later
     unless value=eval(query)
-      raise('未通过验证查询')
+     # raise('未通过验证查询')
+      return nil
     else
       return value
     end
