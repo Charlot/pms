@@ -15,7 +15,7 @@ module FileHandler
           validate_msg = validate_import(file)
           if validate_msg.result
             MasterBomItem.transaction do
-              CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+              CSV.foreach(file.file_path, headers: file.headers, col_sep: ';', encoding: file.encoding) do |row|
                 row.strip
                 product=Part.find_by_nr(row['Part No.'])
                 bom_item= Part.find_by_nr(row['Component P/N'])
@@ -56,7 +56,7 @@ module FileHandler
             MasterBomItem.transaction do
               # get order product
               product_qty={}
-              CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+              CSV.foreach(file.file_path, headers: file.headers, col_sep: ';', encoding: file.encoding) do |row|
                 row.strip
                 product=Part.find_by_nr(row['Part No.'])
                 qty=row['Qty'].to_i
@@ -82,7 +82,7 @@ module FileHandler
 
               #write csv
               CSV.open(transport_file, 'wb', write_headers: true,
-                       headers: TRANSPORT_SUCCEED_HEADERS, col_sep: file.col_sep, encoding: file.encoding) do |csv|
+                       headers: TRANSPORT_SUCCEED_HEADERS, col_sep: ';', encoding: file.encoding) do |csv|
                 transport_result.keys.each do |key|
                   p, d=key.split(':')
                   csv<<[Part.find_by_id(p).nr, Department.find_by_id(d).name, transport_result[key]]
@@ -108,8 +108,8 @@ module FileHandler
         tmp_file=full_tmp_path(file.file_name)
         msg=Message.new(result: true)
         CSV.open(tmp_file, 'wb', write_headers: true,
-                 headers: INVALID_CSV_HEADERS, col_sep: file.col_sep, encoding: file.encoding) do |csv|
-          CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+                 headers: INVALID_CSV_HEADERS, col_sep: ';', encoding: file.encoding) do |csv|
+          CSV.foreach(file.file_path, headers: file.headers, col_sep: ';', encoding: file.encoding) do |row|
             row_valid_msg = validate_row(row)
             if row_valid_msg.result
               csv<<row.fields
@@ -128,7 +128,8 @@ module FileHandler
       def self.validate_row(row)
         msg=Message.new(contents: [])
         unless Part.find_by_nr(row['Part No.'])
-          msg.contents<<"Part No.#{row['Part No.']} 不存在"
+          #msg.contents<<"Part No.#{row['Part No.']} 不存在.
+          Part.create(nr: row['Part No.'], type: PartType::PRODUCT, description: '导入bom时建立')
         end
 
         unless Part.find_by_nr(row['Component P/N'])
