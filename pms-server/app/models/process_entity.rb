@@ -53,7 +53,12 @@ class ProcessEntity < ActiveRecord::Base
         if cf.field_format == 'part'
           if cv
             wire = Part.find_by_id(cv.value)
-            wire.nil? ? "" : wire.parsed_nr
+            if wire
+              pp  = process_parts.where({part_id:wire.id}).first
+              "#{wire.parsed_nr}|#{pp.quantity if pp}"
+            else
+              ""
+            end
           else
             ""
           end
