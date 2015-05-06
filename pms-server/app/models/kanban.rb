@@ -40,6 +40,8 @@ class Kanban < ActiveRecord::Base
       end
       if kanbans.count > 0
         return {conditions: "kanbans.id IN(#{kanbans.join(',')})"}
+      else
+        {conditions: "kanbans.nr like '%#{value}%'"}
       end
     else
       {conditions: "kanbans.nr like '%#{value}%'"}

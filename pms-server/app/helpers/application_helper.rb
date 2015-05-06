@@ -28,8 +28,9 @@ module ApplicationHelper
 
   def scope_search
     model = params[:model].classify.constantize
-    authorize(model)
+    # authorize(model)
     @q = params[:q]
+    puts "------------------#{model.search_for(@q)}".red
     resultes = model.search_for(@q).paginate(:page=>params[:page])
     instance_variable_set("@#{params[:controller]}",resultes)
     render :index
