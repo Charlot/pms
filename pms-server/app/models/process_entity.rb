@@ -74,6 +74,50 @@ class ProcessEntity < ActiveRecord::Base
   end
 
   #
+  def oee_code(oee = "")
+    case oee
+    when ""
+      if value_t1 || value_t2
+        oee = "C"
+        oee_code(oee)
+      elsif value_s1 || value_s2
+        oee = "S"
+        oee_code(oee)
+      elsif value_t1_strip_length || value_t2_strip_length
+        oee = "W"
+        oee_code(oee)
+      else
+        oee << "-"
+      end
+    when "C"
+      if value_t1 && value_t2
+        oee << "C"
+      elsif value_s1 || value_s2
+        oee << "S"
+      elsif ((value_t1.nil? && value_t1_strip_length) || (value_t2.nil? && value_t2_strip_length))
+        oee << "W"
+      else
+        oee << "-"
+      end
+    when "W"
+      if value_t1_strip_length && value_t2_strip_length
+        oee << "W"
+      else
+        oee << "-"
+      end
+    when "S"
+      if value_s1 && value_s2
+        oee << "S"
+      elsif ((value_s1.nil? && value_t1_strip_length) || (value_s2.nil? && value_t2_strip_length))
+        oee << "W"
+      else
+        oee << "-"
+      end
+    end
+    oee
+  end
+
+  #
   def wire
     if self.value_default_wire_nr && (part = Part.find_by_id(self.value_default_wire_nr))
       return part

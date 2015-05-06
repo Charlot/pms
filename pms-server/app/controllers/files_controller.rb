@@ -1,5 +1,5 @@
 class FilesController < ApplicationController
-  before_filter :skip_authorization
+  #before_filter :skip_authorization
 
   def index
     puts params

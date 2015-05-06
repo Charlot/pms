@@ -194,8 +194,45 @@ class Kanban < ActiveRecord::Base
   end
 
   def task_time
-    sum = (self.process_entities.inject(0) { |sum, pe| sum+=pe.stand_time if pe.stand_time })
-    self.quantity * (sum.nil? ? 0 : sum)
+    task_time = 0.0
+    case self.ktype
+    when KanbanType::WHITE
+      if self.production_order_items.count == 0
+        return task_time
+      end
+
+      poi = self.production_order_items.last
+      machine = poi.machine
+      process_entity = self.process_entities.first
+      if machine.nil? || process_entity.nil?
+        return task_time
+      end
+
+      oee = OeeCode.find_by_nr(process_entity.oee_code)
+
+      if oee.nil?
+        return task_time
+      end
+
+      machinetimerule = MachineTimeRule.where({oee_code_id: oee.id,machine_type_id: machine.machine_type_id}).order(length: :asc)
+
+      timerule = nil
+
+      machinetimerule.each{|mtr|
+        if process_entity.value_wire_qty_factor.to_f > mtr.length.to_f
+          timerule = mtr
+        end
+      }
+
+      if timerule.nil?
+        return task_time
+      end
+
+      task_time = timerule.time * self.quantity
+    when KanbanType::BLUE
+
+    end
+    task_time
   end
 
   def source_position
