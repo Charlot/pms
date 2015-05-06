@@ -33,7 +33,7 @@
 
     <div class="field">
       <%= f.label 'Role'%>
-      <%= f.select :role,options_from_collection_for_select(Role.all,"name","name")%>
+      <%= select_tag(:role, options_for_select(Role.all.collect{|r|[r.name,r.name]} ,@user.role),include_blank: false)%>
     </div>
 
     <div class="actions">

@@ -15,7 +15,7 @@ class PositionsController < ApplicationController
   # GET /positions/new
   def new
     @position = Position.new
-    authorize(@position)
+    # authorize(@position)
   end
 
   # GET /positions/1/edit
@@ -26,7 +26,7 @@ class PositionsController < ApplicationController
   # POST /positions.json
   def create
     @position = Position.new(position_params)
-    authorize(@position)
+    # authorize(@position)
     respond_to do |format|
       if @position.save
         format.html { redirect_to @position, notice: 'Position was successfully created.' }
@@ -66,7 +66,7 @@ class PositionsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_position
       @position = Position.find(params[:id])
-      authorize(@position)
+      # authorize(@position)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -1,0 +1,9 @@
+<% if field %>
+    <input type="text" id="<%= field.name %>"
+           class="format_<%= field.field_format %> custom_value_edit_input  custom_field custom_field_input"
+           field="<%= field.id %>"
+           <%= local_assigns[:disabled].blank? ? nil : 'disabled'%>
+           custom_value_id="<%= local_assigns[:custom_value_id] %>" value="<%= local_assigns[:default_value]|| CustomValue.value_by_format(field, value) %>"/>
+<% else %>
+    <span style="color: blue">NO INPUT HERE</span>
+<% end %>

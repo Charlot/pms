@@ -27,11 +27,7 @@
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">生产订单<span class="caret"></span></a>
           <ul class="dropdown-menu" role="manage">
             <li><a href="<%= production_orders_path %>">订单列表</a></li>
-
-            <% if policy(ProductionOrder).preview?%>
-                <li><a href="<%= preview_production_orders_path %>">订单预览</a></li>
-            <% end %>
-
+            <li><a href="<%= preview_production_orders_path %>">订单预览</a></li>
           </ul>
         </li>
 
@@ -39,8 +35,8 @@
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">基础数据<span class="caret"></span></a>
           <ul class="dropdown-menu" role="manage">
             <li><a href="<%= parts_path %>">零件</a></li>
-            <li><a href="<%= warehouses_path%>">仓库</a></li>
-            <li><a href="<%= positions_path%>">库位</a></li>
+            <li><a href="<%= warehouses_path %>">仓库</a></li>
+            <li><a href="<%= positions_path %>">库位</a></li>
             <li><a href="<%= measure_units_path %>">单位</a></li>
             <li><a href="<%= part_positions_path %>">Cutting原材料库位</a></li>
             <li><a href="<%= master_bom_items_path %>">Master BOM</a></li>
@@ -50,7 +46,7 @@
           </ul>
         </li>
 
-        <% if current_user.av? || current_user.system?%>
+        <% if current_user.av? || current_user.admin? || current_user.system? %>
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">机器与模具<span class="caret"></span></a>
               <ul class="dropdown-menu" role="manage">
@@ -66,7 +62,7 @@
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">库存<span class="caret"></span></a>
               <ul class="dropdown-menu" role="manage">
-                <li><a href="<%= storages_path%>">库存</a></li>
+                <li><a href="<%= storages_path %>">库存</a></li>
               </ul>
             </li>
 
@@ -86,7 +82,7 @@
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
-        <li><a><%= current_user.user_name%></a></li>
+        <li><a><%= current_user.user_name %></a></li>
         <li><%= link_to '退出', destroy_user_session_path, method: :delete %></li>
       </ul>
     </div>

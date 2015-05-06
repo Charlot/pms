@@ -17,11 +17,12 @@ class ProcessEntitiesController < ApplicationController
   # GET /process_entities/new
   def new
     @process_entity = ProcessEntity.new
-    authorize(@process_entity)
+    # authorize(@process_entity)
   end
 
   # GET /process_entities/1/edit
   def edit
+    @process_template=@process_entity.process_template
   end
 
   # GET /process_entities/1/simple
@@ -32,7 +33,7 @@ class ProcessEntitiesController < ApplicationController
   #GET
 
   def export_auto
-    authorize(ProcessEntity)
+    # authorize(ProcessEntity)
     msg = Message.new
     begin
       msg = FileHandler::Excel::ProcessEntityAutoHandler.export(params[:q])
@@ -47,7 +48,7 @@ class ProcessEntitiesController < ApplicationController
   end
 
   def export_semi
-    authorize(ProcessEntity)
+    # authorize(ProcessEntity)
     msg = Message.new
     begin
       msg = FileHandler::Excel::ProcessEntitySemiAutoHandler.export(params[:q])
@@ -208,7 +209,7 @@ class ProcessEntitiesController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_process_entity
     @process_entity = ProcessEntity.find(params[:id])
-    authorize(@process_entity)
+    # authorize(@process_entity)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

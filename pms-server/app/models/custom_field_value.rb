@@ -1,5 +1,5 @@
 class CustomFieldValue<BaseClass
-  attr_accessor :custom_field, :customized, :value, :value_was
+  attr_accessor :id,:custom_field, :customized, :value, :value_was
 
 
   def custom_field_id

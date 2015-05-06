@@ -1,6 +1,7 @@
 class KanbanPolicy<ApplicationPolicy
   def update?
-    user.av? || user.system?
+    true
+    # user.av? || user.system?
   end
 
   def manage_routing?
@@ -16,7 +17,8 @@ class KanbanPolicy<ApplicationPolicy
   end
 
   def finish_production?
-    user.av? || user.cutting?
+    # user.av? || user.cutting?
+    true
   end
 
   def history?
@@ -24,27 +26,33 @@ class KanbanPolicy<ApplicationPolicy
   end
 
   def release?
-    user.av? || user.system?
+    # user.av?
+    true
   end
 
   def lock?
-    user.av? || user.system?
+    # user.av?
+    true
   end
 
   def discard?
-    user.av? || user.system?
+    # user.av?
+    true
   end
 
   def add_routing_template?
-    user.av? || user.system?
+    # user.av?
+    true
   end
 
   def import?
-    user.av? || user.system?
+    # user.av?
+    true
   end
 
   def import_to_scan?
-    user.av? || user.cutting? || user.system?
+    # user.has_any_role? :av,:cutting
+    true
   end
 
   def import_to_get_kanban_list
@@ -53,22 +61,27 @@ class KanbanPolicy<ApplicationPolicy
 
   def scan_finish?
     #user.has_any_role? :av,:cutting
-    user.av? ||user.cutting? || user.system?
+    # user.av? || user.admin?
+    true
   end
 
   def management?
-    user.av? || user.system?
+    # user.av?
+    true
   end
 
   def scan?
-    user.av? ||user.cutting? || user.system?
+    # user.av? || user.admin?
+    true
   end
 
   def panel?
-    user.av?||user.cutting? || user.system?
+    # user.av? || user.admin?
+    true
   end
 
   def import_update_quantity?
-    user.av? || user.admin? || user.system?
+    # user.av? || user.admin? || user.system?
+    true
   end
 end

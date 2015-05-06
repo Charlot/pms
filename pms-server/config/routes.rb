@@ -135,7 +135,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :custom_values
+  resources :custom_values do
+    collection do
+      post :updates
+    end
+  end
 
   resources :custom_fields do
     collection do

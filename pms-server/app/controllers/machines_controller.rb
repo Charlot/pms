@@ -15,7 +15,7 @@ class MachinesController < ApplicationController
   # GET /machines/new
   def new
     @machine = Machine.new
-    authorize(@machine)
+    # authorize(@machine)
   end
 
   # GET /machines/1/edit
@@ -24,7 +24,7 @@ class MachinesController < ApplicationController
 
   # GET/POST /machines/import
   def import
-    authorize(Machine)
+    # authorize(Machine)
     if request.post?
       msg = Message.new
       begin
@@ -44,7 +44,7 @@ class MachinesController < ApplicationController
   # POST /machines.json
   def create
     @machine = Machine.new(machine_params)
-    authorize(@machine)
+    # authorize(@machine)
     respond_to do |format|
       if @machine.save
         format.html { redirect_to @machine, notice: 'Machine was successfully created.' }
@@ -84,7 +84,7 @@ class MachinesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_machine
       @machine = Machine.find(params[:id])
-      authorize(@machine)
+      # authorize(@machine)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

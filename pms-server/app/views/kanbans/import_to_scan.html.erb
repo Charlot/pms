@@ -15,4 +15,16 @@
   <div>
     <a href="/files/<%= ImportTemplate.kanban_scan_excel_template %>">下载模板：<%= ImportTemplate::KANBAN_SCAN_EXCEL_TEMPLATE %></a>
   </div>
+  <div class="info-warn-div">
+    <h5> 说明：</h5>
+
+    <div>
+      模板文件： kanban_scan.xlsx，中包含3列:Kanban Nr,Wire Nr,Product Nr<br/>
+      其中：Kanban Nr是看板号;Wire Nr是线号;Product Nr是总成号<br/>
+      导入投卡，可以有两个选择：<br/>
+      1. 只填写Kanban Nr，可以投白卡<br/>
+      2. 只填写Wire Nr,Product Nr,可以投白卡<br/>
+      (3列都填写，以第一种方式优先)</br>
+    </div>
+  </div>
 </div>

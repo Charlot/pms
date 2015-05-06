@@ -1,5 +1,5 @@
-class DepartmentPolicy<ApplicationPolicy
-  def update?
+class CustomFieldPolicy<ApplicationPolicy
+  def validate?
 
     # update?
     #user.has_role? :admin

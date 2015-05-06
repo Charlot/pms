@@ -15,7 +15,7 @@ class DepartmentsController < ApplicationController
   # GET /departments/new
   def new
     @department = Department.new
-    authorize(@department)
+    # authorize(@department)
   end
 
   # GET /departments/1/edit
@@ -26,7 +26,7 @@ class DepartmentsController < ApplicationController
   # POST /departments.json
   def create
     @department = Department.new(department_params)
-    authorize(@department)
+    # authorize(@department)
     respond_to do |format|
       if @department.save
         format.html { redirect_to @department, notice: 'Department was successfully created.' }
@@ -66,7 +66,7 @@ class DepartmentsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_department
       @department = Department.find(params[:id])
-      authorize(@department)
+      # authorize(@department)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -16,7 +16,7 @@ class ProcessTemplatesController < ApplicationController
   # GET /process_templates/new
   def new
     @process_template = ProcessTemplate.new
-    authorize(@process_template)
+    # authorize(@process_template)
   end
 
   # GET /process_templates/1/edit
@@ -26,7 +26,7 @@ class ProcessTemplatesController < ApplicationController
   # POST /process_templates
   # POST /process_templates.json
   def create
-    authorize(ProcessTemplate)
+    # authorize(ProcessTemplate)
     params.permit!
     ProcessTemplate.transaction do
       @process_template=ProcessTemplate.new(params[:process_template])
@@ -77,7 +77,7 @@ class ProcessTemplatesController < ApplicationController
   end
 
   def template
-    authorize(ProcessTemplate)
+    # authorize(ProcessTemplate)
     if @process_template=ProcessTemplate.find_by_code(params[:code])
       if ProcessType.auto?(@process_template.type)
         render partial: 'new_process_auto'
@@ -90,7 +90,7 @@ class ProcessTemplatesController < ApplicationController
   end
 
   def import
-    authorize(ProcessTemplate)
+    # authorize(ProcessTemplate)
     if request.post?
       msg = Message.new
       begin
@@ -108,17 +108,17 @@ class ProcessTemplatesController < ApplicationController
 
 
   def autoimport
-    authorize(ProcessTemplate)
+    # authorize(ProcessTemplate)
     ProcessTemplate.import(params[:file], 'auto')
     redirect_to process_templates_url, notice: 'ProcessTemplate was successfully imported.'
   end
   
   def semiautoimport
-    authorize(ProcessTemplate)
+    # authorize(ProcessTemplate)
   end 
   
   def manual_import
-    authorize(ProcessTemplate)
+    # authorize(ProcessTemplate)
     ProcessTemplate.import(params[:file], 'manual')
     redirect_to process_templates_url, notice: 'ProcessTemplate was successfully imported.'
   end
@@ -129,7 +129,7 @@ class ProcessTemplatesController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_process_template
     @process_template = ProcessTemplate.find(params[:id])
-    authorize(@process_template)
+    # authorize(@process_template)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

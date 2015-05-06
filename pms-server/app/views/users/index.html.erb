@@ -1,4 +1,4 @@
-<%= render partial: 'shared/search'%>
+<%= render partial: 'shared/search' %>
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @users %>
@@ -23,14 +23,12 @@
         <td><%= user.name %></td>
         <td><%= user.email %></td>
         <td>
-          <%= user.role_name.join("|")%>
+          <%= user.role_name.join("|") %>
         </td>
-        <td><%= link_to '详情', user_path(user),class:'btn btn-default'%></td>
-        <% if policy(user).update? %>
-          <td>
-            <%= link_to '编辑', edit_user_path(user), class: 'btn btn-default'%>
-          </td>
-        <% end %>
+        <td><%= link_to '详情', user_path(user), class: 'btn btn-default' %></td>
+        <td>
+          <%= link_to '编辑', edit_user_path(user), class: 'btn btn-default' %>
+        </td>
       </tr>
   <% end %>
   </tbody>

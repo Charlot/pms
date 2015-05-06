@@ -45,7 +45,8 @@ class ApplicationPolicy
   end
 
   def update?
-    false
+    # false
+    true
   end
 
   def edit?
@@ -57,7 +58,7 @@ class ApplicationPolicy
   end
 
   def scope
-    Pundit.policy_scope!(user, record.class)
+   # Pundit.policy_scope!(user, record.class)
   end
 
   class Scope
