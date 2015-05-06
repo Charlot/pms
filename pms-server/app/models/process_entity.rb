@@ -78,7 +78,13 @@ class ProcessEntity < ActiveRecord::Base
     a.compact
   end
 
-  #
+  # 目前只有6中操作方式
+  # CC: 两端压端子
+  # CW: 一端压端子，一端剥线
+  # CS: 一端压端子，一端套防水圈
+  # SW: 一端套防水圈，一端剥线
+  # SS: 两端套防水圈
+  # WW: 两端剥线
   def oee_code(oee = "")
     case oee
     when ""

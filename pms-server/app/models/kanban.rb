@@ -201,6 +201,7 @@ class Kanban < ActiveRecord::Base
         return task_time
       end
 
+      #根据最见的生产订单
       poi = self.production_order_items.last
       machine = poi.machine
       process_entity = self.process_entities.first
