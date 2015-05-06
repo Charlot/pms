@@ -14,7 +14,7 @@ module Enum
         RESOURCE_GROUP_TOOL: {name: PageInfo.resourcegrouptool, actions: ["new", "index"]},
         TOOL: {name: PageInfo.tool, actions: ["new", "index", "import"]},
         PART_POSITION: {name: PageInfo.partposition, actions: ["new", "index", "import"]},
-        MASTER_BOM_ITEM: {name: PageInfo.masterbomitem, actions: ['new', 'index', 'import','transport']},
+        MASTER_BOM_ITEM: {name: PageInfo.masterbomitem, actions: ['new', 'index', 'import','transport','export']},
         DEPARTMENT: {NAME: PageInfo.department, actions: ['new','index']},
         WAREHOUSE: {NAME: PageInfo.warehouse,actions:['new','index']},
         STORAGE: {NAME: PageInfo.storage,actions:['new','index']},

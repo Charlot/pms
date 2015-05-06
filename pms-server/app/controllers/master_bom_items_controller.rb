@@ -99,6 +99,20 @@ class MasterBomItemsController < ApplicationController
   end
 
 
+  def export
+    msg = Message.new
+    begin
+      msg = FileHandler::Csv::MasterBomItemHandler.export(request.user_agent)
+    rescue => e
+      msg.content = e.message
+    end
+    if msg.result
+      send_file msg.content
+    else
+      render json: msg
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_master_bom_item

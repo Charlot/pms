@@ -46,6 +46,32 @@ module FileHandler
         return msg
       end
 
+      def self.export(user_agent,tmp_file=nil)
+        msg = Message.new
+        begin
+          tmp_file = MasterBomItemHandler.full_tmp_path('master_bom.csv') unless tmp_file
+          ['Part No.', 'Component P/N', 'Material Qty Per Harness', 'Dep', 'Delete']
+          CSV.open(tmp_file, 'wb', write_headers: true,
+                   headers: IMPORT_HEADERS,
+                   col_sep: ';', encoding: PartHandler.get_encoding(user_agent)) do |csv|
+            MasterBomItem.all.each do |item|
+              csv<<[
+                  item.product.nr,
+                  item.bom_item.nr,
+                  item.qty,
+                  item.department.code,
+                  '0'
+              ]
+            end
+          end
+          msg.result =true
+          msg.content =tmp_file
+        rescue => e
+          msg.content =e.message
+        end
+        msg
+      end
+
       def self.transport(file)
         msg = Message.new
         begin

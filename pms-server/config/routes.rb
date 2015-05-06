@@ -44,16 +44,17 @@ Rails.application.routes.draw do
     collection do
       match :import, to: :import, via: [:get, :post]
       match :transport, to: :transport, via: [:get, :post]
+      match :export, to: :export, via: [:get, :post]
     end
   end
 
   resources :departments
 
-  resources :master_bom_items do
-    collection do
-      match :import, to: :import, via: [:get, :post]
-    end
-  end
+  # resources :master_bom_items do
+  #   collection do
+  #     match :import, to: :import, via: [:get, :post]
+  #   end
+  # end
 
   resources :kanban_process_entities
 
