@@ -57,6 +57,10 @@ class ProductionOrderItemState<BaseType
     [INIT, OPTIMISE_FAIL]
   end
 
+  def self.sort_states
+    [INIT, OPTIMISE_FAIL]
+  end
+
   def self.distribute_states
     [OPTIMISE_SUCCEED, DISTRIBUTE_FAIL]
   end

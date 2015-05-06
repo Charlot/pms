@@ -30,7 +30,7 @@ class Machine < ActiveRecord::Base
   end
 
   def for_sort_order_items(machine_time=nil)
-    q=production_order_items.where(state: ProductionOrderItemState::INIT)
+    q=production_order_items.where(state: ProductionOrderItemState.sort_states)
     q= q.where(machine_time: machine_time) unless machine_time.nil?
     q
   end
