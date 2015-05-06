@@ -24,7 +24,7 @@ module FileHandler
 
           kanban = nil
 
-          
+
           product = Part.where({nr: row['Product Nr'], type: PartType::PRODUCT}).first
           if product.nil?
             msg.contents << "Row #{line}: 总成号:#{row['Product Nr']}未找到!"
