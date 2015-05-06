@@ -157,6 +157,11 @@ oee_codes.each_with_index do |oee,i|
   o.save
 end
 
+MachineType.destroy_all
+["CC36","CC64"].each do |type|
+  MachineType.create({nr:type})
+end
+
 puts "======================".yellow
 puts "9.看板库位信息".yellow
 puts "======================".yellow
