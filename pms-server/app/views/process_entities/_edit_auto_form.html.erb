@@ -71,10 +71,10 @@
     </tr>
     <tr>
       <td>S1 Qty factor:
-        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_s1_qty_factor, value: @process_entity.value_s1_qty_factor} %>
+        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_s1_qty_factor, custom_value_id: @process_entity.id_s1_qty_factor, value: @process_entity.value_s1_qty_factor} %>
       </td>
       <td>S2 Qty factor:
-        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_s2_qty_factor, value: @process_entity.value_s2_qty_factor} %>
+        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_s2_qty_factor, custom_value_id: @process_entity.id_s2_qty_factor, value: @process_entity.value_s2_qty_factor} %>
       </td>
     </tr>
     <tr>
