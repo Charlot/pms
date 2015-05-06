@@ -1,6 +1,6 @@
 class Users::SessionsController < Devise::SessionsController
  before_filter :configure_sign_in_params, only: [:create]
- before_filter :skip_authorization
+ #before_filter :skip_authorization
 
   # GET /resource/sign_in
   def new

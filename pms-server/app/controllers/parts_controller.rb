@@ -17,18 +17,18 @@ class PartsController < ApplicationController
   # GET /parts/1
   # GET /parts/1.json
   def show
-    authorize @part
+    #authorize @part
   end
 
   # GET /parts/new
   def new
     @part = Part.new
-    authorize @part
+    #authorize @part
   end
 
   # GET /parts/1/edit
   def edit
-    authorize @part
+    #authorize @part
   end
 
   # POST /parts
