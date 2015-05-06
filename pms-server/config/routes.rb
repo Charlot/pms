@@ -45,6 +45,7 @@ Rails.application.routes.draw do
       match :import, to: :import, via: [:get, :post]
       match :transport, to: :transport, via: [:get, :post]
       match :export, to: :export, via: [:get, :post]
+      get :search
     end
   end
 

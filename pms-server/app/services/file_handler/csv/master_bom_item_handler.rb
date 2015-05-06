@@ -5,6 +5,7 @@ module FileHandler
       IMPORT_HEADERS=['Part No.', 'Component P/N', 'Material Qty Per Harness', 'Dep', 'Delete']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MS'
 
+      EXPORT_HEADERS=['Part No.', 'Component P/N', 'Material Qty Per Harness', 'Dep', 'Delete']
       TRANSPORT_HEADERS=['Part No.', 'Qty']
       TRANSPORT_SUCCEED_HEADERS=['Component P/N', 'Dep', 'Total Qty']
       INVALID_TRANSPORT_HEADERS=TRANSPORT_HEADERS<<'Error MS'
@@ -46,20 +47,19 @@ module FileHandler
         return msg
       end
 
-      def self.export(user_agent,tmp_file=nil)
+      def self.export(user_agent,params,tmp_file=nil)
         msg = Message.new
         begin
           tmp_file = MasterBomItemHandler.full_tmp_path('master_bom.csv') unless tmp_file
-          ['Part No.', 'Component P/N', 'Material Qty Per Harness', 'Dep', 'Delete']
           CSV.open(tmp_file, 'wb', write_headers: true,
-                   headers: IMPORT_HEADERS,
+                   headers: EXPORT_HEADERS,
                    col_sep: ';', encoding: PartHandler.get_encoding(user_agent)) do |csv|
-            MasterBomItem.all.each do |item|
+            MasterBomItem.search(params).all.each do |item|
               csv<<[
-                  item.product.nr,
-                  item.bom_item.nr,
+                  item.product_nr,
+                  item.bom_item_nr,
                   item.qty,
-                  item.department.code,
+                  item.department_code,
                   '0'
               ]
             end
@@ -182,6 +182,7 @@ module FileHandler
             if row_valid_msg.result
               csv<<row.fields
             else
+              # next
               if msg.result
                 msg.result=false
                 msg.content = "请下载错误文件<a href='/files/#{Base64.urlsafe_encode64(tmp_file)}'>#{::File.basename(tmp_file)}</a>"

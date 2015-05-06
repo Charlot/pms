@@ -1,7 +1,7 @@
 module ApplicationHelper
   def search
     model = params[:controller].classify.constantize
-    authorize(model)
+    # authorize(model)
     condition = {}
     params[:q].each { |k,v|
       condition[k] = v
@@ -17,7 +17,7 @@ module ApplicationHelper
   end
 
   def export
-    authorize(params[:model].constantize)
+    # authorize(params[:model].constantize)
     msg = "FileHandler::Excel::#{params[:model]}Handler".constantize.export(params[:q])
     if msg.result
       send_file msg.content
@@ -37,7 +37,7 @@ module ApplicationHelper
 
 
   def form_search
-    authorize(model)
+    # authorize(model)
     @condition=params[@model]
     query=model.unscoped
     @condition.each do |k, v|
