@@ -85,6 +85,11 @@ class ProcessEntity < ActiveRecord::Base
   # SW: 一端套防水圈，一端剥线
   # SS: 两端套防水圈
   # WW: 两端剥线
+  # 下面的逻辑请对照上面的6中操作方式查看
+  # 我问过徐工的逻辑是，
+  # 压了端子，一定要剥线，
+  # 套了防水圈，也是一定要剥线
+  # 所以你可以看到我下面的判断的“先后顺序”
   def oee_code(oee = "")
     case oee
     when ""
