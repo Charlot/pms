@@ -113,6 +113,8 @@ class ProcessEntity < ActiveRecord::Base
     when "W"
       if value_t1_strip_length && value_t2_strip_length
         oee << "W"
+      elsif ((value_t1_strip_length.nil? && value_s1) || (value_t2_strip_length.nil? && value_s2))
+        oee << "S"
       else
         oee << "-"
       end
