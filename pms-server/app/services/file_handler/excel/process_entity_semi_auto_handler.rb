@@ -105,7 +105,7 @@ module FileHandler
                       if a.count == 2
                         custom_fields_quantity << a.last
                       else
-                        custom_fields_quantity << 0
+                        custom_fields_quantity << 1
                       end
                     end
 
@@ -162,7 +162,7 @@ module FileHandler
                       if a.count == 2
                         custom_fields_quantity << a.last
                       else
-                        custom_fields_quantity << 0
+                        custom_fields_quantity << 1
                       end
                     end
 
