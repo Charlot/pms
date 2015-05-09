@@ -94,10 +94,24 @@ module FileHandler
                       process_entity.custom_values << cv
                     end
 
-                    #template fields
-                    custom_fields = row['Template Fields'].split(',')
-                    custom_fields_val = custom_fields.collect{|cf| cf.split("|").first}
-                    custom_fields_quanitty = custom_fields.collect{|cf| cf.split("|").last}
+                    template_fields = []
+
+                    custom_fields_val = []
+                    custom_fields_quantity = []
+
+                    row['Template Fields'].split(',').each do |cf|
+                      a = cf.split("|")
+                      custom_fields_val << a.first
+                      if a.count == 2
+                        custom_fields_quantity << a.last
+                      else
+                        custom_fields_quantity << 0
+                      end
+                    end
+
+                    pe.custom_fields.select { |cf| cf.name != "default_wire_nr" }.each_with_index do |cf,index|
+                      template_fields << {:type => cf.field_format,:value=>custom_fields_val[index],:ext => custom_fields_quantity[index]}
+                    end
 
                     process_entity.custom_fields.select { |cf| cf.name != "default_wire_nr" }.each_with_index do |cf, index|
                       cv = nil
@@ -117,10 +131,12 @@ module FileHandler
                       process_entity.custom_values<<cv if cv
                     end
 
-                    process_entity.custom_values.select { |cv| cv.custom_field.name != "default_wire_nr" }.each_with_index do |cv, index|
+                    tmp_quantity = template_fields.select{|tf| tf[:type] == "part"}.collect{|a|a[:ext]}
+
+                    process_entity.custom_values.select { |cv| (cv.custom_field.name != "default_wire_nr")&&(cv.custom_field.field_format=="part")}.each_with_index do |cv, index|
                       cf=cv.custom_field
                       if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
-                        process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: custom_fields_quanitty[index].to_f)
+                        process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: tmp_quantity[index].to_f)
                       end
                     end
                   when 'update'
@@ -135,9 +151,24 @@ module FileHandler
                       pe.wire.update(nr: "#{product.nr}_#{row['Wire Nr']}")
                     end
 
-                    custom_fields = row['Template Fields'].split(',')
-                    custom_fields_val = custom_fields.collect{|cf| cf.split("|").first}
-                    custom_fields_quanitty = custom_fields.collect{|cf| cf.split("|").last}
+                    template_fields = []
+
+                    custom_fields_val = []
+                    custom_fields_quantity = []
+
+                    row['Template Fields'].split(',').each do |cf|
+                      a = cf.split("|")
+                      custom_fields_val << a.first
+                      if a.count == 2
+                        custom_fields_quantity << a.last
+                      else
+                        custom_fields_quantity << 0
+                      end
+                    end
+
+                    pe.custom_fields.select { |cf| cf.name != "default_wire_nr" }.each_with_index do |cf,index|
+                      template_fields << {:type => cf.field_format,:value=>custom_fields_val[index],:ext => custom_fields_quantity[index]}
+                    end
 
                     pe.custom_fields.select { |cf| cf.name != "default_wire_nr" }.each_with_index { |cf, index|
                       cv = pe.custom_values.where(custom_field_id: cf.id).first
@@ -177,10 +208,14 @@ module FileHandler
                     }
                     pe.process_parts.destroy_all
 
-                    pe.custom_values.select { |cv| cv.custom_field.name != "default_wire_nr" }.each_with_index do |cv, index|
+                    temp_quantity = template_fields.select{|tf| tf[:type] == "part"}.collect{|a|a[:ext]}
+
+                    pe.custom_values.select { |cv| (cv.custom_field.name != "default_wire_nr")&&(cv.custom_field.field_format=="part") }.each_with_index do |cv, index|
                       cf=cv.custom_field
                       if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
-                        pe.process_parts<<ProcessPart.new(part_id: cv.value, quantity: custom_fields_quanitty[index].to_f)
+                        puts "#{template_fields}".red
+                        puts "#{Part.find_by_id(cv.value).nr},#{temp_quantity[index]},#{index}".red
+                        pe.process_parts<<ProcessPart.new(part_id: cv.value, quantity: temp_quantity[index].to_f)
                       end
                     end
                     pe.save
