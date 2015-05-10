@@ -1,6 +1,6 @@
 module ApplicationHelper
   def search
-    model = params[:controller].classify.constantize 
+    model = params[:controller].classify.constantize
     condition = {}
     params[:q].each { |k,v|
       condition[k] = v
