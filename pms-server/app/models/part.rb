@@ -80,8 +80,8 @@ class Part < ActiveRecord::Base
 
       store = kanban.des_storage.split(" ").first
 
-      cutting_storage = ["FC","MC","TC"]
-      assembly_storage = ["XF","XM","XT"]
+      cutting_storage = ["FC", "MC", "TC"]
+      assembly_storage = ["XF", "XM", "XT"]
 
       # 如果当前看板卡的宋辽位置在cutting_storage 中
       # 也就是送往半自动线架再加工的
@@ -94,13 +94,13 @@ class Part < ActiveRecord::Base
         # 如果是送往总装的
         # 那么，先找蓝卡
         kanbans = Kanban.joins(process_entities: :process_parts).where(
-            "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND process_parts.part_id = ?",KanbanType::BLUE,kanban_id,product_id,self.id
+            "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND process_parts.part_id = ?", KanbanType::BLUE, kanban_id, product_id, self.id
         ).distinct
 
         # 去除也是送往总装的蓝卡
         # 因为我们要查找的是，送往半自动线架的蓝卡
         kks = []
-        kanbans.each{|k|
+        kanbans.each { |k|
           store = k.des_storage.split(" ").first
           unless assembly_storage.include?(store)
             kks << k
@@ -112,7 +112,7 @@ class Part < ActiveRecord::Base
         # 如果没有找到，则寻找白卡的送料位置
         if kks.count <=0
           kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
-              "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",KanbanType::WHITE,kanban_id,product_id,self.id
+              "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'", KanbanType::WHITE, kanban_id, product_id, self.id
           ).distinct
         else
           kanbans = kks
@@ -150,7 +150,7 @@ class Part < ActiveRecord::Base
   private
   def update_cv_strip_length
     if self.strip_length_changed?
-
+      CustomValue.update_part_strip_length(self)
     end
   end
 end
