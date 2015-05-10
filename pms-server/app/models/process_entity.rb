@@ -53,7 +53,12 @@ class ProcessEntity < ActiveRecord::Base
         if cf.field_format == 'part'
           if cv
             wire = Part.find_by_id(cv.value)
-            wire.nil? ? "" : wire.parsed_nr
+            if wire
+              pp  = process_parts.where({part_id:wire.id}).first
+              "#{wire.parsed_nr}|#{pp.quantity if pp}"
+            else
+              ""
+            end
           else
             ""
           end
@@ -71,6 +76,63 @@ class ProcessEntity < ActiveRecord::Base
     puts a.to_json
     puts a.compact.to_json
     a.compact
+  end
+
+  # 目前只有6中操作方式
+  # CC: 两端压端子
+  # CW: 一端压端子，一端剥线
+  # CS: 一端压端子，一端套防水圈
+  # SW: 一端套防水圈，一端剥线
+  # SS: 两端套防水圈
+  # WW: 两端剥线
+  # 下面的逻辑请对照上面的6中操作方式查看
+  # 我问过徐工的逻辑是，
+  # 压了端子，一定要剥线，
+  # 套了防水圈，也是一定要剥线
+  # 所以你可以看到我下面的判断的“先后顺序”
+  def oee_code(oee = "")
+    case oee
+    when ""
+      if value_t1 || value_t2
+        oee = "C"
+        oee_code(oee)
+      elsif value_s1 || value_s2
+        oee = "S"
+        oee_code(oee)
+      elsif value_t1_strip_length || value_t2_strip_length
+        oee = "W"
+        oee_code(oee)
+      else
+        oee << "-"
+      end
+    when "C"
+      if value_t1 && value_t2
+        oee << "C"
+      elsif value_s1 || value_s2
+        oee << "S"
+      elsif ((value_t1.nil? && value_t1_strip_length) || (value_t2.nil? && value_t2_strip_length))
+        oee << "W"
+      else
+        oee << "-"
+      end
+    when "W"
+      if value_t1_strip_length && value_t2_strip_length
+        oee << "W"
+      elsif ((value_t1_strip_length.nil? && value_s1) || (value_t2_strip_length.nil? && value_s2))
+        oee << "S"
+      else
+        oee << "-"
+      end
+    when "S"
+      if value_s1 && value_s2
+        oee << "S"
+      elsif ((value_s1.nil? && value_t1_strip_length) || (value_s2.nil? && value_t2_strip_length))
+        oee << "W"
+      else
+        oee << "-"
+      end
+    end
+    oee
   end
 
   #

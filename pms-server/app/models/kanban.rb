@@ -196,8 +196,50 @@ class Kanban < ActiveRecord::Base
   end
 
   def task_time
-    sum = (self.process_entities.inject(0) { |sum, pe| sum+=pe.stand_time if pe.stand_time })
-    self.quantity * (sum.nil? ? 0 : sum)
+    task_time = 0.0
+    case self.ktype
+    when KanbanType::WHITE
+      if self.production_order_items.count == 0
+        return task_time
+      end
+
+      #因为全自动工时与机器有关，而要知道机器，一定要优化结束才能知道
+      #所以，这里选择一张看板的最后生产的任务的机器来做判断
+      poi = self.production_order_items.last
+      machine = poi.machine
+      process_entity = self.process_entities.first
+      if machine.nil? || process_entity.nil?
+        return task_time
+      end
+
+      #根据全自动看的工艺来查找出操作代码
+      oee = OeeCode.find_by_nr(process_entity.oee_code)
+
+      if oee.nil?
+        return task_time
+      end
+
+      #查找全部满足的全自动工时规则，并且以断线长度升序排序
+      machinetimerule = MachineTimeRule.where({oee_code_id: oee.id,machine_type_id: machine.machine_type_id}).order(length: :asc)
+
+      timerule = nil
+
+      #一定要断线长度正好超过规则，才选择这个规则
+      machinetimerule.each{|mtr|
+        if process_entity.value_wire_qty_factor.to_f > mtr.length.to_f
+          timerule = mtr
+        end
+      }
+
+      if timerule.nil?
+        return task_time
+      end
+
+      task_time = timerule.time * self.quantity
+    when KanbanType::BLUE
+
+    end
+    task_time
   end
 
   def source_position

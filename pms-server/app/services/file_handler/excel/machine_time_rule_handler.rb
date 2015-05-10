@@ -20,18 +20,19 @@ module FileHandler
                 HEADERS.each_with_index do |k, i|
                   row[k] = book.cell(line, i+1).to_s.strip
                 end
-              oee = OeeCode.find_by_nr(row['OEE'])
-              machine_type = MachineType.find_by_nr(row['Machine Type'])
-              length = row['Length'].to_f
+                puts row['Time']
+                oee = OeeCode.find_by_nr(row['OEE'])
+                machine_type = MachineType.find_by_nr(row['Machine Type'])
+                length = row['Length'].to_f
 
-              rule = MachineTimeRule.where({oee_code_id: oee.id,machine_type_id: machine_type.id,length: length}).first
-              if rule
-                #update
-                rule.update(time:row['Time'])
-              else
-                #create
-                rule = MachineTimeRule.create({oee_code_id:oee.id,machine_type_id:machine_type.id,length:length,time:row['Time'].to_f})
-              end
+                rule = MachineTimeRule.where({oee_code_id: oee.id,machine_type_id: machine_type.id,length: length}).first
+                if rule
+                  #update
+                  rule.update(time:row['Time'].to_f)
+                else
+                  #create
+                  rule = MachineTimeRule.create({oee_code_id:oee.id,machine_type_id:machine_type.id,length:length,time:row['Time'].to_f})
+                end
               end
               end
             msg.result = true

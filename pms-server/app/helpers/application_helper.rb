@@ -1,7 +1,6 @@
 module ApplicationHelper
   def search
-    model = params[:controller].classify.constantize
-    # authorize(model)
+    model = params[:controller].classify.constantize 
     condition = {}
     params[:q].each { |k,v|
       condition[k] = v
@@ -17,7 +16,6 @@ module ApplicationHelper
   end
 
   def export
-    # authorize(params[:model].constantize)
     msg = "FileHandler::Excel::#{params[:model]}Handler".constantize.export(params[:q])
     if msg.result
       send_file msg.content
@@ -28,7 +26,6 @@ module ApplicationHelper
 
   def scope_search
     model = params[:model].classify.constantize
-    # authorize(model)
     @q = params[:q]
     resultes = model.search_for(@q).paginate(:page=>params[:page])
     instance_variable_set("@#{params[:controller]}",resultes)
@@ -37,7 +34,6 @@ module ApplicationHelper
 
 
   def form_search
-    # authorize(model)
     @condition=params[@model]
     query=model.unscoped
     @condition.each do |k, v|
