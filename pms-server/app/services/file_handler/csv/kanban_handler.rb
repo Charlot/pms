@@ -18,7 +18,7 @@ module FileHandler
         list = []
         # validate_msg = validate_import(file)
         # if validate_msg.result
-        CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+        CSV.foreach(file.file_path, headers: file.headers, col_sep: ';', encoding: file.encoding) do |row|
           row.strip
           product = Part.find_by_nr(row['Product Nr'])
           wire=Part.find_by_nr("#{row['Product Nr']}_#{row['Wire Nr']}")
@@ -57,8 +57,7 @@ module FileHandler
       def self.import_update(file)
         msg = Message.new
         begin
-
-          CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+          CSV.foreach(file.file_path, headers: file.headers, col_sep: ';', encoding: file.encoding) do |row|
             row.strip
             params = {}
             UPDATE_HEADERS.each { |header|
