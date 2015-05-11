@@ -398,6 +398,16 @@ class KanbansController < ApplicationController
     # authorize(Kanban)
   end
 
+
+  def export_white
+    msg = FileHandler::Excel::KanbanHandler.export_white
+    if msg.result
+      send_file msg.content
+    else
+      render json: msg
+    end
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_kanban

@@ -181,6 +181,7 @@ Rails.application.routes.draw do
       get :panel
       get :scope_search
       get :export
+      get :export_white
       get :management
       match :import, to: :import, via: [:get, :post]
       match :scan_finish, to: :scan_finish, via: [:get, :post]
