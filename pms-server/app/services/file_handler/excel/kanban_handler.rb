@@ -9,9 +9,9 @@ module FileHandler
       ]
 
       WHITE_HEADERS=['Nr', 'Quantity', 'Safety Stock', 'Copies',
-                     'Remark','Remark2', 'Wire Nr', 'Product Nr', 'Type',
+                     'Remark', 'Remark2', 'Wire Nr', 'Product Nr', 'Type',
                      'Bundle', 'Destination Warehouse',
-                     'Destination Storage', 'Process List','Row Wire Nr','Diameter','Length','T1','T2','S1','S2']
+                     'Destination Storage', 'Process List', 'Row Wire Nr', 'Diameter', 'Length', 'T1', 'T2', 'S1', 'S2']
 
       def self.import_update_quantity(file)
         msg = Message.new(contents: [])
@@ -145,14 +145,14 @@ module FileHandler
                                 k.des_warehouse,
                                 k.des_storage,
                                 k.process_list,
-                                wire.nil? ? '':wire.nr,
-                                wire.cross_section,
+                                wire.nil? ? '' : wire.nr,
+                                wire.nil? ? '' : wire.cross_section,
                                 process_entity.value_wire_qty_factor,
-                                t1.nil? ? '':t1.nr,
-                                t2.nil? ? '':t2.nr,
-                                s1.nil? ? '':s1.nr,
-                                s2.nil? ? '':s2.nr,
-                            ], types: [:string, nil, nil, nil, nil, :string, :string, :string, :string,:string, :string, :string]
+                                t1.nil? ? '' : t1.nr,
+                                t2.nil? ? '' : t2.nr,
+                                s1.nil? ? '' : s1.nr,
+                                s2.nil? ? '' : s2.nr,
+                            ], types: [:string, nil, nil, nil, nil, :string, :string, :string, :string, :string, :string, :string]
             end
           end
           p.use_shared_strings = true
