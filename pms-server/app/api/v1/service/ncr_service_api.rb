@@ -111,7 +111,8 @@ module V1
               printer=Printer::Client.new({code: params[:code],
                                            id: item.kanban_id,
                                            machine_nr: params[:machine_nr],
-                                           bundle_no: params[:bundle_no]})
+                                           bundle_no: params[:bundle_no],
+                                           order_item_nr: params[:order_item_nr]})
               printer.gen_data
             end
           end

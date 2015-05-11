@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150510144820) do
+ActiveRecord::Schema.define(version: 20150511021206) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -335,6 +335,18 @@ ActiveRecord::Schema.define(version: 20150510144820) do
 
   add_index "process_templates", ["code"], name: "index_process_templates_on_code", using: :btree
   add_index "process_templates", ["type"], name: "index_process_templates_on_type", using: :btree
+
+  create_table "production_order_item_labels", force: true do |t|
+    t.integer  "production_order_item_id"
+    t.integer  "bundle_no"
+    t.float    "qty"
+    t.string   "nr"
+    t.integer  "state"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "production_order_item_labels", ["production_order_item_id"], name: "index_production_order_item_labels_on_production_order_item_id", using: :btree
 
   create_table "production_order_items", force: true do |t|
     t.string   "nr"

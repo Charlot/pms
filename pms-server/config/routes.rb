@@ -1,5 +1,7 @@
 require 'devise'
 Rails.application.routes.draw do
+  resources :production_order_item_labels
+
   root :to => 'welcome#index'
 
   devise_for :users, controllers: {
