@@ -1,0 +1,33 @@
+<script type="text/javascript">
+    $(document).ready(function () {
+        data_upload("#item-data-uploader");
+    });
+</script>
+<p id="notice">
+  <%= notice %>
+</p>
+<h3>导入更新看板基本信息</h3>
+<div>
+  选择数据文件：
+  <input id="item-data-uploader" type="file" name="files[]" data-url="/kanbans/import_update_base"/>
+
+  <div id="item-data-uploader-preview" style="display:none;"></div>
+  <div>
+    <a href="/files/<%= ImportTemplate.kanban_update_base_template %>">下载模板：<%= ImportTemplate::KANBAN_UPDATE_BASE_TEMPLATE %></a>
+  </div>
+  <div class="info-warn-div">
+    <h5> 说明：</h5>
+
+    <div>
+      模板文件：kanban_update_base_template.csv，中包含列: Nr;Quantity;Safety Stock;Copies;Remark;Remark2;Product Nr;Bundle;Source Warehouse;Source Storage;Destination Warehouse;Destination Storage<br/>
+      其中：Nr-看板号;Quantity-总量;Safety Stock-安全库存;Copies-张数;Remark-白卡中是特殊工艺，兰卡中是备注1;Remark2-白卡中是APAB，兰卡中是备注2<br/>
+      Product Nr-总成号;Bundle-捆扎量;Source Warehouse-源仓库;Source Storage-源库位;Destination Warehouse-目标仓库;Destination Storage-目标库位<br/>
+      当更新时，Nr为必填，其它列为选填。</br>
+      1. 例如，更新看板总量和捆扎数，只保留3列：Nr;Quantity;Bundle，其它整列都删除掉</br>
+      1. 例如，更新看板APAB，只保留2列：Nr;Remark2，其它整列都删除掉</br>
+      删除整列是将包含列头都删除掉，不仅仅是删除列内容
+      <br/>
+      </br>
+    </div>
+  </div>
+</div>

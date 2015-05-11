@@ -9,7 +9,8 @@
   <thead>
   <tr>
     <th>#</th>
-    <th>Nr</th>
+    <th>模具号</th>
+    <!--<th>条码</th>-->
     <th>Resource group</th>
     <th>Part</th>
     <th>Mnt</th>
@@ -25,6 +26,7 @@
   <% @tools.each_with_index do |tool, i| %>
       <tr>
         <td><%= i+1 %></td>
+        <!--<td><%= tool.nr_display %></td>-->
         <td><%= tool.nr %></td>
         <td><%= tool.resource_group_tool.nr if tool.resource_group_tool %></td>
         <td><%= tool.part.nr if tool.part %></td>

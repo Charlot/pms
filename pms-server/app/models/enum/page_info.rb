@@ -56,6 +56,8 @@ module Enum
             else
               'N/A'
           end
+        when 'import_update_base'
+          "#{model}更新基本信息"
         else
           "N/A"
       end
