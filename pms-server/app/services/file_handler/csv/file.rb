@@ -9,7 +9,7 @@ module FileHandler
       end
 
       def default
-        {col_sep: SEPARATOR, headers: true}
+        {col_sep: ';', headers: true}
       end
 
     end
