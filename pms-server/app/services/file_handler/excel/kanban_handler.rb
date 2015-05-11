@@ -152,7 +152,7 @@ module FileHandler
                                 t2.nil? ? '' : t2.nr,
                                 s1.nil? ? '' : s1.nr,
                                 s2.nil? ? '' : s2.nr,
-                            ], types: [:string, nil, nil, nil, nil, :string, :string, :string, :string, :string, :string, :string]
+                            ], types: [:string, nil, nil, nil, nil, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string]
             end
           end
           p.use_shared_strings = true
