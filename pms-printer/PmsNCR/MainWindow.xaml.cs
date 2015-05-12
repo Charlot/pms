@@ -39,7 +39,8 @@ namespace PmsNCR
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            this.Title = "PMS CLIENT: " + WPCSConfig.MachineNr;
+            new Login().ShowDialog();
+            this.Title = WPCSConfig.MachineNr+"/"+WPCSConfig.UserNr+"/"+WPCSConfig.UserGroupNr;
            // if (startService()) {
              new ClientDataWatcher().Show();
             //}

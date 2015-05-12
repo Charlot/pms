@@ -82,7 +82,7 @@ namespace PmsNCRWcf
         /// <param name="orderItemNr"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public Msg<string> ChangeOrderItemState(string orderItemNr, OrderItemState state)
+        public Msg<string> ChangeOrderItemState(string orderItemNr, OrderItemState state, string userNr = null, string userGroupNr = null)
         {
 
             Msg<string> msg = new Msg<string>();
@@ -90,6 +90,8 @@ namespace PmsNCRWcf
             req.RequestFormat = DataFormat.Json;
             req.AddParameter("order_item_nr", orderItemNr);
             req.AddParameter("state", (int)state);
+            req.AddParameter("user_nr", userNr);
+            req.AddParameter("user_group_nr", userGroupNr);
             var res = new ApiClient().Execute(req);
             var data = res.Content;
             if (data != null)

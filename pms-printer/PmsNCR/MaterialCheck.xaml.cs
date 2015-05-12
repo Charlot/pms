@@ -15,6 +15,7 @@ using PmsNCRWcf;
 using PmsNCRWcf.Config;
 using PmsNCRWcf.Converter;
 using Brilliantech.Framwork.Utils.LogUtil;
+using System.Text.RegularExpressions;
 
 namespace PmsNCR
 {
@@ -57,6 +58,11 @@ namespace PmsNCR
 
         private void InitCheckGraph()
         {
+            WireCB.IsEnabled = !MaterialCheckConfig.WireLockCheck;
+            Terminal1CB.IsEnabled = Terminal2CB.IsEnabled = !MaterialCheckConfig.TerminalLockCheck;
+            Tool1CB.IsEnabled = Tool2CB.IsEnabled = !MaterialCheckConfig.ToolLockCheck;
+
+
             JobNrLab.Content = orderItem.ItemNr;
             WireNrTB.Text = orderItem.WireNr;
             WireCusNrTB.Text = orderItem.WireCusNr;
@@ -86,7 +92,7 @@ namespace PmsNCR
                 WorkArea1.Visibility = Visibility.Visible;
                 TerminalNr1TB.Text = orderItem.Terminal1Nr;
                 TerminalCusNr1TB.Text = orderItem.Terminal1CusNr;
-                Tool1NrTB.Text = orderItem.Tool1Nr;
+                Tool1NrTB.Text = orderItem.Tool1Nr;                
                 Terminal1GraphLab.Visibility = Visibility.Visible;
             }
 
@@ -107,21 +113,27 @@ namespace PmsNCR
                 string text = ScanCodeTB.Text;
                 if (text.Length > 1)
                 {
-                    string prefix = text.Substring(0, 1);
-                    string content = String.Empty;
-                    if (prefix.Equals(MaterialCheckConfig.AreaPrefix))
+                   string prefix = text.Substring(0, 1);
+                   string content = String.Empty;
+                    
+                    Regex areaRegex = new Regex(MaterialCheckConfig.AreaPattern, RegexOptions.IgnoreCase);
+                    Regex wireRegex = new Regex(MaterialCheckConfig.WirePattern, RegexOptions.IgnoreCase);
+                    Regex terminalRegex = new Regex(MaterialCheckConfig.TerminalPattern, RegexOptions.IgnoreCase);
+                    Regex toolRegex = new Regex(MaterialCheckConfig.ToolPattern, RegexOptions.IgnoreCase);
+
+                    if (areaRegex.Match(text).Success)
                     {
-                        content = text.Substring(MaterialCheckConfig.AreaPrefix.Length, text.Length - 1);
+                        content = text.Substring(MaterialCheckConfig.AreaPrefix.Length, text.Length -MaterialCheckConfig.AreaPrefix.Length);
                         CurrentAreaTB.Text = content;
                     }
-                    else if (CurrentAreaTB.Text.Length==0 && prefix.Equals(MaterialCheckConfig.WirePrefix))
+                    else if (CurrentAreaTB.Text.Length==0 && wireRegex.Match(text).Success)
                     {
-                        content = text.Substring(MaterialCheckConfig.WirePrefix.Length, text.Length - 1);
+                        content = text.Substring(MaterialCheckConfig.WirePrefix.Length, text.Length - MaterialCheckConfig.WirePrefix.Length);
                         WireCB.IsChecked = WireNrTB.Text.Equals(content);
                     }
-                    else if (prefix.Equals(MaterialCheckConfig.TerminalPrefix))
+                    else if (terminalRegex.Match(text).Success)
                     {
-                        content = text.Substring(MaterialCheckConfig.TerminalPrefix.Length, text.Length - 1);
+                        content = text.Substring(MaterialCheckConfig.TerminalPrefix.Length, text.Length - MaterialCheckConfig.TerminalPrefix.Length);
                         if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area1))
                         {
                             Terminal1CB.IsChecked = TerminalNr1TB.Text.Equals(content);
@@ -132,9 +144,9 @@ namespace PmsNCR
                         }
 
                     }
-                    else if (prefix.Equals(MaterialCheckConfig.ToolPrefix))
+                    else if (toolRegex.Match(text).Success)
                     {
-                        content = text.Substring(MaterialCheckConfig.ToolPrefix.Length, text.Length - 1);
+                        content = text.Substring(MaterialCheckConfig.ToolPrefix.Length, text.Length - MaterialCheckConfig.ToolPrefix.Length);
 
                         if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area1))
                         {
@@ -163,6 +175,7 @@ namespace PmsNCR
         private void CleanScanBtn_Click(object sender, RoutedEventArgs e)
         {
             ScanCodeTB.Text = String.Empty;
+            CurrentAreaTB.Text = String.Empty;
             ScanCodeTB.Focus();
         }
 

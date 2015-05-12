@@ -97,7 +97,7 @@ namespace PmsNCR
                     fullPath = MoveFile(fullPath, System.IO.Path.Combine(toScanDir, System.IO.Path.GetFileName(fullPath)));
                     if (fullPath != null)
                     {
-                        canMoveFile = OrderSDCConverter.ParseSDCToServer(fullPath,WPCSConfig.MachineNr);
+                        canMoveFile = OrderSDCConverter.ParseSDCToServer(fullPath,WPCSConfig.MachineNr,WPCSConfig.UserNr,WPCSConfig.UserGroupNr);
                     }
                 }
             }

@@ -1,7 +1,7 @@
 ﻿<Window x:Class="PmsNCR.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="PMS CLIENT" Height="259" Width="210" Loaded="Window_Loaded" Closing="Window_Closing" ResizeMode="NoResize" Topmost="True">
+        Title="PMS CLIENT" Height="259" Width="210" Loaded="Window_Loaded" Closing="Window_Closing" ResizeMode="NoResize" Topmost="True" Icon="/PmsNCR;component/robot.ico">
     <Grid>
         <StackPanel>
             <StackPanel.Background>

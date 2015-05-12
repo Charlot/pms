@@ -11,7 +11,7 @@ namespace PmsNCRWcf.Converter
 {
     public class OrderSDCConverter
     {
-        public static bool ParseSDCToServer(string filePath, string machineNr = null)
+        public static bool ParseSDCToServer(string filePath, string machineNr = null,string userNr=null,string userGroupNr=null)
         {
             ConfigUtil config = new ConfigUtil(filePath);
             OrderService service = new OrderService();
@@ -23,7 +23,7 @@ namespace PmsNCRWcf.Converter
                     case "JobStarted":
                         string jobNr = GetJobNr(config.Get("Job", node));
                         new PrintService().PrintKB("P002", jobNr,machineNr);
-                        return service.ChangeOrderItemState(jobNr, OrderItemState.STARTED).Result;
+                        return service.ChangeOrderItemState(jobNr, OrderItemState.STARTED,userNr,userGroupNr).Result;
                     case "JobRestarted":
                         string jobNr1 = GetJobNr(config.Get("Job", node));
                         int piece3 = int.Parse(config.Get("TotalGoodPieces", node));
@@ -31,13 +31,13 @@ namespace PmsNCRWcf.Converter
                         {
                             new PrintService().PrintKB("P002", jobNr1, machineNr);
                         }
-                        return service.ChangeOrderItemState(jobNr1, OrderItemState.RESTARTED).Result;
+                        return service.ChangeOrderItemState(jobNr1, OrderItemState.RESTARTED, userNr, userGroupNr).Result;
                     case "JobPaused":
-                        return service.ChangeOrderItemState(GetJobNr(config.Get("Job", node)), OrderItemState.PAUSED).Result;
+                        return service.ChangeOrderItemState(GetJobNr(config.Get("Job", node)), OrderItemState.PAUSED, userNr, userGroupNr).Result;
                     case "JobInterrupted":
-                        return service.ChangeOrderItemState(GetJobNr(config.Get("Job", node)), OrderItemState.INTERRUPTED).Result;
+                        return service.ChangeOrderItemState(GetJobNr(config.Get("Job", node)), OrderItemState.INTERRUPTED, userNr, userGroupNr).Result;
                     case "JobAborted":
-                        return service.ChangeOrderItemState(GetJobNr(config.Get("Job", node)), OrderItemState.ABORTED).Result;
+                        return service.ChangeOrderItemState(GetJobNr(config.Get("Job", node)), OrderItemState.ABORTED, userNr, userGroupNr).Result;
                     //case "JobTerminated":
                     //    // PrintKanban();
                     //    string orderNr = GetJobNr(config.Get("Job", node));
@@ -61,7 +61,7 @@ namespace PmsNCRWcf.Converter
                     case "ProductionTerminated":
                         string pOrderNr2 = GetJobNr(config.Get("Job", node));
 
-                        service.ChangeOrderItemState(pOrderNr2, OrderItemState.TERMINATED);
+                        service.ChangeOrderItemState(pOrderNr2, OrderItemState.TERMINATED, userNr, userGroupNr);
                         int piece2 = int.Parse(config.Get("TotalGoodPieces", node));
                         Msg<OrderItem> msg2 = service.ProducePiece(pOrderNr2, piece2);
                         if (msg2.Result)

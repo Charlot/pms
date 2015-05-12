@@ -23,6 +23,10 @@ namespace PmsNCRWcf.Config
         private static string machineNr;
         private static string machineIP;
 
+        private static string userNr;
+        private static string userGroupNr;
+        private static List<string> userGroupsNr;
+
         private static int scanClientFolderInterval = 1000;
         private static bool deleteFileAfterRead = false;
 
@@ -49,6 +53,13 @@ namespace PmsNCRWcf.Config
 
             machineNr = config.Get("MachineNr");
             machineIP = config.Get("MachineIP");
+
+            userNr = config.Get("UserNr");
+            userGroupNr = config.Get("UserGroupNr");
+            userGroupsNr = new List<string>();
+            foreach (string s in config.Get("UserGroupsNr").Split(',')) {
+                userGroupsNr.Add(s);
+            }
 
             if (!int.TryParse(config.Get("ScanClientFolderInterval"), out scanClientFolderInterval))
             {
@@ -132,6 +143,35 @@ namespace PmsNCRWcf.Config
                 config.Set("MachineIP", value);
                 config.Save();
             }
+        }
+
+        public static string UserNr
+        {
+            get { return WPCSConfig.userNr; }
+            set
+            {
+                WPCSConfig.userNr = value;
+                config.Set("UserNr", value);
+                config.Save();
+            }
+        }
+
+        public static string UserGroupNr
+        {
+            get { return WPCSConfig.userGroupNr; }
+            set
+            {
+                WPCSConfig.userGroupNr = value;
+                config.Set("UserGroupNr", value);
+                config.Save();
+            }
+        }
+
+
+        public static List<string> UserGroupsNr
+        {
+            get { return WPCSConfig.userGroupsNr; }
+            set { WPCSConfig.userGroupsNr = value; }
         }
 
         public static int ScanClientFolderInterval
