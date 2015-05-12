@@ -6,6 +6,10 @@ module FileHandler
                       'Wire Nr', 'Product Nr', 'Type', 'Bundle',
                       'Source Warehouse', 'Source Storage', 'Destination Warehouse',
                       'Destination Storage', 'Process List']
+      UPDATE_HEADERS=['Nr', 'Quantity', 'Bundle', 'Safety Stock', 'Copies', 'Remark', 'Remark2', 'Product Nr',
+                      'Source Warehouse', 'Source Storage', 'Destination Warehouse',
+                      'Destination Storage']
+
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
       def self.import_to_get_kanban_list(file)
@@ -14,15 +18,15 @@ module FileHandler
         list = []
         # validate_msg = validate_import(file)
         # if validate_msg.result
-        CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+        CSV.foreach(file.file_path, headers: file.headers, col_sep: ';', encoding: file.encoding) do |row|
           row.strip
           product = Part.find_by_nr(row['Product Nr'])
           wire=Part.find_by_nr("#{row['Product Nr']}_#{row['Wire Nr']}")
           # if !product.nil? && !wire.nil?
-            puts '-------------------------------------------'.red
-            Kanban.search_for("#{row['Wire Nr']} #{row['Product Nr']}").each do |k|
-              list<<k.nr
-            end
+          puts '-------------------------------------------'.red
+          Kanban.search_for("#{row['Wire Nr']} #{row['Product Nr']}").each do |k|
+            list<<k.nr
+          end
           # end
           # route_list = row['Process List'].split(',')
           # puts "================="
@@ -53,8 +57,31 @@ module FileHandler
       def self.import_update(file)
         msg = Message.new
         begin
-          validate_msg = validate_import(file)
-          if validate_msg.result
+          CSV.foreach(file.file_path, headers: file.headers, col_sep: ';', encoding: file.encoding) do |row|
+            row.strip
+            params = {}
+            UPDATE_HEADERS.each { |header|
+              unless (row[header].nil? || header_to_attr(header).nil?)
+                params[header_to_attr(header)] = row[header]
+              end
+            }
+            unless row['Product Nr'].blank?
+              if product = Part.find_by_nr(row['Product Nr'])
+               params[:product_id]=product.id
+              end
+            end
+            if kb=Kanban.find_by_nr(row['Nr'])
+              kb.without_versioning do
+                kb.update(params)
+              end
+            end
+          end
+
+          msg.result = true
+          msg.content = 'Kanban 更新成功'
+
+            # validate_msg = validate_import(file)
+            # if validate_msg.result
 =begin
             Kanban.transaction do
               CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
@@ -99,12 +126,12 @@ module FileHandler
               end
             end
 =end
-            msg.result = true
-            msg.content = 'Kanban 上传成功'
-          else
-            msg.result = false
-            msg.content = validate_msg.content
-          end
+            # msg.result = true
+            # msg.content = 'Kanban 更新成功'
+            # else
+            #   msg.result = false
+            #   # msg.content = validate_msg.content
+            # end
         rescue => e
           puts e.backtrace
           msg.content = e.message
@@ -352,6 +379,8 @@ module FileHandler
             :copies
           when "Remark"
             :remark
+          when "Remark2"
+            :remark2
           when "Type"
             :ktype
           #when "Wire Length"

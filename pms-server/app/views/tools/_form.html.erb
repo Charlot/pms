@@ -12,9 +12,15 @@
     <% end %>
 
     <div class="field">
-      <%= f.label :nr %><br>
+      <%= f.label :nr_display,'名称' %><br>
+      <%= f.text_field :nr_display %>
+    </div>
+
+    <div class="field">
+      <%= f.label :nr,'条码' %><br>
       <%= f.text_field :nr %>
     </div>
+
     <div class="field">
       <%= f.label :part %><br>
       <% if @tool.new_record? && @tool.part.blank? %>

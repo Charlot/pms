@@ -1,0 +1,33 @@
+<h1>Listing production_order_item_labels</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Production order item</th>
+      <th>Bundle no</th>
+      <th>Qty</th>
+      <th>Nr</th>
+      <th>State</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @production_order_item_labels.each do |production_order_item_label| %>
+      <tr>
+        <td><%= production_order_item_label.production_order_item %></td>
+        <td><%= production_order_item_label.bundle_no %></td>
+        <td><%= production_order_item_label.qty %></td>
+        <td><%= production_order_item_label.nr %></td>
+        <td><%= production_order_item_label.state %></td>
+        <td><%= link_to 'Show', production_order_item_label %></td>
+        <td><%= link_to 'Edit', edit_production_order_item_label_path(production_order_item_label) %></td>
+        <td><%= link_to 'Destroy', production_order_item_label, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Production order item label', new_production_order_item_label_path %>

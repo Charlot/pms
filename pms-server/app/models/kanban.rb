@@ -226,6 +226,8 @@ class Kanban < ActiveRecord::Base
         timerule = nil
 puts "#{machine.machine_type.nr}----#{process_entity.value_wire_qty_factor}".red
         #一定要断线长度正好超过规则，才选择这个规则
+        # design bug
+        # query improvment
         machinetimerule.each { |mtr|
           if process_entity.value_wire_qty_factor.to_f > mtr.length.to_f
             timerule = mtr

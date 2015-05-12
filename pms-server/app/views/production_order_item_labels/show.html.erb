@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Production order item:</strong>
+  <%= @production_order_item_label.production_order_item %>
+</p>
+
+<p>
+  <strong>Bundle no:</strong>
+  <%= @production_order_item_label.bundle_no %>
+</p>
+
+<p>
+  <strong>Qty:</strong>
+  <%= @production_order_item_label.qty %>
+</p>
+
+<p>
+  <strong>Nr:</strong>
+  <%= @production_order_item_label.nr %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @production_order_item_label.state %>
+</p>
+
+<%= link_to 'Edit', edit_production_order_item_label_path(@production_order_item_label) %> |
+<%= link_to 'Back', production_order_item_labels_path %>

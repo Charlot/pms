@@ -2,7 +2,7 @@ require 'csv'
 module FileHandler
   module Csv
     class ToolHandler<Base
-      IMPORT_HEADERS=['Nr','Resource Group','Part','MNT','Used Days','Rql','Tol','Rql Date']
+      IMPORT_HEADERS=['Nr','Nr Display','Resource Group','Part','MNT','Used Days','Rql','Tol','Rql Date']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
       def self.import(file)
@@ -18,6 +18,7 @@ module FileHandler
                 if tool = Tool.find_by_nr(row['Nr'])
                   #update
                   tool.update({
+                                  nr_display:row['Nr Display'],
                                   resource_group_id:rg.id,
                                   part_id:part.id,
                                   mnt:row['MNT'],
@@ -30,6 +31,7 @@ module FileHandler
                   #create
                   tool = Tool.new({
                                       nr:row['Nr'],
+                                      nr_display:row['Nr Display'],
                                       resource_group_id:rg.id,
                                       part_id:part.id,
                                       mnt:row['MNT'],

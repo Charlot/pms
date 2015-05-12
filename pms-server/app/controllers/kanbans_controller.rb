@@ -208,7 +208,6 @@ class KanbansController < ApplicationController
   end
 
 
-
   # GET/POST
   def import
     # authorize(Kanban)
@@ -243,6 +242,22 @@ class KanbansController < ApplicationController
     end
   end
 
+  def import_update_base
+    if request.post?
+      msg = Message.new
+      begin
+        file=params[:files][0]
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd.save
+        file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
+        msg = FileHandler::Csv::KanbanHandler.import_update(file)
+      rescue => e
+        msg.content = e.message
+      end
+      render json: msg
+    end
+  end
+
   # 导入看板卡进行投卡
   def import_to_scan
     @hide_sidebar = true
@@ -267,11 +282,11 @@ class KanbansController < ApplicationController
     if request.post?
       msg = Message.new
       # begin
-        file=params[:files][0]
-        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
-        fd.save
-        file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
-        msg = FileHandler::Csv::KanbanHandler.import_to_get_kanban_list(file)
+      file=params[:files][0]
+      fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+      fd.save
+      file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
+      msg = FileHandler::Csv::KanbanHandler.import_to_get_kanban_list(file)
       # rescue => e
       #   msg.content = e.message
       # end
@@ -346,7 +361,7 @@ class KanbansController < ApplicationController
 
     #check version of Kanban
     render json: {result: false, content: "看板未找到：#{parsed_code.to_json}"} and return unless @kanban
-    render json:{result:false,content:'看板为兰卡，不可以投！'} and return if @kanban.ktype==KanbanType::BLUE
+    render json: {result: false, content: '看板为兰卡，不可以投！'} and return if @kanban.ktype==KanbanType::BLUE
     render json: {result: false, content: "看板版本错误#{parsed_code[:version_nr]}"} and return unless (version = @kanban.versions.where(id: parsed_code[:version_nr]))
     #last_version = @kanban.versions.last
     #need_update = last_version.created_at > version.created_at
@@ -381,6 +396,16 @@ class KanbansController < ApplicationController
   def panel
     @hide_sidebar= true
     # authorize(Kanban)
+  end
+
+
+  def export_white
+    msg = FileHandler::Excel::KanbanHandler.export_white
+    if msg.result
+      send_file msg.content
+    else
+      render json: msg
+    end
   end
 
   private

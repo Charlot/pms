@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  production_order_item_id: 
+  bundle_no: 1
+  qty: 1.5
+  nr: MyString
+  state: 1
+
+two:
+  production_order_item_id: 
+  bundle_no: 1
+  qty: 1.5
+  nr: MyString
+  state: 1

@@ -3,7 +3,8 @@ class ProductionOrderItem < ActiveRecord::Base
   belongs_to :kanban
   belongs_to :production_order
   belongs_to :machine
-
+  has_many :production_order_item_labels
+  after_update :generate_production_item_label
   has_paper_trail
 
   def self.for_optimise
@@ -87,6 +88,16 @@ class ProductionOrderItem < ActiveRecord::Base
   def self.optimise_order
     Machine.all.each do |machine|
       machine.sort_order_item
+    end
+  end
+
+  def generate_production_item_label
+    if self.produced_qty_changed?
+      if self.kanban && self.produced_qty>0 && (self.produced_qty % self.kanban.bundle==0)
+        self.production_order_item_labels.create(nr: SecureRandom.uuid,
+                                                 qty: self.kanban.bundle,
+                                                 bundle_no: self.produced_qty / self.kanban.bundle)
+      end
     end
   end
 end

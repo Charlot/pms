@@ -8,6 +8,11 @@ module FileHandler
           'Destination Storage', 'Process List', 'Operator'
       ]
 
+      WHITE_HEADERS=['Nr', 'Quantity', 'Safety Stock', 'Copies',
+                     'Remark', 'Remark2', 'Wire Nr', 'Product Nr', 'Type',
+                     'Bundle', 'Destination Warehouse',
+                     'Destination Storage', 'Process List', 'Row Wire Nr', 'Diameter', 'Length', 'T1', 'T2', 'S1', 'S2']
+
       def self.import_update_quantity(file)
         msg = Message.new(contents: [])
 
@@ -105,6 +110,63 @@ module FileHandler
         end
         msg
       end
+
+      def self.export_white
+        msg = Message.new
+        begin
+          tmp_file = full_export_path('WirteKanban.xlsx') unless tmp_file
+
+          p = Axlsx::Package.new
+          p.workbook.add_worksheet(name: 'Basic Worksheet') do |sheet|
+            sheet.add_row WHITE_HEADERS
+            kanbans =Kanban.where(ktype: KanbanType::WHITE)
+
+            kanbans.each do |k|
+              process_entity=k.process_entities.first
+              next if process_entity.blank?
+              wire=Part.find_by_id(process_entity.value_wire_nr)
+              t1=Part.find_by_id(process_entity.value_t1)
+              t2=Part.find_by_id(process_entity.value_t2)
+
+              s1=Part.find_by_id(process_entity.value_s1)
+              s2=Part.find_by_id(process_entity.value_s2)
+
+              sheet.add_row [
+                                k.nr,
+                                k.quantity,
+                                k.safety_stock,
+                                k.copies,
+                                k.remark,
+                                k.remark2,
+                                k.wire_nr,
+                                k.product_nr,
+                                k.ktype,
+                                k.bundle,
+                                k.des_warehouse,
+                                k.des_storage,
+                                k.process_list,
+                                wire.nil? ? '' : wire.nr,
+                                wire.nil? ? '' : wire.cross_section,
+                                process_entity.value_wire_qty_factor,
+                                t1.nil? ? '' : t1.nr,
+                                t2.nil? ? '' : t2.nr,
+                                s1.nil? ? '' : s1.nr,
+                                s2.nil? ? '' : s2.nr,
+                            ], types: [:string, nil, nil, nil, nil, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string]
+            end
+          end
+          p.use_shared_strings = true
+          p.serialize(tmp_file)
+
+          msg.result =true
+          msg.content =tmp_file
+        rescue => e
+          puts e.backtrace
+          msg.content = e.message
+        end
+        msg
+      end
+
 
       def self.import_scan file
         msg = Message.new(contents: [])

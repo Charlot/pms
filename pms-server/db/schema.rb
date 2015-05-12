@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150429085827) do
+ActiveRecord::Schema.define(version: 20150512065916) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -336,6 +336,18 @@ ActiveRecord::Schema.define(version: 20150429085827) do
   add_index "process_templates", ["code"], name: "index_process_templates_on_code", using: :btree
   add_index "process_templates", ["type"], name: "index_process_templates_on_type", using: :btree
 
+  create_table "production_order_item_labels", force: true do |t|
+    t.integer  "production_order_item_id"
+    t.integer  "bundle_no"
+    t.float    "qty"
+    t.string   "nr"
+    t.integer  "state"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "production_order_item_labels", ["production_order_item_id"], name: "index_production_order_item_labels_on_production_order_item_id", using: :btree
+
   create_table "production_order_items", force: true do |t|
     t.string   "nr"
     t.integer  "state",               default: 100
@@ -351,6 +363,8 @@ ActiveRecord::Schema.define(version: 20150429085827) do
     t.integer  "produced_qty"
     t.float    "machine_time",        default: 0.0
     t.float    "prev_index",          default: 0.0
+    t.string   "user_nr"
+    t.string   "user_group_nr"
   end
 
   add_index "production_order_items", ["kanban_id"], name: "index_production_order_items_on_kanban_id", using: :btree
@@ -431,6 +445,7 @@ ActiveRecord::Schema.define(version: 20150429085827) do
     t.datetime "rql_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "nr_display"
   end
 
   add_index "tools", ["nr"], name: "index_tools_on_nr", using: :btree
