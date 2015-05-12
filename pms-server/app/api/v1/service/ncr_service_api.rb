@@ -67,7 +67,7 @@ module V1
               if item.state==ProductionOrderItemState::TERMINATED
                 r= false
               else
-                r= item.update(state: params[:state])
+                r= item.update(state: params[:state],user_nr:params[:user_nr],user_group_nr:params[:user_group_nr])
               end
 
               NcrLogWorker.perform_async({order_item_nr: params[:order_item_nr],

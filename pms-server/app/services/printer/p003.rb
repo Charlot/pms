@@ -2,7 +2,7 @@
 module Printer
   class P003<Base
     HEAD=[:CO_Nr, :CP_Nr,
-          :kBanNr, :warehouse,
+          :kBanNr,:user, :warehouse,
           :pnNr, :bundleNo, :totalQuantity, :bQuantity, :singleResCC, :wireNr,
           :partNr, :partDesc, :color, :length, :diameter,
           :t1_nr, :t1_custom_nr, :t1_strip_length, :s1_nr,
@@ -11,18 +11,23 @@ module Printer
 
     def generate_data(args=nil)
       item=ProductionOrderItem.find_by_nr(args[:order_item_nr])
+      kanban = Kanban.find_by_id(self.id)
       if item_label=item.production_order_item_labels.where(bundle_no: args[:bundle_no]).first
-        kanban = Kanban.find_by_id(self.id)
+
+        product=Part.find_by_id(kanban.product_id)
+
+      #  raise '' if product
         #Now the Automatic KANBAN onlu has 1 process entity
         process_entity = kanban.process_entities.first
         wire=Part.find_by_id(process_entity.value_wire_nr)
 
         head={
-            CO_Nr: 'CO_NR',
-            CP_Nr: 'CP_NR',
+            CO_Nr: item.nr,
+            CP_Nr: item.optimise_index,
+            user: item.user_nr.blank? ? '' : "#{item.user_nr} / #{item.user_group_nr}",
             kBanNr: kanban.nr,
             warehouse: kanban.des_storage,
-            pnNr: 'pnNr',
+            pnNr: (product.nil? ? '' : "#{product.nr} / #{product.custom_nr}"),
             bundleNo: args[:bundle_no],
             totalQuantity: kanban.quantity,
             bQuantity: kanban.bundle,

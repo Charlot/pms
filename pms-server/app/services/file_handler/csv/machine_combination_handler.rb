@@ -12,7 +12,7 @@ module FileHandler
 
           CSV.open(tmp_file, 'wb', write_headers: true,
                    headers: IMPORT_HEADERS,
-                   col_sep: SEPARATOR, encoding: MachineCombinationHandler.get_encoding(user_agent)) do |csv|
+                   col_sep: ';', encoding: MachineCombinationHandler.get_encoding(user_agent)) do |csv|
             MachineCombination.all.each_with_index do |mc,i|
               parts = {}
               ['w1','t1','t2','s1','s2'].each do |p|
@@ -47,7 +47,7 @@ module FileHandler
           validate_msg = validate_import(file)
           if validate_msg.result
             MachineCombination.transaction do
-              CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+              CSV.foreach(file.file_path, headers: file.headers, col_sep: ';', encoding: file.encoding) do |row|
                 row.strip
                 puts "#{row}".red
                 params = {}
@@ -127,6 +127,18 @@ module FileHandler
           msg.content=msg.contents.join('/')
         end
         return msg
+      end
+
+      def self.get_encoding(user_agent)
+        os=System::Base.os_by_user_agent(user_agent)
+        case os
+          when 'windows'
+            return 'GB18030:UTF-8'
+          when 'linux', 'macintosh'
+            return 'UTF-8:UTF-8'
+          else
+            return 'UTF-8:UTF-8'
+        end
       end
     end
   end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150511021206) do
+ActiveRecord::Schema.define(version: 20150512065916) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -363,6 +363,8 @@ ActiveRecord::Schema.define(version: 20150511021206) do
     t.integer  "produced_qty"
     t.float    "machine_time",        default: 0.0
     t.float    "prev_index",          default: 0.0
+    t.string   "user_nr"
+    t.string   "user_group_nr"
   end
 
   add_index "production_order_items", ["kanban_id"], name: "index_production_order_items_on_kanban_id", using: :btree
