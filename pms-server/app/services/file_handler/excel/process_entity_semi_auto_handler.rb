@@ -109,9 +109,9 @@ module FileHandler
                       end
                     end
 
-                    pe.custom_fields.select { |cf| cf.name != "default_wire_nr" }.each_with_index do |cf,index|
-                      template_fields << {:type => cf.field_format,:value=>custom_fields_val[index],:ext => custom_fields_quantity[index]}
-                    end
+                    # pe.custom_fields.select { |cf| cf.name != "default_wire_nr" }.each_with_index do |cf,index|
+                    #   template_fields << {:type => cf.field_format,:value=>custom_fields_val[index],:ext => custom_fields_quantity[index]}
+                    # end
 
                     process_entity.custom_fields.select { |cf| cf.name != "default_wire_nr" }.each_with_index do |cf, index|
                       cv = nil
