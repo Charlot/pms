@@ -108,68 +108,99 @@ namespace PmsNCR
 
         private void ScanCodeTB_KeyUp(object sender, KeyEventArgs e)
         {
+          
             if (e.Key == Key.Enter)
-            {
-                string text = ScanCodeTB.Text;
-                if (text.Length > 1)
-                {
-                   string prefix = text.Substring(0, 1);
-                   string content = String.Empty;
-                    
-                    Regex areaRegex = new Regex(MaterialCheckConfig.AreaPattern, RegexOptions.IgnoreCase);
-                    Regex wireRegex = new Regex(MaterialCheckConfig.WirePattern, RegexOptions.IgnoreCase);
-                    Regex terminalRegex = new Regex(MaterialCheckConfig.TerminalPattern, RegexOptions.IgnoreCase);
-                    Regex toolRegex = new Regex(MaterialCheckConfig.ToolPattern, RegexOptions.IgnoreCase);
-
-                    if (areaRegex.Match(text).Success)
-                    {
-                        content = text.Substring(MaterialCheckConfig.AreaPrefix.Length, text.Length -MaterialCheckConfig.AreaPrefix.Length);
-                        CurrentAreaTB.Text = content;
-                    }
-                    else if (CurrentAreaTB.Text.Length==0 && wireRegex.Match(text).Success)
-                    {
-                        content = text.Substring(MaterialCheckConfig.WirePrefix.Length, text.Length - MaterialCheckConfig.WirePrefix.Length);
-                        WireCB.IsChecked = WireNrTB.Text.Equals(content);
-                    }
-                    else if (terminalRegex.Match(text).Success)
-                    {
-                        content = text.Substring(MaterialCheckConfig.TerminalPrefix.Length, text.Length - MaterialCheckConfig.TerminalPrefix.Length);
-                        if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area1))
-                        {
-                            Terminal1CB.IsChecked = TerminalNr1TB.Text.Equals(content);
-                        }
-                        else if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area2))
-                        {
-                            Terminal2CB.IsChecked = TerminalNr2TB.Text.Equals(content);
-                        }
-
-                    }
-                    else if (toolRegex.Match(text).Success)
-                    {
-                        content = text.Substring(MaterialCheckConfig.ToolPrefix.Length, text.Length - MaterialCheckConfig.ToolPrefix.Length);
-
-                        if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area1))
-                        {
-                            Tool1CB.IsChecked = Tool1NrTB.Text.Equals(content);
-                        }
-                        else if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area2))
-                        {
-                            Tool2CB.IsChecked = Tool2NrTB.Text.Equals(content);
-                        }
-                    }
-
-                    if (CanStartProduce())
-                    {
-                        StartProduceBtn.IsEnabled = true;
-                    }
-                }
-
-                if (AutoCleanScanCB.IsChecked.Value)
-                {
-                    ScanCodeTB.Text = String.Empty;
-                }
+            {  
+                CheckMaterial();
+               // CleanScanText();
             }
 
+        }
+
+        private void CleanScanText() {
+            if (AutoCleanScanCB.IsChecked.Value)
+            {
+                ScanCodeTB.Text = String.Empty;
+            }
+        }
+
+        private void CheckMaterial()
+        {
+            string text = ScanCodeTB.Text;
+            if (text.Length > 1)
+            {
+               // string prefix = text.Substring(0, 1);
+                string content = String.Empty;
+
+                Regex areaRegex = new Regex(MaterialCheckConfig.AreaPattern, RegexOptions.IgnoreCase);
+                Regex wireRegex = new Regex(MaterialCheckConfig.WirePattern, RegexOptions.IgnoreCase);
+                Regex terminalRegex = new Regex(MaterialCheckConfig.TerminalPattern, RegexOptions.IgnoreCase);
+                Regex toolRegex = new Regex(MaterialCheckConfig.ToolPattern, RegexOptions.IgnoreCase);
+
+                if (areaRegex.Match(text).Success)
+                {
+                    content = text.Substring(MaterialCheckConfig.AreaPrefix.Length, text.Length - MaterialCheckConfig.AreaPrefix.Length);
+                    if (content.Equals(MaterialCheckConfig.Area1) || content.Equals(MaterialCheckConfig.Area2))
+                    {
+                        CurrentAreaTB.Text = content;
+                        CleanScanText();
+                    }
+                }
+                else if (CurrentAreaTB.Text.Length == 0 && wireRegex.Match(text).Success)
+                {
+                    content = text.Substring(MaterialCheckConfig.WirePrefix.Length, text.Length - MaterialCheckConfig.WirePrefix.Length);
+                    WireCB.IsChecked = WireNrTB.Text.Equals(content);
+                    if (WireCB.IsChecked.Value) {
+                        CleanScanText();
+                    }
+                }
+                else if (terminalRegex.Match(text).Success)
+                {
+                    content = text.Substring(MaterialCheckConfig.TerminalPrefix.Length, text.Length - MaterialCheckConfig.TerminalPrefix.Length);
+                    if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area1))
+                    {
+                        Terminal1CB.IsChecked = TerminalNr1TB.Text.Equals(content);
+                        if (Terminal1CB.IsChecked.Value) {
+                            CleanScanText();
+                        }
+                    }
+                    else if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area2))
+                    {
+                        Terminal2CB.IsChecked = TerminalNr2TB.Text.Equals(content);
+                        if (Terminal2CB.IsChecked.Value)
+                        {
+                            CleanScanText();
+                        }
+                    }
+
+                }
+                else if (toolRegex.Match(text).Success)
+                {
+                    content = text.Substring(MaterialCheckConfig.ToolPrefix.Length, text.Length - MaterialCheckConfig.ToolPrefix.Length);
+
+                    if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area1))
+                    {
+                        Tool1CB.IsChecked = Tool1NrTB.Text.Equals(content);
+                        if (Tool1CB.IsChecked.Value)
+                        {
+                            CleanScanText();
+                        }
+                    }
+                    else if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area2))
+                    {
+                        Tool2CB.IsChecked = Tool2NrTB.Text.Equals(content);
+                        if (Tool2CB.IsChecked.Value)
+                        {
+                            CleanScanText();
+                        }
+                    }
+                }
+
+                if (CanStartProduce())
+                {
+                    StartProduceBtn.IsEnabled = true;
+                }
+            }
         }
 
         private void CleanScanBtn_Click(object sender, RoutedEventArgs e)
@@ -286,6 +317,25 @@ namespace PmsNCR
             WorkArea2.Visibility = visibility;
 
 
+
+        }
+
+        private void ScanCodeTB_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (ScanCodeTB.Text.Length>0)
+            {
+                CheckMaterial();
+            }
+        }
+
+        private void MaterialCB_Checked(object sender, RoutedEventArgs e)
+        {
+
+            if (AutoCleanScanCB.IsChecked.Value)
+            {
+                ScanCodeTB.Text = String.Empty;
+            }
+            StartProduceBtn.IsEnabled = CanStartProduce();
 
         }
 
