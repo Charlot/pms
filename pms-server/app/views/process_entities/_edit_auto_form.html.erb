@@ -108,7 +108,9 @@
         if (confirm('确定更新?')) {
             var values = {};
             $.each($('.custom_value_edit_input'), function (i, obj) {
-                values[$(obj).attr('custom_value_id')] = $(obj).val();
+                if($(obj).attr('custom_value_id')!='') {
+                    values[$(obj).attr('custom_value_id')] = $(obj).val();
+                }
             });
 
             $.post('/custom_values/updates', {values: values}, function (msg) {
