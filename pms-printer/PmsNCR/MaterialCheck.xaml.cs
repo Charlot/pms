@@ -129,14 +129,24 @@ namespace PmsNCR
             string text = ScanCodeTB.Text;
             if (text.Length > 1)
             {
-               // string prefix = text.Substring(0, 1);
+                // string prefix = text.Substring(0, 1);
                 string content = String.Empty;
 
                 Regex areaRegex = new Regex(MaterialCheckConfig.AreaPattern, RegexOptions.IgnoreCase);
                 Regex wireRegex = new Regex(MaterialCheckConfig.WirePattern, RegexOptions.IgnoreCase);
                 Regex terminalRegex = new Regex(MaterialCheckConfig.TerminalPattern, RegexOptions.IgnoreCase);
                 Regex toolRegex = new Regex(MaterialCheckConfig.ToolPattern, RegexOptions.IgnoreCase);
-
+                if (wireRegex.Match(text).Success)
+                {
+                    if (!WireCB.IsChecked.Value)
+                    {
+                        content = text.Substring(MaterialCheckConfig.WirePrefix.Length, text.Length - MaterialCheckConfig.WirePrefix.Length);
+                        WireCB.IsChecked = WireNrTB.Text.Equals(content);                        
+                    }
+                    if (WireCB.IsChecked.Value) {
+                        CleanScanText();
+                    }
+                }
                 if (areaRegex.Match(text).Success)
                 {
                     content = text.Substring(MaterialCheckConfig.AreaPrefix.Length, text.Length - MaterialCheckConfig.AreaPrefix.Length);
@@ -146,27 +156,27 @@ namespace PmsNCR
                         CleanScanText();
                     }
                 }
-                else if (CurrentAreaTB.Text.Length == 0 && wireRegex.Match(text).Success)
-                {
-                    content = text.Substring(MaterialCheckConfig.WirePrefix.Length, text.Length - MaterialCheckConfig.WirePrefix.Length);
-                    WireCB.IsChecked = WireNrTB.Text.Equals(content);
-                    if (WireCB.IsChecked.Value) {
-                        CleanScanText();
-                    }
-                }
-                else if (terminalRegex.Match(text).Success)
+
+                if (terminalRegex.Match(text).Success && CurrentAreaTB.Text.Length>0)
                 {
                     content = text.Substring(MaterialCheckConfig.TerminalPrefix.Length, text.Length - MaterialCheckConfig.TerminalPrefix.Length);
                     if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area1))
                     {
-                        Terminal1CB.IsChecked = TerminalNr1TB.Text.Equals(content);
-                        if (Terminal1CB.IsChecked.Value) {
+                        if (!Terminal1CB.IsChecked.Value)
+                        {
+                            Terminal1CB.IsChecked = TerminalNr1TB.Text.Equals(content);
+                        }
+                        if (Terminal1CB.IsChecked.Value)
+                        {
                             CleanScanText();
                         }
                     }
                     else if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area2))
                     {
-                        Terminal2CB.IsChecked = TerminalNr2TB.Text.Equals(content);
+                        if (!Terminal2CB.IsChecked.Value)
+                        {
+                            Terminal2CB.IsChecked = TerminalNr2TB.Text.Equals(content);                           
+                        }
                         if (Terminal2CB.IsChecked.Value)
                         {
                             CleanScanText();
@@ -174,13 +184,17 @@ namespace PmsNCR
                     }
 
                 }
-                else if (toolRegex.Match(text).Success)
+
+                if (toolRegex.Match(text).Success && CurrentAreaTB.Text.Length > 0)
                 {
                     content = text.Substring(MaterialCheckConfig.ToolPrefix.Length, text.Length - MaterialCheckConfig.ToolPrefix.Length);
 
                     if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area1))
                     {
-                        Tool1CB.IsChecked = Tool1NrTB.Text.Equals(content);
+                        if (!Tool1CB.IsChecked.Value)
+                        {
+                            Tool1CB.IsChecked = Tool1NrTB.Text.Equals(content);
+                        }
                         if (Tool1CB.IsChecked.Value)
                         {
                             CleanScanText();
@@ -188,7 +202,10 @@ namespace PmsNCR
                     }
                     else if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area2))
                     {
-                        Tool2CB.IsChecked = Tool2NrTB.Text.Equals(content);
+                        if (!Tool2CB.IsChecked.Value)
+                        {
+                            Tool2CB.IsChecked = Tool2NrTB.Text.Equals(content);
+                        }
                         if (Tool2CB.IsChecked.Value)
                         {
                             CleanScanText();
