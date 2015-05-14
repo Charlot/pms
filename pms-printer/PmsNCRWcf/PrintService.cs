@@ -85,7 +85,7 @@ namespace PmsNCRWcf
 
 
 
-        public Msg<string> PrintBundleLabel(string code, string order_item_nr, string machine_nr, int bundle_no)
+        public Msg<string> PrintBundleLabel(string code, string order_item_nr, string machine_nr, int bundle_no, bool in_store=false)
         {
             Msg<string> msg = new Msg<string>();
             try
@@ -96,7 +96,10 @@ namespace PmsNCRWcf
                 req.AddParameter("order_item_nr", order_item_nr);
                 req.AddParameter("machine_nr", machine_nr);
                 req.AddParameter("bundle_no", bundle_no);
-
+                if (in_store)
+                {
+                    req.AddParameter("in_store", in_store);
+                }
                 Printer printer = PrinterConfig.Find(code);
 
                 var res = new ApiClient().Execute(req);

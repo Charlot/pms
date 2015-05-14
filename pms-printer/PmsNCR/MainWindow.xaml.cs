@@ -40,9 +40,9 @@ namespace PmsNCR
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             new Login().ShowDialog();
-            this.Title = WPCSConfig.MachineNr+"/"+WPCSConfig.UserNr+"/"+WPCSConfig.UserGroupNr;
-           // if (startService()) {
-             new ClientDataWatcher().Show();
+            this.Title = WPCSConfig.MachineNr + "/" + WPCSConfig.UserNr + "/" + WPCSConfig.UserGroupNr;
+            // if (startService()) {
+            new ClientDataWatcher().Show();
             //}
         }
 
@@ -110,6 +110,5 @@ namespace PmsNCR
         {
             new MachineSettingWindow().ShowDialog(); 
         }
-
     }
 }
