@@ -47,7 +47,7 @@ module FileHandler
         return msg
       end
 
-      def self.export(user_agent,params,tmp_file=nil)
+      def self.export(user_agent, params, tmp_file=nil)
         msg = Message.new
         begin
           tmp_file = MasterBomItemHandler.full_tmp_path('master_bom.csv') unless tmp_file
@@ -75,22 +75,26 @@ module FileHandler
       def self.transport(file)
         msg = Message.new
         begin
-          validate_msg = validate_transport(file)
+          # validate_msg = validate_transport(file)
           transport_file=full_tmp_path(file.file_name)
-          if validate_msg.result
+          # if validate_msg.result
+          if true
             transport_result={}
             MasterBomItem.transaction do
               # get order product
               product_qty={}
               CSV.foreach(file.file_path, headers: file.headers, col_sep: ';', encoding: file.encoding) do |row|
                 row.strip
+
                 product=Part.find_by_nr(row['Part No.'])
-                qty=row['Qty'].to_i
-                key=product.id.to_s
-                if product_qty.has_key?(key)
-                  product_qty[key]+=qty
-                else
-                  product_qty[key]=qty
+                if product
+                  qty=row['Qty'].to_i
+                  key=product.id.to_s
+                  if product_qty.has_key?(key)
+                    product_qty[key]+=qty
+                  else
+                    product_qty[key]=qty
+                  end
                 end
               end
 
