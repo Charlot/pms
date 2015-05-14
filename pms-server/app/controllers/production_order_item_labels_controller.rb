@@ -4,7 +4,11 @@ class ProductionOrderItemLabelsController < ApplicationController
   respond_to :html
 
   def index
-    @production_order_item_labels = ProductionOrderItemLabel.all
+    if params[:production_order_item_id].blank?
+    @production_order_item_labels = ProductionOrderItemLabel.paginate(:page => params[:page])
+    else
+      @production_order_item_labels=ProductionOrderItem.find_by_id(params[:production_order_item_id]).production_order_item_labels.order(bundle_no: :asc)
+      end
     respond_with(@production_order_item_labels)
   end
 

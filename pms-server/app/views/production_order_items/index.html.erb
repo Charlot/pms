@@ -71,6 +71,7 @@
     <th>OptimiseAt</th>
     <th>OptimiseIndex</th>
     <th>UpdatedAt</th>
+    <th>生产详细</th>
     <th colspan="3"></th>
   </tr>
   </thead>
@@ -85,7 +86,6 @@
         <td><%= link_to(production_order_item.kanban.nr, kanban_path(production_order_item.kanban)) if production_order_item.kanban%></td>
         <td><%= production_order_item.kanban.product.nr   if production_order_item.kanban%></td>
         <td><%= production_order_item.kanban.wire_nr  if production_order_item.kanban%></td>
-        <td><%= production_order_item.kanban.product_nr if production_order_item.kanban%></td>
         <td><%= production_order_item.kanban.quantity  if production_order_item.kanban%></td>
         <td><%= production_order_item.kanban.bundle  if production_order_item.kanban%></td>
         <td><%= production_order_item.produced_qty %></td>
@@ -95,6 +95,7 @@
         <td><%= production_order_item.optimise_at.localtime if production_order_item.optimise_at %></td>
         <td><%= production_order_item.optimise_index %></td>
         <td><%=production_order_item.updated_at.localtime%>
+        <td><%= link_to '生产详细',production_order_item_production_order_item_labels_path(production_order_item)%></td>
         <td><%= link_to 'Show', production_order_item %></td>
         <td><%= link_to 'Edit', edit_production_order_item_path(production_order_item) %></td>
         <td><%= link_to 'Destroy', production_order_item, method: :delete, data: {confirm: 'Are you sure?'} %></td>

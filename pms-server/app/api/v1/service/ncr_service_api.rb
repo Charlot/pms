@@ -49,7 +49,7 @@ module V1
           # get order item passed
           get :passed do
             if machine=Machine.find_by_nr(params[:machine_nr])
-              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_passed(machine).limit(50).all)
+              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_passed(machine).limit(20))
             end
           end
 
@@ -108,6 +108,9 @@ module V1
 
           get :bundle_label do
             if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
+              unless params[:in_store].blank?
+                item.create_label(params[:bundle_no])
+              end
               printer=Printer::Client.new({code: params[:code],
                                            id: item.kanban_id,
                                            machine_nr: params[:machine_nr],
