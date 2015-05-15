@@ -96,7 +96,7 @@ class ProductionOrderItem < ActiveRecord::Base
   def create_label bundle
     if self.kanban
       unless self.production_order_item_labels.where(bundle_no: bundle).first
-        self.production_order_item_labels.create(nr: SecureRandom.uuid,
+        self.production_order_item_labels.create(nr:  "#{self.nr}-#{bundle}",
                                                  qty: self.kanban.bundle,
                                                  bundle_no: bundle)
       end
@@ -106,11 +106,11 @@ class ProductionOrderItem < ActiveRecord::Base
   def generate_production_item_label
     if self.produced_qty_changed?
       if self.kanban && self.produced_qty>0 && (self.produced_qty % self.kanban.bundle==0)
-        bundle_no=self.produced_qty / self.kanban.bundle
-        unless self.production_order_item_labels.where(bundle_no: bundle_no).first
-          self.production_order_item_labels.create(nr: SecureRandom.uuid,
+        bundle=self.produced_qty / self.kanban.bundle
+        unless self.production_order_item_labels.where(bundle_no: bundle).first
+          self.production_order_item_labels.create(nr: "#{self.nr}-#{bundle}",
                                                    qty: self.kanban.bundle,
-                                                   bundle_no: bundle_no)
+                                                   bundle_no: bundle)
         end
       end
     end
