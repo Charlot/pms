@@ -6,8 +6,8 @@ class ProductionOrderItem < ActiveRecord::Base
   has_many :production_order_item_labels
   after_update :update_qty_to_terminate
   after_update :generate_production_item_label
-  after_update :enter_store
-  after_update :move_store
+  # after_update :enter_store
+  # after_update :move_store
   has_paper_trail
 
   def self.for_optimise
@@ -150,17 +150,5 @@ class ProductionOrderItem < ActiveRecord::Base
         end
       end
     end
-  end
-
-  def enter_store
-
-  end
-
-  def move_store
-
-  end
-
-  def can_auto_store
-    # if self.state_changed? &&
   end
 end
