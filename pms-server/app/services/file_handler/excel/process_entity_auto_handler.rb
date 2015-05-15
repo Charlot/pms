@@ -24,7 +24,7 @@ module FileHandler
                 HEADERS.each_with_index do |k, i|
                   row[k] = book.cell(line, i+1).to_s.strip
                   if STRING_HEADERS.include?(k)
-                    row[k]=row[k].sub(/\.0/,'')
+                    row[k]=row[k].sub(/\.0/, '')
                   end
                 end
 
@@ -229,7 +229,7 @@ module FileHandler
             HEADERS.each_with_index do |k, i|
               row[k] = book.cell(line, i+1).to_s.strip
               if STRING_HEADERS.include?(k)
-                row[k]=row[k].sub(/\.0/,'')
+                row[k]=row[k].sub(/\.0/, '')
               end
             end
 
