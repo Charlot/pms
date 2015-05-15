@@ -4,6 +4,7 @@ class ProductionOrderItem < ActiveRecord::Base
   belongs_to :production_order
   belongs_to :machine
   has_many :production_order_item_labels
+  after_update :update_qty_to_terminate
   after_update :generate_production_item_label
   after_update :enter_store
   after_update :move_store
@@ -93,23 +94,52 @@ class ProductionOrderItem < ActiveRecord::Base
     end
   end
 
+
   def create_label bundle
+    bundle=bundle.to_i
     if self.kanban
       unless self.production_order_item_labels.where(bundle_no: bundle).first
-        self.production_order_item_labels.create(nr:  "#{self.nr}-#{bundle}",
-                                                 qty: self.kanban.bundle,
-                                                 bundle_no: bundle)
+        qty=0
+        if (bundle*self.kanban.bundle)<=self.kanban.quantity
+          qty=self.kanban.bundle
+        else
+          qty=self.kanban.quantity-(bundle-1)*self.kanban.bundle
+        end
+        if qty>0
+          self.production_order_item_labels.create(nr: "#{self.nr}-#{bundle}",
+                                                   qty: qty,
+                                                   bundle_no: bundle)
+        end
       end
     end
   end
 
+  def update_qty_to_terminate
+    if self.produced_qty_changed?
+      unless self.state==ProductionOrderItemState::TERMINATED
+        if self.kanban && self.produced_qty>=kanban.quantity
+          self.update(state: ProductionOrderItemState::TERMINATED)
+        end
+      end
+    end
+  end
+
+
   def generate_production_item_label
     if self.produced_qty_changed?
-      if self.kanban && self.produced_qty>0 && (self.produced_qty % self.kanban.bundle==0)
-        bundle=self.produced_qty / self.kanban.bundle
-        unless self.production_order_item_labels.where(bundle_no: bundle).first
+      if self.kanban && self.produced_qty>0
+        if self.produced_qty % self.kanban.bundle==0
+          bundle=self.produced_qty / self.kanban.bundle
+          unless self.production_order_item_labels.where(bundle_no: bundle).first
+            self.production_order_item_labels.create(nr: "#{self.nr}-#{bundle}",
+                                                     qty: self.kanban.bundle,
+                                                     bundle_no: bundle)
+          end
+        elsif (self.state==ProductionOrderItemState::TERMINATED && self.produced_qty>=self.kanban.quantity)
+          bundle=self.produced_qty / self.kanban.bundle+1
+          qty=self.produced_qty-(bundle-1)*self.kanban.bundle
           self.production_order_item_labels.create(nr: "#{self.nr}-#{bundle}",
-                                                   qty: self.kanban.bundle,
+                                                   qty: qty,
                                                    bundle_no: bundle)
         end
       end
