@@ -108,7 +108,9 @@ class ProductionOrderItem < ActiveRecord::Base
         if qty>0
           self.production_order_item_labels.create(nr: "#{self.nr}-#{bundle}",
                                                    qty: qty,
-                                                   bundle_no: bundle)
+                                                   bundle_no: bundle,
+                                                   position_nr: self.kanban.des_storage,
+                                                   whouse_nr: Warehouse.get_whouse_by_position_prefix(self.kanban.des_storage))
         end
       end
     end
@@ -133,14 +135,18 @@ class ProductionOrderItem < ActiveRecord::Base
           unless self.production_order_item_labels.where(bundle_no: bundle).first
             self.production_order_item_labels.create(nr: "#{self.nr}-#{bundle}",
                                                      qty: self.kanban.bundle,
-                                                     bundle_no: bundle)
+                                                     bundle_no: bundle,
+                                                     position_nr: self.kanban.des_storage,
+                                                     whouse_nr: Warehouse.get_whouse_by_position_prefix(self.kanban.des_storage))
           end
         elsif (self.state==ProductionOrderItemState::TERMINATED && self.produced_qty>=self.kanban.quantity)
           bundle=self.produced_qty / self.kanban.bundle+1
           qty=self.produced_qty-(bundle-1)*self.kanban.bundle
           self.production_order_item_labels.create(nr: "#{self.nr}-#{bundle}",
                                                    qty: qty,
-                                                   bundle_no: bundle)
+                                                   bundle_no: bundle,
+                                                   position_nr: self.kanban.des_storage,
+                                                   whouse_nr: Warehouse.get_whouse_by_position_prefix(self.kanban.des_storage))
         end
       end
     end
