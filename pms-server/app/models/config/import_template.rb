@@ -17,7 +17,7 @@ class ImportTemplate
   MACHINE_TIME_RULE_EXCEL_TEMPLATE='machine_time_rule.xlsx'
   TOOL_CSV_TEMPLATE='tool.csv'
   PART_POSITION_CSV_TEMPLATE='part_position.csv'
-  MASTER_BOM_CSV_TEMPLATE='master_bom.csv'
+  MASTER_BOM_CSV_TEMPLATE='master_bom_template.xlsx'
   ORDER_BOM_CSV_TEMPLATE='order_transport.csv'
 
 

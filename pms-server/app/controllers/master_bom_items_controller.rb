@@ -65,20 +65,34 @@ class MasterBomItemsController < ApplicationController
 
 
   def import
-    # authorize(MasterBomItem)
+    # authorize(MachineTimeRule)
     if request.post?
       msg = Message.new
       begin
         file=params[:files][0]
         fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
         fd.save
-        file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
-        msg = FileHandler::Csv::MasterBomItemHandler.import(file)
+        msg = FileHandler::Excel::MasterBomItemHandler.import(fd)
       rescue => e
         msg.content = e.message
       end
       render json: msg
     end
+
+    # # authorize(MasterBomItem)
+    # if request.post?
+    #   msg = Message.new
+    #   begin
+    #     file=params[:files][0]
+    #     fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+    #     fd.save
+    #     file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
+    #     msg = FileHandler::Csv::MasterBomItemHandler.import(file)
+    #   rescue => e
+    #     msg.content = e.message
+    #   end
+    #   render json: msg
+    # end
   end
 
   def transport
