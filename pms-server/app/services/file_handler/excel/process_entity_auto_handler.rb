@@ -24,7 +24,7 @@ module FileHandler
                 HEADERS.each_with_index do |k, i|
                   row[k] = book.cell(line, i+1).to_s.strip
                   if STRING_HEADERS.include?(k)
-                    row[k]=row[k].sub(/\.0/,'')
+                    row[k]=row[k].sub(/\.0/, '')
                   end
                 end
 
@@ -180,7 +180,7 @@ module FileHandler
                                 pe.parsed_wire_nr,
                                 (wire.nr if wire),
                                 pe.value_wire_qty_factor,
-                   ..             pe.value_default_bundle_qty,
+                                pe.value_default_bundle_qty,
                                 parts_info[:t1_nr],
                                 pe.value_t1_qty_factor,
                                 pe.t1_strip_length,
@@ -229,7 +229,7 @@ module FileHandler
             HEADERS.each_with_index do |k, i|
               row[k] = book.cell(line, i+1).to_s.strip
               if STRING_HEADERS.include?(k)
-                row[k]=row[k].sub(/\.0/,'')
+                row[k]=row[k].sub(/\.0/, '')
               end
             end
 
