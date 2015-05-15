@@ -180,7 +180,7 @@ module FileHandler
                                 pe.parsed_wire_nr,
                                 (wire.nr if wire),
                                 pe.value_wire_qty_factor,
-                                pe.value_default_bundle_qty,
+                   ..             pe.value_default_bundle_qty,
                                 parts_info[:t1_nr],
                                 pe.value_t1_qty_factor,
                                 pe.t1_strip_length,
