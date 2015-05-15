@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150512065916) do
+ActiveRecord::Schema.define(version: 20150515071053) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -344,6 +344,8 @@ ActiveRecord::Schema.define(version: 20150512065916) do
     t.integer  "state"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "whouse_nr"
+    t.string   "position_nr"
   end
 
   add_index "production_order_item_labels", ["production_order_item_id"], name: "index_production_order_item_labels_on_production_order_item_id", using: :btree
