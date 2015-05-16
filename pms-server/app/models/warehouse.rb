@@ -3,9 +3,12 @@ class Warehouse < ActiveRecord::Base
 
 
   PREFIX_WHOUSE={'^MC' => 'SRP1',
-                 '^XF' => 'SRP1',
-                 '^XT' => 'SRP1',
-                 '^XM' => '3PL'}
+                 '^FC' => 'SRP1',
+                 '^TC' => 'SRP1',
+                 '^XM' => '3PL',
+                 '^XF' => '3PL',
+                 '^XT' => '3PL'
+  }
 
 
   def self.get_whouse_by_position_prefix(position_nr)

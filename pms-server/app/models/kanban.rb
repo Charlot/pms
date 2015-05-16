@@ -49,9 +49,11 @@ class Kanban < ActiveRecord::Base
       else
         {conditions: "kanbans.nr like '%#{value}%'"}
       end
+      {conditions: "kanbans.nr like '%#{value}%'"}
     else
       {conditions: "kanbans.nr like '%#{value}%'"}
     end
+    {conditions: "kanbans.nr like '%#{value}%'"}
   end
 
   def create_part_bom
