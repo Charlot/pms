@@ -38,7 +38,7 @@ class ProductionOrderItem < ActiveRecord::Base
 
   def self.for_passed(machine)
     where(state: ProductionOrderItemState.passed_states, machine_id: machine.id)
-        .order(production_order_id: :desc, optimise_index: :desc)
+        .order(updated_at: :desc,production_order_id: :desc, optimise_index: :desc)
   end
 
   def self.for_export(production_order)
