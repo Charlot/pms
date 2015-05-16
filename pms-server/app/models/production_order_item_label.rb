@@ -1,8 +1,13 @@
 class ProductionOrderItemLabel < ActiveRecord::Base
   belongs_to :production_order_item
 
+  IN_STORE=100
+  ENTER_STOCK_FAIL=200
+
+
   after_create :update_production_order_item_state
-  after_create :enter_store
+  after_create :enter_stock
+  after_create :move_stock
 
   def update_production_order_item_state
     unless self.production_order_item.state==ProductionOrderItemState::TERMINATED
@@ -13,7 +18,11 @@ class ProductionOrderItemLabel < ActiveRecord::Base
     end
   end
 
-  def enter_store
-    
+  def enter_stock
+    ItemLabelInStockWorker.perform_async(self.id)
+  end
+
+  def move_stock
+    ItemLabelMoveStockWorker.perform_async(self.id,'SR01','SR01')
   end
 end

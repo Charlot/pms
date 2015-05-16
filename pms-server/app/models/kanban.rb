@@ -13,6 +13,7 @@ class Kanban < ActiveRecord::Base
   delegate :nr, to: :product, prefix: true, allow_nil: true
   delegate :custom_nr, to: :product, prefix: true, allow_nil: true
   has_many :production_order_items
+  has_many :production_order_item_blues
 
   accepts_nested_attributes_for :kanban_process_entities, allow_destroy: true
 
@@ -28,6 +29,11 @@ class Kanban < ActiveRecord::Base
   # after_update :update_part_bom
 
   has_paper_trail
+
+  # def find_by_version(v)
+  #   v=v.to_i
+  #   self.versions.offset(v.to_i-1).first.reify
+  # end
 
   def self.find_by_wire_nr key, operator, value
     parts = Part.where("nr LIKE '%_#{value}%'").map(&:id)
