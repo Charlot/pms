@@ -35,7 +35,7 @@ module FileHandler
                                 pe.parsed_wire_nr,
                                 pe.remark,
                                 "update"
-                            ], types: [:string, :string, :string, :float, :string, :string, :string]
+                            ], types: [:string, :string, :string, :float, :string, :string, :string,:string, :string, :string, :string, :string]
             end
           end
           p.use_shared_strings = true

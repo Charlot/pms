@@ -8,5 +8,7 @@
 :timeout: 30
 :queues:
 #  - [often, 7]
-  - [default, 5]
+  - [ncr_log, 5]
   - [email, 7]
+  - [store,4]
+  - [tool,6]

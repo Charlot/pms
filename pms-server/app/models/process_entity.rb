@@ -37,6 +37,7 @@ class ProcessEntity < ActiveRecord::Base
       if process.count > 0
         return {conditions: "process_entities.id IN(#{process.join(',')})"}
       end
+      {conditions: "process_entities.nr like '%#{value}%'"}
     end
     {conditions: "process_entities.nr LIKE '%#{value}%'"}
   end
