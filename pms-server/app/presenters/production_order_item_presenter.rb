@@ -20,7 +20,7 @@ class ProductionOrderItemPresenter<Presenter
   end
 
   def self.init_preview_presenters(params)
-    params.map.with_index { |param, i| self.new(param).to_preview_order(i+1) }
+    params.map.with_index { |param, i| self.new(param).to_preview_order(i+1) }.reject{|p| p.blank?}
   end
 
   def to_preview_order(no=0)

@@ -24,7 +24,7 @@ module FileHandler
                 HEADERS.each_with_index do |k, i|
                   row[k] = book.cell(line, i+1).to_s.strip
                   if STRING_HEADERS.include?(k)
-                    row[k]=row[k].sub(/\.0/,'')
+                    row[k]=row[k].sub(/\.0/, '')
                   end
                 end
 
@@ -183,10 +183,10 @@ module FileHandler
                                 pe.value_default_bundle_qty,
                                 parts_info[:t1_nr],
                                 pe.value_t1_qty_factor,
-                                pe.value_t1_strip_length,
+                                pe.t1_strip_length,
                                 parts_info[:t2_nr],
                                 pe.value_t2_qty_factor,
-                                pe.value_t2_strip_length,
+                                pe.t2_strip_length,
                                 parts_info[:s1_nr],
                                 pe.value_s1_qty_factor,
                                 parts_info[:s2_nr],
@@ -229,7 +229,7 @@ module FileHandler
             HEADERS.each_with_index do |k, i|
               row[k] = book.cell(line, i+1).to_s.strip
               if STRING_HEADERS.include?(k)
-                row[k]=row[k].sub(/\.0/,'')
+                row[k]=row[k].sub(/\.0/, '')
               end
             end
 

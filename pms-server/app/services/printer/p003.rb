@@ -30,7 +30,7 @@ module Printer
             pnNr: (product.nil? ? '' : "#{product.nr} / #{product.custom_nr}"),
             bundleNo: args[:bundle_no],
             totalQuantity: kanban.quantity,
-            bQuantity: kanban.bundle,
+            bQuantity: item_label.qty.to_i,
             singleResCC: args[:machine_nr],
             wireNr: kanban.wire_nr,
             partNr: wire.nr,

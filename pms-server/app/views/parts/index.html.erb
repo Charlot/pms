@@ -19,7 +19,7 @@
     <th>Strip length</th>
     <th>Resource group</th>
     <th>Measure unit</th>
-    <th colspan="4"></th>
+    <th colspan="3"></th>
   </tr>
   </thead>
 
@@ -37,7 +37,7 @@
         <td><%= part.measure_unit %></td>
         <td><%= link_to '详情', part %></td>
         <td><%= link_to '编辑', edit_part_path(part) %></td>
-        <td><%= link_to '删除', part, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <!--<td><%= link_to '删除', part, method: :delete, data: {confirm: 'Are you sure?'} %></td>-->
         <td>
           <%= link_to 'BOM表', part_bom_path(part.id) %>
         </td>
