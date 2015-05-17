@@ -6,8 +6,10 @@ class ProductionOrderItem < ActiveRecord::Base
   has_many :production_order_item_labels
   after_update :update_qty_to_terminate
   after_update :generate_production_item_label
-  after_update :enter_store
-  after_update :move_store
+  self.inheritance_column = :_type_disabled
+  default_scope { where(type: ProductionOrderItemType::WHITE) }
+  # after_update :enter_store
+  # after_update :move_store
   has_paper_trail
 
   def self.for_optimise
@@ -149,18 +151,6 @@ class ProductionOrderItem < ActiveRecord::Base
                                                    whouse_nr: Warehouse.get_whouse_by_position_prefix(self.kanban.des_storage))
         end
       end
-    end
-  end
-
-  def enter_store
-
-  end
-
-  def move_store
-
-  end
-
-  def can_auto_store
-    # if self.state_changed? &&
+    end if self.type==ProductionOrderItemType::WHITE
   end
 end

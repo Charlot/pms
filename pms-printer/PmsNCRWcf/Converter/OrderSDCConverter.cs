@@ -59,24 +59,27 @@ namespace PmsNCRWcf.Converter
                         }
                         break;
                     case "ProductionTerminated":
-                        string pOrderNr2 = GetJobNr(config.Get("Job", node));
-
-                        service.ChangeOrderItemState(pOrderNr2, OrderItemState.TERMINATED, userNr, userGroupNr);
+                        string pOrderNr2 = GetJobNr(config.Get("Job", node));                       
                         int piece2 = int.Parse(config.Get("TotalGoodPieces", node));
                         Msg<OrderItem> msg2 = service.ProducePiece(pOrderNr2, piece2);
                         if (msg2.Result)
                         {
                             OrderItem item = msg2.Object;
-                            if (piece2 % item.BundleQuantity == 0 && piece2 > 0)
+                            if (piece2 > 0)
                             {
-                                new PrintService().PrintBundleLabel("P003", pOrderNr2, machineNr, piece2 / item.BundleQuantity);
-                            }
-                            return true;
-                        }
-
-                        //// priny
-                        //new PrintService().PrintKB("P002", pOrderNr2);
-                        break;
+                                if (piece2 % item.BundleQuantity == 0)
+                                {
+                                    new PrintService().PrintBundleLabel("P003", pOrderNr2, machineNr, piece2 / item.BundleQuantity);
+                                }
+                                else {
+                                    if (piece2 >= item.TotalQuantity) {
+                                        new PrintService().PrintBundleLabel("P003", pOrderNr2, machineNr, piece2 / item.BundleQuantity+1);
+                                    }
+                                }
+                            }                             
+                        }                    
+                       return  service.ChangeOrderItemState(pOrderNr2, OrderItemState.TERMINATED, userNr, userGroupNr).Result; 
+                         
                     default:
                         break;
                 }

@@ -67,7 +67,7 @@ gem 'redis-namespace'
 gem 'colorize'
 
 # For REST API Call
-gem 'rest_client'
+gem 'rest-client'
 
 # For Paging
 gem 'will_paginate', '3.0.7'

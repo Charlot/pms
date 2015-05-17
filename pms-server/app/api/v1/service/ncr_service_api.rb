@@ -15,8 +15,21 @@ module V1
                 msg.Content = "Machine IP #{params[:ip]} is not valid"
               end
             else
-              msg.Content="No Machine Nr: #{params[:machine_nr]}"
+              msg.Content="No Machine Nr:#{params[:machine_nr]}"
             end
+            msg
+          end
+
+          post :tool do
+            if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
+              puts "-------------------#{params.to_json}".red
+              item.without_versioning do
+                item.update_attributes(tool1: params[:tool1_nr], tool2: params[:tool2_nr])
+              end
+            end
+            msg=ServiceMessage.new
+            msg.Result=true
+            msg.Content="Success"
             msg
           end
         end
@@ -67,7 +80,7 @@ module V1
               if item.state==ProductionOrderItemState::TERMINATED
                 r= false
               else
-                r= item.update(state: params[:state],user_nr:params[:user_nr],user_group_nr:params[:user_group_nr])
+                r= item.update(state: params[:state], user_nr: params[:user_nr], user_group_nr: params[:user_group_nr])
               end
 
               NcrLogWorker.perform_async({order_item_nr: params[:order_item_nr],

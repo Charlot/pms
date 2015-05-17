@@ -26,6 +26,8 @@ namespace PmsNCR
     {
         public static bool IsShow = false;
         private OrderItemCheck orderItem = null;
+        private string currentTool1;
+        private string currentTool2;
 
         public MaterialCheck()
         {
@@ -260,6 +262,7 @@ namespace PmsNCR
                             if (OrderDDSConverter.ConvertJsonOrderToDDS(orderItem.FileName))
                             {
                                 MessageBox.Show("Order Created, Please Use EASY to work!");
+                                s.SetOrderItemTool(orderItem.ItemNr,currentTool1,currentTool2);
                                 this.Close();
                             }
                         }
@@ -347,6 +350,13 @@ namespace PmsNCR
 
         private void MaterialCB_Checked(object sender, RoutedEventArgs e)
         {
+            CheckBox cb = (sender as CheckBox);
+            if (cb.Name == "Tool1CB") {
+                 currentTool1 = Tool1NrTB.Text;
+            }
+            else if (cb.Name == "Tool2CB") {
+                currentTool2 = Tool2NrTB.Text;
+            }
 
             if (AutoCleanScanCB.IsChecked.Value)
             {

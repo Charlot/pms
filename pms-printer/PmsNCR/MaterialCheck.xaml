@@ -18,8 +18,8 @@
         <Label Content="JOB_NR" Height="28" HorizontalAlignment="Left"
                Margin="384,12,0,0" Name="JobNrLab" VerticalAlignment="Top" Width="129" />
         <Label Content="Wire:" Height="28" HorizontalAlignment="Left" Margin="332,46,0,0" Name="label2" VerticalAlignment="Top" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="384,46,0,0" Name="WireNrTB" VerticalAlignment="Top" Width="120" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="385,75,0,0" Name="WireCusNrTB" VerticalAlignment="Top" Width="120" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="384,46,0,0" IsEnabled="False" Name="WireNrTB" VerticalAlignment="Top" Width="120" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="385,75,0,0" IsEnabled="False"  Name="WireCusNrTB" VerticalAlignment="Top" Width="120" />
         <CheckBox IsChecked="False" Content="" Height="16" HorizontalAlignment="Left" Margin="521,58,0,0" Name="WireCB" VerticalAlignment="Top" Checked="MaterialCB_Checked" />
         <Label Content="Side 1" Height="28" HorizontalAlignment="Left" Margin="15,84,0,0" Name="label3" VerticalAlignment="Top" />
         <Grid Height="143" HorizontalAlignment="Left" Margin="15,118,0,0" Name="WorkArea1" 
@@ -29,8 +29,8 @@
                 <Label Content="Terminal" Height="25" Name="label4" Margin="-1,6,183,112"></Label>
 
 
-            <TextBox Height="23" Name="TerminalNr1TB" Margin="49,6,64,114" />
-            <TextBox Height="23" Name="TerminalCusNr1TB" Margin="48,35,64,0" VerticalAlignment="Top" />
+            <TextBox Height="23" Name="TerminalNr1TB" Margin="49,6,64,114"  IsEnabled="False" />
+            <TextBox Height="23" Name="TerminalCusNr1TB" Margin="48,35,64,0" VerticalAlignment="Top"  IsEnabled="False" />
 
             <CheckBox  IsChecked="False" Content="" Name="Terminal1CB" Margin="184,25,15,98"  Checked="MaterialCB_Checked" />
             <Label Content="Mold" Height="28" Name="label5" Margin="-4,71,187,44" />
@@ -67,8 +67,8 @@
 
             <Label Content="Terminal" Height="25" Name="label6" Margin="6,6,194,112"></Label>
 
-            <TextBox Height="23" Name="TerminalNr2TB" Margin="49,6,64,114" />
-            <TextBox Height="23" Name="TerminalCusNr2TB" Margin="48,35,64,0" VerticalAlignment="Top" />
+            <TextBox Height="23" Name="TerminalNr2TB" Margin="49,6,64,114"  IsEnabled="False" />
+            <TextBox Height="23" Name="TerminalCusNr2TB" Margin="48,35,64,0" VerticalAlignment="Top"  IsEnabled="False" />
 
             <CheckBox  IsChecked="False" Content="" Name="Terminal2CB" Margin="194,25,15,98"  Checked="MaterialCB_Checked" />
 

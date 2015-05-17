@@ -82,7 +82,7 @@ namespace PmsNCR
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (MessageBox.Show("Confirm Close?","Confirm",MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
+            if (MessageBox.Show("Confirm Close?")==MessageBoxResult.OK) {
                 Application.Current.Shutdown();
             }
         }

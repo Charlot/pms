@@ -147,6 +147,7 @@ class Part < ActiveRecord::Base
     end
   end
 
+
   private
   def update_cv_strip_length
     if self.strip_length_changed?

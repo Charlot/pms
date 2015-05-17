@@ -17,5 +17,6 @@ namespace PmsNCRWcf
        Msg<OrderItem> ProducePiece(string orderItemNr, int producedQty);
        Msg<List<OrderItemCheck>> GetOrderPreviewList(string machineNr);
        Msg<List<OrderItemCheck>> GetOrderPassedList(string machineNr);
+       Msg<string> SetOrderItemTool(string orderItemNr, string tool1Nr, string tool2Nr);
     }
 }

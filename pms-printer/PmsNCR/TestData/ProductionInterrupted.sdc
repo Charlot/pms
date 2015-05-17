@@ -1,5 +1,5 @@
 [ProductionInterrupted]
 ArticleKey=A_005527
-Job=J_005610
-ProductionRequestedPieces=110
-TotalGoodPieces=100
+Job=J_005910
+ProductionRequestedPieces=210
+TotalGoodPieces=210
