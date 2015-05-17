@@ -9,6 +9,7 @@ class ProductionOrderItemLabel < ActiveRecord::Base
   after_create :update_production_order_item_state
   after_create :enter_stock
   after_create :move_stock
+  after_create :update_tool_cut_count
 
   def update_production_order_item_state
     unless self.production_order_item.state==ProductionOrderItemState::TERMINATED
@@ -24,6 +25,10 @@ class ProductionOrderItemLabel < ActiveRecord::Base
   end
 
   def move_stock
-   # ItemLabelMoveStockWorker.perform_async(self.id)
+    # ItemLabelMoveStockWorker.perform_async(self.id)
+  end
+
+  def update_tool_cut_count
+    UpdateToolCutCountWorker.perform_async(self.id)
   end
 end

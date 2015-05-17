@@ -1,5 +1,9 @@
 class ChangeStateOfProductionOrderItemLabels < ActiveRecord::Migration
-  def change
-    change_column :production_order_item_labels,:state,:integer,default: ProductionOrderItemLabel::INIT
+  def up
+    change_column_default :production_order_item_labels, :state, ProductionOrderItemLabel::INIT
+  end
+
+  def down
+
   end
 end

@@ -10,13 +10,12 @@
   <tr>
     <th>#</th>
     <th>模具号</th>
-    <!--<th>条码</th>-->
     <th>Resource group</th>
     <th>Part</th>
-    <th>Mnt</th>
-    <th>Used days</th>
+    <th>压接次数</th>
+    <th>使用天数</th>
     <th>Rql</th>
-    <th>Tol</th>
+    <th>总压接次数</th>
     <th>Rql date</th>
     <th colspan="3"></th>
   </tr>
@@ -26,7 +25,6 @@
   <% @tools.each_with_index do |tool, i| %>
       <tr>
         <td><%= i+1 %></td>
-        <!--<td><%= tool.nr_display %></td>-->
         <td><%= tool.nr %></td>
         <td><%= tool.resource_group_tool.nr if tool.resource_group_tool %></td>
         <td><%= tool.part.nr if tool.part %></td>

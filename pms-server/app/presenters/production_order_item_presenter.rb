@@ -20,7 +20,7 @@ class ProductionOrderItemPresenter<Presenter
   end
 
   def self.init_preview_presenters(params)
-    params.map.with_index { |param, i| self.new(param).to_preview_order(i+1) }.reject{|p| p.blank?}
+    params.map.with_index { |param, i| self.new(param).to_preview_order(i+1) }.reject { |p| p.blank? }
   end
 
   def to_preview_order(no=0)
@@ -45,7 +45,7 @@ class ProductionOrderItemPresenter<Presenter
 
       s1=Part.find_by_id(process_entity.value_s1)
       s2=Part.find_by_id(process_entity.value_s2)
-      {
+      item= {
           No: no,
           Id: @production_order_item.id,
           ItemNr: @production_order_item.nr,
@@ -76,6 +76,8 @@ class ProductionOrderItemPresenter<Presenter
           Seal2Nr: s2.nil? ? nil : s1.nr,
           UpdateTime: @production_order_item.updated_at.localtime
       }
+      # @production_order_item.update_attributes(tool1: item[:Terminal1Nr], tool2: item[:Terminal2Nr])
+      return item
     end
 
     # {
