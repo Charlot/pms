@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150516023842) do
+ActiveRecord::Schema.define(version: 20150517025048) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 20150516023842) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "position",          default: 0
+    t.integer  "state",             default: 100
   end
 
   add_index "kanban_process_entities", ["kanban_id"], name: "index_kanban_process_entities_on_kanban_id", using: :btree
@@ -341,7 +342,7 @@ ActiveRecord::Schema.define(version: 20150516023842) do
     t.integer  "bundle_no"
     t.float    "qty"
     t.string   "nr"
-    t.integer  "state"
+    t.integer  "state",                    default: 90
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "whouse_nr"

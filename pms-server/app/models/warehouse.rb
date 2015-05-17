@@ -2,9 +2,9 @@ class Warehouse < ActiveRecord::Base
   validates :nr, presence: true, uniqueness: {message: 'nr should be uniq'}
 
 
-  PREFIX_WHOUSE={'^MC' => 'SRP1',
-                 '^FC' => 'SRP1',
-                 '^TC' => 'SRP1',
+  PREFIX_WHOUSE={'^MC' => 'SRPL',
+                 '^FC' => 'SRPL',
+                 '^TC' => 'SRPL',
                  '^XM' => '3PL',
                  '^XF' => '3PL',
                  '^XT' => '3PL'

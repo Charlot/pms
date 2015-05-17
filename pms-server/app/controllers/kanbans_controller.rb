@@ -320,6 +320,7 @@ class KanbansController < ApplicationController
       else
         if item=ProductionOrderItemBlue.where(kanban_id: @kanban.id, state: ProductionOrderItemState::INIT).first
           item.update(state: ProductionOrderItemState::TERMINATED)
+          @kanban.process_entities.update_all(state:ProductionOrderItemState::TERMINATED)
           render json: {result: false, content: '销卡成功'} and return
           # item.update
         else
@@ -377,7 +378,9 @@ class KanbansController < ApplicationController
       if ProductionOrderItemBlue.where(kanban_id: @kanban.id, state: ProductionOrderItemState::INIT).count>0
         render json: {result: false, content: "卡已投过，不可重复投卡"} and return
       end
-      unless (@order = ProductionOrderItemBlue.create(kanban_id: @kanban.id, code: @kanban.printed_2DCode, produced_qty: @kanban.quantity))
+      if (@order = ProductionOrderItemBlue.create(kanban_id: @kanban.id, code: @kanban.printed_2DCode, produced_qty: @kanban.quantity))
+        @kanban.process_entities.update_all(state:ProductionOrderItemState::STARTED)
+      else
         render json: {result: false, content: "Production Order Item Created Failed"} and return
       end
       # if @kanban.state == KanbanState::LOCKED

@@ -1,6 +1,7 @@
 class ProductionOrderItemLabel < ActiveRecord::Base
   belongs_to :production_order_item
 
+  INIT=90
   IN_STORE=100
   ENTER_STOCK_FAIL=200
 
@@ -23,6 +24,6 @@ class ProductionOrderItemLabel < ActiveRecord::Base
   end
 
   def move_stock
-    ItemLabelMoveStockWorker.perform_async(self.id,'SR01','SR01')
+   # ItemLabelMoveStockWorker.perform_async(self.id)
   end
 end

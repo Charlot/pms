@@ -11,7 +11,7 @@ class ProductionOrderItemBlue<ProductionOrderItem
 
   def move_stock
     if self.state_changed? and self.state==ProductionOrderItemState::TERMINATED
-
+     # ItemBlueMoveStockWorker.perform_async(self.id)
     end
   end
 end
