@@ -40,9 +40,9 @@ namespace PmsNCR
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             new Login().ShowDialog();
-            this.Title = WPCSConfig.MachineNr+"/"+WPCSConfig.UserNr+"/"+WPCSConfig.UserGroupNr;
-           // if (startService()) {
-             new ClientDataWatcher().Show();
+            this.Title = WPCSConfig.MachineNr + "/" + WPCSConfig.UserNr + "/" + WPCSConfig.UserGroupNr;
+            // if (startService()) {
+            new ClientDataWatcher().Show();
             //}
         }
 
@@ -82,7 +82,7 @@ namespace PmsNCR
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (MessageBox.Show("Confirm Close?","Confirm",MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
+            if (MessageBox.Show("Confirm Close?")==MessageBoxResult.OK) {
                 Application.Current.Shutdown();
             }
         }
@@ -110,6 +110,5 @@ namespace PmsNCR
         {
             new MachineSettingWindow().ShowDialog(); 
         }
-
     }
 }

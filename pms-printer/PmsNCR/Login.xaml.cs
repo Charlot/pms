@@ -44,5 +44,13 @@ namespace PmsNCR
         {
             e.Cancel = !logined;
         }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Confirm Close?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                Application.Current.Shutdown();
+            }
+        }
     }
 }

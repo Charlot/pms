@@ -83,10 +83,9 @@ namespace PmsNCR
             if (bundleNo > 0 && PreviewOrderDG.SelectedItems.Count == 1)
             {
                 OrderItemCheck item = PreviewOrderDG.SelectedItem as OrderItemCheck;
-
-                new PrintService().PrintBundleLabel("P003", item.ItemNr, WPCSConfig.MachineNr,bundleNo);
-          
+                new PrintService().PrintBundleLabel("P003", item.ItemNr, WPCSConfig.MachineNr,bundleNo,InstoreCheck.IsChecked.Value);          
             }
         }
+         
     }
 }

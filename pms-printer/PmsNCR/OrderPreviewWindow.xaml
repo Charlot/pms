@@ -1,7 +1,7 @@
 ﻿<Window x:Class="PmsNCR.OrderPreviewWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="PMS CLIENT - OrderPreviewWindow" Height="322" Width="852"
+        Title="PMS CLIENT - OrderPreviewWindow" Height="370" Width="855"
         Loaded="Window_Loaded" ResizeMode="CanResize" 
         WindowStartupLocation="CenterScreen" Closing="Window_Closing">
     
@@ -19,18 +19,17 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition  Height="Auto"/>
-            <RowDefinition Height="250*" />
+            <RowDefinition  Height="319"/>
+            <RowDefinition Height="12*" />
         </Grid.RowDefinitions> 
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="150"/>
         </Grid.ColumnDefinitions>
-            <DataGrid Name="PreviewOrderDG" BorderThickness="0" Background="White" Height="300"  
-                              ClipboardCopyMode="IncludeHeader" AutoGenerateColumns="False" IsReadOnly="True"
-                              CanUserAddRows="false" CanUserDeleteRows="false" SnapsToDevicePixels="True" 
+            <DataGrid Name="PreviewOrderDG" BorderThickness="0" Background="White" ClipboardCopyMode="IncludeHeader" AutoGenerateColumns="False" IsReadOnly="True"
+                              CanUserAddRows="false" CanUserDeleteRows="false" SnapsToDevicePixels="False" 
                          
-                              CanUserReorderColumns="True" FontSize="13">
+                              CanUserReorderColumns="False" FontSize="13" Margin="0,0,0,10">
 
 
             <DataGrid.ColumnHeaderStyle>
@@ -70,7 +69,7 @@
                     <DataGridTextColumn Header="Seal2" Binding="{Binding Path=Seal2Nr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 </DataGrid.Columns>
             </DataGrid>
-        <StackPanel Grid.Column="1">
+        <StackPanel Grid.Column="1" Margin="0,0,0,12" Grid.RowSpan="2">
             <ComboBox Name="OrderStateCB"  Margin="20,6,0,0" Height="52"
                       Width="87" FontStretch="Normal" VerticalContentAlignment="Center">
                 <ComboBoxItem Content="NextOrder" IsSelected="True"></ComboBoxItem>
@@ -80,10 +79,12 @@
                   Name="UpdatePreviewBtn" 
                  Width="87" Click="UpdatePreviewBtn_Click" Margin="20,6,0,0" />
             <Button Content="Print Kanban" Height="52" Name="PrintKanbanBtn" Width="87" Margin="20,6,0,0" Click="PrintKanbanBtn_Click" />
-            <StackPanel Height="104" Name="stackPanel1" Width="138" Margin="10,5,0,0" Background="#FFCACDE5">
+            <StackPanel Height="126" Name="stackPanel1" Width="138" Margin="10,5,0,0" Background="#FFCACDE5">
                 <Label Content="BundleNo:" Height="28" Name="label1" />
                 <TextBox Height="23" Name="BundleNoTB" Width="120" />
-                <Button Content="Print Bundle Label" Height="32" Name="PrintBundleLabelBtn" Width="120" Click="PrintBundleLabelBtn_Click" />
+                <Button Content="Print Bundle Label" Height="23" Name="PrintBundleLabelBtn" Width="120" Click="PrintBundleLabelBtn_Click" />
+                
+                <CheckBox Content="INSTORE" Height="16" Name="InstoreCheck" Foreground="Red" FontWeight="Bold" Margin="15"/>
             </StackPanel>
             <!--<Button Height="56"  Width="88"  Margin="34,16,0,0" Content="显示预览卡"/>-->
         </StackPanel>

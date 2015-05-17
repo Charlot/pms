@@ -40,6 +40,7 @@ namespace PmsNCRWcf.Config
                 OrderListAbortedAction = config.Get("OrderListAbortedAction");
 
                 MachineIPSettingAction = config.Get("MachineIPSettingAction");
+                OrderToolSettingAction = config.Get("OrderToolSettingAction");
             }
             catch (Exception e)
             {
@@ -86,5 +87,6 @@ namespace PmsNCRWcf.Config
         public static string MachineIPSettingAction { get; set; }
         public static string OrderListTerminatedAction { get; set; }
         public static string OrderListAbortedAction { get; set; }
+        public static string OrderToolSettingAction { get; set; }
     }
 }

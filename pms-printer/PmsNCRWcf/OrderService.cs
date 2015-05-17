@@ -203,6 +203,36 @@ namespace PmsNCRWcf
             }
             return msg;
         }
+
+        public Msg<string> SetOrderItemTool(string orderItemNr, string tool1Nr, string tool2Nr)
+        {
+            Msg<string> msg = new Msg<string>();
+            try
+            {
+                var req = new RestRequest(ApiConfig.OrderToolSettingAction, Method.POST);
+                req.RequestFormat = DataFormat.Json;
+                req.AddParameter("order_item_nr", orderItemNr);
+                req.AddParameter("tool1_nr", tool1Nr);
+                req.AddParameter("tool2_nr", tool2Nr);
+                var res = new ApiClient().Execute(req);
+                var data = JSONHelper.parse<Msg<string>>(res.Content);
+                if (data != null)
+                {
+                    msg = data;
+                }
+                else
+                {
+                    msg.Content = "API ERROR";
+                }
+            }
+            catch (Exception e)
+            {
+                msg.Result = false;
+                msg.Content = e.Message;
+                LogUtil.Logger.Error(e.Message);
+            }
+            return msg;
+        }
         private bool setHead()
         {
             WebOperationContext.Current.OutgoingResponse.Headers.Add("Access-Control-Allow-Origin", "*");
@@ -217,7 +247,5 @@ namespace PmsNCRWcf
             }
             return true;
         }
-
-
     }
 }
