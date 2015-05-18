@@ -43,6 +43,8 @@ module Enum
           "编辑#{model}"
         when "import"
           "导入#{model}"
+        when 'import_update'
+          "更新#{model}"
         when 'state_export'
           "状态导出#{model}"
         when 'import_to_get_kanban_list'

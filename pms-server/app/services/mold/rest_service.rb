@@ -1,6 +1,6 @@
 module Mold
   class RestService
-    REST_HOST='http://192.168.5.86:9090/rest'
+    REST_HOST='http://192.168.1.222:9090/rest'
     TOKEN='3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d'
 
     def update_cut_count(mold_nr, cut, total)

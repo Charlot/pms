@@ -1,6 +1,7 @@
 class ImportTemplate
   BOM_CSV_TEMPLATE='bom.csv'
   PART_CSV_TEMPLATE='part.csv'
+  PART_UPDATE_CSV_TEMPLATE='part_update.csv'
   PROCESS_TEMPLATE_CSV_TEMPLATE='process_template.csv'
   PROCESS_ENTITY_AUTO_CSV_TEMPLATE='process_entity_auto.csv'
   PROCESS_ENTITY_AUTO_EXCEL_TEMPLATE='process_entity_auto.xlsx'

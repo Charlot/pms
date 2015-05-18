@@ -47,6 +47,33 @@ module FileHandler
         return msg
       end
 
+      def self.update(file)
+        msg = Message.new
+        begin
+          Part.transaction do
+            CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+              row.strip
+              part = Part.find_by_nr(row['Part Nr'])
+              params = {}
+              IMPORT_HEADERS.each { |header|
+                unless (row[header].nil? || header_to_attr(header).nil?)
+                  params[header_to_attr(header)] = row[header]
+                end
+              }
+              if part
+                part.update(params.except(:nr))
+              end
+            end
+          end
+          msg.result = true
+          msg.content = 'Part 更新成功'
+        rescue => e
+          puts e.backtrace
+          msg.content = e.message
+        end
+        return msg
+      end
+
       def self.export(user_agent)
         msg = Message.new
         begin
