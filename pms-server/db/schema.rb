@@ -342,11 +342,11 @@ ActiveRecord::Schema.define(version: 20150517053423) do
     t.integer  "bundle_no"
     t.float    "qty"
     t.string   "nr"
+    t.integer  "state",                    default: 90
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "whouse_nr"
     t.string   "position_nr"
-    t.integer  "state",                    default: 90
   end
 
   add_index "production_order_item_labels", ["production_order_item_id"], name: "index_production_order_item_labels_on_production_order_item_id", using: :btree
@@ -444,14 +444,14 @@ ActiveRecord::Schema.define(version: 20150517053423) do
     t.string   "nr"
     t.integer  "resource_group_id"
     t.integer  "part_id"
+    t.integer  "mnt",               default: 0
     t.integer  "used_days"
     t.integer  "rql"
+    t.integer  "tol",               default: 0
     t.datetime "rql_date"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "nr_display"
-    t.integer  "mnt",               default: 0
-    t.integer  "tol",               default: 0
   end
 
   add_index "tools", ["nr"], name: "index_tools_on_nr", using: :btree
