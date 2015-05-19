@@ -63,6 +63,7 @@ class ProductionOrderItemPresenter<Presenter
           WireNr: wire.nr,
           Diameter: wire.cross_section,
           WireCusNr: wire.custom_nr||'',
+          WireColor: wire.color,
           WireLength: process_entity.value_wire_qty_factor.to_f,
           Terminal1Nr: t1.nil? ? nil : t1.nr,
           Terminal1CusNr: t1.nil? ? nil : t1.custom_nr,
