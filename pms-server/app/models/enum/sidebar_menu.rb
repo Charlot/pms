@@ -4,7 +4,7 @@ module Enum
         KANBAN: {name: PageInfo.kanban, actions: ["new", "index", "import",'import_to_get_kanban_list','import_update_base']},
         PRODUCTION_ORDER: {name: PageInfo.productionorder, actions: ["new", "index"]},
         PRODUCTION_ORDER_ITEM: {name: PageInfo.productionorderitem, actions: ["new", "index","state_export"]},
-        PART: {name: PageInfo.part, actions: ["new", "index", "import"]},
+        PART: {name: PageInfo.part, actions: ["new", "index", "import",'import_update']},
         MEASURE_UNIT: {name: PageInfo.measureunit, actions: ["new", "index"]},
         PART_BOM: {name: PageInfo.partbom, actions: ["new", "index", "import"]},
         PROCESS_TEMPLATE: {name: PageInfo.processtemplate, actions: ["new", "index", "import"]},

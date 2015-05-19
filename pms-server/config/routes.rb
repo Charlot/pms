@@ -213,6 +213,7 @@ Rails.application.routes.draw do
       get :search
       get :scope_search
       match :import, to: :import, via: [:get, :post]
+      match :import_update, to: :import_update, via: [:get, :post]
       get :export
       match :search, to: :search, via: [:get, :post]
     end
