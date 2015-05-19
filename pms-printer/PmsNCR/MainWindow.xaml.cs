@@ -26,6 +26,7 @@ namespace PmsNCR
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static string CurrentOrder = string.Empty;
 
         //WebServiceHost host = null;
 
@@ -109,6 +110,11 @@ namespace PmsNCR
         private void MachineSettingBtn_Click(object sender, RoutedEventArgs e)
         {
             new MachineSettingWindow().ShowDialog(); 
+        }
+
+        private void SPCBtn_Click(object sender, RoutedEventArgs e)
+        {
+            new SPCWindow().ShowDialog();
         }
     }
 }

@@ -50,6 +50,7 @@ namespace PmsNCR
             if (msg.Result)
             {
                 orderItem = msg.Object;
+                MainWindow.CurrentOrder = orderItem.OrderNr;
             }
             else
             {

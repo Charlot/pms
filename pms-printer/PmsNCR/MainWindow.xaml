@@ -10,11 +10,11 @@
                     <GradientStop Color="#FF849DF5" Offset="1"/>
                 </LinearGradientBrush>
             </StackPanel.Background>
-            <Button Content="Material Check" Height="29" Name="MaterialCheckBtn" Width="171" Margin="10,10,0,10" Click="MaterialCheckBtn_Click" />
-            <Button Content="Order Preview" Height="29" Name="OrderPreviewBtn" Width="171" Margin="10,10,0,10" Click="OrderPreviewBtn_Click" />
-            <Button Content="Printer Setting" Height="29" Name="PrinterSettingBtn" Width="171"  Margin="10,10,0,10" Click="PrinterSettingBtn_Click"/>
-
-            <Button Content="Machine Setting" Height="29" Name="MachineSettingBtn" Width="171"  Margin="10,10,0,10" Click="MachineSettingBtn_Click" />
-        </StackPanel>
+            <Button Content="Material Check" Height="29" Name="MaterialCheckBtn" Width="171" Margin="10,5,0,10" Click="MaterialCheckBtn_Click" />
+            <Button Content="Order Preview" Height="29" Name="OrderPreviewBtn" Width="171" Margin="10,5,0,10" Click="OrderPreviewBtn_Click" />
+            <Button Content="SPC Input" Height="29" Name="SPCBtn" Width="171"  Margin="10,5,0,10" Click="SPCBtn_Click" />
+            <Button Content="Printer Setting" Height="29" Name="PrinterSettingBtn" Width="171"  Margin="10,5,0,10" Click="PrinterSettingBtn_Click"/>
+            <Button Content="Machine Setting" Height="29" Name="MachineSettingBtn" Width="171"  Margin="10,5,0,10" Click="MachineSettingBtn_Click" />
+            </StackPanel>
     </Grid>
 </Window>
