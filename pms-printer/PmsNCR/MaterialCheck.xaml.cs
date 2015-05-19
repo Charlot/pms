@@ -60,6 +60,36 @@ namespace PmsNCR
 
         private void InitCheckGraph()
         {
+            // set wire color
+            try
+            {
+                if (!string.IsNullOrEmpty(orderItem.WireColor))
+                {
+                    List<string> colors = ShortColorConverter.Converts(orderItem.WireColor);
+                    if (colors!=null)
+                    {
+                        try
+                        {
+                            if (colors.Count == 1)
+                            {
+                                WireColorLab1.Background = WireColorLab2.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[0]));
+
+                            }
+                            else
+                            {
+                                WireColorLab1.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[0]));
+                                WireColorLab2.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[1]));
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            LogUtil.Logger.Error(e.Message);
+                        }
+                    }
+                }
+            }
+            catch { }
+            WireColorTB.Text = orderItem.WireColor;
             WireCB.IsEnabled = !MaterialCheckConfig.WireLockCheck;
             Terminal1CB.IsEnabled = Terminal2CB.IsEnabled = !MaterialCheckConfig.TerminalLockCheck;
             Tool1CB.IsEnabled = Tool2CB.IsEnabled = !MaterialCheckConfig.ToolLockCheck;

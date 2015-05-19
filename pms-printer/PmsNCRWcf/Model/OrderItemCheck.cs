@@ -30,6 +30,8 @@ namespace PmsNCRWcf.Model
         [DataMember]
         public string WireNr { get; set; }
         [DataMember]
+        public string WireColor { get; set; }
+        [DataMember]
         public string WireCusNr { get; set; }
         [DataMember]
         public string WireLength { get; set; }

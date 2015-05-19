@@ -14,13 +14,13 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <Label Content="Job:" Height="28" HorizontalAlignment="Left" Margin="332,12,0,0" Name="label1" VerticalAlignment="Top" />
+        <Label Content="Job:" Height="28" HorizontalAlignment="Left" Margin="332,0,0,0" Name="label1" VerticalAlignment="Top" />
         <Label Content="JOB_NR" Height="28" HorizontalAlignment="Left"
-               Margin="384,12,0,0" Name="JobNrLab" VerticalAlignment="Top" Width="129" />
-        <Label Content="Wire:" Height="28" HorizontalAlignment="Left" Margin="332,46,0,0" Name="label2" VerticalAlignment="Top" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="384,46,0,0" IsEnabled="False" Name="WireNrTB" VerticalAlignment="Top" Width="120" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="385,75,0,0" IsEnabled="False"  Name="WireCusNrTB" VerticalAlignment="Top" Width="120" />
-        <CheckBox IsChecked="False" Content="" Height="16" HorizontalAlignment="Left" Margin="521,58,0,0" Name="WireCB" VerticalAlignment="Top" Checked="MaterialCB_Checked" />
+               Margin="384,0,0,0" Name="JobNrLab" VerticalAlignment="Top" Width="129" />
+        <Label Content="Wire:" Height="28" HorizontalAlignment="Left" Margin="332,27,0,0" Name="label2" VerticalAlignment="Top" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="384,27,0,0" IsEnabled="False" Name="WireNrTB" VerticalAlignment="Top" Width="120" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="385,56,0,0" IsEnabled="False"  Name="WireCusNrTB" VerticalAlignment="Top" Width="120" />
+        <CheckBox IsChecked="False" Content="" Height="16" HorizontalAlignment="Left" Margin="521,39,0,0" Name="WireCB" VerticalAlignment="Top" Checked="MaterialCB_Checked" />
         <Label Content="Side 1" Height="28" HorizontalAlignment="Left" Margin="15,84,0,0" Name="label3" VerticalAlignment="Top" />
         <Grid Height="143" HorizontalAlignment="Left" Margin="15,118,0,0" Name="WorkArea1" 
                     VerticalAlignment="Top" Width="228" Visibility="Hidden">
@@ -47,7 +47,14 @@
                 </Grid.ColumnDefinitions>
                 <Label Content="" Height="40" Background="Black" Visibility="Hidden" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Margin="8,30,0,0" Name="Terminal1GraphLab" VerticalAlignment="Top" Width="42" />
                 <Label Content="" Height="25"  BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Margin="26,37,0,0" Name="label10" VerticalAlignment="Top" Width="90" />
-                <Label BorderBrush="Black" Background="Black" BorderThickness="1" Content="" Height="40" HorizontalAlignment="Right" Margin="0,29,129,0" Name="label11" VerticalAlignment="Top" Width="157" Grid.ColumnSpan="2" />
+                <Label BorderBrush="Black" Background="Black"
+                       BorderThickness="0" Content="" Height="25" 
+                       HorizontalAlignment="Right" Margin="0,29,129,0" 
+                       Name="WireColorLab1" VerticalAlignment="Top" Width="157" Grid.ColumnSpan="2" />
+                <Label BorderBrush="Black" Background="Black"
+                       BorderThickness="0" Content="" Height="15" 
+                       HorizontalAlignment="Right" Margin="0,54,129,0" 
+                       Name="WireColorLab2" VerticalAlignment="Top" Width="157" Grid.ColumnSpan="2" />
                 <Label BorderBrush="Black" BorderThickness="1" Content="" Height="25" HorizontalAlignment="Left" Margin="33,37,0,0" Name="label12" VerticalAlignment="Top" Width="90" Grid.Column="1" />
                 <Label BorderBrush="Black" Background="Black" Visibility="Hidden" BorderThickness="1" Content="" Height="40" HorizontalAlignment="Left" Margin="107,30,0,0" Name="Terminal2GraphLab" VerticalAlignment="Top" Width="42" Grid.Column="1" />
                 <Label Content="&lt;---" Height="28" Margin="22,70,136,0" Name="label14" VerticalAlignment="Top" />
@@ -94,6 +101,8 @@
         <Button Content="Mirror" 
                 Height="60" HorizontalAlignment="Left" Margin="710,0,0,0" Name="MirrorBtn"
                 VerticalAlignment="Top" Width="87" Click="MirrorBtn_Click" />
+        <Label Content="Color:" Height="28" HorizontalAlignment="Left" Margin="332,84,0,0" Name="label11" VerticalAlignment="Top" />
+        <TextBox Height="23" HorizontalAlignment="Left" IsEnabled="False" Margin="384,86,0,0" Name="WireColorTB" VerticalAlignment="Top" Width="120" />
     </Grid>
     
 </Window>

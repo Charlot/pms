@@ -19,16 +19,17 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition  Height="319"/>
-            <RowDefinition Height="12*" />
+            <RowDefinition  Height="320" MinHeight="319"/> 
         </Grid.RowDefinitions> 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition Width="150"/>
-        </Grid.ColumnDefinitions>
-            <DataGrid Name="PreviewOrderDG" BorderThickness="0" Background="White" ClipboardCopyMode="IncludeHeader" AutoGenerateColumns="False" IsReadOnly="True"
+            <ColumnDefinition Width="90*"/>
+            <ColumnDefinition Width="20*" MaxWidth="150"/>
+        </Grid.ColumnDefinitions> 
+            <DataGrid Name="PreviewOrderDG" BorderThickness="0" Background="White"
+                      ClipboardCopyMode="IncludeHeader" AutoGenerateColumns="False" IsReadOnly="True"
                               CanUserAddRows="false" CanUserDeleteRows="false" SnapsToDevicePixels="False" 
-                         
+                         Grid.Row="0"
+                      Grid.Column="0"
                               CanUserReorderColumns="False" FontSize="13" Margin="0,0,0,10">
 
 
@@ -59,7 +60,7 @@
                 <DataGridTextColumn Header="Bundle" Binding="{Binding Path=KanbanBundle}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="Wire" Binding="{Binding Path=KanbanWireNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="Row Wire" Binding="{Binding Path=WireNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
-                    <!--<DataGridTextColumn Header="CustNr" Binding="{Binding Path=WireCusNr}" ElementStyle="{StaticResource contentCenterStyle}"/>-->
+                    <DataGridTextColumn Header="Color" Binding="{Binding Path=WireColor}" ElementStyle="{StaticResource contentCenterStyle}"/>
                     <DataGridTextColumn Header="Length" Binding="{Binding Path=WireLength}" ElementStyle="{StaticResource contentCenterStyle}"/>
                     <DataGridTextColumn Header="Ter1" Binding="{Binding Path=Terminal1Nr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                     <DataGridTextColumn Header="Mold1" Binding="{Binding Path=Tool1Nr}" ElementStyle="{StaticResource contentCenterStyle}"/>
@@ -69,7 +70,7 @@
                     <DataGridTextColumn Header="Seal2" Binding="{Binding Path=Seal2Nr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 </DataGrid.Columns>
             </DataGrid>
-        <StackPanel Grid.Column="1" Margin="0,0,0,12" Grid.RowSpan="2">
+        <StackPanel Grid.Column="1" Margin="0,0,0,12"  Grid.Row="0" MaxWidth="165">
             <ComboBox Name="OrderStateCB"  Margin="20,6,0,0" Height="52"
                       Width="87" FontStretch="Normal" VerticalContentAlignment="Center">
                 <ComboBoxItem Content="NextOrder" IsSelected="True"></ComboBoxItem>
