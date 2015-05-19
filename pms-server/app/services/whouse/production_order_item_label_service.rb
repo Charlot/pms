@@ -9,7 +9,8 @@ class ProductionOrderItemLabelService
                                              fifo: label.created_at.localtime,
                                              toWh: label.whouse_nr,
                                              toPosition: label.position_nr,
-                                             packageId: label.nr
+                                             packageId: label.nr,
+                                             uniq:true
                                             })
         end
         if r
@@ -35,7 +36,8 @@ class ProductionOrderItemLabelService
           moves=[]
           if part=Part.find_by_id(pe.value_default_wire_nr)
             part.part_boms.joins(:bom_item).select('part_boms.*,parts.nr,parts.type as part_type').each do |pb|
-              qty = pb.part_type==PartType::MATERIAL_WIRE ? pb.quantity/1000 : pb.quantity
+              # TODO check if the part is material wire!
+              qty = pb.quanity.to_f>10 ? pb.quantity/1000 : pb.quantity
               moves<<base_params.merge({
                                            qty: qty,
                                            partNr: pb.nr
