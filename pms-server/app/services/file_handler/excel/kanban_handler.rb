@@ -160,7 +160,6 @@ module FileHandler
 
           msg.result =true
           msg.content =tmp_file
-        C
           puts e.backtrace
           msg.content = e.message
         end
@@ -252,6 +251,7 @@ module FileHandler
 
         msg.result = true
         if msg.contents.count > 0
+          # msg.result=false
           msg.content = msg.contents.join(";")
         else
           msg.content = "投卡成功!"
