@@ -85,7 +85,7 @@
         </Grid>
         <Label Content="Side 2" Height="28" HorizontalAlignment="Left" Margin="667,80,0,0" Name="label8" VerticalAlignment="Top" />
         <Label Content="Scan Bar:" Height="28" HorizontalAlignment="Left" Margin="83,279,0,0" Name="label9" VerticalAlignment="Top" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="175,283,0,0" Name="ScanCodeTB" VerticalAlignment="Top" Width="310" KeyUp="ScanCodeTB_KeyUp" TextChanged="ScanCodeTB_TextChanged" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="175,283,0,0" Name="ScanCodeTB" VerticalAlignment="Top" Width="310" KeyUp="ScanCodeTB_KeyUp" />
         <Label Content="Scan Area:" Height="28" HorizontalAlignment="Left" Margin="83,317,0,0" Name="label13" VerticalAlignment="Top" />
         <TextBox Height="23" HorizontalAlignment="Left" Margin="175,319,0,0" Name="CurrentAreaTB" VerticalAlignment="Top" Width="120" />
         <CheckBox Content="Auto Clear" Height="16" IsChecked="True" HorizontalAlignment="Left" Margin="510,289,0,0" Name="AutoCleanScanCB" VerticalAlignment="Top" />

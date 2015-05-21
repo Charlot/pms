@@ -101,6 +101,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helper\SettingReader.cs" />
+    <Compile Include="PrintKBConfirmWindow.xaml.cs">
+      <DependentUpon>PrintKBConfirmWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PrintLabelConfirmWindow.xaml.cs">
+      <DependentUpon>PrintLabelConfirmWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SPCWindow.xaml.cs">
       <DependentUpon>SPCWindow.xaml</DependentUpon>
     </Compile>
@@ -155,6 +161,14 @@
     <Page Include="PrinterSetting.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PrintKBConfirmWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PrintLabelConfirmWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SPCWindow.xaml">
       <SubType>Designer</SubType>

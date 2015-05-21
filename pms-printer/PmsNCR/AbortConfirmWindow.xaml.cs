@@ -13,6 +13,7 @@ using System.Windows.Shapes;
 using PmsNCRWcf;
 using PmsNCRWcf.Enmu;
 using PmsNCR.Helper;
+using System.Configuration;
 
 namespace PmsNCR
 {
@@ -36,7 +37,7 @@ namespace PmsNCR
 
         private void AbortBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (PasswdTB.Password.Equals(SettingReader.OrderAbortPasswd))
+            if (PasswdTB.Password.Equals(ConfigurationManager.AppSettings["OrderAbortPasswd"]))
             {
                 OrderService service = new OrderService();
                 bool result = service.ChangeOrderItemState(OrderLab.Content.ToString(), OrderItemState.MANUAL_ABORTED).Result;

@@ -371,13 +371,13 @@ namespace PmsNCR
 
         }
 
-        private void ScanCodeTB_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (ScanCodeTB.Text.Length>0)
-            {
-                CheckMaterial();
-            }
-        }
+        //private void ScanCodeTB_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+        //    if (ScanCodeTB.Text.Length>0)
+        //    {
+        //        CheckMaterial();
+        //    }
+        //}
 
         private void MaterialCB_Checked(object sender, RoutedEventArgs e)
         {

@@ -13,5 +13,7 @@ namespace PmsNCR.Helper
                 return   ConfigurationManager.AppSettings["OrderAbortPasswd"];
             }
         }
+
+
     }
 }

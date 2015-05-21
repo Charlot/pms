@@ -72,7 +72,8 @@ namespace PmsNCR
             if (PreviewOrderDG.SelectedItems.Count == 1)
             {
                 OrderItemCheck item = PreviewOrderDG.SelectedItem as OrderItemCheck;
-                new PrintService().PrintKB("P002", item.ItemNr, WPCSConfig.MachineNr);
+                //new PrintService().PrintKB("P002", item.ItemNr, WPCSConfig.MachineNr);
+                new PrintKBConfirmWindow(item).ShowDialog();
             }
         }
 
@@ -83,7 +84,10 @@ namespace PmsNCR
             if (bundleNo > 0 && PreviewOrderDG.SelectedItems.Count == 1)
             {
                 OrderItemCheck item = PreviewOrderDG.SelectedItem as OrderItemCheck;
-                new PrintService().PrintBundleLabel("P003", item.ItemNr, WPCSConfig.MachineNr,bundleNo,InstoreCheck.IsChecked.Value);          
+                new PrintLabelConfirmWindow(item, InstoreCheck.IsChecked.Value,bundleNo).ShowDialog();
+                BundleNoTB.Text = string.Empty;
+                InstoreCheck.IsChecked = false;
+              //  new PrintService().PrintBundleLabel("P003", item.ItemNr, WPCSConfig.MachineNr,bundleNo,InstoreCheck.IsChecked.Value);          
             }
         }
          
