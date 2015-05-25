@@ -122,7 +122,6 @@ class PartsController < ApplicationController
   end
   
   def import
-    if request.post?
       msg = Message.new
       begin 
         file=params[:files][0]
