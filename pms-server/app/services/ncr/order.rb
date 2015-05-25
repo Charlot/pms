@@ -16,15 +16,17 @@ module Ncr
             # puts item.to_json
             begin
               puts "$$$$$#{write_order_api(item)}"
-              response=RestClient.post(write_order_api(item), {params: post_params(item).to_json},
-                                       accept: :json)
-              rb=JSON.parse(response.body)
-              if rb['Result']
-                item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_SUCCEED)
-              else
-                item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_FAIL, message: rb['Content'])
-              end
-              puts JSON.parse(response.body)['Result'].class
+              # response=RestClient.post(write_order_api(item), {params: post_params(item).to_json},
+              #                          accept: :json)
+              # rb=JSON.parse(response.body)
+              # if rb['Result']
+              # if (kb=Kanban.find_by_id(item.kanban_id)) && kb.quantity<200
+              item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_SUCCEED)
+              # end
+                # else
+                #   item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_FAIL, message: rb['Content'])
+                # end
+                # puts JSON.parse(response.body)['Result'].class
             rescue => e
               puts "#{e.class}---#{e.message}-----------------------------"
               # raise(e)
@@ -63,15 +65,29 @@ module Ncr
       "#{item.nr}"
     end
 
-    def json_order_item_content(item)
+    def json_order_item_content(item, mirror=false)
       kanban=item.kanban
       process_entity=kanban.process_entities.first
       # template=process_entity.process_template
       wire=Part.find_by_id(process_entity.value_wire_nr)
-      t1=Part.find_by_id(process_entity.value_t1)
-      t2=Part.find_by_id(process_entity.value_t2)
-      s1=Part.find_by_id(process_entity.value_s1)
-      s2=Part.find_by_id(process_entity.value_s2)
+      unless mirror
+        t1=Part.find_by_id(process_entity.value_t1)
+        t2=Part.find_by_id(process_entity.value_t2)
+        s1=Part.find_by_id(process_entity.value_s1)
+        s2=Part.find_by_id(process_entity.value_s2)
+
+        strip1=process_entity.t1_strip_length
+        strip2=process_entity.t2_strip_length
+      else
+        t2=Part.find_by_id(process_entity.value_t1)
+        t1=Part.find_by_id(process_entity.value_t2)
+        s2=Part.find_by_id(process_entity.value_s1)
+        s1=Part.find_by_id(process_entity.value_s2)
+
+        strip1=process_entity.t2_strip_length
+        strip2=process_entity.t1_strip_length
+      end
+
       if self.production_order.nil?
         self.production_order=item.production_order
       end
@@ -92,18 +108,18 @@ module Ncr
         json=json.merge({
                             t1_nr: t1.nr,
                             t1_custom_nr: t1.custom_nr,
-                            t1_strip_length: process_entity.t1_strip_length,
+                            t1_strip_length: strip1,
                             t1_tool: tool1.nil? ? nil : tool1.nr
                         })
       end
 
       unless t2.nil?
-        tool2=Tool.where(part_id: t1.id).first
+        tool2=Tool.where(part_id: t2.id).first
 
         json=json.merge({
                             t2_nr: t2.nr,
                             t2_custom_nr: t2.custom_nr,
-                            t2_strip_length: process_entity.t2_strip_length,
+                            t2_strip_length: strip2,
                             t1_tool: tool2.nil? ? nil : tool2.nr
                         })
       end
@@ -131,10 +147,27 @@ module Ncr
               TotalPieces: kanban.quantity,
               BatchSize: kanban.bundle,
               Name: "J_#{item.nr}",
-              Hint: "Cutting Order: #{self.production_order.nr}. Cutting Position: #{item.nr}. Bundle quantity: #{kanban.bundle}. Total quantity: #{kanban.quantity}."
+              Hint: " Cutting Job: #{item.nr}. Cutting Order: #{self.production_order.nr}. Kanban #{kanban.nr}. Bundle quantity: #{kanban.bundle}. Total quantity: #{kanban.quantity}."
           }
       }
 
+      pull_off_length1=nil
+      if t1.nil? && s1.nil?
+        begin
+          pull_off_length1 =strip1.to_f/2
+        rescue => e
+          puts e.message
+        end
+      end
+
+      pull_off_length2=nil
+      if t2.nil? && s2.nil?
+        begin
+          pull_off_length2 =strip2.to_f/2
+        rescue => e
+          puts e.message
+        end
+      end
       # article
       json[:article]={
           NewArticle: {
@@ -146,8 +179,9 @@ module Ncr
           NewLeadSet1: {
               WireKey: wire.nr,
               WireLength: process_entity.value_wire_qty_factor,
-              StrippingLength: "#{process_entity.t1_strip_length}, #{process_entity.t2_strip_length}",
-              PulloffLength: "#{process_entity.t1_strip_length}, #{process_entity.t2_strip_length}",
+              StrippingLength: "#{strip1}, #{strip2}",
+              # PulloffLength: "#{process_entity.t1_strip_length}, #{process_entity.t2_strip_length}",
+              PulloffLength: "#{pull_off_length1}, #{pull_off_length2}",
               SealKey: "#{s1.nil? ? '' : s1.nr}, #{s2.nil? ? '' : s2.nr}",
               TerminalKey: "#{t1.nil? ? '' : t1.nr}, #{t2.nil? ? '' : t2.nr}"
           }
@@ -159,6 +193,7 @@ module Ncr
               WireKey: wire.nr,
               WireGroup: 'Group0',
               ElectricalSizeMM2: '0.50', #process_entity.value_wire_qty_factor,
+              Diameter: wire.cross_section==0 ? '' : wire.cross_section,
               Color: 'RD',
               Name: wire.nr,
               Hint: wire.nr
@@ -171,7 +206,7 @@ module Ncr
             NewTerminal: {
                 TerminalKey: t1.nr,
                 TerminalGroup: 'Group0',
-                StrippingLength: process_entity.t1_strip_length,
+                StrippingLength: strip1,
                 Name: t1.nr,
                 Hint: 't1 description'
             }
@@ -183,7 +218,7 @@ module Ncr
             NewTerminal: {
                 TerminalKey: t2.nr,
                 TerminalGroup: 'Group0',
-                StrippingLength: process_entity.t2_strip_length,
+                StrippingLength: strip2,
                 Name: t2.nr,
                 Hint: 't2 description'
             }
@@ -215,9 +250,9 @@ module Ncr
         }
       end
 
-      puts "---------------------"
-      puts json.to_json
-      puts "------------------------"
+      # puts "---------------------"
+      # puts json.to_json
+      # puts "------------------------"
       json
     end
   end

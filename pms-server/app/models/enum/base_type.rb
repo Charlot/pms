@@ -26,6 +26,10 @@ class BaseType<BaseClass
     constant_by_value(v)
   end
 
+  def self.include_value?(v)
+    constants.collect{|c|const_get(c.to_s)}.include?(v.to_i)
+  end
+
   def self.key(v)
     constant_by_value(v).downcase
   end

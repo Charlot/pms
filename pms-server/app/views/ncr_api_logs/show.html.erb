@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Machine nr:</strong>
+  <%= @ncr_api_log.machine_nr %>
+</p>
+
+<p>
+  <strong>Order item nr:</strong>
+  <%= @ncr_api_log.order_item_nr %>
+</p>
+
+<p>
+  <strong>Log type:</strong>
+  <%= @ncr_api_log.log_type %>
+</p>
+
+<p>
+  <strong>Order item state:</strong>
+  <%= @ncr_api_log.order_item_state %>
+</p>
+
+<p>
+  <strong>Order item qty:</strong>
+  <%= @ncr_api_log.order_item_qty %>
+</p>
+
+<p>
+  <strong>Params detail:</strong>
+  <%= @ncr_api_log.params_detail %>
+</p>
+
+<p>
+  <strong>Return detail:</strong>
+  <%= @ncr_api_log.return_detail %>
+</p>
+
+<%= link_to 'Edit', edit_ncr_api_log_path(@ncr_api_log) %> |
+<%= link_to 'Back', ncr_api_logs_path %>

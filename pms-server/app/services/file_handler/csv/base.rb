@@ -16,6 +16,7 @@ module FileHandler
       end
 
       def self.validate_import(file)
+
         tmp_file=full_tmp_path(file.file_name)
         msg=Message.new(result: true)
         CSV.open(tmp_file, 'wb', write_headers: true,

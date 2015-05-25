@@ -65,8 +65,11 @@ class CustomFieldsController < ApplicationController
     msg=Message.new
     begin
       if @custom_field
-        msg.content = @custom_field.validate_format_field(params[:args])
-        msg.result = true
+        if msg.content = @custom_field.validate_format_field(params[:args])
+          msg.result =true
+        else
+          msg.content ='值填写错误！请核实'
+        end
       else
         msg.content = 'no such custom field'
       end
@@ -75,6 +78,7 @@ class CustomFieldsController < ApplicationController
     end
     render json: msg
   end
+
 
   private
   # Use callbacks to share common setup or constraints between actions.

@@ -2,35 +2,106 @@ require 'csv'
 module FileHandler
   module Csv
     class PartHandler<Base
-      IMPORT_HEADERS=['Part Nr','Custom Nr','Type','Strip Length'] #Resource Group 和 Measure Unit后加
+      IMPORT_HEADERS=['Part Nr', 'Custom Nr', 'Type', 'Strip Length', 'Color', 'Color Desc', 'Component Type', 'Cross Section', 'Operator']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
       def self.import(file)
-      	msg = Message.new
-      	begin
-      		validate_msg = validate_import(file)
-      		if validate_msg.result
-      			Part.transaction do
-      				CSV.foreach(file.file_path,headers: file.headers,col_sep: file.col_sep,encoding: file.encoding) do |row|
-      					part = Part.find_by_nr(row['Part Nr'])
-      					unless part
-      						Part.create({nr:row['Part Nr'],custom_nr: row['Custom Nr'],type:row['Type'],strip_length:row['Strip Length']})
-      					else
-      						part.update({custom_nr:row['Custom Nr'],type:row['Type'],strip_length:row['Strip Length']})
-      					end
-      				end
-      			end
-      			msg.result = true
-      			msg.content = 'Part 上传成共'
-      		else
-      			msg.result = false
-      			msg.content = validate_msg.content
-      		end
-      	rescue => e
-      		puts e.backtrace
-      		msg.content = e.message
+        msg = Message.new
+        begin
+          validate_msg = validate_import(file)
+          if validate_msg.result
+            Part.transaction do
+              CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+                row.strip
+                part = Part.find_by_nr(row['Part Nr'])
+                params = {}
+                IMPORT_HEADERS.each { |header|
+                  unless (row[header].nil? || header_to_attr(header).nil?)
+                    params[header_to_attr(header)] = row[header]
+                  end
+                }
+                puts params
+                unless part
+                  Part.create(params)
+                else
+                  puts "Update-------------------------"
+                  if row['Operator'].nil? || row['Operator']=='update'
+                    part.update(params.except(:nr))
+                  elsif row['Operator']=='destory'
+                    part.destroy
+                  end
+
+                end
+              end
+            end
+            msg.result = true
+            msg.content = 'Part 上传成共'
+          else
+            msg.result = false
+            msg.content = validate_msg.content
+          end
+        rescue => e
+          puts e.backtrace
+          msg.content = e.message
         end
         return msg
+      end
+
+      def self.update(file)
+        msg = Message.new
+        begin
+          Part.transaction do
+            CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+              row.strip
+              part = Part.find_by_nr(row['Part Nr'])
+              params = {}
+              IMPORT_HEADERS.each { |header|
+                unless (row[header].nil? || header_to_attr(header).nil?)
+                  params[header_to_attr(header)] = row[header]
+                end
+              }
+              if part
+                part.update(params.except(:nr))
+              end
+            end
+          end
+          msg.result = true
+          msg.content = 'Part 更新成功'
+        rescue => e
+          puts e.backtrace
+          msg.content = e.message
+        end
+        return msg
+      end
+
+      def self.export(user_agent)
+        msg = Message.new
+        begin
+          tmp_file = KanbanHandler.full_tmp_path('part.csv') unless tmp_file
+
+          CSV.open(tmp_file, 'wb', write_headers: true,
+                   headers: IMPORT_HEADERS,
+                   col_sep: SEPARATOR, encoding: PartHandler.get_encoding(user_agent)) do |csv|
+            Part.all.each do |part|
+              csv<<[
+                  part.nr,
+                  part.custom_nr,
+                  part.type,
+                  part.strip_length,
+                  part.color,
+                  part.color_desc,
+                  part.component_type,
+                  part.cross_section,
+                  'update'
+              ]
+            end
+          end
+          msg.result =true
+          msg.content =tmp_file
+        rescue => e
+          msg.content =e.message
+        end
+        msg
       end
 
       def self.validate_import(file)
@@ -64,6 +135,28 @@ module FileHandler
           msg.content=msg.contents.join('/')
         end
         return msg
+      end
+
+      def self.header_to_attr header
+        case header
+          when 'Part Nr'
+            :nr
+          when 'Custom Nr'
+            :custom_nr
+          when 'Type'
+            :type
+          when 'Strip Length'
+            :strip_length
+          when 'Color'
+            :color
+          when 'Color Desc'
+            :color_desc
+          when 'Component Type'
+            :component_type
+          when 'Cross Section'
+            :cross_section
+          else
+        end
       end
     end
   end

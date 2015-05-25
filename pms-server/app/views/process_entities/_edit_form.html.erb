@@ -1,0 +1,5 @@
+<% if ProcessType.semi_auto?(@process_template.type) %>
+    <%= render 'edit_semi_auto_form' %>
+<% elsif ProcessType.auto?(@process_template.type) %>
+    <%= render 'edit_auto_form'  %>
+<% end %>

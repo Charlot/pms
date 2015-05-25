@@ -15,6 +15,7 @@ class ProcessPartsController < ApplicationController
   # GET /process_parts/new
   def new
     @process_part = ProcessPart.new
+    # authorize(@process_part)
   end
 
   # GET /process_parts/1/edit
@@ -25,7 +26,7 @@ class ProcessPartsController < ApplicationController
   # POST /process_parts.json
   def create
     @process_part = ProcessPart.new(process_part_params)
-
+    # authorize(@process_part)
     respond_to do |format|
       if @process_part.save
         format.html { redirect_to @process_part, notice: 'Process part was successfully created.' }
@@ -65,6 +66,7 @@ class ProcessPartsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_process_part
       @process_part = ProcessPart.find(params[:id])
+      # authorize(@process_part)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -1,11 +1,13 @@
 class PartsController < ApplicationController
   before_action :set_part, only: [:show, :edit, :update, :destroy,
-                         :add_process_entities,:delete_process_entities]
+                                  :add_process_entities, :delete_process_entities]
 
   # GET /parts
   # GET /parts.json
   def index
     @parts = Part.paginate(:page => params[:page])
+    #@q = Part.ransack(params[:q])
+    #@parts = @q.result.paginate(:page => params[:page])
     respond_to do |format|
       format.html
       format.csv { send_data @parts.to_csv }
@@ -15,15 +17,18 @@ class PartsController < ApplicationController
   # GET /parts/1
   # GET /parts/1.json
   def show
+    #authorize @part
   end
 
   # GET /parts/new
   def new
     @part = Part.new
+    #authorize @part
   end
 
   # GET /parts/1/edit
   def edit
+    #authorize @part
   end
 
   # POST /parts
@@ -31,6 +36,7 @@ class PartsController < ApplicationController
   def create
     msg = Message.new
     @part = Part.new(part_params)
+    # authorize(@part)
 
     respond_to do |format|
       if @part.save
@@ -50,6 +56,7 @@ class PartsController < ApplicationController
   # PATCH/PUT /parts/1
   # PATCH/PUT /parts/1.json
   def update
+    # authorize @part
     respond_to do |format|
       if @part.update(part_params)
         format.html { redirect_to @part, notice: 'Part was successfully updated.' }
@@ -75,32 +82,30 @@ class PartsController < ApplicationController
   # GET /parts/search.json
 =begin
   def search
-    @part = Part.send("find_by_"+params[:attr],params[:val])
-    respond_to do |format|
-      format.json { render json: {result: false, content: "Not Found!"}} unless @part
-      format.json { render json: {result: true, content: @part.as_json(include: :process_entities)}}
-    end
   end
 =end
 
   # POST /parts/1/add_process_entitties
+=begin
   def add_process_entities
-    if (@part.kanbans.select { |k| k.can_update? == false}).count>0
-      render json:{ result: false,content:"不能修改Routing，因为有关联该Part的KANBAN正在生产!"} and return
+    if (@part.kanbans.select { |k| k.can_update? == false }).count>0
+      render json: {result: false, content: "不能修改Routing，因为有关联该Part的KANBAN正在生产!"} and return
     end
 
-    params[:process_entities].each {|pe_id|
-      @part.part_process_entities<<PartProcessEntity.create(process_entity_id:pe_id)
+    params[:process_entities].each { |pe_id|
+      @part.part_process_entities<<PartProcessEntity.create(process_entity_id: pe_id)
     }
 
     if @part.save
-      render json: {result:true,content:{}}
+      render json: {result: true, content: {}}
     else
-      render json: {result:false,content:{}}
+      render json: {result: false, content: {}}
     end
   end
+=end
 
   # DELETE /parts/1/delete_process_entities
+=begin
   def delete_process_entities
     msg = Message.new
     msg.result = true
@@ -112,7 +117,7 @@ class PartsController < ApplicationController
     end
     ActiveRecord::Base.transaction do
       begin
-        @part.part_process_entities.where(process_entity_id:params[:process_entities]).each{|x|x.destroy}
+        @part.part_process_entities.where(process_entity_id: params[:process_entities]).each { |x| x.destroy }
       rescue
         msg.result = false
       end
@@ -120,15 +125,48 @@ class PartsController < ApplicationController
 
     render json: msg
   end
-  
+=end
+
+  def export
+    msg=Message.new
+    begin
+      msg=FileHandler::Csv::PartHandler.export(request.user_agent)
+      if msg.result
+        send_file msg.content
+      else
+        @content = msg.to_json
+        render 'shared/error'
+      end
+    end
+  end
+
   def import
+    # authorize(Part)
+    if request.post?
       msg = Message.new
-      begin 
+      begin
         file=params[:files][0]
-        fd = FileData.new(data: file,original_name:file.original_filename,path:$upload_data_file_path,path_name:"#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
         fd.save
-        file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase,file_path: fd.full_path,file_name: file.original_filename)
+        file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
         msg = FileHandler::Csv::PartHandler.import(file)
+      rescue => e
+        msg.content = e.message
+      end
+      render json: msg
+    end
+  end
+
+
+  def import_update
+    if request.post?
+      msg = Message.new
+      begin
+        file=params[:files][0]
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd.save
+        file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
+        msg = FileHandler::Csv::PartHandler.update(file)
       rescue => e
         msg.content = e.message
       end
@@ -140,10 +178,11 @@ class PartsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_part
       @part = Part.find(params[:id])
+      # authorize(@part)
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def part_params
-      params.require(:part).permit(:nr, :custom_nr, :type, :strip_length, :resource_group_id, :measure_unit_id,:description)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def part_params
+    params.require(:part).permit(:nr, :custom_nr, :type, :strip_length, :resource_group_id, :measure_unit_id, :description)
+  end
 end

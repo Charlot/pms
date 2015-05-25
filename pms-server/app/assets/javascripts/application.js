@@ -17,5 +17,7 @@
 //= require jquery.file.upload/jquery.iframe-transport
 //= require jquery.file.upload/jquery.fileupload
 //= require twitter/bootstrap
+//= require best_in_place
+//= require best_in_place.jquery-ui
 //= require turbolinks
 //= require_tree .

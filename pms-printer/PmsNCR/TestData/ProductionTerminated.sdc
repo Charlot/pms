@@ -1,0 +1,5 @@
+[ProductionTerminated]
+ArticleKey=A_002152
+Job=J_006041
+ProductionRequestedPieces=210
+TotalGoodPieces=210

@@ -18,37 +18,87 @@ module FileHandler
           if validate_msg.result
             ProcessEntity.transaction do
               CSV.foreach(file.file_path,headers: file.headers,col_sep: file.col_sep,encoding: file.encoding) do |row|
+                row.strip
                 process_template = ProcessTemplate.find_by_code(row['Template Code'])
                 product = Part.find_by_nr(row['Product Nr'])
-                #part = Part.find_by_nr(row['Wire Nr'])
-                part = Part.create({nr:"#{row['Product Nr']}_#{row['Wire NO']}",type:PartType::PRODUCT_SEMIFINISHED})
+
                 params = {}
-                params = params.merge({nr:row['Nr'],name:row['Name'],description:row['Description'],stand_time:row['Stand Time'],product_id:product.id,process_template_id:process_template.id})
-                #TODO add WorkStation Type and Cost Center
-                process_entity = ProcessEntity.new(params)
-                process_entity.process_template = process_template
-                process_entity.save
+                params = params.merge({
+                                          nr:row['Nr'],
+                                          name:row['Name'],
+                                          description:row['Description'],
+                                          stand_time:row['Stand Time'],
+                                          product_id:product.id,
+                                          process_template_id:process_template.id
+                                      })
 
-                custom_fields = {}
-                ['Wire NO','Component','Qty Factor','Bundle Qty', 'T1','T1 Qty Factor','T1 Strip Length', 'T2','T2 Qty Factor','T2 Strip Length', 'S1','S1 Qty Factor', 'S2','S2 Qty Factor'].each{|header|
-                  custom_fields = custom_fields.merge(header_to_custom_fields(header,row[header])) if row[header]
-                }
+                pe = ProcessEntity.where({nr:params[:nr],product_id:product.id}).first
+                if pe
+                  pe.update(params.except(:nr))
 
-                custom_fields.each do |k,v|
-                 if  cf = process_entity.custom_fields.find{|cf| cf.name == k.to_s}
-                   if cf.name == "default_wire_nr"
-                     cv = CustomValue.new(custom_field_id:cf.id,is_for_out_stock: cf.is_for_out_stock,value:cf.get_field_format_value("#{product.nr}_#{v}"))
-                   else
-                     cv = CustomValue.new(custom_field_id:cf.id,is_for_out_stock: cf.is_for_out_stock,value:cf.get_field_format_value(v))
-                   end
-                  process_entity.custom_values<<cv
-                 end
-                end
+                  custom_fields = {}
+                  ['Wire NO','Component','Qty Factor','Bundle Qty', 'T1','T1 Qty Factor','T1 Strip Length', 'T2','T2 Qty Factor','T2 Strip Length', 'S1','S1 Qty Factor', 'S2','S2 Qty Factor'].each{|header|
+                    custom_fields = custom_fields.merge(header_to_custom_fields(header,row[header])) if row[header]
+                  }
+                  puts custom_fields
 
-                process_entity.custom_values.each do |cv|
-                  cf=cv.custom_field
-                  if CustomFieldFormatType.part?(cf.field_format)
-                    process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: process_entity.process_part_quantity_by_cf(cf.name.to_sym))
+                  custom_fields.each do |k,v|
+                    if  cf = pe.custom_fields.find{|cf| cf.name == k.to_s}
+                      if cv = pe.custom_values.where({custom_field_id:cf.id}).first
+                        #找到了，更新
+                        #puts "找到了".red
+                        if cf.name == "default_wire_nr"
+                          cv = cv.update(value:cf.get_field_format_value("#{product.nr}_#{v}"))
+                        else
+                          cv = cv.update(value:cf.get_field_format_value(v))
+                        end
+                      else
+                        #未找到，创建
+                        if cf.name == "default_wire_nr"
+                          cv = CustomValue.new(custom_field_id:cf.id,is_for_out_stock: cf.is_for_out_stock,value:cf.get_field_format_value("#{product.nr}_#{v}"))
+                        else
+                          cv = CustomValue.new(custom_field_id:cf.id,is_for_out_stock: cf.is_for_out_stock,value:cf.get_field_format_value(v))
+                        end
+                        pe.custom_values<<cv
+                      end
+                    end
+                  end
+
+                  pe.process_parts.destroy_all
+                  pe.custom_values.each do |cv|
+                    cf=cv.custom_field
+                    if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
+                      pe.process_parts<<ProcessPart.new(part_id: cv.value, quantity: pe.process_part_quantity_by_cf(cf.name.to_sym))
+                    end
+                  end
+                else
+                  part = Part.create({nr:"#{row['Product Nr']}_#{row['Wire NO']}",type:PartType::PRODUCT_SEMIFINISHED})
+                  #TODO add WorkStation Type and Cost Center
+                  process_entity = ProcessEntity.new(params)
+                  process_entity.process_template = process_template
+                  process_entity.save
+
+                  custom_fields = {}
+                  ['Wire NO','Component','Qty Factor','Bundle Qty', 'T1','T1 Qty Factor','T1 Strip Length', 'T2','T2 Qty Factor','T2 Strip Length', 'S1','S1 Qty Factor', 'S2','S2 Qty Factor'].each{|header|
+                    custom_fields = custom_fields.merge(header_to_custom_fields(header,row[header])) if row[header]
+                  }
+
+                  custom_fields.each do |k,v|
+                    if  cf = process_entity.custom_fields.find{|cf| cf.name == k.to_s}
+                      if cf.name == "default_wire_nr"
+                        cv = CustomValue.new(custom_field_id:cf.id,is_for_out_stock: cf.is_for_out_stock,value:cf.get_field_format_value("#{product.nr}_#{v}"))
+                      else
+                        cv = CustomValue.new(custom_field_id:cf.id,is_for_out_stock: cf.is_for_out_stock,value:cf.get_field_format_value(v))
+                      end
+                      process_entity.custom_values<<cv
+                    end
+                  end
+
+                  process_entity.custom_values.each do |cv|
+                    cf=cv.custom_field
+                    if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
+                      process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: process_entity.process_part_quantity_by_cf(cf.name.to_sym))
+                    end
                   end
                 end
               end
@@ -91,18 +141,21 @@ module FileHandler
         msg = Message.new({result:true,contents:[]})
         #验证零件
         product = Part.where({nr:row['Product Nr'],type:PartType::PRODUCT}).first
+        puts row['Product Nr']
+        puts product
         wire = Part.where({nr:"#{row['Product Nr']}_#{row['Wire NO']}"},type:PartType::PRODUCT_SEMIFINISHED)
         if product.nil?
           msg.contents << "Product Nr: #{row['Product Nr']}不存在"
         end
 
         #验证步骤号
-        if ProcessEntity.where({nr: row['Nr'],product_id:product.id}).count > 0#find_by_nr(row['Nr']).count > 0
-          msg.contents<<"Nr: #{row['Nr']}，已经存在"
-        end
+        pe = ProcessEntity.where({nr: row['Nr'],product_id:product.id})#.count > 0#find_by_nr(row['Nr']).count > 0
+        if pe.count <= 0
+          if wire.count > 0
+            msg.contents << "Wire NO: #{row['Wire NO']}已被使用"
+          end
+        else
 
-        if wire.count > 0
-          msg.contents << "Wire NO: #{row['Wire NO']}已被使用"
         end
 
         #验证模板

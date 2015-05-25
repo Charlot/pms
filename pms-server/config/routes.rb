@@ -1,4 +1,42 @@
+require 'devise'
 Rails.application.routes.draw do
+  resources :production_order_item_labels
+
+  root :to => 'welcome#index'
+
+  devise_for :users, controllers: {
+                 sessions: 'users/sessions'
+                   }
+
+  resources :users do
+    collection do
+      get :scope_search
+    end
+  end
+  resources :positions
+  resources :ncr_api_logs
+
+  resources :machine_time_rules do
+    collection do
+      match :import, to: :import,via: [:get,:post]
+    end
+  end
+
+  resources :machine_types
+
+  resources :oee_codes
+
+  resources :warehouses do
+    resources :positions
+  end
+
+  resources :storages do
+    collection do
+      get :scope_search
+    end
+  end
+
+
   resources :part_positions do
     collection do
       match :import, to: :import, via: [:get, :post]
@@ -8,35 +46,47 @@ Rails.application.routes.draw do
   resources :master_bom_items do
     collection do
       match :import, to: :import, via: [:get, :post]
+      match :transport, to: :transport, via: [:get, :post]
+      match :export, to: :export, via: [:get, :post]
+      get :search
     end
   end
 
   resources :departments
 
-  resources :master_bom_items do
-    collection do
-      match :import, to: :import, via: [:get, :post]
-    end
-  end
+  # resources :master_bom_items do
+  #   collection do
+  #     match :import, to: :import, via: [:get, :post]
+  #   end
+  # end
 
   resources :kanban_process_entities
 
   resources :production_order_items do
+    resources :production_order_item_labels
+
     collection do
+      get :search
       post :optimise
       post :distribute
       post :export
+      match :state_export, to: :state_export, via: [:get, :post]
     end
   end
 
   resources :production_orders do
     resources :production_order_items
+
+    collection do
+      get :preview
+    end
   end
 
   resources :settings
 
   resources :tools do
     collection do
+      get :scope_search
       match :import, to: :import, via: [:get, :post]
     end
   end
@@ -51,6 +101,7 @@ Rails.application.routes.draw do
 
   resources :machine_combinations do
     collection do
+      get :export
       match :import, to: :import, via: [:get, :post]
     end
   end
@@ -82,12 +133,20 @@ Rails.application.routes.draw do
     end
     collection do
       get :search
+      get :scope_search
+      get :export_auto
+      get :export_semi
       match :import_auto, to: :import_auto, via: [:get, :post]
       match :import_semi_auto, to: :import_semi_auto, via: [:get, :post]
+      get :export_unused
     end
   end
 
-  resources :custom_values
+  resources :custom_values do
+    collection do
+      post :updates
+    end
+  end
 
   resources :custom_fields do
     collection do
@@ -103,6 +162,7 @@ Rails.application.routes.draw do
       post :semiautoimport
       post :manual_import
       match :import, to: :import, via: [:get, :post]
+      get :scope_search
     end
   end
 
@@ -121,12 +181,20 @@ Rails.application.routes.draw do
     collection do
       post :scan
       get :panel
-      get :search
+      get :scope_search
+      get :export
+      get :export_white
+      get :management
       match :import, to: :import, via: [:get, :post]
+      match :scan_finish, to: :scan_finish, via: [:get, :post]
+      match :import_to_scan, to: :import_to_scan, via: [:get, :post]
+      match :import_to_get_kanban_list, to: :import_to_get_kanban_list, via: [:get, :post]
+      match :import_update_quantity, to: :import_update_quantity, via: [:get, :post]
+      match :import_update_base, to: :import_update_base, via: [:get, :post]
     end
   end
 
-  root :to => 'welcome#index'
+
 
   resources :part_boms do
     collection do
@@ -143,11 +211,21 @@ Rails.application.routes.draw do
     end
     collection do
       get :search
+      get :scope_search
       match :import, to: :import, via: [:get, :post]
-      #post :import
+      match :import_update, to: :import_update, via: [:get, :post]
+      get :export
+      match :search, to: :search, via: [:get, :post]
     end
   end
   resources :files
+
+
+  require 'sidekiq/web'
+  # authenticate :user, lambda { |u| u.is_sys } do
+  mount Sidekiq::Web => '/sidekiq'
+  # end
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

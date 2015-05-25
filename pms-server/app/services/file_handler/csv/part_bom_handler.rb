@@ -14,6 +14,7 @@ module FileHandler
           if validate_msg.result
             PartBom.transaction do
               CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+                row.strip
                 root=Part.find_by_nr(row['Part Nr'])
                 node=Part.find_by_nr(row['Component Nr'])
                 unless pm=root.part_boms.where(bom_item_id: node.id).first

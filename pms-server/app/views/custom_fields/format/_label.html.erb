@@ -1,5 +1,5 @@
 <% if field %>
-    <label><%= CustomValue.value_by_format(field, value) %></label>
+    <label id="<%= field.name %>"><%= CustomValue.value_by_format(field, value) %></label>
 <% else %>
     <span style="color: blue">NO INPUT HERE</span>
 <% end %>

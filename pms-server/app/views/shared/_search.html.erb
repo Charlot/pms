@@ -1,0 +1,11 @@
+<div class="row">
+  <form class="navbar-form navbar-left" role="search" method="get" action="<%=send("scope_search_#{current_controller}_path")%>">
+    <div class="form-group">
+      <input type="text" class="form-control" placeholder="输入..." name="q" value="<%= @q%>">
+
+      <input type="text" name="controller" value="<%= current_controller%>" class="hidden">
+      <input type="text" name="model" value="<%= current_model%>" class="hidden">
+    </div>
+    <button type="submit" class="btn btn-default">搜索</button>
+  </form>
+</div>

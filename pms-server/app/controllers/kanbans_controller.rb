@@ -1,7 +1,7 @@
 class KanbansController < ApplicationController
   before_action :set_kanban, only: [:show, :edit, :update, :destroy,
                                     :add_process_entities, :delete_process_entities,
-                                    :finish_production, :history, :release, :lock, :discard, :manage,:manage_routing]
+                                    :finish_production, :history, :release, :lock, :discard, :manage_routing]
 
   # GET /kanbans
   # GET /kanbans.json
@@ -17,6 +17,7 @@ class KanbansController < ApplicationController
   # GET /kanbans/new
   def new
     @kanban = Kanban.new
+    # authorize(@kanban)
     2.times { @kanban.kanban_process_entities.build }
   end
 
@@ -29,8 +30,8 @@ class KanbansController < ApplicationController
   def create
     ActiveRecord::Base.transaction do
       @kanban = Kanban.new(kanban_params)
-
     end
+    # authorize(@kanban)
     respond_to do |format|
       if @kanban.save
         format.html { redirect_to @kanban, notice: 'Kanban was successfully created.' }
@@ -44,7 +45,7 @@ class KanbansController < ApplicationController
 
   #GET /kanbans/1/manage_routing
   def manage_routing
-
+    #authorize(Kanban)
   end
 
   #POST /kanbans/1/add_process_entities
@@ -57,12 +58,12 @@ class KanbansController < ApplicationController
     end
 
     process_entities = []
-    if (process_entities = ProcessEntity.where(id:params[:process_entities])).count != params[:process_entities].count
+    if (process_entities = ProcessEntity.where(id: params[:process_entities])).count != params[:process_entities].count
       msg.content = "Routing未找到"
       render json: msg and return
     end
 
-    create_params = process_entities.collect{|pe| {process_entity_id:pe.id}}
+    create_params = process_entities.collect { |pe| {process_entity_id: pe.id} }
 
     unless kpes = @kanban.kanban_process_entities.create(create_params)
       msg.content = @kanban.errors.full_messages
@@ -79,12 +80,12 @@ class KanbansController < ApplicationController
     msg = Message.new
     msg.result = true
 
-    unless (kpes = @kanban.kanban_process_entities.where(process_entity_id:params[:process_entities])).count == params[:process_entities].count
+    unless (kpes = @kanban.kanban_process_entities.where(process_entity_id: params[:process_entities])).count == params[:process_entities].count
       msg.result = false
       render json: msg and return
     end
 
-    kpes.each {|kpe| kpe.destroy}
+    kpes.each { |kpe| kpe.destroy }
 
     render json: msg
   end
@@ -96,11 +97,12 @@ class KanbansController < ApplicationController
       puts "======="
       puts kanban_params.to_json
       if @kanban.can_update? && @kanban.update(kanban_params)
+        #if @kanban.update(kanban_params)
         format.html { redirect_to @kanban, notice: 'Kanban was successfully updated.' }
-        format.json { render :show, status: :ok, location: @kanban }
+        format.json { respond_with_bip(@kanban) }
       else
-        format.html { render :edit ,notice: 'State Error'}
-        format.json { render json: @kanban.errors, status: :unprocessable_entity }
+        format.html { render :edit, notice: 'State Error' }
+        format.json { respond_with_bip(@kanban) }
       end
     end
   end
@@ -109,7 +111,6 @@ class KanbansController < ApplicationController
   # DELETE /kanbans/1.json
   def destroy
     redirect_to kanbans_url, notice: 'State Error.' and return if @kanban.can_destroy?
-
     @kanban.destroy
     respond_to do |format|
       format.html { redirect_to kanbans_url, notice: 'Kanban was successfully destroyed.' }
@@ -138,10 +139,9 @@ class KanbansController < ApplicationController
 
   # POST /kanbans/1/release
   # POST /kanbans/1/release.json
+  # 发布看板卡
   def release
-    #TODO Release kanban
     redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state, KanbanState::RELEASED)
-
     @kanban.without_versioning do
       if @kanban.update(state: KanbanState::RELEASED)
         redirect_to @kanban, notice: 'Kanban was successfully released.'
@@ -153,8 +153,8 @@ class KanbansController < ApplicationController
 
   # POST /kanbans/1/lock
   # POST /kanbans/1/lock.json
+  # 锁定看板卡
   def lock
-    #TODO Lock kanban
     redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state, KanbanState::LOCKED)
     @kanban.without_versioning do
       if @kanban.update(state: KanbanState::LOCKED)
@@ -167,8 +167,8 @@ class KanbansController < ApplicationController
 
   # DELETE /kanbans/1/discard
   # DELETE /kanbasn/1/discard.json
+  # 销毁看板卡
   def discard
-    #TODO Delete kanban
     redirect_to @kanban, notice: 'State Error.' and return unless KanbanState.switch_to(@kanban.state, KanbanState::DELETED)
     @kanban.without_versioning do
       if @kanban.update(state: KanbanState::DELETED)
@@ -181,37 +181,43 @@ class KanbansController < ApplicationController
 
   # GET /kanbans/search.json
   # Search by part_nr and product_nr
+=begin
   def search
     msg = Message.new
-    @kanbans = Kanban.search(params[:part_nr],params[:product_nr]).paginate(:page => params[:page])
+    @q = params[:q]
+
+    @kanbans = Kanban.search_for(params[:q]).paginate(:page => params[:page])
     msg.result = true
     msg.content = @kanbans
 
-    render partial: 'list'
+    render :index
   end
+=end
 
   # GET /kanbans/add_routing_template
   def add_routing_template
+    # authorize(Kanban)
     case params[:type].to_i
-    when KanbanType::WHITE
-      render partial: 'add_auto_routing'
-    when KanbanType::BLUE
-      render partial: 'add_semi_auto_routing'
-    else
-      render partial: 'add_auto_routing'
+      when KanbanType::WHITE
+        render partial: 'add_auto_routing'
+      when KanbanType::BLUE
+        render partial: 'add_semi_auto_routing'
+      else
+        render partial: 'add_auto_routing'
     end
   end
 
+
   # GET/POST
   def import
+    # authorize(Kanban)
     if request.post?
       msg = Message.new
       begin
         file=params[:files][0]
-        fd = FileData.new(data: file,original_name:file.original_filename,path:$upload_data_file_path,path_name:"#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
         fd.save
-        file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase,file_path: fd.full_path,file_name: file.original_filename)
-        msg = FileHandler::Csv::KanbanHandler.import(file)
+        msg = FileHandler::Excel::KanbanHandler.import(fd)
       rescue => e
         msg.content = e.message
       end
@@ -219,52 +225,169 @@ class KanbansController < ApplicationController
     end
   end
 
-  def scan_to_finish
-    #parse code
-    parsed_code = Kanban.parse_printed_2DCode(params[:code])
-    render json: {result: false, content: "Input Error"} and return unless parsed_code
+  # GET/POST
+  def import_update_quantity
+    # authorize(Kanban)
+    if request.post?
+      msg = Message.new
+      begin
+        file=params[:files][0]
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd.save
+        msg = FileHandler::Excel::KanbanHandler.import_update_quantity(fd.full_path)
+      rescue => e
+        msg.content = e.message
+      end
+      render json: msg
+    end
+  end
 
-    @kanban = Kanban.find_by_id(parsed_code[:id])
+  def import_update_base
+    if request.post?
+      msg = Message.new
+      begin
+        file=params[:files][0]
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd.save
+        file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
+        msg = FileHandler::Csv::KanbanHandler.import_update(file)
+      rescue => e
+        msg.content = e.message
+      end
+      render json: msg
+    end
+  end
 
-    #check Kanban State
-    render json: {result: false, content: "Kanban is not released"} and return unless @kanban.state == KanbanState::RELEASED
+  # 导入看板卡进行投卡
+  def import_to_scan
+    @hide_sidebar = true
+    # authorize(Kanban)
+    if request.post?
+      msg = Message.new
+      begin
+        file=params[:files][0]
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd.save
+        #file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
+        msg = FileHandler::Excel::KanbanHandler.import_scan(fd.full_path)
+      rescue => e
+        msg.content = e.message
+      end
+      render json: msg
+    end
+  end
 
-    #check version of Kanban
-    render json: {result: false, content: "Kanban not fount for#{parsed_code.to_json}" } and return unless @kanban
-    render json: {result: false, content: "Kanban version error.#{parsed_code[:version_nr]}"} and return unless (version = @kanban.versions.where(id: parsed_code[:version_nr]))
+  def import_to_get_kanban_list
+    # authorize(Kanban)
+    if request.post?
+      msg = Message.new
+      # begin
+      file=params[:files][0]
+      fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+      fd.save
+      file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
+      msg = FileHandler::Csv::KanbanHandler.import_to_get_kanban_list(file)
+      # rescue => e
+      #   msg.content = e.message
+      # end
+      render json: msg
+    end
+  end
 
+  # 扫描销卡
+  def scan_finish
+    @hide_sidebar = true
+    # authorize(Kanban)
+    if request.post?
+      #parse code
+      parsed_code = Kanban.parse_printed_2DCode(params[:code])
+      render json: {result: false, content: "扫描错误！"} and return unless parsed_code
+
+      @kanban = Kanban.find_by_id(parsed_code[:id])
+      render json: {result: false, content: '看板不存在'} and return unless @kanban
+      #check version of Kanban
+      #render json: {result: false, content: "Kanban not fount for#{parsed_code.to_json}"} and return unless @kanban
+      #render json: {result: false, content: "Kanban version error.#{parsed_code[:version_nr]}"} and return unless (version = @kanban.versions.where(id: parsed_code[:version_nr]))
+
+      #check Kanban State
+      #render json: {result: false, content: "看板已销卡"} and return if @kanban.state == KanbanState::RELEASED
+
+
+      if @kanban.ktype == KanbanType::WHITE
+        # unless ((order_items = @kanban.production_order_items.where(state: ProductionOrderItemState.wait_scan_states)).count == 1)
+        render json: {result: false, content: "只销兰卡!"} and return
+        # end
+      else
+        if item=ProductionOrderItemBlue.where(kanban_id: @kanban.id, state: ProductionOrderItemState::INIT).first
+          item.update(state: ProductionOrderItemState::TERMINATED)
+          @kanban.process_entities.update_all(state:ProductionOrderItemState::TERMINATED)
+          render json: {result: false, content: '销卡成功'} and return
+          # item.update
+        else
+          render json: {result: false, content: '看板未生产，不可销卡'} and return
+        end
+      end
+      render json: {result: true, content: ''}
+    end
+  end
+
+  # GET
+  def management
+    # authorize(Kanban)
   end
 
   # POST /kanbans/scan.json
+  # 扫描看板卡
   def scan
     #parse code
     parsed_code = Kanban.parse_printed_2DCode(params[:code])
-    render json: {result: false, content: "Input Error"} and return unless parsed_code
+    render json: {result: false, content: "输入错误"} and return unless parsed_code
 
     @kanban = Kanban.find_by_id(parsed_code[:id])
+    # authorize(@kanban)
 
     #check Kanban State
-    render json: {result: false, content: "Kanban is not released"} and return unless @kanban.state == KanbanState::RELEASED
+    render json: {result: false, content: "看板未发布"} and return unless @kanban.state == KanbanState::RELEASED
 
     #check version of Kanban
-    render json: {result: false, content: "Kanban not fount for#{parsed_code.to_json}" } and return unless @kanban
-    render json: {result: false, content: "Kanban version error.#{parsed_code[:version_nr]}"} and return unless (version = @kanban.versions.where(id: parsed_code[:version_nr]))
+    render json: {result: false, content: "看板未找到：#{parsed_code.to_json}"} and return unless @kanban
+    render json: {result: false, content: "看板版本错误#{parsed_code[:version_nr]}"} and return unless (version = @kanban.versions.where(id: parsed_code[:version_nr]))
     #last_version = @kanban.versions.last
     #need_update = last_version.created_at > version.created_at
+
     need_update = @kanban.versions.count > parsed_code[:version_nr].to_i
 
     #response dependent on Kanban type
-    render json: {result: false, content: "Kanban has been updated,please reprint!"} and return if need_update #&& @kanban.type == KanbanType::BLUE
+    render json: {result: false, content: "看板已经更新，请重新打印!"} and return if need_update && @kanban.ktype == KanbanType::BLUE
+
+    #check kanban quantity and bundle
+    render json: {result: false, content: "看板数量为0，不能扫描！"} and return if @kanban.quantity == 0
 
     #2015-3-10 李其
     #不做扫描之后验证是否已经扫入，由工作人员控制
     #注释了这段代码，暂时不实现标注唯一的一张纸质看板卡
-    if ProductionOrderItem.where(kanban_id: @kanban.id, state: ProductionOrderItemState::INIT).count > 0
-      render json: {result: false, content: "Kanban Order has been released"} and return
-    end
+    if @kanban.ktype==KanbanType::WHITE
+      if ProductionOrderItem.where("kanban_id = ? AND state= ?", @kanban.id, ProductionOrderItemState::INIT).count > 0
+        render json: {result: false, content: "卡已投过，不可重复投卡"} and return
+      end
 
-    unless (@order = ProductionOrderItem.create(kanban_id: @kanban.id,code:params[:code]))
-      render json: {result: false, content: "Production Order Item Created Failed"} and return
+      unless (@order = ProductionOrderItem.create(kanban_id: @kanban.id, code: params[:code]))
+        render json: {result: false, content: "Production Order Item Created Failed"} and return
+      end
+    elsif @kanban.ktype==KanbanType::BLUE
+      if ProductionOrderItemBlue.where(kanban_id: @kanban.id, state: ProductionOrderItemState::INIT).count>0
+        render json: {result: false, content: "卡已投过，不可重复投卡"} and return
+      end
+      if (@order = ProductionOrderItemBlue.create(kanban_id: @kanban.id, code: @kanban.printed_2DCode, produced_qty: @kanban.quantity))
+        @kanban.process_entities.update_all(state:ProductionOrderItemState::STARTED)
+      else
+        render json: {result: false, content: "Production Order Item Created Failed"} and return
+      end
+      # if @kanban.state == KanbanState::LOCKED
+      #   render json: {result: false, content: "卡已投过，不可重复投卡"} and return
+      # else
+      #   @kanban.update(state: KanbanState::LOCKED)
+      # end
     end
 
     if need_update && @kanban.type == KanbanType::WHITE
@@ -278,22 +401,33 @@ class KanbansController < ApplicationController
   # GET /kanbans/panel.json
   def panel
     @hide_sidebar= true
+    # authorize(Kanban)
+  end
+
+
+  def export_white
+    msg = FileHandler::Excel::KanbanHandler.export_white
+    if msg.result
+      send_file msg.content
+    else
+      render json: msg
+    end
   end
 
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_kanban
     @kanban = Kanban.find(params[:id])
+    # authorize(@kanban)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def kanban_params
     #params[:kanban]
-    params.require(:kanban).permit(:id, :state, :remark, :quantity,
-                                   :safety_stock, :source_warehouse,
-                                   :source_storage, :des_warehouse,
+    params.require(:kanban).permit(:id, :state, :remark, :quantity, :bundle,
+                                   :safety_stock, :des_warehouse,
                                    :des_storage, :print_time, :part_id,
-                                   :version, :ktype, :copies,:product_id
+                                   :version, :ktype, :copies, :product_id
     )
   end
 end

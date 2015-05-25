@@ -7,7 +7,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="<%= root_path%>">P.M.S.</a>
+      <a class="navbar-brand" href="<%= root_path %>">PMS</a>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -16,46 +16,74 @@
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">KANBAN扫描<span class="caret"></span></a>
           <ul class="dropdown-menu" role="manage">
-            <li class="<%= 'active' if current_controller?({controller: 'kanbans'})%>"><a href="<%= panel_kanbans_path%>">KANBAN扫描投卡</a></li>
+            <li><a href="<%= panel_kanbans_path %>">KANBAN扫描投卡</a></li>
+            <li><a href="<%= scan_finish_kanbans_path %>">KANBAN扫描销卡</a></li>
           </ul>
         </li>
 
-        <li class="<%= 'active' if current_controller?({controller: 'production_order_items'})%>"><a href="<%= production_order_items_path %>">生产任务</a></li>
-        <li class="<%= 'active' if current_controller?({controller: 'production_orders'})%>"><a href="<%= production_orders_path %>">生产订单</a></li>
+        <li><a href="<%= production_order_items_path %>">生产任务</a></li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">生产订单<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="manage">
+            <li><a href="<%= production_orders_path %>">订单列表</a></li>
+            <li><a href="<%= preview_production_orders_path %>">订单预览</a></li>
+          </ul>
+        </li>
 
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">基础数据<span class="caret"></span></a>
           <ul class="dropdown-menu" role="manage">
-            <li class="<%= 'active' if current_controller?({controller: 'departments'})%>"><a href="<%= departments_path %>">部门</a></li>
-            <li class="<%= 'active' if current_controller?({controller: 'measure_units'})%>"><a href="<%= measure_units_path %>">单位</a></li>
-            <li class="<%= 'active' if current_controller?({controller: 'parts'})%>"><a href="<%= parts_path %>">零件</a></li>
-            <!--<li class="<%= 'active' if current_controller?({controller: 'part_boms'})%>"><a href="<%= part_boms_path %>">BOM表</a></li>-->
-            <li class="<%= 'active' if current_controller?({controller: 'master_bom_items'})%>"><a href="<%= master_bom_items_path %>">Master BOM</a></li>
-            <li class="<%= 'active' if current_controller?({controller: 'process_templates'})%>"><a href="<%= process_templates_path %>">步骤模板</a></li>
-            <li class="<%= 'active' if current_controller?({controller: 'process_entities'})%>"><a href="<%= process_entities_path %>">步骤</a></li>
-            <li class="<%= 'active' if current_controller?({controller: 'kanbans'})%>"><a href="<%= kanbans_path %>">KANBAN</a></li>
+            <li><a href="<%= parts_path %>">零件</a></li>
+            <li><a href="<%= warehouses_path %>">仓库</a></li>
+            <li><a href="<%= positions_path %>">库位</a></li>
+            <li><a href="<%= measure_units_path %>">单位</a></li>
+            <li><a href="<%= part_positions_path %>">Cutting原材料库位</a></li>
+            <li><a href="<%= master_bom_items_path %>">Master BOM</a></li>
+            <li><a href="<%= process_templates_path %>">步骤模板</a></li>
+            <li><a href="<%= process_entities_path %>">步骤</a></li>
+            <li><a href="<%= kanbans_path %>">KANBAN</a></li>
           </ul>
         </li>
 
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">机器与模具<span class="caret"></span></a>
-          <ul class="dropdown-menu" role="manage">
-            <li class="<%= 'active' if current_controller?({controller: 'resource_group_machines'})%>"><a href="<%= resource_group_machines_path %>">机器组</a></li>
-            <li class="<%= 'active' if current_controller?({controller: 'machines'})%>"><a href="<%= machines_path %>">机器</a></li>
-            <li class="<%= 'active' if current_controller?({controller: 'resource_group_tools'})%>"><a href="<%= resource_group_tools_path %>">模具组</a></li>
-            <li class="<%= 'active' if current_controller?({controller: 'tools'})%>"><a href="<%= tools_path %>">模具</a></li>
-            </ul>
-        </li>
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">库存<span class="caret"></span></a>
-          <ul class="dropdown-menu" role="manage">
-            <li class="<%= 'active' if current_controller?({controller: 'part_positions'})%>"><a href="<%= part_positions_path%>">Cutting原材料库位</a> </li>
-            <li><a href='<%= "#{Setting.wms_url}/storages/panel" if Setting.wms_url%>'>库存</a></li>
-            <li><a href="<%= %>">移库</a></li>
-          </ul>
-        </li>
+        <% if current_user.av? || current_user.admin? || current_user.system? %>
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">机器与模具<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="manage">
+                <li><a href="<%= oee_codes_path %>">OeeCode</a></li>
+                <li><a href="<%= resource_group_machines_path %>">机器组</a></li>
+                <li><a href="<%= machine_types_path %>">机器类型</a></li>
+                <li><a href="<%= machine_time_rules_path %>">机器工时规则</a></li>
+                <li><a href="<%= machines_path %>">机器</a></li>
+                <li><a href="<%= resource_group_tools_path %>">模具组</a></li>
+                <li><a href="<%= tools_path %>">模具</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">库存<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="manage">
+                <li><a href="<%= storages_path %>">库存</a></li>
+              </ul>
+            </li>
 
-        <li class="<%= 'active' if current_controller?({controller: 'settings'})%>"><a href="<%= settings_path%>">设置</a></li>
+        <% end %>
+        <% if current_user.admin? || current_user.system? %>
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">管理<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="manage">
+                <li><a href="<%= departments_path %>">部门</a></li>
+                <li><a href="<%= warehouses_path %>">仓库</a></li>
+                <li><a href="<%= users_path %>">用户</a></li>
+                <li><a href="<%= settings_path %>">设置</a></li>
+              </ul>
+            </li>
+        <% end %>
+
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a><%= current_user.user_name %></a></li>
+        <li><%= link_to '退出', destroy_user_session_path, method: :delete %></li>
       </ul>
     </div>
   </div>

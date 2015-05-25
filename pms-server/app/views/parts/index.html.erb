@@ -1,3 +1,6 @@
+<%= render partial: 'shared/search' %>
+<%= link_to '导出零件', export_parts_path, :class => 'btn btn-info' %>
+
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @parts %>
@@ -10,10 +13,13 @@
     <th>Nr</th>
     <th>Custom nr</th>
     <th>Type</th>
+    <th>Color</th>
+    <th>Component Type</th>
+    <th>Cross Section</th>
     <th>Strip length</th>
     <th>Resource group</th>
     <th>Measure unit</th>
-    <th colspan="4"></th>
+    <th colspan="3"></th>
   </tr>
   </thead>
 
@@ -23,12 +29,15 @@
         <td><%= part.nr %></td>
         <td><%= part.custom_nr %></td>
         <td><%= PartType.display(part.type) %></td>
+        <td><%= part.color %></td>
+        <td><%= part.component_type %></td>
+        <td><%= part.cross_section %></td>
         <td><%= part.strip_length %></td>
         <td><%= part.resource_group_tool.nr if part.resource_group_tool %></td>
         <td><%= part.measure_unit %></td>
         <td><%= link_to '详情', part %></td>
         <td><%= link_to '编辑', edit_part_path(part) %></td>
-        <td><%= link_to '删除', part, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <!--<td><%= link_to '删除', part, method: :delete, data: {confirm: 'Are you sure?'} %></td>-->
         <td>
           <%= link_to 'BOM表', part_bom_path(part.id) %>
         </td>
@@ -39,8 +48,3 @@
 <div class="digg_pagination">
   <%= will_paginate @parts, :container => false %>
 </div>
-
-
-
-
-

@@ -1,0 +1,17 @@
+﻿<Window x:Class="PmsNCR.Login"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Login" Height="211" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow" Topmost="True" ShowInTaskbar="True" Loaded="Window_Loaded" Closing="Window_Closing">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25*" />
+            <RowDefinition Height="147*" />
+        </Grid.RowDefinitions>
+        <Label Content="UserNr:" Grid.Row="1" Height="28" HorizontalAlignment="Left" Margin="24,55,0,0" Name="label1" VerticalAlignment="Top" />
+        <TextBox Grid.Row="1" Height="23" HorizontalAlignment="Left" Margin="86,59,0,0" Name="UserNrText" VerticalAlignment="Top" Width="163" />
+        <Label Content="Shit:" Grid.Row="1" Height="28" HorizontalAlignment="Left" Margin="42,17,0,0" Name="label2" VerticalAlignment="Top" />
+        <ComboBox Grid.Row="1" Height="23" HorizontalAlignment="Left" Margin="86,22,0,0" Name="ShiftCB" VerticalAlignment="Top" Width="163" />
+        <Button Content="OK" Grid.Row="1" Height="33" HorizontalAlignment="Left" Margin="42,98,0,0" Name="OKBtn" VerticalAlignment="Top" Width="76" Click="OKBtn_Click" FontWeight="Bold" />
+        <Button Content="Cancel" Grid.Row="1" Height="33" HorizontalAlignment="Left" Margin="182,98,0,0" Name="button1" VerticalAlignment="Top" Width="80" Click="button1_Click" />
+    </Grid>
+</Window>

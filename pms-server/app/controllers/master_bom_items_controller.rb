@@ -4,7 +4,7 @@ class MasterBomItemsController < ApplicationController
   # GET /master_bom_items
   # GET /master_bom_items.json
   def index
-    @master_bom_items = MasterBomItem.all
+    @master_bom_items = MasterBomItem.search(params).paginate(:page => params[:page])
   end
 
   # GET /master_bom_items/1
@@ -15,6 +15,7 @@ class MasterBomItemsController < ApplicationController
   # GET /master_bom_items/new
   def new
     @master_bom_item = MasterBomItem.new
+    # authorize(@master_bom_item)
   end
 
   # GET /master_bom_items/1/edit
@@ -25,6 +26,7 @@ class MasterBomItemsController < ApplicationController
   # POST /master_bom_items.json
   def create
     @master_bom_item = MasterBomItem.new(master_bom_item_params)
+    # authorize(@master_bom_item)
 
     respond_to do |format|
       if @master_bom_item.save
@@ -63,14 +65,46 @@ class MasterBomItemsController < ApplicationController
 
 
   def import
+    # authorize(MachineTimeRule)
     if request.post?
       msg = Message.new
       begin
         file=params[:files][0]
-        fd = FileData.new(data: file,original_name:file.original_filename,path:$upload_data_file_path,path_name:"#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
         fd.save
-        file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase,file_path: fd.full_path,file_name: file.original_filename)
-        msg = FileHandler::Csv::MasterBomItemHandler.import(file)
+        msg = FileHandler::Excel::MasterBomItemHandler.import(fd)
+      rescue => e
+        msg.content = e.message
+      end
+      render json: msg
+    end
+
+    # # authorize(MasterBomItem)
+    # if request.post?
+    #   msg = Message.new
+    #   begin
+    #     file=params[:files][0]
+    #     fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+    #     fd.save
+    #     file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
+    #     msg = FileHandler::Csv::MasterBomItemHandler.import(file)
+    #   rescue => e
+    #     msg.content = e.message
+    #   end
+    #   render json: msg
+    # end
+  end
+
+  def transport
+    # authorize(MasterBomItem)
+    if request.post?
+      msg = Message.new
+      begin
+        file=params[:files][0]
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd.save
+        file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
+        msg = FileHandler::Csv::MasterBomItemHandler.transport(file)
       rescue => e
         msg.content = e.message
       end
@@ -78,14 +112,38 @@ class MasterBomItemsController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_master_bom_item
-      @master_bom_item = MasterBomItem.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def master_bom_item_params
-      params.require(:master_bom_item).permit(:qty, :bom_item_id, :product_id, :department_id)
+  def export
+    msg = Message.new
+    begin
+      msg = FileHandler::Csv::MasterBomItemHandler.export(request.user_agent,params)
+    rescue => e
+      msg.content = e.message
     end
+    if msg.result
+      send_file msg.content
+    else
+      render json: msg
+    end
+  end
+
+  def search
+    @master_bom_items=MasterBomItem.search(params).paginate(:page => params[:page])
+    @product_nr=params[:product_nr]
+    @bom_item_nr=params[:bom_item_nr]
+    @department_id=params[:department_id]
+    render :index
+  end
+
+  private
+  # Use callbacks to share common setup or constraints between actions.
+  def set_master_bom_item
+    @master_bom_item = MasterBomItem.find(params[:id])
+    # authorize(@master_bom_item)
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def master_bom_item_params
+    params.require(:master_bom_item).permit(:qty, :bom_item_id, :product_id, :department_id)
+  end
 end

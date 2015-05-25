@@ -36,7 +36,7 @@ namespace PmsNCRWcf
                 }
                 else
                 {
-                    msg.Content = "不存在需要生产的订单，请联系相关人员";
+                    msg.Content = "No Order";
                 }
             }
             catch (Exception e) {
@@ -52,12 +52,16 @@ namespace PmsNCRWcf
         /// </summary>
         /// <param name="orderItemId"></param>
         /// <returns></returns>
-        public Msg<string> GetOrderItemForProduce(int orderItemId)
+        public Msg<string> GetOrderItemForProduce(int orderItemId,bool mirror=false)
         {
             Msg<string> msg = new Msg<string>();
             var req = new RestRequest(ApiConfig.OrderItemForProduceAction, Method.GET);
             req.RequestFormat = DataFormat.Json;
             req.AddParameter("order_item_id", orderItemId);
+            if (mirror)
+            {
+                req.AddParameter("mirror", mirror);
+            }
             var res = new ApiClient().Execute(req);
             var data = res.Content;
             if (data != null)
@@ -67,7 +71,7 @@ namespace PmsNCRWcf
             }
             else
             {
-                msg.Content = "不存在需要生产的订单，请联系相关人员";
+                msg.Content = "No Order";
             }
             return msg;
         }
@@ -78,7 +82,7 @@ namespace PmsNCRWcf
         /// <param name="orderItemNr"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public Msg<string> ChangeOrderItemState(string orderItemNr, OrderItemState state)
+        public Msg<string> ChangeOrderItemState(string orderItemNr, OrderItemState state, string userNr = null, string userGroupNr = null)
         {
 
             Msg<string> msg = new Msg<string>();
@@ -86,6 +90,8 @@ namespace PmsNCRWcf
             req.RequestFormat = DataFormat.Json;
             req.AddParameter("order_item_nr", orderItemNr);
             req.AddParameter("state", (int)state);
+            req.AddParameter("user_nr", userNr);
+            req.AddParameter("user_group_nr", userGroupNr);
             var res = new ApiClient().Execute(req);
             var data = res.Content;
             if (data != null)
@@ -95,7 +101,7 @@ namespace PmsNCRWcf
             }
             else
             {
-                msg.Content = "不存在需要生产的订单，请联系相关人员";
+                msg.Content = "No Order";
             }
             return msg;
         }
@@ -126,7 +132,7 @@ namespace PmsNCRWcf
                 }
                 else
                 {
-                    msg.Content = "API 返回错误，请联系相关人员";
+                    msg.Content = "API ERROR";
                 }
             }
             catch (Exception e)
@@ -157,7 +163,66 @@ namespace PmsNCRWcf
                 }
                 else
                 {
-                    msg.Content = "API 返回数据错误，请联系相关人员";
+                    msg.Content = "API ERROR";
+                }
+            }
+            catch (Exception e)
+            {
+                msg.Result = false;
+                msg.Content = e.Message;
+                LogUtil.Logger.Error(e.Message);
+            }
+            return msg;
+        }
+
+        public Msg<List<OrderItemCheck>> GetOrderPassedList(string machineNr)
+        {
+            Msg<List<OrderItemCheck>> msg = new Msg<List<OrderItemCheck>>();
+            try
+            {
+                var req = new RestRequest(ApiConfig.OrderListPassedAction, Method.GET);
+                req.RequestFormat = DataFormat.Json;
+                req.AddParameter("machine_nr", machineNr);
+                var res = new ApiClient().Execute(req);
+                var data = JSONHelper.parse<List<OrderItemCheck>>(res.Content);
+                if (data != null)
+                {
+                    msg.Result = true;
+                    msg.Object = data;
+                }
+                else
+                {
+                    msg.Content = "API ERROR";
+                }
+            }
+            catch (Exception e)
+            {
+                msg.Result = false;
+                msg.Content = e.Message;
+                LogUtil.Logger.Error(e.Message);
+            }
+            return msg;
+        }
+
+        public Msg<string> SetOrderItemTool(string orderItemNr, string tool1Nr, string tool2Nr)
+        {
+            Msg<string> msg = new Msg<string>();
+            try
+            {
+                var req = new RestRequest(ApiConfig.OrderToolSettingAction, Method.POST);
+                req.RequestFormat = DataFormat.Json;
+                req.AddParameter("order_item_nr", orderItemNr);
+                req.AddParameter("tool1_nr", tool1Nr);
+                req.AddParameter("tool2_nr", tool2Nr);
+                var res = new ApiClient().Execute(req);
+                var data = JSONHelper.parse<Msg<string>>(res.Content);
+                if (data != null)
+                {
+                    msg = data;
+                }
+                else
+                {
+                    msg.Content = "API ERROR";
                 }
             }
             catch (Exception e)
@@ -182,7 +247,5 @@ namespace PmsNCRWcf
             }
             return true;
         }
-
-
     }
 }

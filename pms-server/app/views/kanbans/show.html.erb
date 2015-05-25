@@ -31,6 +31,10 @@
               <ins><%= @kanban.quantity %></ins>
             </li>
             <li class="list-group-item">
+              <label><%= KanbanDesc::BUNDLE %>:</label>
+              <ins><%= @kanban.bundle %></ins>
+            </li>
+            <li class="list-group-item">
               <label><%= KanbanDesc::TYPE %>:</label>
               <ins><%= KanbanType.display(@kanban.ktype) %></ins>
             </li>
@@ -41,14 +45,6 @@
             <li class="list-group-item">
               <label><%= KanbanDesc::SAFETY_STOCK %>:</label>
               <ins><%= @kanban.safety_stock %></ins>
-            </li>
-            <li class="list-group-item">
-              <label><%= KanbanDesc::SOURCE_WAREHOUSE %>:</label>
-              <ins><%= @kanban.source_warehouse %></ins>
-            </li>
-            <li class="list-group-item">
-              <label><%= KanbanDesc::SOURCE_STORAGE %>:</label>
-              <ins><%= @kanban.source_storage %></ins>
             </li>
             <li class="list-group-item">
               <label><%= KanbanDesc::DES_WAREHOUSE %>:</label>
@@ -94,9 +90,13 @@
       Routing
     </div>
     <div class="panel-body">
-      <% @kanban.process_entities.each do |pe| %>
-          <%= render partial: 'process_entities/simple', locals: {process_entity: pe} %>
-      <% end %>
+      <ul class="list-group">
+        <% @kanban.kanban_process_entities.each do |kpe| %>
+            <label>顺序:</label>
+            <%= best_in_place kpe,:position ,as: :input%>
+            <%= render partial: 'process_entities/simple', locals: {process_entity: kpe.process_entity} %>
+        <% end %>
+      </ul>
     </div>
   </div>
 </div>

@@ -15,6 +15,7 @@ class ResourceGroupMachinesController < ApplicationController
   # GET /resource_group_machines/new
   def new
     @resource_group_machine = ResourceGroupMachine.new
+    #authorize(@resource_group_machine)
   end
 
   # GET /resource_group_machines/1/edit
@@ -25,7 +26,7 @@ class ResourceGroupMachinesController < ApplicationController
   # POST /resource_group_machines.json
   def create
     @resource_group_machine = ResourceGroupMachine.new(resource_group_machine_params)
-
+    #authorize(@resource_group_machine)
     respond_to do |format|
       if @resource_group_machine.save
         format.html { redirect_to @resource_group_machine, notice: 'Resource group machine was successfully created.' }
@@ -65,6 +66,7 @@ class ResourceGroupMachinesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_resource_group_machine
       @resource_group_machine = ResourceGroupMachine.find(params[:id])
+      #authorize(@resource_group_machine)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

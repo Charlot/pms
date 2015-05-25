@@ -5,20 +5,24 @@ module Enum
                 PROCESS_TEMPLATE: "Routing模板", PROCESS_ENTITY: "Routing", RESOURCE_GROUP_MACHINE: "机器组",
                 RESOURCE_GROUP_TOOL: "模具组", TOOL: "模具", SETTING: "设置", MASTER_BOM_ITEM: 'Master BOM',
                 PART_POSITION: "Cutting原材料库存",
-                DEPARTMENT: '部门'
+                DEPARTMENT: "部门",WAREHOUSE: "仓库",STORAGE:"库存",POSITION:"库位",
+                OEE_CODE: "OeeCode",MACHINE_TYPE: "机器类型",
+                MACHINE_TIME_RULE: "机器工时规则",
+                USER: "用户"
     }
 
-    @@actions = ["new", "index", "show", "edit", "import", "panel"]
+    @@actions = ["new", "index", "show", "edit", "import", "panel",'transport']
 
     class<<self
       @@models.each { |k, v|
         method_name = k.to_s.split("_").map(&:capitalize).join
+        #puts "#{method_name}".blue
         define_method(method_name.downcase.to_sym) {
           v
         }
         @@actions.each { |action|
           m = k.to_s.split("_").map(&:capitalize).join
-          #puts "#{m}_#{action}"
+          #puts "#{m}_#{action}".red
           define_method("#{m}_#{action}".to_sym) {
             model = self.send(m.downcase)
             action_content(model, action)
@@ -39,8 +43,23 @@ module Enum
           "编辑#{model}"
         when "import"
           "导入#{model}"
+        when 'import_update'
+          "更新#{model}"
+        when 'state_export'
+          "状态导出#{model}"
+        when 'import_to_get_kanban_list'
+          "获取看板列表"
         when "panel"
           "#{model}控制面板"
+        when 'transport'
+          case model
+            when 'Master BOM'
+              "订单BOM转换"
+            else
+              'N/A'
+          end
+        when 'import_update_base'
+          "#{model}更新基本信息"
         else
           "N/A"
       end

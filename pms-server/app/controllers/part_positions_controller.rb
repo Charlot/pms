@@ -15,6 +15,7 @@ class PartPositionsController < ApplicationController
   # GET /part_positions/new
   def new
     @part_position = PartPosition.new
+    # authorize(@part_position)
   end
 
   # GET /part_positions/1/edit
@@ -25,6 +26,7 @@ class PartPositionsController < ApplicationController
   # POST /part_positions.json
   def create
     @part_position = PartPosition.new(part_position_params)
+    # authorize(@part_position)
 
     respond_to do |format|
       if @part_position.save
@@ -63,13 +65,27 @@ class PartPositionsController < ApplicationController
 
   # GET/POST
   def import
-
+    # authorize(PartPosition)
+    if request.post?
+    msg = Message.new
+    begin
+      file=params[:files][0]
+      fd = FileData.new(data: file,original_name:file.original_filename,path:$upload_data_file_path,path_name:"#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+      fd.save
+      file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase,file_path: fd.full_path,file_name: file.original_filename)
+      msg = FileHandler::Csv::PartPositionHandler.import(file)
+    rescue => e
+      msg.content = e.message
+    end
+    render json: msg
+    end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_part_position
       @part_position = PartPosition.find(params[:id])
+      # authorize(@part_position)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -1,37 +1,45 @@
-
-<%= link_to '导入机器规则',import_machine_combinations_path%>
+<%= link_to '导入机器规则', import_machine_combinations_path, class: 'btn btn-default' %>
+<%= link_to '导出机器规则', export_machine_combinations_path, data: {confirm: "确定？"}, class: 'btn btn-default' %>
 <p id="notice"><%= notice %></p>
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
+    <th>#</th>
     <th>Nr</th>
     <th>Name</th>
     <th>IP</th>
+    <th>Type</th>
     <th>Description</th>
     <th>Resource group</th>
     <th>Print Time</th>
     <th>Seal Time</th>
     <th>Terminal Time</th>
     <th>Wire Time</th>
-    <th colspan="5"></th>
+    <th>Wire Length Time</th>
+    <th colspan="4"></th>
   </tr>
   </thead>
 
   <tbody>
-  <% @machines.each do |machine| %>
+  <% @machines.each_with_index do |machine, i| %>
       <tr>
+        <td><%= i+1 %></td>
         <td><%= machine.nr %></td>
         <td><%= machine.name %></td>
         <td><%= machine.ip %></td>
+        <td>
+          <%= best_in_place machine, :machine_type_id, as: :select, collection: MachineType.all.collect { |mt| [mt.id, mt.nr] }.to_h %>
+        </td>
         <td><%= machine.description %></td>
         <td><%= machine.resource_group_machine.nr if machine.resource_group_machine %></td>
         <td><%= machine.print_time %></td>
         <td><%= machine.seal_time %></td>
         <td><%= machine.terminal_time %></td>
         <td><%= machine.wire_time %></td>
+        <td><%= machine.wire_length_time %></td>
         <td><%= link_to 'Show', machine %></td>
         <td><%= link_to 'Edit', edit_machine_path(machine) %></td>
-        <td><%= link_to 'Destroy', machine, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <!--<td><%= link_to 'Destroy', machine, method: :delete, data: {confirm: 'Are you sure?'} %></td>-->
         <% if machine.machine_scope %>
             <td><%= link_to 'Edit Scope', edit_machine_machine_scope_path(machine) %></td>
             <td><%= link_to 'Create or Edit Combination', machine_machine_combinations_path(machine) %></td>

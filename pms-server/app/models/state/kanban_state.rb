@@ -3,6 +3,7 @@ class KanbanState < BaseClass
   RELEASED = 1
   LOCKED = 2
   DELETED = 3
+
   # 2015-2-26 added by Tesla Lee
   # Versioned 状态废弃
   # VERSIONED = 4

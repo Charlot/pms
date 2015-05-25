@@ -1,0 +1,27 @@
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+  <tr>
+    <th>Bundle no</th>
+    <th>Qty</th>
+    <th>Nr</th>
+    <th>State</th>
+    <th></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @production_order_item_labels.each do |production_order_item_label| %>
+      <tr>
+        <td><%= production_order_item_label.bundle_no %></td>
+        <td>
+          <%= best_in_place production_order_item_label, :qty, as: :input %>
+        </td>
+        <td><%= production_order_item_label.nr %></td>
+        <td><%= production_order_item_label.state %></td>
+        <td><%= link_to 'Destroy', production_order_item_label, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br>

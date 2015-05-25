@@ -1,0 +1,67 @@
+﻿<Window x:Class="PmsNCR.MachineSettingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="PMS" Height="294" Width="440" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+    <Window.Resources>
+        <Style x:Name="LableStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+        <Style x:Name="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="FontSize" Value="15"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="78*" />
+            <RowDefinition Height="433*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <StackPanel.Background>
+                <LinearGradientBrush EndPoint="0,0" StartPoint="0,0">
+                    <GradientStop Color="#FF355FF5" Offset="1"/>
+                    <GradientStop Color="#FF849DF5" Offset="1"/>
+                </LinearGradientBrush>
+            </StackPanel.Background>
+            <Label Content="Machine Setting" FontSize="20" Foreground="White" FontWeight="Bold" Margin="10,10,0,0"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Margin="5,20,0,0" HorizontalAlignment="Left">
+
+            <StackPanel Orientation="Horizontal"  Margin="0,5,0,5">
+                <StackPanel Width="150">
+                    <Label Content="Machine Nr"/>
+                </StackPanel>
+                <TextBox Name="MachineNrTB" Width="249"  FontSize="20"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"  Margin="0,5,0,5">
+                <StackPanel Width="150">
+                    <Label Content="Machine IP"/>
+                </StackPanel>
+
+                <TextBox Name="MachineIPTB" Width="249" FontSize="20"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"  Margin="0,5,0,5">
+                <StackPanel Width="150">
+                    <Label Content="Server IP"/>
+                </StackPanel>
+
+                <TextBox Name="ServerIPTB" Width="249" FontSize="20"/>
+            </StackPanel>
+            <StackPanel Width="200">
+                <Button Name="SaveBtn" Content="Save"   Foreground="White" Height="39" 
+                        Width="114"  FontSize="15" Click="SaveBtn_Click">
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF849DF5" Offset="0"/>
+                            <GradientStop Color="#FF687DD4" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                    <Button.Effect>
+                        <DropShadowEffect Opacity="0.295"/>
+                    </Button.Effect>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+        
+    </Grid>
+</Window>
+

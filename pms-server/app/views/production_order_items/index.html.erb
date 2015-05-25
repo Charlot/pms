@@ -1,10 +1,56 @@
 <p id="notice"><%= notice %></p>
-
 <% if has_optimise_items %>
     <%= form_tag('/production_order_items/optimise', method: 'post') do %>
-        <input type="button" value="OPTIMISE" onclick="if(confirm('optimise?')){form.submit();}"/>
+        <input type="button" value="优化" class="btn btn-info" onclick="if(confirm('optimise?')){form.submit();}"/>
     <% end %>
 <% end %>
+<hr>
+<% if @optimised && has_distribute_items(@production_order) %>
+    <%= form_tag('/production_order_items/distribute', method: 'post') do %>
+        <%= hidden_field_tag :production_order_id, @production_order.id %>
+        <input type="button" value="分发" class="btn btn-info" onclick="if(confirm('distribute?')){form.submit();}"/>
+    <% end %>
+<% end %>
+<% if @production_order %>
+    <%= form_tag('/production_order_items/export', method: 'post') do %>
+        <%= hidden_field_tag :production_order_id, @production_order.id %>
+        <input type="button" value="导出" class="btn btn-default" onclick="if(confirm('export?')){form.submit();}"/>
+    <% end %>
+<% end %>
+<div>
+  <form method="get" action="<%= search_production_order_items_path %>">
+    <div>
+      <div>
+        <span>机器号：
+          <%= select_tag :machine_id, options_for_select(machine_options, @machine_id), selected: @machine_id, include_blank: true %>
+        </span>
+                <span>任务号：
+          <input type="text" name="production_order_item_nr" value="<%= @production_order_item_nr %>"/>
+        </span>
+
+         <span>线号：
+          <input type="text" name="wire_nr" value="<%= @wire_nr %>"/>
+        </span>
+
+        <span>状态：
+        <%= select_tag 'state', options_for_select(production_order_item_state_options,@state), include_blank: true %>
+        </span>
+      </div>
+      <input type="hidden" name="production_order_id" value="<%= @production_order.id if @production_order %>"/>
+
+      <div>
+        <input type="submit" value="查找" class="btn btn-primary" name="search"/>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @production_order_items %>
+  </div>
+  <%= will_paginate @production_order_items, :container => false %>
+</div>
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
@@ -13,10 +59,19 @@
     <th>State</th>
     <th>Code</th>
     <th>Kanban</th>
+    <th>ProductNr</th>
+    <th>Wire</th>
+    <!--<th></th>-->
+    <th>Kanban Quantity</th>
+    <th>Kanban Bundle</th>
+    <th>Produced Quantity</th>
     <th>Machine</th>
+    <!--<th>TotalTime</th>-->
     <th>Production order</th>
     <th>OptimiseAt</th>
     <th>OptimiseIndex</th>
+    <th>UpdatedAt</th>
+    <th>生产详细</th>
     <th colspan="3"></th>
   </tr>
   </thead>
@@ -24,15 +79,23 @@
   <tbody>
   <% @production_order_items.each_with_index do |production_order_item, i| %>
       <tr>
-        <td><%= i+1 %></td>
+        <td><%= @page*WillPaginate.per_page + i+1 %></td>
         <td><%= production_order_item.nr %></td>
         <td><%= ProductionOrderItemState.display production_order_item.state %></td>
         <td><%= production_order_item.code %></td>
-        <td><%= production_order_item.kanban.nr %></td>
+        <td><%= link_to(production_order_item.kanban.nr, kanban_path(production_order_item.kanban)) if production_order_item.kanban%></td>
+        <td><%= production_order_item.kanban.product.nr   if production_order_item.kanban%></td>
+        <td><%= production_order_item.kanban.wire_nr  if production_order_item.kanban%></td>
+        <td><%= production_order_item.kanban.quantity  if production_order_item.kanban%></td>
+        <td><%= production_order_item.kanban.bundle  if production_order_item.kanban%></td>
+        <td><%= production_order_item.produced_qty %></td>
         <td><%= production_order_item.machine.nr if production_order_item.machine %></td>
+        <!--<td><%= production_order_item.machine_time %></td>-->
         <td><%= production_order_item.production_order.nr if production_order_item.production_order %></td>
-        <td><%= production_order_item.optimise_at %></td>
+        <td><%= production_order_item.optimise_at.localtime if production_order_item.optimise_at %></td>
         <td><%= production_order_item.optimise_index %></td>
+        <td><%=production_order_item.updated_at.localtime%>
+        <td><%= link_to '生产详细',production_order_item_production_order_item_labels_path(production_order_item)%></td>
         <td><%= link_to 'Show', production_order_item %></td>
         <td><%= link_to 'Edit', edit_production_order_item_path(production_order_item) %></td>
         <td><%= link_to 'Destroy', production_order_item, method: :delete, data: {confirm: 'Are you sure?'} %></td>
@@ -41,15 +104,9 @@
   </tbody>
 </table>
 <br>
-<% if @optimised && has_distribute_items(@production_order) %>
-    <%= form_tag('/production_order_items/distribute', method: 'post') do %>
-        <%= hidden_field_tag :production_order_id, @production_order.id %>
-        <input type="button" value="DISTRIBUTE" onclick="if(confirm('distribute?')){form.submit();}"/>
-    <% end %>
-    <br/>
-    <%= form_tag('/production_order_items/export', method: 'post') do %>
-        <%= hidden_field_tag :production_order_id, @production_order.id %>
-        <input type="button" value="EXPORT" onclick="if(confirm('export?')){form.submit();}"/>
-    <% end %>
-<% end %>
 
+
+<hr/>
+<div class="digg_pagination">
+  <%= will_paginate @production_order_items, :container => false %>
+</div>

@@ -4,7 +4,7 @@ class MachinesController < ApplicationController
   # GET /machines
   # GET /machines.json
   def index
-    @machines = Machine.all
+    @machines = Machine.order(nr: :asc).all
   end
 
   # GET /machines/1
@@ -15,6 +15,7 @@ class MachinesController < ApplicationController
   # GET /machines/new
   def new
     @machine = Machine.new
+    # authorize(@machine)
   end
 
   # GET /machines/1/edit
@@ -23,6 +24,7 @@ class MachinesController < ApplicationController
 
   # GET/POST /machines/import
   def import
+    # authorize(Machine)
     if request.post?
       msg = Message.new
       begin
@@ -42,7 +44,7 @@ class MachinesController < ApplicationController
   # POST /machines.json
   def create
     @machine = Machine.new(machine_params)
-
+    # authorize(@machine)
     respond_to do |format|
       if @machine.save
         format.html { redirect_to @machine, notice: 'Machine was successfully created.' }
@@ -82,10 +84,11 @@ class MachinesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_machine
       @machine = Machine.find(params[:id])
+      # authorize(@machine)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def machine_params
-      params.require(:machine).permit(:nr, :name, :description,:seal_time,:terminal_time,:wire_time, :resource_group_id,:ip)
+      params.require(:machine).permit(:nr, :name, :description,:seal_time,:terminal_time,:wire_time,:wire_length_time, :resource_group_id,:ip,:machine_type_id)
     end
 end

@@ -1,0 +1,121 @@
+<div>
+  <p>Wire:</p>
+  <table class="table">
+    <tr>
+      <td colspan="2">
+        Default Wire No:
+        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_default_wire_nr, custom_value_id: @process_entity.id_default_wire_nr, value: @process_entity.value_default_wire_nr} %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        Component:
+        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_wire_nr, custom_value_id: @process_entity.id_wire_nr, value: @process_entity.value_wire_nr} %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        Qty factor:
+        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_wire_qty_factor, custom_value_id: @process_entity.id_wire_qty_factor, value: @process_entity.value_wire_qty_factor} %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        Bundle Qty:
+        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_default_bundle_qty, custom_value_id: @process_entity.id_default_bundle_qty, value: @process_entity.value_default_bundle_qty} %>
+      </td>
+    </tr>
+  </table>
+  <p>Terminator:</p>
+  <table class="table">
+    <tr>
+      <td>T1:
+        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_t1, custom_value_id: @process_entity.id_t1, value: @process_entity.value_t1} %>
+      </td>
+      <td>T2:
+        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_t2, custom_value_id: @process_entity.id_t2, value: @process_entity.value_t2} %>
+      </td>
+    </tr>
+    <tr>
+      <td>T1 Qty factor:
+        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_t1_qty_factor, custom_value_id: @process_entity.id_t1_qty_factor, value: @process_entity.value_t1_qty_factor} %>
+      </td>
+      <td>T2 Qty factor:
+        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_t2_qty_factor, custom_value_id: @process_entity.id_t2_qty_factor, value: @process_entity.value_t2_qty_factor} %>
+      </td>
+    </tr>
+    <tr>
+      <td>T1 Default Strip Length:
+        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_t1_default_strip_length, custom_value_id: @process_entity.id_t1_default_strip_length, value: @process_entity.value_t1_default_strip_length, disabled: true} %>
+      </td>
+      <td>T1 Strip Length:
+        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_t1_strip_length, custom_value_id: @process_entity.id_t1_strip_length, value: @process_entity.value_t1_strip_length} %>
+      </td>
+      <td>T2 Default Strip Length:
+        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_t2_default_strip_length, custom_value_id: @process_entity.id_t2_default_strip_length, value: @process_entity.value_t2_default_strip_length, disabled: true} %>
+      </td>
+      <td>T2 Strip Length:
+        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_t2_strip_length, custom_value_id: @process_entity.id_t2_strip_length, value: @process_entity.value_t2_strip_length} %>
+      </td>
+    </tr>
+  </table>
+  <p>Seal:</p>
+  <table class="table">
+    <tr>
+      <td>S1:
+        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_s1, custom_value_id: @process_entity.id_s1, value: @process_entity.value_s1} %>
+      </td>
+      <td>S2:
+        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_s2, custom_value_id: @process_entity.id_s2, value: @process_entity.value_s2} %>
+      </td>
+    </tr>
+    <tr>
+      <td>S1 Qty factor:
+        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_s1_qty_factor, custom_value_id: @process_entity.id_s1_qty_factor, value: @process_entity.value_s1_qty_factor} %>
+      </td>
+      <td>S2 Qty factor:
+        <%= render 'custom_fields/format/edit_input', {field: @process_template.field_s2_qty_factor, custom_value_id: @process_entity.id_s2_qty_factor, value: @process_entity.value_s2_qty_factor} %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="text-align: center">
+        <input type="text" value="更 新" class="btn btn-info" onclick="update_auto_process_entity();"/>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<script type="text/javascript">
+    $(
+            $('.format_part').bind('keyup blur', function (event) {
+                if (is_auto_submit_input_event(event, this)) {
+                    var input_names = ['t1', 't2'];
+                    var input_name = $(this).attr('id');
+                    validate_custom_field_part($(this).attr('field'), $(this).val(), function (data) {
+                        if (!data.result) {
+                            swal(data.content);
+                        }
+                        else if ($.inArray(input_name, input_names) > -1) {
+                            $("label[id='" + input_name + "_default_strip_length'").text(data.content.strip_length);
+                            $("input[id='" + input_name + "_default_strip_length'").val(data.content.strip_length);
+                        }
+                    });
+                }
+            })
+    )
+
+    function update_auto_process_entity() {
+        if (confirm('确定更新?')) {
+            var values = {};
+            $.each($('.custom_value_edit_input'), function (i, obj) {
+                if($(obj).attr('custom_value_id')!='') {
+                    values[$(obj).attr('custom_value_id')] = $(obj).val();
+                }
+            });
+
+            $.post('/custom_values/updates', {values: values}, function (msg) {
+                swal(msg.content);
+            });
+        }
+    }
+</script>

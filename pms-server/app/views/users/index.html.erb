@@ -1,0 +1,38 @@
+<%= render partial: 'shared/search' %>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @users %>
+  </div>
+  <%= will_paginate @users, :container => false %>
+</div>
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+  <tr>
+    <th>User Name</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Role</th>
+    <th colspan="2"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @users.each do |user| %>
+      <tr>
+        <td><%= user.user_name %></td>
+        <td><%= user.name %></td>
+        <td><%= user.email %></td>
+        <td>
+          <%= user.role_name.join("|") %>
+        </td>
+        <td><%= link_to '详情', user_path(user), class: 'btn btn-default' %></td>
+        <td>
+          <%= link_to '编辑', edit_user_path(user), class: 'btn btn-default' %>
+        </td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<div class="digg_pagination">
+  <%= will_paginate @users, :container => false %>
+</div>

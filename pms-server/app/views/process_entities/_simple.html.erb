@@ -1,9 +1,24 @@
-<label>步骤号:</label>
-<ins><%= process_entity.nr %></ins>
-/
-<label>名称:</label>
-<ins><%= process_entity.name %></ins>
-<label>总成号:</label>
-<ins><%= process_entity.product_nr%></ins>
+<li class="list-group-item">
+  <label>步骤号:</label>
+  <ins>
+    <a href="<%= process_entity_path(process_entity)%>"><%= process_entity.nr %></a>
+  </ins>
+  /
+  <label>名称:</label>
+  <ins><%= process_entity.name %></ins>
+  <label>总成号:</label>
+  <ins><%= process_entity.product_nr %></ins>
 
+  <label>使用零件:</label>
+  <% process_entity.process_parts.each do |pp| %>
+  <span><%= pp.parsed_nr%></span>
+  <% end %>
 
+  <label>生产零件:</label>
+  <span><%= process_entity.wire.nr if process_entity.wire%></span>
+
+  <a href="<%= process_template_path(process_entity.process_template)%>">
+    <label>Template:</label>
+    <%= process_entity.template_text%>
+  </a>
+</li>

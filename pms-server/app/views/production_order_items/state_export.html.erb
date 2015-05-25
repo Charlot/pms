@@ -1,0 +1,32 @@
+<div>
+  <form method="post" action="<%= state_export_production_order_items_path %>">
+    <div>
+      <div>
+        <span>机器号：
+          <input type="text" name="machine_nr" value="<%= @machine_nr %>"/>
+        </span>
+        <span>状态：
+          <%= select_tag 'state', options_for_select(production_order_item_state_options), include_blank: true %>
+        </span>
+        <span>订单号：
+          <%= select_tag 'production_order_id', options_for_select(production_order_options), include_blank: true %>
+        </span>
+        <span>
+        时间：  <input type="text" name="start_time" class="datepicker"/>~<input type="text" name="end_time" class="datepicker"/>
+        </span>
+      </div>
+      <div>
+        <input type="submit" value="导 出" class="btn btn-primary" name="search"/>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+    $(function () {
+        $(".datepicker").datetimepicker({
+            lang: 'ch',
+            format: 'Y-m-d H:i'
+        });
+    });
+</script>

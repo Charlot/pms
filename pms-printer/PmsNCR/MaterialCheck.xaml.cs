@@ -15,6 +15,7 @@ using PmsNCRWcf;
 using PmsNCRWcf.Config;
 using PmsNCRWcf.Converter;
 using Brilliantech.Framwork.Utils.LogUtil;
+using System.Text.RegularExpressions;
 
 namespace PmsNCR
 {
@@ -23,18 +24,25 @@ namespace PmsNCR
     /// </summary>
     public partial class MaterialCheck : Window
     {
+        public static bool IsShow = false;
         private OrderItemCheck orderItem = null;
+        private string currentTool1;
+        private string currentTool2;
 
         public MaterialCheck()
         {
             InitializeComponent();
+            LoadCheck();           
+            ScanCodeTB.Focus();
+            IsShow = true;
+        }
+
+        public void LoadCheck() {
             if (LoadOrderItemCheck())
             {
                 InitCheckGraph();
             }
-            ScanCodeTB.Focus();
         }
-
         private bool LoadOrderItemCheck()
         {
             OrderService s = new OrderService();
@@ -42,6 +50,7 @@ namespace PmsNCR
             if (msg.Result)
             {
                 orderItem = msg.Object;
+                MainWindow.CurrentOrder = orderItem.OrderNr;
             }
             else
             {
@@ -52,7 +61,42 @@ namespace PmsNCR
 
         private void InitCheckGraph()
         {
-            OrderNrLab.Content = orderItem.ItemNr;
+            // set wire color
+            try
+            {
+                if (!string.IsNullOrEmpty(orderItem.WireColor))
+                {
+                    List<string> colors = ShortColorConverter.Converts(orderItem.WireColor);
+                    if (colors!=null)
+                    {
+                        try
+                        {
+                            if (colors.Count == 1)
+                            {
+                                WireColorLab1.Background = WireColorLab2.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[0]));
+
+                            }
+                            else
+                            {
+                                WireColorLab1.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[0]));
+                                WireColorLab2.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(colors[1]));
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            LogUtil.Logger.Error(e.Message);
+                        }
+                    }
+                }
+            }
+            catch { }
+            WireColorTB.Text = orderItem.WireColor;
+            WireCB.IsEnabled = !MaterialCheckConfig.WireLockCheck;
+            Terminal1CB.IsEnabled = Terminal2CB.IsEnabled = !MaterialCheckConfig.TerminalLockCheck;
+            Tool1CB.IsEnabled = Tool2CB.IsEnabled = !MaterialCheckConfig.ToolLockCheck;
+
+
+            JobNrLab.Content = orderItem.ItemNr;
             WireNrTB.Text = orderItem.WireNr;
             WireCusNrTB.Text = orderItem.WireCusNr;
             WireLenghLab.Content = orderItem.WireLength;
@@ -61,10 +105,19 @@ namespace PmsNCR
             {
                 StripLength1Lab.Content = orderItem.Terminal1StripLength.ToString();
             }
+            else
+            {
+                StripLength1Lab.Content = null;
+            }
 
             if (orderItem.Terminal2StripLength != null)
             {
                 StripLength2Lab.Content = orderItem.Terminal2StripLength.ToString();
+            }
+            else
+            {
+
+                StripLength2Lab.Content = null;
             }
 
             if (orderItem.Terminal1Nr != null)
@@ -72,7 +125,7 @@ namespace PmsNCR
                 WorkArea1.Visibility = Visibility.Visible;
                 TerminalNr1TB.Text = orderItem.Terminal1Nr;
                 TerminalCusNr1TB.Text = orderItem.Terminal1CusNr;
-                Tool1NrTB.Text = orderItem.Tool1Nr;
+                Tool1NrTB.Text = orderItem.Tool1Nr;                
                 Terminal1GraphLab.Visibility = Visibility.Visible;
             }
 
@@ -88,63 +141,122 @@ namespace PmsNCR
 
         private void ScanCodeTB_KeyUp(object sender, KeyEventArgs e)
         {
+          
             if (e.Key == Key.Enter)
+            {  
+                CheckMaterial();
+               // CleanScanText();
+            }
+
+        }
+
+        private void CleanScanText() {
+            if (AutoCleanScanCB.IsChecked.Value)
             {
-                string text = ScanCodeTB.Text;
-                if (text.Length > 1)
+                ScanCodeTB.Text = String.Empty;
+            }
+        }
+
+        private void CheckMaterial()
+        {
+            string text = ScanCodeTB.Text;
+            if (text.Length > 1)
+            {
+                // string prefix = text.Substring(0, 1);
+                string content = String.Empty;
+
+                Regex areaRegex = new Regex(MaterialCheckConfig.AreaPattern, RegexOptions.IgnoreCase);
+                Regex wireRegex = new Regex(MaterialCheckConfig.WirePattern, RegexOptions.IgnoreCase);
+                Regex terminalRegex = new Regex(MaterialCheckConfig.TerminalPattern, RegexOptions.IgnoreCase);
+                Regex toolRegex = new Regex(MaterialCheckConfig.ToolPattern, RegexOptions.IgnoreCase);
+                if (wireRegex.Match(text).Success)
                 {
-                    string prefix = text.Substring(0, 1);
-                    string content = text.Substring(1, text.Length - 1);
-                    if (prefix.Equals(MaterialCheckConfig.AreaPrefix))
+                    if (!WireCB.IsChecked.Value)
+                    {
+                        content = text.Substring(MaterialCheckConfig.WirePrefix.Length, text.Length - MaterialCheckConfig.WirePrefix.Length);
+                        WireCB.IsChecked = WireNrTB.Text.Equals(content);                        
+                    }
+                    if (WireCB.IsChecked.Value) {
+                        CleanScanText();
+                    }
+                }
+                if (areaRegex.Match(text).Success)
+                {
+                    content = text.Substring(MaterialCheckConfig.AreaPrefix.Length, text.Length - MaterialCheckConfig.AreaPrefix.Length);
+                    if (content.Equals(MaterialCheckConfig.Area1) || content.Equals(MaterialCheckConfig.Area2))
                     {
                         CurrentAreaTB.Text = content;
+                        CleanScanText();
                     }
-                    else if (prefix.Equals(MaterialCheckConfig.WirePrefix))
+                }
+
+                if (terminalRegex.Match(text).Success && CurrentAreaTB.Text.Length>0)
+                {
+                    content = text.Substring(MaterialCheckConfig.TerminalPrefix.Length, text.Length - MaterialCheckConfig.TerminalPrefix.Length);
+                    if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area1))
                     {
-                        WireCB.IsChecked = WireNrTB.Text.Equals(content);
-                    }
-                    else if (prefix.Equals(MaterialCheckConfig.TerminalPrefix))
-                    {
-                        if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area1))
+                        if (!Terminal1CB.IsChecked.Value)
                         {
                             Terminal1CB.IsChecked = TerminalNr1TB.Text.Equals(content);
                         }
-                        else if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area2))
+                        if (Terminal1CB.IsChecked.Value)
                         {
-                            Terminal2CB.IsChecked = TerminalNr2TB.Text.Equals(content);
+                            CleanScanText();
                         }
-
                     }
-                    else if (prefix.Equals(MaterialCheckConfig.ToolPrefix))
+                    else if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area2))
                     {
+                        if (!Terminal2CB.IsChecked.Value)
+                        {
+                            Terminal2CB.IsChecked = TerminalNr2TB.Text.Equals(content);                           
+                        }
+                        if (Terminal2CB.IsChecked.Value)
+                        {
+                            CleanScanText();
+                        }
+                    }
 
-                        if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area1))
+                }
+
+                if (toolRegex.Match(text).Success && CurrentAreaTB.Text.Length > 0)
+                {
+                    content = text.Substring(MaterialCheckConfig.ToolPrefix.Length, text.Length - MaterialCheckConfig.ToolPrefix.Length);
+
+                    if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area1))
+                    {
+                        if (!Tool1CB.IsChecked.Value)
                         {
                             Tool1CB.IsChecked = Tool1NrTB.Text.Equals(content);
                         }
-                        else if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area2))
+                        if (Tool1CB.IsChecked.Value)
+                        {
+                            CleanScanText();
+                        }
+                    }
+                    else if (CurrentAreaTB.Text.Equals(MaterialCheckConfig.Area2))
+                    {
+                        if (!Tool2CB.IsChecked.Value)
                         {
                             Tool2CB.IsChecked = Tool2NrTB.Text.Equals(content);
                         }
-                    }
-
-                    if (CanStartProduce())
-                    {
-                        StartProduceBtn.IsEnabled = true;
+                        if (Tool2CB.IsChecked.Value)
+                        {
+                            CleanScanText();
+                        }
                     }
                 }
 
-                if (AutoCleanScanCB.IsChecked.Value)
+                if (CanStartProduce())
                 {
-                    ScanCodeTB.Text = String.Empty;
+                    StartProduceBtn.IsEnabled = true;
                 }
             }
-
         }
 
         private void CleanScanBtn_Click(object sender, RoutedEventArgs e)
         {
             ScanCodeTB.Text = String.Empty;
+            CurrentAreaTB.Text = String.Empty;
             ScanCodeTB.Focus();
         }
 
@@ -164,30 +276,126 @@ namespace PmsNCR
             }
             return wireCan && area1Can && area2Can;
         }
-       
+
         private void StartProduceBtn_Click(object sender, RoutedEventArgs e)
         {
-            try
+            MessageBoxResult result = MessageBox.Show("Confirm Start?");
+            if (result.Equals(MessageBoxResult.OK))
             {
-                OrderService s = new OrderService();
-                Msg<string> msg = s.GetOrderItemForProduce(orderItem.Id);
-                if (msg.Result)
+                try
                 {
-                    if (OrderItemFile.WirteToFile(orderItem.FileName, msg.Object))
+                    OrderService s = new OrderService();
+                    Msg<string> msg = s.GetOrderItemForProduce(orderItem.Id,mirror);
+                    if (msg.Result)
                     {
-                        OrderDDSConverter.ConvertJsonOrderToDDS(orderItem.FileName);
+                        if (OrderItemFile.WirteToFile(orderItem.FileName, msg.Object))
+                        {
+                            if (OrderDDSConverter.ConvertJsonOrderToDDS(orderItem.FileName))
+                            {
+                                MessageBox.Show("Order Created, Please Use EASY to work!");
+                                s.SetOrderItemTool(orderItem.ItemNr,currentTool1,currentTool2);
+                                this.Close();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show(msg.Content);
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show(msg.Content);
+                    MessageBox.Show(ex.Message);
+                    LogUtil.Logger.Error(ex.Message);
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                LogUtil.Logger.Error(ex.Message);
-            }
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            IsShow = false;
+        }
+
+        private void AbortBtn_Click(object sender, RoutedEventArgs e)
+        {
+            new AbortConfirmWindow(this,JobNrLab.Content.ToString()).ShowDialog();
+        }
+
+        private bool mirror = false;
+        private void MirrorBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (!mirror)
+            {
+                mirror = true;
+                MirrorBtn.FontWeight = FontWeights.Bold;
+                MirrorBtn.Foreground = new SolidColorBrush(Colors.Red);
+                MirrorBtn.Content = "!Mirror!";
+            }
+            else
+            {
+                mirror = false;                
+                MirrorBtn.FontWeight = FontWeights.Normal;
+                MirrorBtn.Foreground = new SolidColorBrush(Colors.Black);
+                MirrorBtn.Content = "Mirror";
+            }
+            MirrorArea();
+        }
+
+        private void MirrorArea() {
+            object strip1 = StripLength1Lab.Content;
+            StripLength1Lab.Content =StripLength2Lab.Content;
+            StripLength2Lab.Content = strip1;
+
+            Visibility tervisi = Terminal1GraphLab.Visibility;
+            Terminal1GraphLab.Visibility = Terminal2GraphLab.Visibility;
+            Terminal2GraphLab.Visibility = tervisi;
+
+            string ter1 = TerminalNr1TB.Text;
+            TerminalNr1TB.Text = TerminalNr2TB.Text;
+            TerminalNr2TB.Text = ter1;
+
+            string ter1cus = TerminalCusNr1TB.Text;
+            TerminalCusNr1TB.Text = TerminalCusNr2TB.Text;
+            TerminalCusNr2TB.Text = ter1cus;
+
+
+            string tool1 = Tool1NrTB.Text;
+            Tool1NrTB.Text = Tool2NrTB.Text;
+            Tool2NrTB.Text = tool1;
+
+            Visibility visibility= WorkArea1.Visibility;
+            WorkArea1.Visibility = WorkArea2.Visibility;
+            WorkArea2.Visibility = visibility;
+
+
+
+        }
+
+        //private void ScanCodeTB_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+        //    if (ScanCodeTB.Text.Length>0)
+        //    {
+        //        CheckMaterial();
+        //    }
+        //}
+
+        private void MaterialCB_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox cb = (sender as CheckBox);
+            if (cb.Name == "Tool1CB") {
+                 currentTool1 = Tool1NrTB.Text;
+            }
+            else if (cb.Name == "Tool2CB") {
+                currentTool2 = Tool2NrTB.Text;
+            }
+
+            if (AutoCleanScanCB.IsChecked.Value)
+            {
+                ScanCodeTB.Text = String.Empty;
+            }
+            StartProduceBtn.IsEnabled = CanStartProduce();
+
+        }
+
     }
 }

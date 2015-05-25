@@ -1,5 +1,7 @@
 class MachineCombination < ActiveRecord::Base
   belongs_to :machine
+  delegate :nr,to: :machine,prefix: true,allow_nil: true
+
   MATCH_INDEX={w1: 0, t1: 1, t2: 2, s1: 3, s2: 4, wd1: 5, w2: 6, t3: 7, t4: 8, s3: 9, s4: 10, wd2: 11}
   PROCESS_ENTITY_MATCH_MAP={wire_nr: 0, t1: 1, t2: 2, s1: 3, s2: 4, w2: 6, t3: 7, t4: 8, s3: 9, s4: 10}
 
@@ -82,26 +84,26 @@ class MachineCombinationList< BaseClass
     self.nodes.each_with_index do |n, j|
       match_start_index =(node.match_start_index>n.match_start_index) ? node.match_start_index : n.match_start_index
       match_end_index =(node.match_end_index<n.match_end_index) ? node.match_end_index : n.match_end_index
-      puts "%%%%#{node.to_json}"
-      puts "#####{n.to_json}"
-      puts "&&&.#{j}.#{n.key}.start compare:#{match_start_index}:#{match_end_index}".colorize(:blue)
+      # puts "%%%%#{node.to_json}"
+      # puts "#####{n.to_json}"
+      # puts "&&&.#{j}.#{n.key}.start compare:#{match_start_index}:#{match_end_index}".colorize(:blue)
       (match_start_index..match_end_index).each { |i|
-        puts "**#{i}---#{node.items[i]}:#{n.items[i]}"
+        # puts "**#{i}---#{node.items[i]}:#{n.items[i]}"
         if !node.items[i].nil? && !n.items[i].nil?
           if node.items[i].to_s!=n.items[i].to_s
-            puts "break------#{node.items[i]}:#{n.items[i]}---------#{node.items[i].class}:#{n.items[i].class}----------------"
+            # puts "break------#{node.items[i]}:#{n.items[i]}---------#{node.items[i].class}:#{n.items[i].class}----------------"
             break
           elsif i< match_end_index
-            puts "EQUAL:#{i}-------------------------------"
+            # puts "EQUAL:#{i}-------------------------------"
             # return false
           elsif i==match_end_index
-            puts "success : #{n.key}--key-------------------------".colorize(:yellow)
+            # puts "success : #{n.key}--key-------------------------".colorize(:yellow)
             return n
           end
         end
       }
     end
-    puts 'fail :  -------------------------'.colorize(:red)
+    # puts 'fail :  -------------------------'.colorize(:red)
 
     return nil
   end
@@ -114,5 +116,4 @@ class MachineCombinationNode<BaseClass
     {match_start_index: 0, match_end_index: 5}
   end
 end
-
 

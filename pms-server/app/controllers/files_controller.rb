@@ -1,4 +1,6 @@
 class FilesController < ApplicationController
+  #before_filter :skip_authorization
+
   def index
     puts params
     # send_file File.join($TEMPLATEPATH, params[:id]+'.'+params[:format])

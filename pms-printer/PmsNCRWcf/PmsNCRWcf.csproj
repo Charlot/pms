@@ -65,17 +65,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\ApiConfig.cs" />
+    <Compile Include="Config\ColorConfig.cs" />
     <Compile Include="Config\MaterialCheckConfig.cs" />
     <Compile Include="Config\PrinterConfig.cs" />
     <Compile Include="Config\WPCSConfig.cs" />
+    <Compile Include="Converter\ShortColorConverter.cs" />
     <Compile Include="Converter\OrderSDCConverter.cs" />
     <Compile Include="Converter\OrderDDSConverter.cs" />
     <Compile Include="Enmu\OrderItemState.cs" />
     <Compile Include="Helper\FileInfoHelper.cs" />
     <Compile Include="Helper\JSONHelper.cs" />
+    <Compile Include="IMachineService.cs" />
     <Compile Include="IOrderService.cs" />
     <Compile Include="IPrintService.cs" />
     <Compile Include="IReceiverService.cs" />
+    <Compile Include="MachineService.cs" />
     <Compile Include="Model\ApiClient.cs" />
     <Compile Include="Model\Msg.cs" />
     <Compile Include="Model\OrderItem.cs" />

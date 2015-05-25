@@ -17,19 +17,49 @@ class ProcessEntitiesController < ApplicationController
   # GET /process_entities/new
   def new
     @process_entity = ProcessEntity.new
+    # authorize(@process_entity)
   end
 
   # GET /process_entities/1/edit
   def edit
-  end
-
-
-  def search
+    @process_template=@process_entity.process_template
   end
 
   # GET /process_entities/1/simple
   def simple
     render partial: 'simple',locals:{process_entity:@process_entity}
+  end
+
+  #GET
+
+  def export_auto
+    # authorize(ProcessEntity)
+    msg = Message.new
+    begin
+      msg = FileHandler::Excel::ProcessEntityAutoHandler.export(params[:q])
+    rescue => e
+      msg.content = e.message
+    end
+    if msg.result
+      send_file msg.content
+    else
+      render json: msg
+    end
+  end
+
+  def export_semi
+    # authorize(ProcessEntity)
+    msg = Message.new
+    begin
+      msg = FileHandler::Excel::ProcessEntitySemiAutoHandler.export(params[:q])
+    rescue => e
+      msg.content = e.message
+    end
+    if msg.result
+      send_file msg.content
+    else
+      render json: msg
+    end
   end
 
   # GET POST
@@ -40,8 +70,8 @@ class ProcessEntitiesController < ApplicationController
         file=params[:files][0]
         fd = FileData.new(data: file,original_name:file.original_filename,path:$upload_data_file_path,path_name:"#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
         fd.save
-        file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase,file_path: fd.full_path,file_name: file.original_filename)
-        msg = FileHandler::Csv::ProcessEntityAutoHandler.import(file)
+        #file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase,file_path: fd.full_path,file_name: file.original_filename)
+        msg = FileHandler::Excel::ProcessEntityAutoHandler.import(fd)
       rescue => e
         msg.content = e.message
       end
@@ -57,11 +87,24 @@ class ProcessEntitiesController < ApplicationController
         file=params[:files][0]
         fd = FileData.new(data: file,original_name:file.original_filename,path:$upload_data_file_path,path_name:"#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
         fd.save
-        file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase,file_path: fd.full_path,file_name: file.original_filename)
-        msg = FileHandler::Csv::ProcessEntitySemiAutoHandler.import(file)
+
+        #file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase,file_path: fd.full_path,file_name: file.original_filename)
+        #msg = FileHandler::Csv::ProcessEntitySemiAutoHandler.import(file)
+        msg = FileHandler::Excel::ProcessEntitySemiAutoHandler.import(fd)
       rescue => e
         msg.content = e.message
       end
+      render json: msg
+    end
+  end
+
+  # GET
+  def export_unused
+    msg = FileHandler::Csv::ProcessEntityHandler.export_unused(request.user_agent.downcase)
+    #render json: msg
+    if msg.result
+      send_file msg.content
+    else
       render json: msg
     end
   end
@@ -166,10 +209,11 @@ class ProcessEntitiesController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_process_entity
     @process_entity = ProcessEntity.find(params[:id])
+    # authorize(@process_entity)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def process_entity_params
-    params.require(:process_entity).permit(:nr, :name, :description, :stand_time, :process_template_id, :workstation_type_id, :cost_center_id)
+    params.require(:process_entity).permit(:nr, :name, :description, :stand_time, :process_template_id,:remark, :workstation_type_id, :cost_center_id)
   end
 end

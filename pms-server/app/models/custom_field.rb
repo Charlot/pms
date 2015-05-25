@@ -5,6 +5,8 @@ class CustomField < ActiveRecord::Base
   belongs_to :custom_fieldable, polymorphic: true
   scope :sorted, lambda { order(:position) }
 
+  has_paper_trail
+
   def validate_format_field(args)
     become_to.validate_field(args)
   end

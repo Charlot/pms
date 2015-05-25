@@ -67,11 +67,26 @@ gem 'redis-namespace'
 gem 'colorize'
 
 # For REST API Call
-gem 'rest_client'
+gem 'rest-client'
 
-gem 'will_paginate', '~> 3.0'
+# For Paging
+gem 'will_paginate', '3.0.7'
 
 #Search
-gem 'sunspot_rails'
-gem 'sunspot_solr'
-gem 'progress_bar'
+gem 'scoped_search'
+
+#Editable table
+gem 'best_in_place', '~> 3.0.1'
+
+# Auth
+gem 'devise'
+
+# Role
+gem 'rolify'
+
+# Authorization
+gem 'pundit'
+#
+gem 'sidekiq'
+gem 'sinatra',require: false
+gem 'whenever'

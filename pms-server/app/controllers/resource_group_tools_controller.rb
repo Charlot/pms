@@ -15,6 +15,7 @@ class ResourceGroupToolsController < ApplicationController
   # GET /resource_group_tools/new
   def new
     @resource_group_tool = ResourceGroupTool.new
+    # authorize(@resource_group_tool)
   end
 
   # GET /resource_group_tools/1/edit
@@ -25,6 +26,7 @@ class ResourceGroupToolsController < ApplicationController
   # POST /resource_group_tools.json
   def create
     @resource_group_tool = ResourceGroupTool.new(resource_group_tool_params.except(:resource_group_part))
+    # authorize(@resource_group_tool)
     unless resource_group_tool_params[:resource_group_part].blank?
       @resource_group_part=@resource_group_tool.build_resource_group_part
       @resource_group_part.part=Part.find_by_nr(resource_group_tool_params[:resource_group_part])
@@ -74,6 +76,7 @@ class ResourceGroupToolsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_resource_group_tool
     @resource_group_tool = ResourceGroupTool.find(params[:id])
+    # authorize(@resource_group_tool)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

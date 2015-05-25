@@ -7,6 +7,10 @@ class Tool < ActiveRecord::Base
 
   validate :part_group_presence
 
+  scoped_search on: :nr
+  scoped_search in: :resource_group_tool, on: :nr
+  scoped_search in: :part, on: :nr
+
   private
   def part_group_presence
     errors.add(:part, 'not input') if self.part.blank?

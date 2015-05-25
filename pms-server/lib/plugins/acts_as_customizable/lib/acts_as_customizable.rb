@@ -31,6 +31,8 @@ module Pms
             custom_field_values.detect { |v| v.custom_field.name.downcase== method_name.to_s.sub(/value_/, '') }.try(:value)
           elsif /field_\w+/.match(method_name.to_s)
             available_custom_fields.detect { |f| f.name==method_name.to_s.sub(/field_/, '') }
+          elsif /id_\w+/.match(method_name.to_s)
+            custom_field_values.detect { |v| v.custom_field.name.downcase== method_name.to_s.sub(/id_/, '') }.try(:id)
           else
             super
           end
@@ -84,13 +86,15 @@ module Pms
             if field.multiple?
               values = custom_values.select { |v| v.custom_field == field }
               if values.empty?
-                values << custom_values.build(:customized => self, :custom_field => field, :value => nil)
+                values << custom_values.build(id: nil, :customized => self, :custom_field => field, :value => nil)
               end
               x.value = values.map(&:value)
+              x.id=values.map(&:id)
             else
               cv = custom_values.detect { |v| v.custom_field == field }
-              cv ||= custom_values.build(:customized => self, :custom_field => field, :value => nil)
+              cv ||= custom_values.build(id: nil, :customized => self, :custom_field => field, :value => nil)
               x.value = cv.value
+              x.id=cv.id
             end
             x.value_was = x.value.dup if x.value
             x
