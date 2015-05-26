@@ -55,14 +55,14 @@ module V1
           # preview order item list
           get :preview do
             if machine=Machine.find_by_nr(params[:machine_nr])
-              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(machine).limit(30))
+              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(machine))
             end
           end
 
           # get order item passed
           get :passed do
             if machine=Machine.find_by_nr(params[:machine_nr])
-              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_passed(machine))
+              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_passed(machine).limit(30))
             end
           end
 
