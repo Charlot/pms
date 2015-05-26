@@ -70,6 +70,7 @@ Rails.application.routes.draw do
       post :optimise
       post :distribute
       post :export
+      post :export_scand
       match :state_export, to: :state_export, via: [:get, :post]
     end
   end

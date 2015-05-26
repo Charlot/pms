@@ -30,7 +30,6 @@ class ProductionOrderItemPresenter<Presenter
   def to_check_material_order(no=0)
 
     kanban=@production_order_item.kanban
-    puts "#{kanban.nr}----------".red
     if kanban && (process_entity=kanban.process_entities.first)
       product=Part.find_by_id(kanban.product_id)
       machine=Machine.find_by_id(@production_order_item.machine_id)
@@ -51,7 +50,7 @@ class ProductionOrderItemPresenter<Presenter
           ItemNr: @production_order_item.nr,
           State: @production_order_item.state,
           OptimiseIndex: @production_order_item.optimise_index,
-          OrderNr: @production_order_item.production_order.nr,
+          OrderNr: @production_order_item.production_order.nil? ? '' : @production_order_item.production_order.nr,
           Machine: machine.nil? ? '' : machine.nr,
           FileName: "#{@production_order_item.nr}.json",
           ProductNr: product.nil? ? '' : product.nr,

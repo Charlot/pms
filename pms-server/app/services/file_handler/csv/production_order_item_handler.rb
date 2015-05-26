@@ -8,7 +8,7 @@ module FileHandler
 
       def export_optimized(items, user_agent, tmp_path=nil)
         msg=Message.new
-        begin
+        # begin
           tmp_file = ProductionOrderItemHandler.full_tmp_path('优化数据.csv') unless tmp_file
           CSV.open(tmp_file, 'wb', write_headers: true,
                    headers: EXPORT_CSV_HEADERS,
@@ -36,9 +36,9 @@ module FileHandler
           end
           msg.result =true
           msg.content =tmp_file
-        rescue => e
-          msg.content =e.message
-        end
+        # rescue => e
+        #   msg.content =e.message
+        # end
         msg
       end
 
