@@ -257,8 +257,8 @@ module FileHandler
 
         if product.nil?
           msg.contents << "Product Nr: #{row['Product Nr']}不存在"
-        end
 
+else
         wire = Part.where({nr: "#{row['Product Nr']}_#{row['Wire NO']}"}, type: PartType::PRODUCT_SEMIFINISHED).first
         pe = ProcessEntity.where({nr: row['Nr'], product_id: product.id})
 
@@ -301,7 +301,7 @@ module FileHandler
             msg.contents << "#{header}: #{row[header]}零件类型错误"
           end
         }
-
+        end
         unless msg.result=(msg.contents.size==0)
           msg.content=msg.contents.join('/')
         end
