@@ -211,7 +211,7 @@ module FileHandler
             end
           end
 
-          if kanban.quantity <= 0
+          if kanban.nil? || kanban.quantity <= 0
             puts "未找到".red
             next
           end

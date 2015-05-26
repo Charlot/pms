@@ -11,6 +11,9 @@
         <input type="button" value="分发" class="btn btn-info" onclick="if(confirm('distribute?')){form.submit();}"/>
     <% end %>
 <% end %>
+<%= form_tag('/production_order_items/export_scand', method: 'post') do %>
+    <input type="button" value="导出" class="btn btn-default" onclick="if(confirm('export?')){form.submit();}"/>
+<% end %>
 <% if @production_order %>
     <%= form_tag('/production_order_items/export', method: 'post') do %>
         <%= hidden_field_tag :production_order_id, @production_order.id %>
@@ -33,7 +36,7 @@
         </span>
 
         <span>状态：
-        <%= select_tag 'state', options_for_select(production_order_item_state_options,@state), include_blank: true %>
+          <%= select_tag 'state', options_for_select(production_order_item_state_options, @state), include_blank: true %>
         </span>
       </div>
       <input type="hidden" name="production_order_id" value="<%= @production_order.id if @production_order %>"/>
@@ -83,19 +86,19 @@
         <td><%= production_order_item.nr %></td>
         <td><%= ProductionOrderItemState.display production_order_item.state %></td>
         <td><%= production_order_item.code %></td>
-        <td><%= link_to(production_order_item.kanban.nr, kanban_path(production_order_item.kanban)) if production_order_item.kanban%></td>
-        <td><%= production_order_item.kanban.product.nr   if production_order_item.kanban%></td>
-        <td><%= production_order_item.kanban.wire_nr  if production_order_item.kanban%></td>
-        <td><%= production_order_item.kanban.quantity  if production_order_item.kanban%></td>
-        <td><%= production_order_item.kanban.bundle  if production_order_item.kanban%></td>
+        <td><%= link_to(production_order_item.kanban.nr, kanban_path(production_order_item.kanban)) if production_order_item.kanban %></td>
+        <td><%= production_order_item.kanban.product.nr if production_order_item.kanban %></td>
+        <td><%= production_order_item.kanban.wire_nr if production_order_item.kanban %></td>
+        <td><%= production_order_item.kanban.quantity if production_order_item.kanban %></td>
+        <td><%= production_order_item.kanban.bundle if production_order_item.kanban %></td>
         <td><%= production_order_item.produced_qty %></td>
         <td><%= production_order_item.machine.nr if production_order_item.machine %></td>
         <!--<td><%= production_order_item.machine_time %></td>-->
         <td><%= production_order_item.production_order.nr if production_order_item.production_order %></td>
         <td><%= production_order_item.optimise_at.localtime if production_order_item.optimise_at %></td>
         <td><%= production_order_item.optimise_index %></td>
-        <td><%=production_order_item.updated_at.localtime%>
-        <td><%= link_to '生产详细',production_order_item_production_order_item_labels_path(production_order_item)%></td>
+        <td><%= production_order_item.updated_at.localtime %>
+        <td><%= link_to '生产详细', production_order_item_production_order_item_labels_path(production_order_item) %></td>
         <td><%= link_to 'Show', production_order_item %></td>
         <td><%= link_to 'Edit', edit_production_order_item_path(production_order_item) %></td>
         <td><%= link_to 'Destroy', production_order_item, method: :delete, data: {confirm: 'Are you sure?'} %></td>
