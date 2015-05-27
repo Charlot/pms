@@ -399,7 +399,7 @@ module FileHandler
 
         # 验证总成号
         unless product
-          msg.contents<<"Product Nr:#{Row['Product Nr']},总成号不存在"
+          msg.contents<<"Product Nr:#{row['Product Nr']},总成号不存在"
         end
 
         # 验证工艺
