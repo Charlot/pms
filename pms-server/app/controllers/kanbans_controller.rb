@@ -213,14 +213,14 @@ class KanbansController < ApplicationController
     # authorize(Kanban)
     if request.post?
       msg = Message.new
-      # begin
+      begin
         file=params[:files][0]
         fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
         fd.save
         msg = FileHandler::Excel::KanbanHandler.import(fd)
-      # rescue => e
-      #   msg.content = e.message
-      # end
+      rescue => e
+        msg.content = e.message
+      end
       render json: msg
     end
   end
