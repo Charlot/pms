@@ -402,12 +402,14 @@ module FileHandler
           msg.contents<<"Product Nr:#{row['Product Nr']},总成号不存在"
         end
 
-        # 验证工艺
-        process_nrs = row['Process List'].split(',').collect { |penr| penr.strip }
-        process_entities = ProcessEntity.where({nr: process_nrs, product_id: product.id})
-        nrs= process_nrs - process_entities.collect { |pe| pe.nr }
-        unless nrs.count==0
-          msg.contents << "Process List: #{nrs}，工艺不存在!"
+        if product
+          # 验证工艺
+          process_nrs = row['Process List'].split(',').collect { |penr| penr.strip }
+          process_entities = ProcessEntity.where({nr: process_nrs, product_id: product.id})
+          nrs= process_nrs - process_entities.collect { |pe| pe.nr }
+          unless nrs.count==0
+            msg.contents << "Process List: #{nrs}，工艺不存在!"
+          end
         end
 
         # 验证看板类型
