@@ -100,6 +100,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AdminWindow.xaml.cs">
+      <DependentUpon>AdminWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helper\SettingReader.cs" />
     <Compile Include="PrintKBConfirmWindow.xaml.cs">
       <DependentUpon>PrintKBConfirmWindow.xaml</DependentUpon>
@@ -107,10 +110,17 @@
     <Compile Include="PrintLabelConfirmWindow.xaml.cs">
       <DependentUpon>PrintLabelConfirmWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SearchOrderItemWindow.xaml.cs">
+      <DependentUpon>SearchOrderItemWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SPCWindow.xaml.cs">
       <DependentUpon>SPCWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="AbortConfirmWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AdminWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -167,6 +177,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PrintLabelConfirmWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SearchOrderItemWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
