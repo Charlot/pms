@@ -4,6 +4,7 @@ module FileHandler
       HEADERS=[
           'Part No.', 'Component P/N', 'Material Qty Per Harness', 'Dep', 'Delete'
       ]
+      EXPORT_HEADERS=['Part No.', 'Component P/N', 'Material Qty Per Harness', 'Dep', 'Delete']
 
       def self.import(file)
         msg = Message.new
@@ -19,7 +20,7 @@ module FileHandler
                 row = {}
                 HEADERS.each_with_index do |k, i|
                   row[k] = book.cell(line, i+1).to_s.strip
-                  row[k]=row[k].sub(/\.0/,'') if k=='Part No.' || k=='Component P/N'
+                  row[k]=row[k].sub(/\.0/, '') if k=='Part No.' || k=='Component P/N'
                 end
 
                 product=Part.find_by_nr(row['Part No.'])
@@ -53,6 +54,34 @@ module FileHandler
         msg
       end
 
+      def self.export(params)
+        msg = Message.new
+        begin
+          tmp_file = MasterBomItemHandler.full_tmp_path('master_bom.xlsx')
+          p = Axlsx::Package.new
+          p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
+            sheet.add_row EXPORT_HEADERS
+            MasterBomItem.search(params).all.each do |item|
+              sheet.add_row [
+                                item.product_nr,
+                                item.bom_item_nr,
+                                item.qty,
+                                item.department_code,
+                                '0'
+              ],types: [:string,:string,:string,:string,:string]
+            end
+          end
+          p.use_shared_strings = true
+          p.serialize(tmp_file)
+
+          msg.result =true
+          msg.content =tmp_file
+        rescue => e
+          msg.content =e.message
+        end
+        msg
+      end
+
       def self.validate_import file
         tmp_file=full_tmp_path(file.original_name)
         msg = Message.new(result: true)
@@ -67,7 +96,7 @@ module FileHandler
             row = {}
             HEADERS.each_with_index do |k, i|
               row[k] = book.cell(line, i+1).to_s.strip
-              row[k]=row[k].sub(/\.0/,'') if k=='Part No.' || k=='Component P/N'
+              row[k]=row[k].sub(/\.0/, '') if k=='Part No.' || k=='Component P/N'
             end
 
             mssg = validate_row(row, line)

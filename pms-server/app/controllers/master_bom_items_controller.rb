@@ -116,7 +116,7 @@ class MasterBomItemsController < ApplicationController
   def export
     msg = Message.new
     begin
-      msg = FileHandler::Csv::MasterBomItemHandler.export(request.user_agent,params)
+      msg = FileHandler::Excel::MasterBomItemHandler.export(params)
     rescue => e
       msg.content = e.message
     end
