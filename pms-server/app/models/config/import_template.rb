@@ -20,7 +20,7 @@ class ImportTemplate
   PART_POSITION_CSV_TEMPLATE='part_position.csv'
   MASTER_BOM_CSV_TEMPLATE='master_bom_template.xlsx'
   ORDER_BOM_CSV_TEMPLATE='order_transport.csv'
-
+  ORDER_BOM_EXCEL_TEMPLATE='order_transport.xlsx'
 
   def self.method_missing(method_name, *args, &block)
     if method_name.to_s.include?('_template')
