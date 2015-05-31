@@ -3,7 +3,7 @@ module FileHandler
     class KanbanHandler<Base
       HEADERS=[
           'Nr', 'Quantity', 'Safety Stock', 'Copies',
-          'Remark', 'Wire Nr', 'Product Nr', 'Type',
+          'Remark','Remark2', 'Wire Nr', 'Product Nr', 'Type',
           'Bundle', 'Destination Warehouse',
           'Destination Storage', 'Process List', 'Operator'
       ]
@@ -88,6 +88,7 @@ module FileHandler
                                 k.safety_stock,
                                 k.copies,
                                 k.remark,
+                                k.remark2,
                                 k.wire_nr,
                                 k.product_nr,
                                 k.ktype,
@@ -435,6 +436,8 @@ module FileHandler
             :copies
           when "Remark"
             :remark
+          when 'Remark2'
+            :remark2
           when "Type"
             :ktype
           #when "Wire Length"
