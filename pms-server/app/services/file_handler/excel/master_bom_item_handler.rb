@@ -8,6 +8,7 @@ module FileHandler
 
       TRANSPORT_HEADERS=['Part No.', 'Qty']
       TRANSPORT_SUCCEED_HEADERS=['Component P/N', 'Dep', 'Total Qty']
+      TRANSPORT_SUCCEED_TOTAL_HEADERS=['Component P/N', 'Total Qty']
       #INVALID_TRANSPORT_HEADERS=TRANSPORT_HEADERS<<'Error MS'
 
       def self.import(file)
@@ -94,10 +95,11 @@ module FileHandler
           transport_file=full_tmp_path(file.original_name)
           if validate_msg.result
             #  if true
-            transport_result={}
             MasterBomItem.transaction do
               # get order product
               product_qty={}
+              total_transport_result={}
+              transport_result={}
               book = Roo::Excelx.new file.full_path
               book.default_sheet = book.sheets.first
               #validate file
@@ -123,18 +125,36 @@ module FileHandler
               # add order part item
               product_qty.keys.each do |product_id|
                 MasterBomItem.where(product_id: product_id).each do |item|
+                  total_key="#{item.bom_item_id}"
                   key="#{item.bom_item_id}:#{item.department_id}"
+
+
+                  if total_transport_result.has_key?(total_key)
+                    total_transport_result[total_key]+=item.qty*product_qty[item.product_id.to_s]
+                  else
+                    total_transport_result[total_key]=item.qty*product_qty[item.product_id.to_s]
+                  end
+
                   if transport_result.has_key?(key)
                     transport_result[key]+=item.qty*product_qty[item.product_id.to_s]
                   else
                     transport_result[key]=item.qty*product_qty[item.product_id.to_s]
                   end
+
                 end
               end
 
 
               package = Axlsx::Package.new
-              package.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
+              package.workbook.add_worksheet(:name => "分解汇总") do |sheet|
+                sheet.add_row TRANSPORT_SUCCEED_TOTAL_HEADERS
+                total_transport_result.keys.each do |key|
+                  sheet.add_row [Part.find_by_id(key).nr,
+                                 total_transport_result[key]], types: [:string, :float]
+                end
+              end
+
+              package.workbook.add_worksheet(:name => "分解明细") do |sheet|
                 sheet.add_row TRANSPORT_SUCCEED_HEADERS
                 transport_result.keys.each do |key|
                   p, d=key.split(':')
@@ -255,7 +275,7 @@ module FileHandler
         unless Part.find_by_nr(row['Part No.'])
           msg.contents<<"Part No.#{row['Part No.']} 不存在"
         end
-        
+
         if row['Qty'].blank?
           msg.contents<<"Qty 未填"
         end
