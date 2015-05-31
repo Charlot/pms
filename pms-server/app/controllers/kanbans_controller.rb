@@ -242,6 +242,14 @@ class KanbansController < ApplicationController
     end
   end
 
+  def import_lock
+    import_lock_unlock(KanbanState::LOCKED)
+  end
+
+  def import_unlock
+    import_lock_unlock(KanbanState::RELEASED)
+  end
+
   def import_update_base
     if request.post?
       msg = Message.new
@@ -265,11 +273,11 @@ class KanbansController < ApplicationController
     if request.post?
       msg = Message.new
       # begin
-        file=params[:files][0]
-        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
-        fd.save
-        #file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
-        msg = FileHandler::Excel::KanbanHandler.import_scan(fd.full_path)
+      file=params[:files][0]
+      fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+      fd.save
+      #file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
+      msg = FileHandler::Excel::KanbanHandler.import_scan(fd.full_path)
       # rescue => e
       #   msg.content = e.message
       # end
@@ -320,7 +328,7 @@ class KanbansController < ApplicationController
       else
         if item=ProductionOrderItemBlue.where(kanban_id: @kanban.id, state: ProductionOrderItemState::INIT).first
           item.update(state: ProductionOrderItemState::TERMINATED)
-          @kanban.process_entities.update_all(state:ProductionOrderItemState::TERMINATED)
+          @kanban.process_entities.update_all(state: ProductionOrderItemState::TERMINATED)
           render json: {result: false, content: '销卡成功'} and return
           # item.update
         else
@@ -379,7 +387,7 @@ class KanbansController < ApplicationController
         render json: {result: false, content: "卡已投过，不可重复投卡"} and return
       end
       if (@order = ProductionOrderItemBlue.create(kanban_id: @kanban.id, code: @kanban.printed_2DCode, produced_qty: @kanban.quantity))
-        @kanban.process_entities.update_all(state:ProductionOrderItemState::STARTED)
+        @kanban.process_entities.update_all(state: ProductionOrderItemState::STARTED)
       else
         render json: {result: false, content: "Production Order Item Created Failed"} and return
       end
@@ -429,5 +437,20 @@ class KanbansController < ApplicationController
                                    :des_storage, :print_time, :part_id,
                                    :version, :ktype, :copies, :product_id
     )
+  end
+
+  def import_lock_unlock(state)
+    if request.post?
+      msg = Message.new
+      begin
+        file=params[:files][0]
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd.save
+        msg = FileHandler::Excel::KanbanHandler.import_lock_unlock(fd.full_path, state)
+      rescue => e
+        msg.content = e.message
+      end
+      render json: msg
+    end
   end
 end

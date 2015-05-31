@@ -3,7 +3,7 @@ module FileHandler
     class KanbanHandler<Base
       HEADERS=[
           'Nr', 'Quantity', 'Safety Stock', 'Copies',
-          'Remark','Remark2', 'Wire Nr', 'Product Nr', 'Type',
+          'Remark', 'Remark2', 'Wire Nr', 'Product Nr', 'Type',
           'Bundle', 'Destination Warehouse',
           'Destination Storage', 'Process List', 'Operator'
       ]
@@ -64,6 +64,36 @@ module FileHandler
 
         msg.result = true
         msg.content = "更新成功!"
+        msg
+      end
+
+      def self.import_lock_unlock(file, state)
+        msg = Message.new(contents: [])
+
+        header = ['Kanban Nr']
+
+        book = Roo::Excelx.new file
+        book.default_sheet = book.sheets.first
+
+        2.upto(book.last_row) do |line|
+          row = {}
+          header.each_with_index do |k, i|
+            row[k] = book.cell(line, i+1).to_s.strip # Strip
+          end
+
+          kanban = nil
+
+          if row['Kanban Nr'].present?
+            kanban=Kanban.find_by_nr(row['Kanban Nr'])
+            next unless kanban
+          end
+          kanban.without_versioning do
+            kanban.update(state: state)
+          end
+        end
+
+        msg.result = true
+        msg.content = '处理成功!'
         msg
       end
 

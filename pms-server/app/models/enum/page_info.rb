@@ -53,6 +53,10 @@ module Enum
           "获取看板列表"
         when "panel"
           "#{model}控制面板"
+        when 'import_lock'
+          "#{model}导入锁定"
+        when 'import_unlock'
+          "#{model}导入解除锁定"
         when 'transport'
           case model
             when 'Master BOM'
