@@ -30,7 +30,7 @@ class KanbanState < BaseClass
     when LOCKED
       [RELEASED,DELETED]
     when DELETED
-      [LOCKED,INIT]
+      [RELEASED,LOCKED,INIT]
     else
       []
     end
