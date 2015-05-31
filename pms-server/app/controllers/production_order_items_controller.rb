@@ -182,6 +182,11 @@ class ProductionOrderItemsController < ApplicationController
       @production_order_item_nr=params[:production_order_item_nr]
     end
 
+    unless params[:kanban_nr].blank?
+      @production_order_items=@production_order_items.joins(:kanban).where("kanbans.nr like ?", "%#{params[:kanban_nr]}%")
+      @kanban_nr=params[:kanban_nr]
+    end
+    
     unless params[:wire_nr].blank?
       ids= Kanban.search_for(params[:wire_nr]).pluck(:id)
       @production_order_items=@production_order_items.joins(:kanban).where(kanbans:{id:ids}) if ids.count>0
@@ -205,6 +210,6 @@ class ProductionOrderItemsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def production_order_item_params
-    params.require(:production_order_item).permit(:nr, :state, :optimise_index, :production_order_id, :code, :kanban_id, :machine_id, :production_order)
+    params.require(:production_order_item).permit(:nr, :state, :optimise_index, :production_order_id, :code, :kanban_id, :machine_id, :production_order,:produced_qty)
   end
 end

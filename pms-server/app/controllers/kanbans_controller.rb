@@ -328,7 +328,7 @@ class KanbansController < ApplicationController
       else
         if item=ProductionOrderItemBlue.where(kanban_id: @kanban.id, state: ProductionOrderItemState::INIT).first
           item.update(state: ProductionOrderItemState::TERMINATED)
-          @kanban.process_entities.update_all(state: ProductionOrderItemState::TERMINATED)
+          @kanban.kanban_process_entities.update_all(state: ProductionOrderItemState::TERMINATED)
           render json: {result: false, content: '销卡成功'} and return
           # item.update
         else
@@ -374,28 +374,19 @@ class KanbansController < ApplicationController
     #2015-3-10 李其
     #不做扫描之后验证是否已经扫入，由工作人员控制
     #注释了这段代码，暂时不实现标注唯一的一张纸质看板卡
+    unless @kanban.in_produce?
+      render json: {result: false, content: "卡已投过，不可重复投卡"} and return
+    end
     if @kanban.ktype==KanbanType::WHITE
-      if ProductionOrderItem.where("kanban_id = ? AND state= ?", @kanban.id, ProductionOrderItemState::INIT).count > 0
-        render json: {result: false, content: "卡已投过，不可重复投卡"} and return
-      end
-
-      unless (@order = ProductionOrderItem.create(kanban_id: @kanban.id, code: params[:code]))
+      unless (@order = @kanban.generate_produce_item)
         render json: {result: false, content: "Production Order Item Created Failed"} and return
       end
     elsif @kanban.ktype==KanbanType::BLUE
-      if ProductionOrderItemBlue.where(kanban_id: @kanban.id, state: ProductionOrderItemState::INIT).count>0
-        render json: {result: false, content: "卡已投过，不可重复投卡"} and return
-      end
-      if (@order = ProductionOrderItemBlue.create(kanban_id: @kanban.id, code: @kanban.printed_2DCode, produced_qty: @kanban.quantity))
-        @kanban.process_entities.update_all(state: ProductionOrderItemState::STARTED)
+      if (@order =@kanban.generate_produce_item)
+        @kanban.kanban_process_entities.update_all(state: ProductionOrderItemState::STARTED)
       else
         render json: {result: false, content: "Production Order Item Created Failed"} and return
       end
-      # if @kanban.state == KanbanState::LOCKED
-      #   render json: {result: false, content: "卡已投过，不可重复投卡"} and return
-      # else
-      #   @kanban.update(state: KanbanState::LOCKED)
-      # end
     end
 
     if need_update && @kanban.type == KanbanType::WHITE

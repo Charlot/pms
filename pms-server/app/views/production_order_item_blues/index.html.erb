@@ -1,0 +1,74 @@
+<p id="notice"><%= notice %></p>
+<div>
+  <form method="get" action="<%= search_production_order_item_blues_path %>">
+    <div>
+      <div>
+         <span>任务号：
+          <input type="text" name="production_order_item_nr" value="<%= @production_order_item_nr %>"/>
+        </span>
+         <span>看板号：
+          <input type="text" name="kanban_nr" value="<%= @kanban_nr %>"/>
+        </span>
+        <span>状态：
+          <%= select_tag 'state', options_for_select(production_order_item_blue_state_options, @state), include_blank: true %>
+        </span>
+      </div>
+      <div>
+        <input type="submit" value="查找" class="btn btn-primary" name="search"/>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @production_order_items %>
+  </div>
+  <%= will_paginate @production_order_items, :container => false %>
+</div>
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+  <tr>
+    <th>No.</th>
+    <th>Nr</th>
+    <th>State</th>
+    <th>Code</th>
+    <th>Kanban</th>
+    <th>ProductNr</th>
+    <th>Kanban Quantity</th>
+    <th>Kanban Bundle</th>
+    <th>Produced Quantity</th>
+    <th>CreatedAt</th>
+    <th>UpdatedAt</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @production_order_items.each_with_index do |production_order_item, i| %>
+      <tr>
+        <td><%= @page*WillPaginate.per_page + i+1 %></td>
+        <td><%= production_order_item.nr %></td>
+        <td><%= ProductionOrderItemState.display production_order_item.state %></td>
+        <td><%= production_order_item.code %></td>
+        <td><%= link_to(production_order_item.kanban.nr, kanban_path(production_order_item.kanban)) if production_order_item.kanban %></td>
+        <td><%= production_order_item.kanban.product.nr if production_order_item.kanban %></td>
+        <td><%= production_order_item.kanban.quantity if production_order_item.kanban %></td>
+        <td><%= production_order_item.kanban.bundle if production_order_item.kanban %></td>
+        <td><%= production_order_item.produced_qty %></td>
+        <td><%= production_order_item.created_at.localtime %>
+        <td><%= production_order_item.updated_at.localtime %>
+        <td><%= link_to 'Show', production_order_item %></td>
+        <td><%= link_to 'Edit', edit_production_order_item_path(production_order_item) %></td>
+        <td><%= link_to 'Destroy', production_order_item, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<br>
+
+
+<hr/>
+<div class="digg_pagination">
+  <%= will_paginate @production_order_items, :container => false %>
+</div>

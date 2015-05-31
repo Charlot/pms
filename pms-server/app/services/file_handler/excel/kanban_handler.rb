@@ -199,94 +199,92 @@ module FileHandler
 
 
       def self.import_scan file
-        msg = Message.new(contents: [])
+        msg = Message.new(contents: [],result:true)
 
         header = ['Kanban Nr', 'Wire Nr', 'Product Nr']
 
         book = Roo::Excelx.new file
         book.default_sheet = book.sheets.first
-
-        2.upto(book.last_row) do |line|
-          row = {}
-          header.each_with_index do |k, i|
-            row[k] = book.cell(line, i+1).to_s.strip # Strip
-          end
-
-          kanban = nil
-
-          if row['Kanban Nr'].present?
-            kanban = Kanban.find_by_nr(row['Kanban Nr'])
-          else
-            product = Part.where({nr: row['Product Nr'], type: PartType::PRODUCT}).first
-            if product.nil?
-              msg.contents << "Row #{line}: 总成号:#{row['Product Nr']}未找到!"
-              puts "总成号未找到"
-              next
-            end
-            wire = Part.find_by_nr("#{product.nr}_#{row['Wire Nr']}")
-            if wire.nil?
-              msg.contents << "Row #{line}: 线号:#{row['Wire Nr']}未找到!"
-              puts "线号未找到"
-              next
-            end
-
-            pe=ProcessEntity.joins(custom_values: :custom_field).joins(:kanbans).where(
-                {product_id: product.id, custom_fields: {name: "default_wire_nr"}, custom_values: {value: wire.id}, kanbans: {ktype: KanbanType::WHITE}}
-            ).first
-
-            if pe && (kanban=pe.kanbans.where(ktype: KanbanType::WHITE).first)
-              # kanban = pe.kanbans.where(ktype: KanbanType::WHITE).first
-            else
-              next
-              # msg.contents<< "Row:#{line}步骤不存在！或步骤不消耗零件!"
-            end
-          end
-
-          if kanban.nil? || kanban.quantity <= 0
-            puts "未找到".red
-            next
-          end
-
-          if ProductionOrderItem.where(kanban_id: kanban.id, state: ProductionOrderItemState::INIT).count > 0
-            msg.contents<<"Row:#{line},已投卡"
-            next
-          end
-
-          process_entity = kanban.process_entities.first
-          if process_entity && process_entity.process_parts.count > 0
-            can_create = true
-            parts = []
-            process_entity.process_parts.each { |pe|
-              part = pe.part
-              # if (part.type == PartType::MATERIAL_TERMINAL) && (part.tool == nil)
-              #   can_create = false
-              # end
-              if can_create #&& part.type == PartType::MATERIAL_TERMINAL
-                parts << part.nr
+        begin
+          ProductionOrderItem.transaction do
+            2.upto(book.last_row) do |line|
+              row = {}
+              header.each_with_index do |k, i|
+                row[k] = book.cell(line, i+1).to_s.strip # Strip
               end
-            }
 
-            # if process_entity.process_parts.select { |pe| pe.part.type == PartType::MATERIAL_TERMINAL }.count <= 0
-            #   can_create = false
-            # end
+              kanban = nil
 
-            if can_create
-              unless (order = ProductionOrderItem.create(kanban_id: kanban.id, code: kanban.printed_2DCode))
+              if row['Kanban Nr'].present?
+                kanban = Kanban.find_by_nr(row['Kanban Nr'])
+              else
+                product = Part.where({nr: row['Product Nr'], type: PartType::PRODUCT}).first
+                if product.nil?
+                  msg.contents << "Row #{line}: 总成号:#{row['Product Nr']}未找到!"
+                  puts "总成号未找到"
+                  next
+                end
+                wire = Part.find_by_nr("#{product.nr}_#{row['Wire Nr']}")
+                if wire.nil?
+                  msg.contents << "Row #{line}: 线号:#{row['Wire Nr']}未找到!"
+                  puts "线号未找到"
+                  next
+                end
+
+                pe=ProcessEntity.joins(custom_values: :custom_field).joins(:kanbans).where(
+                    {product_id: product.id, custom_fields: {name: "default_wire_nr"}, custom_values: {value: wire.id}, kanbans: {ktype: KanbanType::WHITE}}
+                ).first
+
+                if pe && (kanban=pe.kanbans.where(ktype: KanbanType::WHITE).first)
+                else
+                  next
+                end
+              end
+
+              if kanban.nil?
+                msg.result=false
+                msg.contents<<"Row:#{line},看板不存在"
                 next
               end
 
-              puts "新建订单成功：#{kanban.nr},#{parts.join('-')}".green
+              if kanban.quantity <= 0
+                msg.result=false
+                msg.contents<<"Row:#{line}:#{kanban.nr},看板量不大于0"
+                next
+              end
+
+              unless kanban.state == KanbanState::RELEASED
+                msg.result=false
+                msg.contents<<"Row:#{line}:#{kanban.nr},未发布"
+                next
+              end
+
+              unless kanban.in_produce?
+                msg.result=false
+                msg.contents<<"Row:#{line}:#{kanban.nr},已投卡,不可重复投卡"
+                next
+              end
+
+              if kanban.process_entities.count>0
+                if kanban.generate_produce_item
+                  msg.contents<<"Row:#{line}:#{kanban.nr},投卡成功!"
+                end
+              else
+                msg.result=false
+                msg.contents<<"Row:#{line}:#{kanban.nr},没有步骤，请联系AV"
+              end
+            end
+            unless msg.result
+              msg.content = msg.contents.join("</br>")
+            else
+              msg.content = "投卡成功!"
             end
           end
+        rescue => e
+          msg.result =false
+          msg.content =e.message
         end
 
-        msg.result = true
-        if msg.contents.count > 0
-          # msg.result=false
-          msg.content = msg.contents.join(";")
-        else
-          msg.content = "投卡成功!"
-        end
         msg
       end
 

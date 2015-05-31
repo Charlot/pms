@@ -10,4 +10,8 @@ module ProductionOrderItemsHelper
   def production_order_item_state_options
     ProductionOrderItemState.to_select.map { |t| [t.display, t.value] }
   end
+
+  def production_order_item_blue_state_options
+    ProductionOrderItemState.to_blue_select.map { |t| [t.display, t.value] }
+  end
 end

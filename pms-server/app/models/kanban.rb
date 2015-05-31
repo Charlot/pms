@@ -286,6 +286,24 @@ puts "#{machine.machine_type.nr}----#{process_entity.value_wire_qty_factor}".red
     kanbans = joins(:product).where('parts.nr LIKE ?', "%#{product_nr}%")
   end
 
+
+  def in_produce?
+    if self.ktype==KanbanType::WHITE
+      return self.production_order_items.where(state: ProductionOrderItemState::INIT).count==0
+    elsif self.ktype==KanbanType::BLUE
+      return self.production_order_item_blues.where(state: ProductionOrderItemState::INIT).count==0
+    end
+     false
+  end
+
+  def generate_produce_item
+    if self.ktype==KanbanType::WHITE
+      return  ProductionOrderItem.create(kanban_id: self.id, code: self.printed_2DCode)
+    elsif self.ktype==KanbanType::BLUE
+      return ProductionOrderItemBlue.create(kanban_id: self.id, code: self.printed_2DCode, produced_qty: self.quantity)
+    end
+    false
+  end
   #
   private
   def generate_id

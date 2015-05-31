@@ -62,6 +62,12 @@ Rails.application.routes.draw do
 
   resources :kanban_process_entities
 
+  resources :production_order_item_blues do
+    collection do
+      get :search
+    end
+  end
+
   resources :production_order_items do
     resources :production_order_item_labels
 
