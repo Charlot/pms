@@ -298,9 +298,9 @@ puts "#{machine.machine_type.nr}----#{process_entity.value_wire_qty_factor}".red
 
   def generate_produce_item
     if self.ktype==KanbanType::WHITE
-      return  ProductionOrderItem.create(kanban_id: self.id, code: self.printed_2DCode)
+      return  ProductionOrderItem.create(kanban_id: self.id, code: self.printed_2DCode,kanban_qty:self.quantity,kanban_bundle:self.bundle)
     elsif self.ktype==KanbanType::BLUE
-      return ProductionOrderItemBlue.create(kanban_id: self.id, code: self.printed_2DCode, produced_qty: self.quantity)
+      return ProductionOrderItemBlue.create(kanban_id: self.id, code: self.printed_2DCode, produced_qty: self.quantity,kanban_qty:self.quantity,kanban_bundle:self.bundle)
     end
     false
   end

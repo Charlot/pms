@@ -121,6 +121,7 @@ module FileHandler
                 end
               end
 
+              puts "------------------#{product_qty.to_json}".red
 
               # add order part item
               product_qty.keys.each do |product_id|
@@ -144,6 +145,8 @@ module FileHandler
                 end
               end
 
+              puts "------------------#{total_transport_result.to_json}".blue
+              puts "------------------#{transport_result.to_json}".yellow
 
               package = Axlsx::Package.new
               package.workbook.add_worksheet(:name => "分解汇总") do |sheet|
