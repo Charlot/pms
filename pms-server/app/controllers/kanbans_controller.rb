@@ -328,7 +328,7 @@ class KanbansController < ApplicationController
         if item=ProductionOrderItemBlue.where(kanban_id: @kanban.id, state: ProductionOrderItemState::INIT).first
           item.update(state: ProductionOrderItemState::TERMINATED)
           @kanban.kanban_process_entities.update_all(state: ProductionOrderItemState::TERMINATED)
-          render json: {result: false, content: '销卡成功'} and return
+          render json: {result: true, content: '销卡成功'} and return
           # item.update
         else
           render json: {result: false, content: '看板未生产，不可销卡'} and return

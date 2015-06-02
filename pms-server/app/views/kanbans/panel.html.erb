@@ -8,6 +8,7 @@
       <div class="row">
         <div class="col-md-6">
           <label>扫描投卡<input type="text" id="scan_Kanban" class="form-control"/></label>
+          <div class="info-warn-div" id="message-div" style="font-size: 20px"></div>
         </div>
       </div>
     </div>
@@ -23,10 +24,12 @@
             if (kanban_id.length > 0 && event.keyCode == 13) {
                 pms.kanban.scan(kanban_id, function (data) {
                     if(data.result){
-                        swal("投卡成功！");
+//                        swal("投卡成功！");
+                        $("#message-div").text(kanban_id+",投卡成功！");
                     }
                     else{
                         swal(data.content);
+                        $("#message-div").text('');
                     }
                 })
             }
