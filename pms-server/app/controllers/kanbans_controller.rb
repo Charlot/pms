@@ -97,7 +97,6 @@ class KanbansController < ApplicationController
       puts "======="
       puts kanban_params.to_json
       if @kanban.can_update? && @kanban.update(kanban_params)
-        #if @kanban.update(kanban_params)
         format.html { redirect_to @kanban, notice: 'Kanban was successfully updated.' }
         format.json { respond_with_bip(@kanban) }
       else
@@ -359,7 +358,7 @@ class KanbansController < ApplicationController
 
     #check version of Kanban
     render json: {result: false, content: "看板未找到：#{parsed_code.to_json}"} and return unless @kanban
-    render json: {result: false, content: "看板版本错误#{parsed_code[:version_nr]}"} and return unless (version = @kanban.versions.where(id: parsed_code[:version_nr]))
+    #render json: {result: false, content: "看板版本错误#{parsed_code[:version_nr]}"} and return unless (version = @kanban.versions.where(id: parsed_code[:version_nr]))
     #last_version = @kanban.versions.last
     #need_update = last_version.created_at > version.created_at
 
@@ -423,7 +422,7 @@ class KanbansController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def kanban_params
     #params[:kanban]
-    params.require(:kanban).permit(:id, :state, :remark, :quantity, :bundle,
+    params.require(:kanban).permit(:id, :state, :remark,:remark2, :quantity, :bundle,
                                    :safety_stock, :des_warehouse,
                                    :des_storage, :print_time, :part_id,
                                    :version, :ktype, :copies, :product_id
