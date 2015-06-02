@@ -1,41 +1,49 @@
 <%= form_for(@part) do |f| %>
-  <% if @part.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@part.errors.count, "error") %> prohibited this part from being saved:</h2>
+    <% if @part.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@part.errors.count, "error") %> prohibited this part from being saved:</h2>
 
-      <ul>
-      <% @part.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+          <ul>
+            <% @part.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :nr %><br>
+      <%= f.text_field :nr %>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :nr %><br>
-    <%= f.text_field :nr %>
-  </div>
-  <div class="field">
-    <%= f.label :custom_nr %><br>
-    <%= f.text_field :custom_nr %>
-  </div>
-  <div class="field">
-    <%= f.label :type %><br>
-    <%= f.select(:type, part_type_select_options,{include_blank: false}) %>
-  </div>
-  <div class="field">
-    <%= f.label :strip_length %><br>
-    <%= f.text_field :strip_length %>
-  </div>
-  <div class="field">
-    <%= f.label :resource_group_id %><br>
-    <%= f.text_field :resource_group_id %>
-  </div>
-  <div class="field">
-    <%= f.label :measure_unit_id %><br>
-    <%= f.text_field :measure_unit_id %>
-  </div>
-  <div class="actions">
-    <%= f.submit '确认'%>
-  </div>
+    <div class="field">
+      <%= f.label :custom_nr %><br>
+      <%= f.text_field :custom_nr %>
+    </div>
+    <div class="field">
+      <%= f.label :type %><br>
+      <%= f.select(:type, part_type_select_options, {include_blank: false}) %>
+    </div>
+    <div class="field">
+      <%= f.label :component_type %><br>
+      <%= f.text_field :component_type %>
+    </div>
+    <div class="field">
+      <%= f.label :cross_section %><br>
+      <%= f.text_field :cross_section %>
+    </div>
+    <div class="field">
+      <%= f.label :strip_length %><br>
+      <%= f.text_field :strip_length %>
+    </div>
+    <div class="field">
+      <%= f.label :resource_group_id %><br>
+      <%= f.text_field :resource_group_id %>
+    </div>
+    <div class="field">
+      <%= f.label :measure_unit_id %><br>
+      <%= f.text_field :measure_unit_id %>
+    </div>
+    <div class="actions">
+      <%= f.submit '确认' %>
+    </div>
 <% end %>

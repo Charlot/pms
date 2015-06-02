@@ -77,7 +77,7 @@ module FileHandler
       def self.export(user_agent)
         msg = Message.new
         begin
-          tmp_file = KanbanHandler.full_tmp_path('part.csv') unless tmp_file
+          tmp_file = PartHandler.full_tmp_path('part.csv') unless tmp_file
 
           CSV.open(tmp_file, 'wb', write_headers: true,
                    headers: IMPORT_HEADERS,

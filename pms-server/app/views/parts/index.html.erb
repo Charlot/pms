@@ -1,5 +1,6 @@
 <%= render partial: 'shared/search' %>
-<%= link_to '导出零件', export_parts_path, :class => 'btn btn-info' %>
+
+<%= link_to '导出零件', export_parts_path({q:@q,model:current_model}), :class => 'btn btn-info' %>
 
 <div class="digg_pagination">
   <div class="page_info">
@@ -10,13 +11,13 @@
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
-    <th>Nr</th>
-    <th>Custom nr</th>
-    <th>Type</th>
-    <th>Color</th>
+    <th>莱尼号</th>
+    <th>客户号</th>
+    <th>类型</th>
+    <th>颜色</th>
     <th>Component Type</th>
-    <th>Cross Section</th>
-    <th>Strip length</th>
+    <th>截面</th>
+    <th>剥线长度</th>
     <th>Resource group</th>
     <th>Measure unit</th>
     <th colspan="3"></th>
@@ -26,13 +27,13 @@
   <tbody>
   <% @parts.each do |part| %>
       <tr>
-        <td><%= part.nr %></td>
-        <td><%= part.custom_nr %></td>
-        <td><%= PartType.display(part.type) %></td>
-        <td><%= part.color %></td>
-        <td><%= part.component_type %></td>
-        <td><%= part.cross_section %></td>
-        <td><%= part.strip_length %></td>
+        <td><%= best_in_place part, :nr, as: :input %></td>
+        <td><%= best_in_place part, :custom_nr, as: :input %></td>
+        <td><%= best_in_place part, :type, as: :select, collection: PartType.to_select.collect { |s| [s.value, s.display] }.to_h %></td>
+        <td><%= best_in_place part, :color, as: :input %></td>
+        <td><%= best_in_place part, :component_type, as: :input %></td>
+        <td><%= best_in_place part, :cross_section, as: :input %></td>
+        <td><%= best_in_place part, :strip_length, as: :input %></td>
         <td><%= part.resource_group_tool.nr if part.resource_group_tool %></td>
         <td><%= part.measure_unit %></td>
         <td><%= link_to '详情', part %></td>

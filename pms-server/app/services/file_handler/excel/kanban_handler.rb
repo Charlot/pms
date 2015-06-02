@@ -107,9 +107,11 @@ module FileHandler
             sheet.add_row HEADERS
             kanbans = []
             if q.nil?
-              kanbans= Kanban.where.not(state: KanbanState::DELETED).all
+              # kanbans= Kanban.where.not(state: KanbanState::DELETED).all
+              kanbans= Kanban.all
             else
-              kanbans = Kanban.search_for(q).select { |k| [KanbanState::INIT, KanbanState::RELEASED, KanbanState::LOCKED].include? k.state }
+              kanbans = Kanban.search_for(q).all
+              # kanbans = Kanban.search_for(q).select { |k| [KanbanState::INIT, KanbanState::RELEASED, KanbanState::LOCKED].include? k.state }
             end
             kanbans.each do |k|
               sheet.add_row [
@@ -191,6 +193,7 @@ module FileHandler
 
           msg.result =true
           msg.content =tmp_file
+        rescue => e
           puts e.backtrace
           msg.content = e.message
         end
@@ -199,7 +202,7 @@ module FileHandler
 
 
       def self.import_scan file
-        msg = Message.new(contents: [],result:true)
+        msg = Message.new(contents: [], result: true)
 
         header = ['Kanban Nr', 'Wire Nr', 'Product Nr']
 

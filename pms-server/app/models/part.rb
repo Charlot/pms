@@ -15,20 +15,21 @@ class Part < ActiveRecord::Base
   has_one :tool
   validates :nr, presence: true, uniqueness: {message: 'part nr should be uniq'}
 
-  # scoped_search on: [:nr, :type], ext_method: :find_by_part_type
+
   has_paper_trail
   scoped_search on: :nr
+  scoped_search on: [:nr, :type], ext_method: :find_by_part_type
 
   after_update :update_cv_strip_length
 
-  # def self.find_by_part_type key, operator, value
-  #   type=PartType.get_value_by_display(value)
-  #   # if type
-  #   #   {conditions: "parts.type=#{type} and parts.nr like '%#{value}%'"}
-  #   # else
-  #     {conditions: ['parts.nr like ?',"'%#{value}%'"] }
-  #   # end
-  # end
+  def self.find_by_part_type key, operator, value
+    type=PartType.get_value_by_display(value)
+    if type
+      {conditions: "parts.type=#{type} or parts.nr like '%#{value}%'"}
+    else
+      {conditions: ['parts.nr like ?',"'%#{value}%'"] }
+    end
+  end
 
   def self.to_csv(options = {})
     CSV.generate(options) do |csv|
