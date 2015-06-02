@@ -28,12 +28,11 @@ class Kanban < ActiveRecord::Base
   # after_destroy :destroy_part_bom
   # after_update :update_part_bom
 
-  has_paper_trail
+  has_paper_trail #:only => [:quantity,:product_id,:part_id,:bundle,:des_warehouse,:des_storage,:print_time]
 
-  # def find_by_version(v)
-  #   v=v.to_i
-  #   self.versions.offset(v.to_i-1).first.reify
-  # end
+  def need_same_content(kanban)
+
+  end
 
   def self.find_by_wire_nr key, operator, value
     parts = Part.where("nr LIKE '%_#{value}%'").map(&:id)
@@ -232,7 +231,7 @@ class Kanban < ActiveRecord::Base
         machinetimerule = MachineTimeRule.where({oee_code_id: oee.id, machine_type_id: machine.machine_type_id}).order(length: :asc)
 
         timerule = nil
-puts "#{machine.machine_type.nr}----#{process_entity.value_wire_qty_factor}".red
+# puts "#{machine.machine_type.nr}----#{process_entity.value_wire_qty_factor}".red
         #一定要断线长度正好超过规则，才选择这个规则
         # design bug
         # query improvment
