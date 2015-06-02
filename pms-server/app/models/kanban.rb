@@ -28,10 +28,21 @@ class Kanban < ActiveRecord::Base
   # after_destroy :destroy_part_bom
   # after_update :update_part_bom
 
-  has_paper_trail #:only => [:quantity,:product_id,:part_id,:bundle,:des_warehouse,:des_storage,:print_time]
+  has_paper_trail :only => [:quantity,:product_id,:bundle,:des_warehouse,:des_storage,:print_time,:remark,:remark2]
 
-  def need_same_content(kanban)
-
+  def has_same_content(kanban)
+    begin
+      [:quantity,:product_id,:bundle,:des_warehouse,:des_storage,:remark,:remark2].each do |attr|
+        puts "#{attr}--#{self.send(attr)}---#{kanban.send(attr)}".red
+        if self.send(attr)!=kanban.send(attr)
+          return false
+        end
+      end
+    rescue => e
+      puts e.message
+      return false
+    end
+    return true
   end
 
   def self.find_by_wire_nr key, operator, value

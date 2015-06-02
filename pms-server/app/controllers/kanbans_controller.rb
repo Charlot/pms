@@ -361,8 +361,16 @@ class KanbansController < ApplicationController
     #render json: {result: false, content: "看板版本错误#{parsed_code[:version_nr]}"} and return unless (version = @kanban.versions.where(id: parsed_code[:version_nr]))
     #last_version = @kanban.versions.last
     #need_update = last_version.created_at > version.created_at
+    render json: {result: false, content: "看板版本错误#{parsed_code[:version_nr]}"} and return if (parsed_code[:version_nr].to_i-1)<0
 
-    need_update = @kanban.versions.count > parsed_code[:version_nr].to_i
+
+    @kanban_version=@kanban.versions[parsed_code[:version_nr].to_i-1].reify
+    if @kanban_version
+      need_update=!@kanban.has_same_content(@kanban_version)
+    else
+      need_update = @kanban.versions.count > parsed_code[:version_nr].to_i
+    end
+    #need_update = @kanban.versions.count > parsed_code[:version_nr].to_i
 
     #response dependent on Kanban type
     render json: {result: false, content: "看板已经更新，请重新打印!"} and return if need_update && @kanban.ktype == KanbanType::BLUE
@@ -422,7 +430,7 @@ class KanbansController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def kanban_params
     #params[:kanban]
-    params.require(:kanban).permit(:id, :state, :remark,:remark2, :quantity, :bundle,
+    params.require(:kanban).permit(:id, :state, :remark, :remark2, :quantity, :bundle,
                                    :safety_stock, :des_warehouse,
                                    :des_storage, :print_time, :part_id,
                                    :version, :ktype, :copies, :product_id

@@ -63,7 +63,7 @@ class ProductionOrderItemBluesController < ApplicationController
     #authorize(@production_order_item)
     @production_order_item.destroy
     respond_to do |format|
-      format.html { redirect_to production_order_items_url, notice: 'Production order item was successfully destroyed.' }
+      format.html { redirect_to production_order_item_blues_path, notice: 'Production order item was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
