@@ -191,6 +191,7 @@ module FileHandler
 
           msg.result =true
           msg.content =tmp_file
+rescue => e
           puts e.backtrace
           msg.content = e.message
         end
