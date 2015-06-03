@@ -78,6 +78,7 @@ Rails.application.routes.draw do
       post :export
       post :export_scand
       post :move
+      post :change_state
       match :state_export, to: :state_export, via: [:get, :post]
     end
   end

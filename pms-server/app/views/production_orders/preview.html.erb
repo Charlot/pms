@@ -9,12 +9,18 @@
       </div>
     </div>
 <% end %>
-<div class="row">
+<div class="row" style="margin-top: 10px">
   <div class="col-md-1">
     <input type="button" value="移动到:" class="btn btn-info" onclick="move_order_item()"/>
   </div>
   <div class="col-md-2">
     <%= select_tag(:machine_nr, options_for_select(@to_machines.collect { |m| [m.nr, m.nr] }), class: 'form-control', id: 'to-machine', include_blank: true) %>
+  </div>
+</div>
+
+<div class="row" style="float: right;margin-right: 30px">
+  <div class="col-md-1">
+    <input type="button" value="手动终止" class="btn btn-warning" onclick="change_state(<%=ProductionOrderItemState::MANUAL_ABORTED%>)"/>
   </div>
 </div>
 <br/>
@@ -87,11 +93,7 @@
 
 <script type="text/javascript">
     function move_order_item() {
-        var items = [];
-        $.each($('.order-item-check:checked'), function (i, item) {
-            console.log($(item).attr('item'));
-            items.push($(item).attr('item'));
-        });
+        var items = get_items();
         console.log(items);
         if (items.length == 0) {
             swal('请选择生产任务');
@@ -103,13 +105,42 @@
             swal('请选择目标机器');
             return;
         }
-        $.post('/production_order_items/move',{machine:to_machine,items:items},function(data){
-            if(data.result){
-               var i= swal('移动成功');
-               window.location.reload();
-            }else{
+        $.post('/production_order_items/move', {machine: to_machine, items: items}, function (data) {
+            if (data.result) {
+                swal('移动成功');
+                window.location.reload();
+            } else {
                 swal('移动失败，请联系管理员');
             }
         });
+    }
+
+    function change_state(state) {
+        if (confirm('确定执行？？？')) {
+            var items = get_items();
+            console.log(items);
+            if (items.length == 0) {
+                swal('请选择生产任务');
+                return;
+            }
+            $.post('/production_order_items/change_state', {items:items,state:state}, function (data) {
+                if (data.result) {
+                      swal('执行成功！');
+                    window.location.reload();
+                } else {
+                    swal('执行失败，请联系管理员');
+                }
+            });
+
+        }
+    }
+
+    function get_items() {
+        var items = [];
+        $.each($('.order-item-check:checked'), function (i, item) {
+            console.log($(item).attr('item'));
+            items.push($(item).attr('item'));
+        });
+        return items;
     }
 </script>

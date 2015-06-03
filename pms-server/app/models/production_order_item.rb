@@ -156,7 +156,11 @@ class ProductionOrderItem < ActiveRecord::Base
 
 
   def can_move?
-    puts "#{self.state}".red
     [ProductionOrderItemState::INIT,ProductionOrderItemState::DISTRIBUTE_SUCCEED].include?(self.state)
   end
+
+  def change_state?
+    [ProductionOrderItemState::INIT,ProductionOrderItemState::DISTRIBUTE_SUCCEED].include?(self.state)
+  end
+
 end
