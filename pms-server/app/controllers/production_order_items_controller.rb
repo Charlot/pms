@@ -211,7 +211,7 @@ class ProductionOrderItemsController < ApplicationController
           params[:items].each_with_index do |id, i|
             if (item=ProductionOrderItem.find_by_id(id)) && item.can_move?
               item.update_attributes(machine_id: machine.id)
-              raise '88888' if i==2
+              # raise '88888' if i==2
             end
           end
           msg.result =true
