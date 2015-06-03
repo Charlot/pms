@@ -1,19 +1,28 @@
-<%= form_tag(preview_production_orders_path,method: 'get') do%>
+<%= @machine_nr %>
+<%= form_tag(preview_production_orders_path, method: 'get') do %>
     <div class="row">
       <div class="col-md-2">
-        <%= select_tag(:machine_nr, options_for_select(Machine.all.collect{|m|[m.nr,m.nr]} << ['All','All'],((@machine && @machine.nr)||@machine_nr)),class:'form-control',include_blank: false)%>
+        <%= select_tag(:machine_nr, options_for_select(Machine.all.collect { |m| [m.nr, m.nr] } << ['All', 'All'], ((@machine && @machine.nr)||@machine_nr)), class: 'form-control', id: 'preview-machine', include_blank: false) %>
       </div>
       <div class="col-md-2">
-        <%= submit_tag('Preview',class:'btn btn-default')%>
+        <%= submit_tag('Preview', class: 'btn btn-default') %>
       </div>
     </div>
-
-<%end%>
-
+<% end %>
+<div class="row">
+  <div class="col-md-1">
+    <input type="button" value="移动到:" class="btn btn-info" onclick="move_order_item()"/>
+  </div>
+  <div class="col-md-2">
+    <%= select_tag(:machine_nr, options_for_select(@to_machines.collect { |m| [m.nr, m.nr] }), class: 'form-control', id: 'to-machine', include_blank: true) %>
+  </div>
+</div>
+<br/>
 <h2>Preview Orders</h2>
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
+    <th>#</th>
     <th>#</th>
     <th>订单批次号</th>
     <th>Optimize Index</th>
@@ -38,37 +47,69 @@
   </tr>
   </thead>
   <tbody>
-  <% @production_order_items.each do |item|%>
-      <% order_item = ProductionOrderItem.find_by_id(item[:Id])%>
+  <% @production_order_items.each do |item| %>
+      <% order_item = ProductionOrderItem.find_by_id(item[:Id]) %>
       <tr>
-        <td><%= item[:No]%></td>
+        <td>
+          <input type="checkbox" item="<%= order_item.id %>" class="order-item-check"/><%= order_item.id %>
+        </td>
+        <td><%= item[:No] %></td>
         <th>
-          <%= best_in_place order_item,:production_order_id,as: :select,collection: production_order_bip_options(order_item.production_order).to_h %>
+          <%= best_in_place order_item, :production_order_id, as: :select, collection: production_order_bip_options(order_item.production_order).to_h %>
         </th>
         <th>
-          <%= best_in_place order_item,:optimise_index, as: :input%>
+          <%= best_in_place order_item, :optimise_index, as: :input %>
         </th>
         <th>
-          <%= best_in_place order_item,:machine_id, as: :select,collection: Machine.all.collect{|machine| [machine.id,machine.nr]}.to_h %>
+          <%= best_in_place order_item, :machine_id, as: :select, collection: Machine.all.collect { |machine| [machine.id, machine.nr] }.to_h %>
         </th>
-        <td><%= best_in_place order_item,:state, as: :select,collection:ProductionOrderItemState.to_select.collect{|s| [s.value,s.display]}.to_h%></td>
-        <td><%= item[:ProductNr]%></td>
-        <th><%= item[:KanbanWireNr]%></th>
-        <td><%= item[:WireNr]%></td>
-        <td><%= item[:WireLength]%></td>
-        <td><%= item[:Diameter]%></td>
-        <td><%= item[:Terminal1Nr]%></td>
-        <td><%= item[:Tool1Nr]%></td>
-        <td><%= item[:Terminal2Nr]%></td>
-        <td><%= item[:Tool2Nr]%></td>
-        <td><%= item[:Seal1Nr]%></td>
-        <td><%= item[:Seal2Nr]%></td>
-        <td><%= item[:ItemNr]%></td>
-        <td><%= item[:KanbanNr]%></td>
-        <td><%= item[:KanbanQuantity]%></td>
-        <td><%= item[:KanbanBundle]%></td>
+        <td><%= best_in_place order_item, :state, as: :select, collection: ProductionOrderItemState.to_select.collect { |s| [s.value, s.display] }.to_h %></td>
+        <td><%= item[:ProductNr] %></td>
+        <th><%= item[:KanbanWireNr] %></th>
+        <td><%= item[:WireNr] %></td>
+        <td><%= item[:WireLength] %></td>
+        <td><%= item[:Diameter] %></td>
+        <td><%= item[:Terminal1Nr] %></td>
+        <td><%= item[:Tool1Nr] %></td>
+        <td><%= item[:Terminal2Nr] %></td>
+        <td><%= item[:Tool2Nr] %></td>
+        <td><%= item[:Seal1Nr] %></td>
+        <td><%= item[:Seal2Nr] %></td>
+        <td><%= item[:ItemNr] %></td>
+        <td><%= item[:KanbanNr] %></td>
+        <td><%= item[:KanbanQuantity] %></td>
+        <td><%= item[:KanbanBundle] %></td>
         <td><%= link_to 'Edit', edit_production_order_item_path(item[:Id]) %></td>
       </tr>
-  <%end%>
+  <% end %>
   </tbody>
 </table>
+
+<script type="text/javascript">
+    function move_order_item() {
+        var items = [];
+        $.each($('.order-item-check:checked'), function (i, item) {
+            console.log($(item).attr('item'));
+            items.push($(item).attr('item'));
+        });
+        console.log(items);
+        if (items.length == 0) {
+            swal('请选择生产任务');
+            return;
+        }
+        var to_machine = $('#to-machine').val();
+        console.log(to_machine);
+        if (to_machine == '') {
+            swal('请选择目标机器');
+            return;
+        }
+        $.post('/production_order_items/move',{machine:to_machine,items:items},function(data){
+            if(data.result){
+               var i= swal('移动成功');
+               window.location.reload();
+            }else{
+                swal('移动失败，请联系管理员');
+            }
+        });
+    }
+</script>

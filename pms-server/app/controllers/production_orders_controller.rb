@@ -51,7 +51,7 @@ class ProductionOrdersController < ApplicationController
     else
       @production_order_items = ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(@machine).all)
     end
-
+    @to_machines=Machine.where.not(nr: @machine.nr)
     #item = @production_order_items.first
     #puts "^^^^^^^^^^^^^^^^^^^^"
     #puts item[:No]

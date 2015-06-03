@@ -132,15 +132,15 @@ class ProductionOrderItemsController < ApplicationController
   def export_scand
     #authorize(ProductionOrderItem)
     # if @production_order=ProductionOrder.find_by_id(params[:production_order_id])
-      items=ProductionOrderItem.for_optimise#(@production_order)
-      msg=FileHandler::Csv::ProductionOrderItemHandler.new.export_optimized(items, request.user_agent)
-      if msg.result
-        send_file msg.content
-      else
-        @content = msg.to_json
-        render 'shared/error'
-        #render json: msg
-      end
+    items=ProductionOrderItem.for_optimise #(@production_order)
+    msg=FileHandler::Csv::ProductionOrderItemHandler.new.export_optimized(items, request.user_agent)
+    if msg.result
+      send_file msg.content
+    else
+      @content = msg.to_json
+      render 'shared/error'
+      #render json: msg
+    end
     # else
     #   @content = "未找到"
     #   render 'shared/error'
@@ -186,20 +186,42 @@ class ProductionOrderItemsController < ApplicationController
       @production_order_items=@production_order_items.joins(:kanban).where("kanbans.nr like ?", "%#{params[:kanban_nr]}%")
       @kanban_nr=params[:kanban_nr]
     end
-    
+
     unless params[:wire_nr].blank?
       ids= Kanban.search_for(params[:wire_nr]).pluck(:id)
-      @production_order_items=@production_order_items.joins(:kanban).where(kanbans:{id:ids}) if ids.count>0
+      @production_order_items=@production_order_items.joins(:kanban).where(kanbans: {id: ids}) if ids.count>0
       @wire_nr=params[:wire_nr]
     end
 
     unless params[:state].blank?
-      @production_order_items=@production_order_items.where(state:params[:state])
+      @production_order_items=@production_order_items.where(state: params[:state])
       @state=params[:state]
     end
     @production_order_items= @production_order_items.paginate(:page => params[:page])
     @page = params[:page].blank? ? 0 : (params[:page].to_i-1)
     render :index
+  end
+
+
+  def move
+    msg=Message.new
+    begin
+      ProductionOrderItem.transaction do
+        if machine=Machine.find_by_nr(params[:machine])
+          params[:items].each_with_index do |id, i|
+            if (item=ProductionOrderItem.find_by_id(id)) && item.can_move?
+              item.update_attributes(machine_id: machine.id)
+              raise '88888' if i==2
+            end
+          end
+          msg.result =true
+        end
+      end
+    rescue => e
+      msg.result =false
+      msg.content =e.message
+    end
+    render json: msg
   end
 
   private
@@ -210,6 +232,6 @@ class ProductionOrderItemsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def production_order_item_params
-    params.require(:production_order_item).permit(:nr, :state, :optimise_index, :production_order_id, :code, :kanban_id, :machine_id, :production_order,:produced_qty)
+    params.require(:production_order_item).permit(:nr, :state, :optimise_index, :production_order_id, :code, :kanban_id, :machine_id, :production_order, :produced_qty)
   end
 end
