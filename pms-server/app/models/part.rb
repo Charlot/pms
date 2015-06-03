@@ -18,6 +18,7 @@ class Part < ActiveRecord::Base
 
   has_paper_trail
   scoped_search on: :nr
+  scoped_search on: :custom_nr
   scoped_search on: [:nr, :type], ext_method: :find_by_part_type
 
   after_update :update_cv_strip_length
@@ -27,7 +28,7 @@ class Part < ActiveRecord::Base
     if type
       {conditions: "parts.type=#{type} or parts.nr like '%#{value}%'"}
     else
-      {conditions: ['parts.nr like ?',"'%#{value}%'"] }
+      {conditions: "parts.nr like '%#{value}%' " }
     end
   end
 
