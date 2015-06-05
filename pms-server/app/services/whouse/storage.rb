@@ -1,6 +1,6 @@
 module Whouse
   class Storage<BaseClass
-    TOKEN='3dcba17f596969a676bfdd90b5425c703f983acf7306760e1057c95afe9f17b1d'
+    TOKEN='cd ..T'
     REST_HOST='http://localhost:8000/'
     ENTER_STOCK_API='/api/v3/whouse/enter_stock'
     MOVE_STOCKS_API='/api/v3/whouse/moves'
