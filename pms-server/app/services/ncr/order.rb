@@ -192,7 +192,7 @@ module Ncr
           NewWire: {
               WireKey: wire.nr,
               WireGroup: 'Group0',
-              ElectricalSizeMM2: '0.50', #process_entity.value_wire_qty_factor,
+              ElectricalSizeMM2: wire.cross_section==0 ? '' : wire.cross_section, #process_entity.value_wire_qty_factor,
               Diameter: wire.cross_section==0 ? '' : wire.cross_section,
               Color: 'RD',
               Name: wire.nr,
