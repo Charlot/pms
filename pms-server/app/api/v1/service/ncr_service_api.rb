@@ -40,6 +40,7 @@ module V1
             if machine=Machine.find_by_nr(params[:machine_nr])
               order = ProductionOrderItem.first_wait_produce(machine)
               if order
+                puts order.to_json.red
                 r= ProductionOrderItemPresenter.new(order).to_check_material_order
               else
                 r= {}

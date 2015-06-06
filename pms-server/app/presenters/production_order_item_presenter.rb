@@ -31,7 +31,7 @@ class ProductionOrderItemPresenter<Presenter
 
     kanban=@production_order_item.kanban
     puts @production_order_item.id
-    # puts kanban.nr.red
+    # puts kanbanz.red
     if kanban && (process_entity=kanban.process_entities.first)
 
       product=Part.find_by_id(kanban.product_id)
