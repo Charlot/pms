@@ -24,7 +24,7 @@ class ProductionOrderItem < ActiveRecord::Base
   end
 
   def self.first_wait_produce(machine)
-    where(state: ProductionOrderItemState.wait_produce_states, machine_id: machine.id)
+    where(state: ProductionOrderItemState.wait_produce_states, machine_id: machine.id).joins(:kanban)
         .order(production_order_id: :asc, optimise_index: :asc).first
   end
 
