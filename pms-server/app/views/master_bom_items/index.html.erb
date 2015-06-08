@@ -4,13 +4,14 @@
       Part No.:<input type="text" class="form-control" name="product_nr" value="<%= @product_nr %>"/>
       Component P/N:<input type="text" class="form-control" name="bom_item_nr" value="<%= @bom_item_nr %>"/>
       Department:
-      <%= select_tag :department_id, options_for_select(department_options, @department_id), selected: @department_id, include_blank: true,class:"form-control" %>
+      <%= select_tag :department_id, options_for_select(department_options, @department_id), selected: @department_id, include_blank: true, class: "form-control" %>
     </div>
     <button type="submit" class="btn btn-default">搜索</button>
   </form>
 </div>
 
-<%= link_to '导出Master Bom', export_master_bom_items_path(params), :class => 'btn btn-warning', data: {confirm: "数据量较大，确定导出?"}  %>
+<%= link_to '导出Master Bom', export_master_bom_items_path(params), :class => 'btn btn-warning', data: {confirm: "数据量较大，确定导出?"} %>
+<%= link_to '导入删除Master Bom', import_delete_master_bom_items_path, :class => 'btn btn-info' %>
 
 <div class="digg_pagination">
   <div class="page_info">
