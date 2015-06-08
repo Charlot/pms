@@ -67,7 +67,7 @@ User.transaction do
   end
 
   unless mayunmia = User.find_by_user_name("yunxia.ma")
-    mayunmia = User.create({user_name: "yunxia.ma", password: "mayunmia789", password_confirmation: "mayunmia789"})
+    mayunmia = User.create({user_name: "yunxia.ma", password: "mayunxia789", password_confirmation: "mayunxia789"})
     mayunmia.add_role :av
   end
 
@@ -95,7 +95,7 @@ User.transaction do
 
   unless sunlihong = User.find_by_user_name("lihong.sun")
     sunlihong = User.create({user_name: "lihong.sun", password: "sunlihong234", password_confirmation: "sunlihong234"})
-    sunlihong.add_role :kanban
+    sunlihong.add_role :admin
   end
 
   unless system = User.find_by_user_name("system")
