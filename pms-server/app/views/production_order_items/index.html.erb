@@ -113,7 +113,11 @@
         <td><%= link_to '生产详细', production_order_item_production_order_item_labels_path(production_order_item) %></td>
         <td><%= link_to 'Show', production_order_item %></td>
         <td><%= link_to 'Edit', edit_production_order_item_path(production_order_item) %></td>
-        <td><%= link_to 'Destroy', production_order_item, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <td>
+          <% if current_user.can_modify_data? %>
+              <%= link_to 'Destroy', production_order_item, method: :delete, data: {confirm: 'Are you sure?'} %>
+          <% end %>
+        </td>
       </tr>
   <% end %>
   </tbody>

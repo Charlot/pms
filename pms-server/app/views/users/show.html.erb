@@ -1,18 +1,30 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>User Name:</strong>
+  <strong>登陆名:</strong>
+  <%= @user.user_name %>
+</p>
+
+
+
+<p>
+  <strong>姓名:</strong>
+  <%= @user.name %>
+</p>
+
+<p>
+  <strong>工号:</strong>
   <%= @user.user_name %>
 </p>
 
 <p>
-  <strong>Email:</strong>
+  <strong>邮箱:</strong>
   <%= @user.email%>
 </p>
 
 <p>
-  <strong>Role:</strong>
+  <strong>权限:</strong>
   <%= @user.role_name.join(" | ")%>
 </p>
 
-<%= link_to 'Edit', edit_user_path(@user) %>
+<%= link_to '编辑', edit_user_path(@user) %>

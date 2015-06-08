@@ -26,7 +26,7 @@ User.transaction do
     admin.add_role :admin
   end
 
-  unless user = User.find_by_user_name("av")
+  unless av = User.find_by_user_name("av")
     av = User.create({user_name: "av", password: "123456", password_confirmation: "123456"})
     av.add_role :av
   end
@@ -40,9 +40,66 @@ User.transaction do
     system = User.create({user_name: "system", password:"123456",password_confirmation:"123456"})
     system.add_role :system
   end
+  #
+  # unless test=User.find_by_user_name("test")
+  #   test = User.create({user_name: "test", password:"123456",password_confirmation:"123456"})
+  #   test.add_role :admin
+  # end
 
-  unless test=User.find_by_user_name("test")
-    test = User.create({user_name: "test", password:"123456",password_confirmation:"123456"})
-    test.add_role :admin
+
+  unless kanban=User.find_by_user_name("kanban")
+    kanban = User.create({user_name: "kanban", password:"123456",password_confirmation:"123456"})
+    kanban.add_role :kanban
+  end
+
+
+  User.destroy_all
+  #
+
+  unless caigaoming = User.find_by_user_name("gaoming.cai")
+    caigaoming = User.create({user_name: "gaoming.cai", password: "caigaoming123", password_confirmation: "caigaoming123"})
+    caigaoming.add_role :admin
+  end
+
+  unless xulin = User.find_by_user_name("lin.xu")
+    xulin = User.create({user_name: "lin.xu", password: "xulin456", password_confirmation: "xulin456"})
+    xulin.add_role :admin
+  end
+
+  unless mayunmia = User.find_by_user_name("yunxia.ma")
+    mayunmia = User.create({user_name: "yunxia.ma", password: "mayunmia789", password_confirmation: "mayunmia789"})
+    mayunmia.add_role :av
+  end
+
+  unless wangbaofeng = User.find_by_user_name("baofeng.wang")
+    wangbaofeng = User.create({user_name: "baofeng.wang", password: "wangbaofeng012", password_confirmation: "wangbaofeng012"})
+    wangbaofeng.add_role :av
+  end
+
+  unless sujun = User.find_by_user_name("jun.su")
+    sujun = User.create({user_name: "jun.su", password: "sujun345", password_confirmation: "sujun345"})
+    sujun.add_role :av
+  end
+
+  unless sunxinqi = User.find_by_user_name("xinqi.sun")
+    sunxinqi = User.create({user_name: "xinqi.sun", password: "sunxinqi678", password_confirmation: "sunxinqi678"})
+    sunxinqi.add_role :av
+  end
+
+
+  unless wangying = User.find_by_user_name("ying.wang")
+    wangying = User.create({user_name: "ying.wang", password: "wangying901", password_confirmation: "wangying901"})
+    wangying.add_role :kanban
+  end
+
+
+  unless sunlihong = User.find_by_user_name("lihong.sun")
+    sunlihong = User.create({user_name: "lihong.sun", password: "sunlihong234", password_confirmation: "sunlihong234"})
+    sunlihong.add_role :kanban
+  end
+
+  unless system = User.find_by_user_name("system")
+    system = User.create({user_name: "system", password:"123456system",password_confirmation:"123456system"})
+    system.add_role :system
   end
 end

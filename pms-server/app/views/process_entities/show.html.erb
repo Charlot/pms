@@ -39,5 +39,6 @@
   <strong>Cost center:</strong>
   <%= @process_entity.cost_center %>
 </p>
-
-<%= link_to '编辑', edit_process_entity_path(@process_entity) %>
+<% if current_user.can_modify_data? %>
+    <%= link_to '编辑', edit_process_entity_path(@process_entity) %>
+<% end %>

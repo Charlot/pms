@@ -18,7 +18,10 @@
         </td>
         <td><%= production_order_item_label.nr %></td>
         <td><%= production_order_item_label.state %></td>
-        <td><%= link_to 'Destroy', production_order_item_label, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <td>
+          <% if current_user.can_modify_data? %>
+              <%= link_to 'Destroy', production_order_item_label, method: :delete, data: {confirm: 'Are you sure?'} %>
+          <% end %></td>
       </tr>
   <% end %>
   </tbody>
