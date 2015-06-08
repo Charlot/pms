@@ -49,7 +49,10 @@ class Kanban < ActiveRecord::Base
     if /^0/.match(v)
       return Kanban.find_by_nr(v)
     else
+      puts v.red
       if /\d+\/\d+/.match(v)
+
+        puts '9999999999'.red
         return Kanban.find_by_id(v.sub(/\/\d+/,''))
       end
     end

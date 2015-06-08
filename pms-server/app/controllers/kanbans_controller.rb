@@ -366,14 +366,15 @@ class KanbansController < ApplicationController
     parsed_code = Kanban.parse_printed_2DCode(params[:code])
     render json: {result: false, content: "输入错误"} and return unless parsed_code
 
-    @kanban = Kanban.find_by_nr_or_id(parsed_code[:id])
+    @kanban = Kanban.find_by_nr_or_id(params[:code])
     # authorize(@kanban)
+
+    render json: {result: false, content: "看板未找到：#{params[:code]}"} and return unless @kanban
 
     #check Kanban State
     render json: {result: false, content: "看板未发布"} and return unless @kanban.state == KanbanState::RELEASED
 
     #check version of Kanban
-    render json: {result: false, content: "看板未找到：#{parsed_code.to_json}"} and return unless @kanban
     #render json: {result: false, content: "看板版本错误#{parsed_code[:version_nr]}"} and return unless (version = @kanban.versions.where(id: parsed_code[:version_nr]))
     #last_version = @kanban.versions.last
     #need_update = last_version.created_at > version.created_at
@@ -412,7 +413,7 @@ class KanbansController < ApplicationController
       end
     end
 
-    if need_update && @kanban.type == KanbanType::WHITE
+    if need_update && @kanban.ktype == KanbanType::WHITE
       render json: {result: true, content: @order}
     else
       render json: {result: true, contnet: @order}

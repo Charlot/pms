@@ -21,6 +21,8 @@
 <div class="row" style="float: right;margin-right: 30px">
   <div class="col-md-1">
     <input type="button" value="手动终止" class="btn btn-warning" onclick="change_state(<%=ProductionOrderItemState::MANUAL_ABORTED%>)"/>
+    <br/>
+    <input type="button" value="设置紧急/取消紧急" class="btn btn-info" onclick="set_urgent()"/>
   </div>
 </div>
 <br/>
@@ -34,6 +36,8 @@
     <th>Optimize Index</th>
     <th>机器号</th>
     <th>状态</th>
+    <th>任务号</th>
+    <th>看板</th>
     <th>总成号</th>
     <th>线号</th>
     <th>原材料线号</th>
@@ -45,8 +49,6 @@
     <th>模具2</th>
     <th>防水圈1</th>
     <th>防水圈2</th>
-    <th>任务号</th>
-    <th>看板</th>
     <th>看板量</th>
     <th>捆扎数</th>
     <th><span class="red-bold">编辑</span></th>
@@ -55,9 +57,9 @@
   <tbody>
   <% @production_order_items.each do |item| %>
       <% order_item = ProductionOrderItem.find_by_id(item[:Id]) %>
-      <tr>
+      <tr class="<%= order_item.is_urgent? ? 'item-urgent' : 'item-not-urgent' %>">
         <td>
-          <input type="checkbox" item="<%= order_item.id %>" class="order-item-check"/><%= order_item.id %>
+          <input type="checkbox" item="<%= order_item.id %>" class="order-item-check"/>
         </td>
         <td><%= item[:No] %></td>
         <th>
@@ -70,6 +72,8 @@
           <%= best_in_place order_item, :machine_id, as: :select, collection: Machine.all.collect { |machine| [machine.id, machine.nr] }.to_h %>
         </th>
         <td><%= best_in_place order_item, :state, as: :select, collection: ProductionOrderItemState.to_select.collect { |s| [s.value, s.display] }.to_h %></td>
+        <td><%= item[:ItemNr] %></td>
+        <td><%= item[:KanbanNr] %></td>
         <td><%= item[:ProductNr] %></td>
         <th><%= item[:KanbanWireNr] %></th>
         <td><%= item[:WireNr] %></td>
@@ -81,8 +85,6 @@
         <td><%= item[:Tool2Nr] %></td>
         <td><%= item[:Seal1Nr] %></td>
         <td><%= item[:Seal2Nr] %></td>
-        <td><%= item[:ItemNr] %></td>
-        <td><%= item[:KanbanNr] %></td>
         <td><%= item[:KanbanQuantity] %></td>
         <td><%= item[:KanbanBundle] %></td>
         <td><%= link_to 'Edit', edit_production_order_item_path(item[:Id]) %></td>
@@ -90,57 +92,3 @@
   <% end %>
   </tbody>
 </table>
-
-<script type="text/javascript">
-    function move_order_item() {
-        var items = get_items();
-        console.log(items);
-        if (items.length == 0) {
-            swal('请选择生产任务');
-            return;
-        }
-        var to_machine = $('#to-machine').val();
-        console.log(to_machine);
-        if (to_machine == '') {
-            swal('请选择目标机器');
-            return;
-        }
-        $.post('/production_order_items/move', {machine: to_machine, items: items}, function (data) {
-            if (data.result) {
-                swal('移动成功');
-                window.location.reload();
-            } else {
-                swal('移动失败，请联系管理员');
-            }
-        });
-    }
-
-    function change_state(state) {
-        if (confirm('确定执行？？？')) {
-            var items = get_items();
-            console.log(items);
-            if (items.length == 0) {
-                swal('请选择生产任务');
-                return;
-            }
-            $.post('/production_order_items/change_state', {items:items,state:state}, function (data) {
-                if (data.result) {
-                      swal('执行成功！');
-                    window.location.reload();
-                } else {
-                    swal('执行失败，请联系管理员');
-                }
-            });
-
-        }
-    }
-
-    function get_items() {
-        var items = [];
-        $.each($('.order-item-check:checked'), function (i, item) {
-            console.log($(item).attr('item'));
-            items.push($(item).attr('item'));
-        });
-        return items;
-    }
-</script>

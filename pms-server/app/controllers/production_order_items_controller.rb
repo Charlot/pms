@@ -244,6 +244,25 @@ class ProductionOrderItemsController < ApplicationController
     render json: msg
   end
 
+  def set_urgent
+    msg=Message.new
+    begin
+      ProductionOrderItem.transaction do
+        params[:items].each_with_index do |id, i|
+          if (item=ProductionOrderItem.find_by_id(id))
+            item.update_attributes(is_urgent: !item.is_urgent)
+            # raise '88888' if i==2
+          end
+        end
+        msg.result =true
+      end
+    rescue => e
+      msg.result =false
+      msg.content =e.message
+    end
+    render json: msg
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_production_order_item
