@@ -10,6 +10,7 @@ class ImportTemplate
   KANBAN_CSV_TEMPLATE='kanban.csv'
   KANBAN_EXCEL_TEMPLATE='kanban.xlsx'
   KANBAN_SCAN_EXCEL_TEMPLATE='kanban_scan.xlsx'
+  KANBAN_FINISH_SCAN_EXCEL_TEMPLATE='kanban_finish_scan.xlsx'
   KANBAN_UPDATE_EXCEL_TEMPLATE='kanban_update_quantity.xlsx'
   KANBAN_LOCK_EXCEL_TEMPLATE='kanban_lock.xlsx'
   KANBAN_RELEASE_EXCEL_TEMPLATE='kanban_release.xlsx'

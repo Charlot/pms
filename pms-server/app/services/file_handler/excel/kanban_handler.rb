@@ -219,7 +219,7 @@ module FileHandler
               kanban = nil
 
               if row['Kanban Nr'].present?
-                kanban = Kanban.find_by_nr(row['Kanban Nr'])
+                kanban = Kanban.find_by_nr_or_id(row['Kanban Nr'])
               else
                 product = Part.where({nr: row['Product Nr'], type: PartType::PRODUCT}).first
                 if product.nil?
@@ -262,7 +262,7 @@ module FileHandler
                 next
               end
 
-              unless kanban.in_produce?
+              unless kanban.not_in_produce?
                 msg.result=false
                 msg.contents<<"Row:#{line}:#{kanban.nr},已投卡,不可重复投卡"
                 next
@@ -290,6 +290,60 @@ module FileHandler
 
         msg
       end
+
+
+
+      def self.import_finish_scan file
+        msg = Message.new(contents: [], result: true)
+
+        header = ['Kanban Nr']
+
+        book = Roo::Excelx.new file
+        book.default_sheet = book.sheets.first
+        begin
+          ProductionOrderItem.transaction do
+            2.upto(book.last_row) do |line|
+              row = {}
+              header.each_with_index do |k, i|
+                row[k] = book.cell(line, i+1).to_s.strip # Strip
+              end
+
+              kanban = nil
+
+              if row['Kanban Nr'].present?
+                kanban = Kanban.find_by_nr_or_id(row['Kanban Nr'])
+              end
+
+              if kanban.nil?
+                msg.result=false
+                msg.contents<<"Row:#{line}.#{row['Kanban Nr'].to_s},看板不存在"
+                next
+              end
+
+              if kanban.not_in_produce?
+                msg.result=false
+                msg.contents<<"Row:#{line}:#{kanban.nr},未投卡，不可销卡"
+                next
+              end
+
+              if kanban.terminate_produce_item
+                msg.contents<<"Row:#{line}:#{kanban.nr},销卡成功!"
+              end
+            end
+            unless msg.result
+              msg.content = msg.contents.join("</br>")
+            else
+              msg.content = "销卡成功!"
+            end
+          end
+        rescue => e
+          msg.result =false
+          msg.content =e.message
+        end
+
+        msg
+      end
+
 
       def self.import file
         msg = Message.new

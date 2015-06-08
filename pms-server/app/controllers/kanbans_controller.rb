@@ -267,7 +267,6 @@ class KanbansController < ApplicationController
 
   # 导入看板卡进行投卡
   def import_to_scan
-    @hide_sidebar = true
     # authorize(Kanban)
     if request.post?
       msg = Message.new
@@ -277,6 +276,23 @@ class KanbansController < ApplicationController
       fd.save
       #file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
       msg = FileHandler::Excel::KanbanHandler.import_scan(fd.full_path)
+      # rescue => e
+      #   msg.content = e.message
+      # end
+      render json: msg
+    end
+  end
+
+  def import_to_finish_scan
+    # authorize(Kanban)
+    if request.post?
+      msg = Message.new
+      # begin
+      file=params[:files][0]
+      fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
+      fd.save
+      #file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
+      msg = FileHandler::Excel::KanbanHandler.import_finish_scan(fd.full_path)
       # rescue => e
       #   msg.content = e.message
       # end
@@ -310,7 +326,7 @@ class KanbansController < ApplicationController
       parsed_code = Kanban.parse_printed_2DCode(params[:code])
       render json: {result: false, content: "扫描错误！"} and return unless parsed_code
 
-      @kanban = Kanban.find_by_id(parsed_code[:id])
+      @kanban = Kanban.find_by_nr_or_id(parsed_code[:id])
       render json: {result: false, content: '看板不存在'} and return unless @kanban
       #check version of Kanban
       #render json: {result: false, content: "Kanban not fount for#{parsed_code.to_json}"} and return unless @kanban
@@ -350,7 +366,7 @@ class KanbansController < ApplicationController
     parsed_code = Kanban.parse_printed_2DCode(params[:code])
     render json: {result: false, content: "输入错误"} and return unless parsed_code
 
-    @kanban = Kanban.find_by_id(parsed_code[:id])
+    @kanban = Kanban.find_by_nr_or_id(parsed_code[:id])
     # authorize(@kanban)
 
     #check Kanban State
@@ -381,7 +397,7 @@ class KanbansController < ApplicationController
     #2015-3-10 李其
     #不做扫描之后验证是否已经扫入，由工作人员控制
     #注释了这段代码，暂时不实现标注唯一的一张纸质看板卡
-    unless @kanban.in_produce?
+    unless @kanban.not_in_produce?
       render json: {result: false, content: "卡已投过，不可重复投卡"} and return
     end
     if @kanban.ktype==KanbanType::WHITE

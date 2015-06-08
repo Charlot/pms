@@ -1,0 +1,26 @@
+<script type="text/javascript">
+    $(document).ready(function () {
+        data_upload("#item-data-uploader");
+    });
+</script>
+<p id="notice">
+  <%= notice %>
+</p>
+<h3>上传KANBAN文件</h3>
+<div>
+  选择数据文件：
+  <input id="item-data-uploader" type="file" name="files[]" data-url="/kanbans/import_to_finish_scan"/>
+
+  <div id="item-data-uploader-preview" style="display:none;"></div>
+  <div>
+    <a href="/files/<%= ImportTemplate.kanban_finish_scan_excel_template %>">下载模板：<%= ImportTemplate::KANBAN_FINISH_SCAN_EXCEL_TEMPLATE %></a>
+  </div>
+  <div class="info-warn-div">
+    <h5> 说明：</h5>
+
+    <div>
+      模板文件： kanban_finish_scan.xlsx，中包含1列:Kanban Nr<br/>
+      其中：Kanban Nr是看板号如004203或112/8
+    </div>
+  </div>
+</div>

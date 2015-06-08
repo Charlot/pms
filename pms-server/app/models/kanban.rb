@@ -28,11 +28,11 @@ class Kanban < ActiveRecord::Base
   # after_destroy :destroy_part_bom
   # after_update :update_part_bom
 
-  has_paper_trail :only => [:quantity,:product_id,:bundle,:des_warehouse,:des_storage,:print_time,:remark,:remark2]
+  has_paper_trail :only => [:quantity, :product_id, :bundle, :des_warehouse, :des_storage, :print_time, :remark, :remark2]
 
   def has_same_content(kanban)
     begin
-      [:quantity,:product_id,:bundle,:des_warehouse,:des_storage,:remark,:remark2].each do |attr|
+      [:quantity, :product_id, :bundle, :des_warehouse, :des_storage, :remark, :remark2].each do |attr|
         puts "#{attr}--#{self.send(attr)}---#{kanban.send(attr)}".red
         if self.send(attr)!=kanban.send(attr)
           return false
@@ -43,6 +43,16 @@ class Kanban < ActiveRecord::Base
       return false
     end
     return true
+  end
+
+  def self.find_by_nr_or_id(v)
+    if /^0/.match(v)
+      return Kanban.find_by_nr(v)
+    else
+      if /\d+\/\d+/.match(v)
+        return Kanban.find_by_id(v.sub(/\/\d+/,''))
+      end
+    end
   end
 
   def self.find_by_wire_nr key, operator, value
@@ -242,7 +252,7 @@ class Kanban < ActiveRecord::Base
         machinetimerule = MachineTimeRule.where({oee_code_id: oee.id, machine_type_id: machine.machine_type_id}).order(length: :asc)
 
         timerule = nil
-# puts "#{machine.machine_type.nr}----#{process_entity.value_wire_qty_factor}".red
+        # puts "#{machine.machine_type.nr}----#{process_entity.value_wire_qty_factor}".red
         #一定要断线长度正好超过规则，才选择这个规则
         # design bug
         # query improvment
@@ -297,23 +307,33 @@ class Kanban < ActiveRecord::Base
   end
 
 
-  def in_produce?
+  def not_in_produce?
     if self.ktype==KanbanType::WHITE
       return self.production_order_items.where(state: ProductionOrderItemState::INIT).count==0
     elsif self.ktype==KanbanType::BLUE
       return self.production_order_item_blues.where(state: ProductionOrderItemState::INIT).count==0
     end
-     false
+    false
   end
 
   def generate_produce_item
     if self.ktype==KanbanType::WHITE
-      return  ProductionOrderItem.create(kanban_id: self.id, code: self.printed_2DCode,kanban_qty:self.quantity,kanban_bundle:self.bundle)
+      return ProductionOrderItem.create(kanban_id: self.id, code: self.printed_2DCode, kanban_qty: self.quantity, kanban_bundle: self.bundle)
     elsif self.ktype==KanbanType::BLUE
-      return ProductionOrderItemBlue.create(kanban_id: self.id, code: self.printed_2DCode, produced_qty: self.quantity,kanban_qty:self.quantity,kanban_bundle:self.bundle)
+      return ProductionOrderItemBlue.create(kanban_id: self.id, code: self.printed_2DCode, produced_qty: self.quantity, kanban_qty: self.quantity, kanban_bundle: self.bundle)
     end
     false
   end
+
+  def terminate_produce_item
+    if self.ktype==KanbanType::WHITE
+      true
+    elsif self.ktype==KanbanType::BLUE
+      return ProductionOrderItemBlue.where(kanban_id: self.id,state: ProductionOrderItemState::INIT ).first.update(state: ProductionOrderItemState::TERMINATED)
+    end
+    false
+  end
+
   #
   private
   def generate_id
