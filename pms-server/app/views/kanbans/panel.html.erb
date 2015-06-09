@@ -31,6 +31,7 @@
                     if (data.result) {
 //                        swal("投卡成功！");
                         $("#message-div").text(kanban_id + ",投卡成功！");
+                        $('#scan_Kanban').val('');
                     }
                     else {
                         swal(data.content);

@@ -26,6 +26,7 @@
                     if (data.result) {
 //                        swal("销卡成功！");
                         $("#message-div").text(kanban_id + ",销卡成功！");
+                        $('#scan_Kanban').val('');
                     }
                     else {
                         swal(data.content);
