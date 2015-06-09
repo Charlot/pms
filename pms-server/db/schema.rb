@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150608065604) do
+ActiveRecord::Schema.define(version: 20150609022828) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
