@@ -156,6 +156,7 @@ ActiveRecord::Schema.define(version: 20150608065604) do
     t.float    "time",            default: 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.float    "min_length"
   end
 
   add_index "machine_time_rules", ["machine_type_id"], name: "index_machine_time_rules_on_machine_type_id", using: :btree
