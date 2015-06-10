@@ -250,24 +250,15 @@ class Kanban < ActiveRecord::Base
         end
 
         #查找全部满足的全自动工时规则，并且以断线长度升序排序
-        machinetimerule = MachineTimeRule.where({oee_code_id: oee.id, machine_type_id: machine_type_id}).order(length: :asc)
-
         timerule = nil
-        # puts "#{machine.machine_type.nr}----#{process_entity.value_wire_qty_factor}".red
-        #一定要断线长度正好超过规则，才选择这个规则
-        # design bug
-        # query improvment
-        machinetimerule.each { |mtr|
-          if (mtr.min_length.to_f...mtr.length.to_f).include?(process_entity.value_wire_qty_factor.to_f)
-            timerule = mtr
-          end
-        }
+        wire_length_value = process_entity.value_wire_qty_factor.to_f
+        timerule = MachineTimeRule.where(["oee_code_id = ? AND machine_type_id = ? AND min_length <= ? AND length > ?", oee.id, machine_type_id, wire_length_value, wire_length_value])
 
         if timerule.nil?
           return task_time
         end
 
-        task_time = timerule.time * self.quantity
+        task_time = timerule.first.time * self.quantity
       when KanbanType::BLUE
 
     end
