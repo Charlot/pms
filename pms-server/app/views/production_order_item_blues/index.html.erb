@@ -19,7 +19,13 @@
     </div>
   </form>
 </div>
-
+<div class="row" style="float: right;margin-right: 30px">
+  <div class="col-md-1">
+    <input type="button" value="手动终止" class="btn btn-warning" onclick="change_state(<%=ProductionOrderItemState::MANUAL_ABORTED%>)"/>
+    <br/>
+    <input type="button" value="设置紧急/取消紧急" class="btn btn-info" onclick="set_urgent()"/>
+  </div>
+</div>
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @production_order_items %>
@@ -29,6 +35,7 @@
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
+    <th>#</th>
     <th>No.</th>
     <th>Nr</th>
     <th>State</th>
@@ -46,7 +53,10 @@
 
   <tbody>
   <% @production_order_items.each_with_index do |production_order_item, i| %>
-      <tr>
+      <tr class="<%= production_order_item.is_urgent? ? 'item-urgent' : 'item-not-urgent' %>">
+        <td>
+          <input type="checkbox" item="<%= production_order_item.id %>" class="order-item-check"/>
+        </td>
         <td><%= @page*WillPaginate.per_page + i+1 %></td>
         <td><%= production_order_item.nr %></td>
         <td><%= ProductionOrderItemState.display production_order_item.state %></td>
