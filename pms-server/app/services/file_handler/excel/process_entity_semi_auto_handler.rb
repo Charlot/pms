@@ -199,10 +199,10 @@ module FileHandler
                         end
                       else
                         if cv
+                          cv.update(value: cf.get_field_format_value(custom_fields_val[index]))
+                        else
                           cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
                           pe.custom_values<<cv
-                        else
-                          cv.update(value: cf.get_field_format_value(custom_fields_val[index]))
                         end
                       end
                     }
