@@ -8,7 +8,7 @@ module FileHandler
           'Destination Storage', 'Process List', 'Operator'
       ]
 
-      WHITE_HEADERS=['Nr', 'Quantity', 'Safety Stock', 'Copies',
+      WHITE_HEADERS=['Nr', 'Quantity', 'Safety Stock', 'Copies','Task Time',
                      'Remark', 'Remark2', 'Wire Nr', 'Product Nr', 'Type',
                      'Bundle', 'Destination Warehouse',
                      'Destination Storage', 'Process List', 'Row Wire Nr', 'Diameter', 'Length', 'T1', 'T2', 'S1', 'S2']
@@ -169,6 +169,7 @@ module FileHandler
                                 k.quantity,
                                 k.safety_stock,
                                 k.copies,
+                                k.task_time,
                                 k.remark,
                                 k.remark2,
                                 k.wire_nr,
