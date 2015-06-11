@@ -8,7 +8,7 @@ class CreateProductionOrderHandlerListItems < ActiveRecord::Migration
       t.integer :result
       t.string :handler_user
       t.datetime :item_terminated_at
-      t.references :production_order_handler_list, index: true
+      t.references :production_order_handler_list#, index: true
 
       t.timestamps
     end
