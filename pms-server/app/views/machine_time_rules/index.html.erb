@@ -7,6 +7,7 @@
       <th>MinLength</th>
       <th>MaxLength</th>
       <th>Time</th>
+      <th>STD Time</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -19,6 +20,7 @@
         <td><%= machine_time_rule.min_length %></td>
         <td><%= machine_time_rule.length %></td>
         <td><%= machine_time_rule.time %></td>
+        <td><%= machine_time_rule.std_time %></td>
         <td><%= link_to 'Show', machine_time_rule %></td>
         <td><%= link_to 'Edit', edit_machine_time_rule_path(machine_time_rule) %></td>
         <td><%= link_to 'Destroy', machine_time_rule, method: :delete, data: { confirm: 'Are you sure?' } %></td>
