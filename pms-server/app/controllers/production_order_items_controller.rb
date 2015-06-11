@@ -230,7 +230,7 @@ class ProductionOrderItemsController < ApplicationController
     begin
       ProductionOrderItem.transaction do
         params[:items].each_with_index do |id, i|
-          if (item=ProductionOrderItem.find_by_id(id)) && item.change_state?
+          if (item=ProductionOrderItem.unscoped.find_by_id(id)) && item.change_state?
             item.update_attributes(state: params[:state])
             # raise '88888' if i==2
           end
@@ -249,7 +249,7 @@ class ProductionOrderItemsController < ApplicationController
     begin
       ProductionOrderItem.transaction do
         params[:items].each_with_index do |id, i|
-          if (item=ProductionOrderItem.find_by_id(id))
+          if (item=ProductionOrderItem.unscoped.find_by_id(id))
             item.update_attributes(is_urgent: !item.is_urgent)
             # raise '88888' if i==2
           end
