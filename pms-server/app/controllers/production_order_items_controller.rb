@@ -129,7 +129,6 @@ class ProductionOrderItemsController < ApplicationController
 
   def export_scand
     #authorize(ProductionOrderItem)
-    # if @production_order=ProductionOrder.find_by_id(params[:production_order_id])
     items=ProductionOrderItem.for_optimise #(@production_order)
     msg=FileHandler::Csv::ProductionOrderItemHandler.new.export_optimized(items, request.user_agent)
     if msg.result
@@ -137,12 +136,7 @@ class ProductionOrderItemsController < ApplicationController
     else
       @content = msg.to_json
       render 'shared/error'
-      #render json: msg
     end
-    # else
-    #   @content = "未找到"
-    #   render 'shared/error'
-    # end
   end
 
   def state_export

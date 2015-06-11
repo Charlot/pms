@@ -1,6 +1,9 @@
-<% if has_distribute_item_blues %>
+<% if @production_order.nil? && has_distribute_item_blues %>
     <%= form_tag('/production_order_item_blues/distribute', method: 'post') do %>
         <input type="button" value="分发" class="btn btn-info" onclick="if(confirm('distribute?')){form.submit();}"/>
+    <% end %>
+    <%= form_tag('/production_order_item_blues/export_scand', method: 'post') do %>
+        <input type="button" value="导出已扫描" class="btn btn-info" onclick="if(confirm('export?')){form.submit();}"/>
     <% end %>
 <% end %>
 <hr>

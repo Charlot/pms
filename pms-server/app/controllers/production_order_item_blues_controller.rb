@@ -47,6 +47,19 @@ class ProductionOrderItemBluesController < ApplicationController
   end
 
 
+  def export_scand
+    #authorize(ProductionOrderItem)
+    items=ProductionOrderItemBlue.for_distribute
+    msg=FileHandler::Excel::ProductionOrderItemBlueHandler.export(items)
+    if msg.result
+      send_file msg.content
+    else
+      @content = msg.to_json
+      render 'shared/error'
+    end
+  end
+
+
   def search
     #authorize(ProductionOrderItem)
     @production_order_items=ProductionOrderItemBlue
