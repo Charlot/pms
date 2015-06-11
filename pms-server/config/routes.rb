@@ -104,6 +104,7 @@ Rails.application.routes.draw do
     collection do
       get :search
       post :distribute
+      post :export
       post :export_scand
     end
   end

@@ -59,6 +59,17 @@ class ProductionOrderItemBluesController < ApplicationController
     end
   end
 
+  def export
+    #authorize(ProductionOrderItem)
+    items=ProductionOrderBlue.find_by_id(params[:production_order_id]).production_order_item_blues
+    msg=FileHandler::Excel::ProductionOrderItemBlueHandler.export(items)
+    if msg.result
+      send_file msg.content
+    else
+      @content = msg.to_json
+      render 'shared/error'
+    end
+  end
 
   def search
     #authorize(ProductionOrderItem)

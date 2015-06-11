@@ -5,6 +5,11 @@
     <%= form_tag('/production_order_item_blues/export_scand', method: 'post') do %>
         <input type="button" value="导出已扫描" class="btn btn-info" onclick="if(confirm('export?')){form.submit();}"/>
     <% end %>
+<% elsif @production_order %>
+    <%= form_tag('/production_order_item_blues/export', method: 'post') do %>
+        <%= hidden_field_tag :production_order_id, @production_order.id %>
+        <input type="button" value="导出订单列表任务" class="btn btn-info" onclick="if(confirm('export?')){form.submit();}"/>
+    <% end %>
 <% end %>
 <hr>
 
@@ -80,8 +85,8 @@
         <td><%= production_order_item.produced_qty %></td>
         <td><%= production_order_item.created_at.localtime %>
         <td><%= production_order_item.terminated_at.localtime if production_order_item.terminated_at %>
-        <td><%= production_order_item.terminate_user%>
-        <td><%= production_order_item.terminated_kanban_code%>
+        <td><%= production_order_item.terminate_user %>
+        <td><%= production_order_item.terminated_kanban_code %>
         <td>
           <% if current_user.can_modify_data? %>
               <%= link_to 'Destroy', production_order_item, method: :delete, data: {confirm: 'Are you sure?'} %>
