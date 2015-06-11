@@ -1,0 +1,94 @@
+<%= @machine_nr %>
+<%= form_tag(preview_production_orders_path, method: 'get') do %>
+    <div class="row">
+      <div class="col-md-2">
+        <%= select_tag(:machine_nr, options_for_select(Machine.all.collect { |m| [m.nr, m.nr] } << ['All', 'All'], ((@machine && @machine.nr)||@machine_nr)), class: 'form-control', id: 'preview-machine', include_blank: false) %>
+      </div>
+      <div class="col-md-2">
+        <%= submit_tag('Preview', class: 'btn btn-default') %>
+      </div>
+    </div>
+<% end %>
+<div class="row" style="margin-top: 10px">
+  <div class="col-md-1">
+    <input type="button" value="移动到:" class="btn btn-info" onclick="move_order_item()"/>
+  </div>
+  <div class="col-md-2">
+    <%= select_tag(:machine_nr, options_for_select(@to_machines.collect { |m| [m.nr, m.nr] }), class: 'form-control', id: 'to-machine', include_blank: true) %>
+  </div>
+</div>
+
+<div class="row" style="float: right;margin-right: 30px">
+  <div class="col-md-1">
+    <input type="button" value="手动终止" class="btn btn-warning" onclick="change_state(<%=ProductionOrderItemState::MANUAL_ABORTED%>)"/>
+    <br/>
+    <input type="button" value="设置紧急/取消紧急" class="btn btn-info" onclick="set_urgent()"/>
+  </div>
+</div>
+<br/>
+<h2>Preview Orders</h2>
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+  <tr>
+    <th>#</th>
+    <th>#</th>
+    <th>订单批次号</th>
+    <th>Optimize Index</th>
+    <th>机器号</th>
+    <th>状态</th>
+    <th>任务号</th>
+    <th>看板</th>
+    <th>总成号</th>
+    <th>线号</th>
+    <th>原材料线号</th>
+    <th>线长</th>
+    <th>截面</th>
+    <th>端子1</th>
+    <th>模具1</th>
+    <th>端子2</th>
+    <th>模具2</th>
+    <th>防水圈1</th>
+    <th>防水圈2</th>
+    <th>看板量</th>
+    <th>捆扎数</th>
+    <th><span class="red-bold">编辑</span></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @production_order_items.each do |item| %>
+      <% order_item = ProductionOrderItem.find_by_id(item[:Id]) %>
+      <tr class="<%= order_item.is_urgent? ? 'item-urgent' : 'item-not-urgent' %>">
+        <td>
+          <input type="checkbox" item="<%= order_item.id %>" class="order-item-check"/>
+        </td>
+        <td><%= item[:No] %></td>
+        <th>
+          <%= best_in_place order_item, :production_order_id, as: :select, collection: production_order_bip_options(order_item.production_order).to_h %>
+        </th>
+        <th>
+          <%= best_in_place order_item, :optimise_index, as: :input %>
+        </th>
+        <th>
+          <%= best_in_place order_item, :machine_id, as: :select, collection: Machine.all.collect { |machine| [machine.id, machine.nr] }.to_h %>
+        </th>
+        <td><%= best_in_place order_item, :state, as: :select, collection: ProductionOrderItemState.to_select.collect { |s| [s.value, s.display] }.to_h %></td>
+        <td><%= item[:ItemNr] %></td>
+        <td><%= item[:KanbanNr] %></td>
+        <td><%= item[:ProductNr] %></td>
+        <th><%= item[:KanbanWireNr] %></th>
+        <td><%= item[:WireNr] %></td>
+        <td><%= item[:WireLength] %></td>
+        <td><%= item[:Diameter] %></td>
+        <td><%= item[:Terminal1Nr] %></td>
+        <td><%= item[:Tool1Nr] %></td>
+        <td><%= item[:Terminal2Nr] %></td>
+        <td><%= item[:Tool2Nr] %></td>
+        <td><%= item[:Seal1Nr] %></td>
+        <td><%= item[:Seal2Nr] %></td>
+        <td><%= item[:KanbanQuantity] %></td>
+        <td><%= item[:KanbanBundle] %></td>
+        <td><%= link_to 'Edit', edit_production_order_item_path(item[:Id]) %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>

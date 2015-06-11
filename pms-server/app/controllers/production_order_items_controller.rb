@@ -100,8 +100,6 @@ class ProductionOrderItemsController < ApplicationController
     #authorize(ProductionOrderItem)
     msg=Message.new
     if @production_order=ProductionOrder.find_by_id(params[:production_order_id])
-      puts "#{@production_order.class}--------------------------------"
-
       msg=Ncr::Order.new(@production_order).distribute
       redirect_to production_order_production_order_items_path(@production_order), notice: msg.content
     else

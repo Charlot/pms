@@ -23,13 +23,20 @@
 
         <li><a href="<%= production_order_items_path %>">白卡生产任务</a></li>
         <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">生产订单<span class="caret"></span></a>
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">白卡生产订单<span class="caret"></span></a>
           <ul class="dropdown-menu" role="manage">
-            <li><a href="<%= production_orders_path %>">订单列表</a></li>
-            <li><a href="<%= preview_production_orders_path %>">订单预览</a></li>
+            <li><a href="<%= production_orders_path %>">白卡订单列表</a></li>
+            <li><a href="<%= preview_production_orders_path %>">白卡订单预览</a></li>
           </ul>
         </li>
+
         <li><a href="<%= production_order_item_blues_path %>">兰卡生产任务</a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">兰卡生产订单<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="manage">
+            <li><a href="<%= production_order_blues_path %>">兰卡订单列表</a></li>
+          </ul>
+        </li>
 
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">基础数据<span class="caret"></span></a>

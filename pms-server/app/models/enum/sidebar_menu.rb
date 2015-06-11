@@ -20,6 +20,17 @@ module Enum
                                     index: @@all_roles,
                                     state_export: @@all_roles
                                 }},
+        PRODUCTION_ORDER_BLUE: {name: PageInfo.productionorderblue, actions: [ "index"],
+                           roles: {
+                               new: @@all_roles,
+                               index: @@all_roles
+                           }},
+        PRODUCTION_ORDER_ITEM_BLUE: {name: PageInfo.productionorderitemblue, actions: [ "index"],
+                                roles: {
+                                    new: @@all_roles,
+                                    index: @@all_roles,
+                                }},
+
         PART: {name: PageInfo.part, actions: ["new", "index", "import", 'import_update']},
         MEASURE_UNIT: {name: PageInfo.measureunit, actions: ["new", "index"]},
         PART_BOM: {name: PageInfo.partbom, actions: ["new", "index", "import"]},

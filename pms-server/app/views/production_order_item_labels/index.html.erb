@@ -1,10 +1,11 @@
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
-    <th>Bundle no</th>
-    <th>Qty</th>
-    <th>Nr</th>
-    <th>State</th>
+    <th>捆扎序号</th>
+    <th>数量</th>
+    <th>唯一码</th>
+    <th>状态</th>
+    <th>生产时间</th>
     <th></th>
   </tr>
   </thead>
@@ -18,6 +19,7 @@
         </td>
         <td><%= production_order_item_label.nr %></td>
         <td><%= production_order_item_label.state %></td>
+        <td><%= production_order_item_label.created_at.localtime %></td>
         <td>
           <% if current_user.can_modify_data? %>
               <%= link_to 'Destroy', production_order_item_label, method: :delete, data: {confirm: 'Are you sure?'} %>

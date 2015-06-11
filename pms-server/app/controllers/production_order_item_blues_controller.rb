@@ -4,43 +4,15 @@ class ProductionOrderItemBluesController < ApplicationController
   # GET /production_order_items
   # GET /production_order_items.json
   def index
-    @production_order_items = ProductionOrderItemBlue.in_produces.paginate(:page => params[:page])
+    if params.has_key?(:production_order_blue_id)
+      @production_order=ProductionOrderBlue.find_by_id(params[:production_order_blue_id])
+      @production_order_items=@production_order.production_order_item_blues.paginate(:page => params[:page])
+    else
+      @production_order_items = ProductionOrderItemBlue.for_distribute.paginate(:page => params[:page])
+    end
     @page = params[:page].blank? ? 0 : (params[:page].to_i-1)
   end
 
-  #
-  # # GET /production_order_items/1
-  # # GET /production_order_items/1.json
-  # def show
-  #   ##authorize(@production_order_item)
-  # end
-  #
-  # # GET /production_order_items/new
-  # def new
-  #   @production_order_item = ProductionOrderItem.new
-  #   ##authorize(@production_order_item)
-  # end
-  #
-  # # GET /production_order_items/1/edit
-  # def edit
-  #   #authorize(@production_order_item)
-  # end
-  #
-  # # POST /production_order_items
-  # # POST /production_order_items.json
-  # def create
-  #   @production_order_item = ProductionOrderItem.new(production_order_item_params)
-  #   #authorize(@production_order_item)
-  #   respond_to do |format|
-  #     if @production_order_item.save
-  #       format.html { redirect_to @production_order_item, notice: 'Production order item was successfully created.' }
-  #       format.json { render :show, status: :created, location: @production_order_item }
-  #     else
-  #       format.html { render :new }
-  #       format.json { render json: @production_order_item.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
 
   # PATCH/PUT /production_order_items/1
   # PATCH/PUT /production_order_items/1.json
@@ -56,6 +28,47 @@ class ProductionOrderItemBluesController < ApplicationController
       end
     end
   end
+
+  def distribute
+    #authorize(ProductionOrderItem)
+    msg=Message.new
+    if ProductionOrderItemBlue.has_for_distribute?
+      order_operate=Ncr::Order.new(nil, ProductionOrderType::BLUE)
+      msg=order_operate.distribute
+      if msg.result
+        redirect_to production_order_blue_production_order_item_blues_path(order_operate.production_order), notice: msg.content
+      else
+        redirect_to production_order_item_blues_path, notice: msg.content
+      end
+    else
+      msg.content = '不存在需要优化项'
+      redirect_to production_order_items_path, notice: msg.content
+    end
+  end
+
+
+  def search
+    #authorize(ProductionOrderItem)
+    @production_order_items=ProductionOrderItemBlue
+
+    if params.has_key?(:production_order_item_nr) && params[:production_order_item_nr].length>0
+      @production_order_items= @production_order_items.where("production_order_items.nr like '%#{params[:production_order_item_nr]}%'")
+      @production_order_item_nr=params[:production_order_item_nr]
+    end
+
+    unless params[:kanban_nr].blank?
+      @production_order_items=@production_order_items.joins(:kanban).where("kanbans.nr like ?", "%#{params[:kanban_nr]}%")
+      @kanban_nr=params[:kanban_nr]
+    end
+    unless params[:state].blank?
+      @production_order_items=@production_order_items.where(state: params[:state])
+      @state=params[:state]
+    end
+    @production_order_items= @production_order_items.paginate(:page => params[:page])
+    @page = params[:page].blank? ? 0 : (params[:page].to_i-1)
+    render :index
+  end
+
 
   # DELETE /production_order_items/1
   # DELETE /production_order_items/1.json

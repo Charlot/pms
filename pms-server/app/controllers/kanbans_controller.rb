@@ -326,7 +326,7 @@ class KanbansController < ApplicationController
       parsed_code = Kanban.parse_printed_2DCode(params[:code])
       render json: {result: false, content: "扫描错误！"} and return unless parsed_code
 
-      @kanban = Kanban.find_by_nr_or_id(parsed_code[:id])
+      @kanban = Kanban.find_by_nr_or_id(params[:code])
       render json: {result: false, content: '看板不存在'} and return unless @kanban
       #check version of Kanban
       #render json: {result: false, content: "Kanban not fount for#{parsed_code.to_json}"} and return unless @kanban
@@ -341,7 +341,7 @@ class KanbansController < ApplicationController
         render json: {result: false, content: "只销兰卡!"} and return
         # end
       else
-        if item=ProductionOrderItemBlue.where(kanban_id: @kanban.id, state: ProductionOrderItemState::INIT).first
+        if item=ProductionOrderItemBlue.where(kanban_id: @kanban.id, state: ProductionOrderItemState::DISTRIBUTE_SUCCEED).first
           item.update(state: ProductionOrderItemState::TERMINATED)
           @kanban.kanban_process_entities.update_all(state: ProductionOrderItemState::TERMINATED)
           render json: {result: true, content: '销卡成功'} and return

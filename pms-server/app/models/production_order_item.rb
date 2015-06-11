@@ -6,6 +6,7 @@ class ProductionOrderItem < ActiveRecord::Base
   has_many :production_order_item_labels
   after_update :update_qty_to_terminate
   after_update :generate_production_item_label
+  after_update :set_terminated_at
   self.inheritance_column = :_type_disabled
   default_scope { where(type: ProductionOrderItemType::WHITE) }
   # after_update :enter_store
@@ -125,7 +126,7 @@ class ProductionOrderItem < ActiveRecord::Base
           self.update(state: ProductionOrderItemState::TERMINATED)
         end
       end
-    end
+    end if self.type==ProductionOrderItemType::WHITE
   end
 
 
@@ -154,13 +155,18 @@ class ProductionOrderItem < ActiveRecord::Base
     end if self.type==ProductionOrderItemType::WHITE
   end
 
+  def set_terminated_at
+    if self.state_changed? && self.state==ProductionOrderItemState::TERMINATED
+      self.terminated_at= Time.now
+    end if self.type==ProductionOrderItemType::WHITE
+  end
 
   def can_move?
-    [ProductionOrderItemState::INIT,ProductionOrderItemState::DISTRIBUTE_SUCCEED].include?(self.state)
+    [ProductionOrderItemState::INIT, ProductionOrderItemState::DISTRIBUTE_SUCCEED].include?(self.state)
   end
 
   def change_state?
-    [ProductionOrderItemState::INIT,ProductionOrderItemState::DISTRIBUTE_SUCCEED].include?(self.state)
+    [ProductionOrderItemState::INIT, ProductionOrderItemState::DISTRIBUTE_SUCCEED].include?(self.state)
   end
 
 end

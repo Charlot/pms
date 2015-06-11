@@ -49,9 +49,8 @@ class Kanban < ActiveRecord::Base
     if /^0/.match(v)
       return Kanban.find_by_nr(v)
     else
-      puts v.red
+       /\d+\/\d+/.match(v)
       if /\d+\/\d+/.match(v)
-
         puts '9999999999'.red
         return Kanban.find_by_id(v.sub(/\/\d+/, ''))
       end
@@ -315,7 +314,7 @@ class Kanban < ActiveRecord::Base
     if self.ktype==KanbanType::WHITE
       return ProductionOrderItem.create(kanban_id: self.id, code: self.printed_2DCode, kanban_qty: self.quantity, kanban_bundle: self.bundle)
     elsif self.ktype==KanbanType::BLUE
-      return ProductionOrderItemBlue.create(kanban_id: self.id, code: self.printed_2DCode, produced_qty: self.quantity, kanban_qty: self.quantity, kanban_bundle: self.bundle)
+      return ProductionOrderItemBlue.create(kanban_id: self.id, code: self.printed_2DCode, kanban_qty: self.quantity, kanban_bundle: self.bundle)
     end
     false
   end

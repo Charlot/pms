@@ -17,7 +17,7 @@
 <% if @production_order %>
     <%= form_tag('/production_order_items/export', method: 'post') do %>
         <%= hidden_field_tag :production_order_id, @production_order.id %>
-        <input type="button" value="导出已优化" class="btn btn-default" onclick="if(confirm('export?')){form.submit();}"/>
+        <input type="button" value="导出" class="btn btn-default" onclick="if(confirm('export?')){form.submit();}"/>
     <% end %>
 <% end %>
 <div>
