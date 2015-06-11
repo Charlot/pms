@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nr:</strong>
+  <%= @production_order_handler_list_item.nr %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @production_order_handler_list_item.desc %>
+</p>
+
+<p>
+  <strong>Kanban code:</strong>
+  <%= @production_order_handler_list_item.kanban_code %>
+</p>
+
+<p>
+  <strong>Kanban nr:</strong>
+  <%= @production_order_handler_list_item.kanban_nr %>
+</p>
+
+<p>
+  <strong>Result:</strong>
+  <%= @production_order_handler_list_item.result %>
+</p>
+
+<p>
+  <strong>Handler user:</strong>
+  <%= @production_order_handler_list_item.handler_user %>
+</p>
+
+<p>
+  <strong>Item terminated at:</strong>
+  <%= @production_order_handler_list_item.item_terminated_at %>
+</p>
+
+<p>
+  <strong>Production order handler list:</strong>
+  <%= @production_order_handler_list_item.production_order_handler_list %>
+</p>
+
+<%= link_to 'Edit', edit_production_order_handler_list_item_path(@production_order_handler_list_item) %> |
+<%= link_to 'Back', production_order_handler_list_items_path %>
