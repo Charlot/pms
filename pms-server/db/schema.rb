@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150611010230) do
+ActiveRecord::Schema.define(version: 20150611060004) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -354,27 +354,30 @@ ActiveRecord::Schema.define(version: 20150611010230) do
 
   create_table "production_order_items", force: true do |t|
     t.string   "nr"
-    t.integer  "state",               default: 100
+    t.integer  "state",                  default: 100
     t.string   "code"
     t.text     "message"
     t.integer  "kanban_id"
     t.integer  "production_order_id"
     t.integer  "machine_id"
-    t.float    "optimise_index",      default: 0.0
+    t.float    "optimise_index",         default: 0.0
     t.datetime "optimise_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "produced_qty"
-    t.float    "machine_time",        default: 0.0
-    t.float    "prev_index",          default: 0.0
+    t.float    "machine_time",           default: 0.0
+    t.float    "prev_index",             default: 0.0
     t.string   "user_nr"
     t.string   "user_group_nr"
-    t.integer  "type",                default: 100
+    t.integer  "type",                   default: 100
     t.string   "tool1"
     t.string   "tool2"
-    t.float    "kanban_qty",          default: 0.0
-    t.float    "kanban_bundle",       default: 0.0
-    t.boolean  "is_urgent",           default: false
+    t.float    "kanban_qty",             default: 0.0
+    t.float    "kanban_bundle",          default: 0.0
+    t.boolean  "is_urgent",              default: false
+    t.datetime "terminated_at"
+    t.string   "terminate_user"
+    t.string   "terminated_kanban_code"
   end
 
   add_index "production_order_items", ["kanban_id"], name: "index_production_order_items_on_kanban_id", using: :btree
