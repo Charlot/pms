@@ -21,8 +21,7 @@
         <td><%= production_order.nr %></td>
         <td><%= production_order.state %></td>
         <td><%=production_order.created_at.localtime%></td>
-        <td><%= link_to 'Show', production_order_production_order_items_path(production_order) %></td>
-        <td><%= link_to 'Edit', edit_production_order_path(production_order) %></td>
+        <td><%= link_to 'Show', production_order_blue_production_order_item_blues_path(production_order) %></td>
         <td><%= link_to 'Destroy', production_order, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
   <% end %>

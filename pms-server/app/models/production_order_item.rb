@@ -165,8 +165,11 @@ class ProductionOrderItem < ActiveRecord::Base
     [ProductionOrderItemState::INIT, ProductionOrderItemState::DISTRIBUTE_SUCCEED].include?(self.state)
   end
 
-  def change_state?
-    [ProductionOrderItemState::INIT, ProductionOrderItemState::DISTRIBUTE_SUCCEED].include?(self.state)
+  def can_change_state?
+    [ProductionOrderItemState::INIT,
+     ProductionOrderItemState::DISTRIBUTE_SUCCEED,
+     ProductionOrderItemState::DISTRIBUTE_FAIL,
+     ProductionOrderItemState::MANUAL_ABORTED].include?(self.state)
   end
 
 end
