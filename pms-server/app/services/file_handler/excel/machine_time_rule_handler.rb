@@ -2,7 +2,7 @@ module FileHandler
   module Excel
     class MachineTimeRuleHandler<Base
       HEADERS=[
-          'OEE','Machine Type','Min Length','Max Length','Time'
+          'OEE','Machine Type','Min Length','Max Length','Time','Std Time'
       ]
 
       def self.import(file)
@@ -29,10 +29,10 @@ module FileHandler
                 rule = MachineTimeRule.where({oee_code_id: oee.id,machine_type_id: machine_type.id,min_length: min_length,length: max_length}).first
                 if rule
                   #update
-                  rule.update(time:row['Time'].to_f)
+                  rule.update({time:row['Time'].to_f, std_time:row['Std Time'].to_f})
                 else
                   #create
-                  rule = MachineTimeRule.create({oee_code_id:oee.id,machine_type_id:machine_type.id,min_length:min_length,length: max_length,time:row['Time'].to_f})
+                  rule = MachineTimeRule.create({oee_code_id:oee.id,machine_type_id:machine_type.id,min_length:min_length,length: max_length,time:row['Time'].to_f,std_time:row['Std Time'].to_f})
                 end
               end
               end
