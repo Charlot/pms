@@ -252,17 +252,16 @@ class Kanban < ActiveRecord::Base
         #查找全部满足的全自动工时规则，并且以断线长度升序排序
         timerule = nil
         wire_length_value = process_entity.value_wire_qty_factor.to_f
-        timerule = MachineTimeRule.where(["oee_code_id = ? AND machine_type_id = ? AND min_length <= ? AND length > ?", oee.id, machine_type_id, wire_length_value, wire_length_value])
+        timerule = MachineTimeRule.where(["oee_code_id = ? AND machine_type_id = ? AND min_length <= ? AND length > ?", oee.id, machine_type_id, wire_length_value, wire_length_value]).first
 
         if timerule.nil?
           return task_time
         end
-
-        task_time = timerule.first.time * self.quantity
+        task_time = timerule.time * self.quantity
       when KanbanType::BLUE
 
     end
-    task_time
+    task_time.round(2)
   end
 
   def source_position
