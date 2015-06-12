@@ -318,6 +318,8 @@ module FileHandler
                   handler_user: row['User']
               )
 
+              production_order_handler.production_order_handler_items<<production_order_handler_item
+
               if row['Kanban Nr'].present?
                 kanban = Kanban.find_by_nr_or_id(row['Kanban Nr'])
               end
@@ -328,7 +330,6 @@ module FileHandler
 
                 production_order_handler_item.remark= msg.contents.join("</br>")
                 production_order_handler_item.result=ProductionOrderHandlerItem::FAIL
-                production_order_handler.production_order_handler_items<<production_order_handler_item
                 next
               end
 
@@ -339,7 +340,7 @@ module FileHandler
                 production_order_handler_item.remark= msg.contents.join("</br>")
                 production_order_handler_item.result=ProductionOrderHandlerItem::FAIL
                 production_order_handler_item.kanban_nr=kanban.nr
-                production_order_handler.production_order_handler_items<<production_order_handler_item
+                production_order_handler_item.kanban_id=kanban.id
                 next
               end
 
@@ -349,9 +350,10 @@ module FileHandler
                 production_order_handler_item.remark= msg.contents.join("</br>")
                 production_order_handler_item.result=ProductionOrderHandlerItem::SUCCESS
                 production_order_handler_item.kanban_nr=kanban.nr
+                production_order_handler_item.kanban_id=kanban.id
               end
-              production_order_handler.production_order_handler_items<<production_order_handler_item
             end
+            production_order_handler.save
             unless msg.result
               msg.content = msg.contents.join("</br>")
             else

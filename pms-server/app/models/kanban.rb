@@ -305,9 +305,9 @@ class Kanban < ActiveRecord::Base
 
   def not_in_produce?
     if self.ktype==KanbanType::WHITE
-      return self.production_order_items.where(state: ProductionOrderItemState::INIT).count==0
+      return self.production_order_items.where(state: ProductionOrderItemState::DISTRIBUTE_SUCCEED).count==0
     elsif self.ktype==KanbanType::BLUE
-      return self.production_order_item_blues.where(state: ProductionOrderItemState::INIT).count==0
+      return self.production_order_item_blues.where(state: ProductionOrderItemState::DISTRIBUTE_SUCCEED).count==0
     end
     false
   end
@@ -326,7 +326,7 @@ class Kanban < ActiveRecord::Base
       true
     elsif self.ktype==KanbanType::BLUE
       return ProductionOrderItemBlue.
-          where(kanban_id: self.id, state: ProductionOrderItemState::INIT).first
+          where(kanban_id: self.id, state: ProductionOrderItemState::DISTRIBUTE_SUCCEED).first
                  .update(state: ProductionOrderItemState::TERMINATED,
                          terminated_at:  handler_item.item_terminated_at,
                          terminate_user: handler_item.handler_user,
