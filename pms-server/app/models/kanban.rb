@@ -18,6 +18,8 @@ class Kanban < ActiveRecord::Base
   accepts_nested_attributes_for :kanban_process_entities, allow_destroy: true
 
   scoped_search on: :nr
+  # scoped_search on: :des_storage
+
   scoped_search in: :product, on: :nr
   scoped_search in: :process_entities, on: :nr
   scoped_search in: :process_entities, on: :nr, ext_method: :find_by_wire_nr
