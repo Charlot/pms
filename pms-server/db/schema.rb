@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150612022129) do
+ActiveRecord::Schema.define(version: 20150612025426) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -157,6 +157,7 @@ ActiveRecord::Schema.define(version: 20150612022129) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "min_length"
+    t.float    "std_time"
   end
 
   add_index "machine_time_rules", ["length"], name: "index_machine_time_rules_on_length", using: :btree
