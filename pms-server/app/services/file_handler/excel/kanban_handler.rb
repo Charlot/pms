@@ -8,7 +8,7 @@ module FileHandler
           'Destination Storage', 'Process List', 'Operator'
       ]
 
-      WHITE_HEADERS=['Nr', 'Quantity', 'Safety Stock', 'Copies','Task Time',
+      WHITE_HEADERS=['Nr', 'Quantity', 'Safety Stock', 'Copies', 'Task Time',
                      'Remark', 'Remark2', 'Wire Nr', 'Product Nr', 'Type',
                      'Bundle', 'Destination Warehouse',
                      'Destination Storage', 'Process List', 'Row Wire Nr', 'Diameter', 'Length', 'T1', 'T2', 'S1', 'S2']
@@ -293,16 +293,17 @@ module FileHandler
       end
 
 
-
       def self.import_finish_scan file
         msg = Message.new(contents: [], result: true)
 
-        header = ['Kanban Nr']
+        header = ['Kanban Nr', 'Time', 'User']
 
         book = Roo::Excelx.new file
         book.default_sheet = book.sheets.first
         begin
           ProductionOrderItem.transaction do
+            production_order_handler=ProductionOrderHandler.new(desc: '兰卡销卡')
+
             2.upto(book.last_row) do |line|
               row = {}
               header.each_with_index do |k, i|
@@ -310,6 +311,14 @@ module FileHandler
               end
 
               kanban = nil
+              production_order_handler_item=ProductionOrderHandlerItem.new(
+                  desc: '兰卡销卡',
+                  kanban_code: row['Kanban Nr'],
+                  item_terminated_at: row['Time'],
+                  handler_user: row['User']
+              )
+
+              production_order_handler.production_order_handler_items<<production_order_handler_item
 
               if row['Kanban Nr'].present?
                 kanban = Kanban.find_by_nr_or_id(row['Kanban Nr'])
@@ -318,19 +327,33 @@ module FileHandler
               if kanban.nil?
                 msg.result=false
                 msg.contents<<"Row:#{line}.#{row['Kanban Nr'].to_s},看板不存在"
+
+                production_order_handler_item.remark= msg.contents.join("</br>")
+                production_order_handler_item.result=ProductionOrderHandlerItem::FAIL
                 next
               end
 
               if kanban.not_in_produce?
                 msg.result=false
                 msg.contents<<"Row:#{line}:#{kanban.nr},未投卡，不可销卡"
+
+                production_order_handler_item.remark= msg.contents.join("</br>")
+                production_order_handler_item.result=ProductionOrderHandlerItem::FAIL
+                production_order_handler_item.kanban_nr=kanban.nr
+                production_order_handler_item.kanban_id=kanban.id
                 next
               end
 
-              if kanban.terminate_produce_item
+              if kanban.terminate_produce_item(production_order_handler_item)
                 msg.contents<<"Row:#{line}:#{kanban.nr},销卡成功!"
+
+                production_order_handler_item.remark= msg.contents.join("</br>")
+                production_order_handler_item.result=ProductionOrderHandlerItem::SUCCESS
+                production_order_handler_item.kanban_nr=kanban.nr
+                production_order_handler_item.kanban_id=kanban.id
               end
             end
+            production_order_handler.save
             unless msg.result
               msg.content = msg.contents.join("</br>")
             else
@@ -341,7 +364,6 @@ module FileHandler
           msg.result =false
           msg.content =e.message
         end
-
         msg
       end
 

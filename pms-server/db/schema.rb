@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150611060004) do
+ActiveRecord::Schema.define(version: 20150612025426) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -157,6 +157,7 @@ ActiveRecord::Schema.define(version: 20150611060004) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "min_length"
+    t.float    "std_time"
   end
 
   add_index "machine_time_rules", ["length"], name: "index_machine_time_rules_on_length", using: :btree
@@ -340,6 +341,34 @@ ActiveRecord::Schema.define(version: 20150611060004) do
   add_index "process_templates", ["code"], name: "index_process_templates_on_code", using: :btree
   add_index "process_templates", ["type"], name: "index_process_templates_on_type", using: :btree
 
+<<<<<<< HEAD
+=======
+  create_table "production_order_handler_items", force: true do |t|
+    t.string   "nr"
+    t.string   "desc"
+    t.text     "remark"
+    t.string   "kanban_code"
+    t.string   "kanban_nr"
+    t.integer  "result"
+    t.string   "handler_user"
+    t.datetime "item_terminated_at"
+    t.integer  "production_order_handler_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "kanban_id"
+  end
+
+  add_index "production_order_handler_items", ["production_order_handler_id"], name: "production_order_handler_items_poh_index", using: :btree
+
+  create_table "production_order_handlers", force: true do |t|
+    t.string   "nr"
+    t.string   "desc"
+    t.string   "remark"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+>>>>>>> cf3443abe345804926fe9d6aa05990a9aebcb809
   create_table "production_order_item_labels", force: true do |t|
     t.integer  "production_order_item_id"
     t.integer  "bundle_no"
