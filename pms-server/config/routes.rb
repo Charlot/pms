@@ -1,5 +1,9 @@
 require 'devise'
 Rails.application.routes.draw do
+  resources :production_order_handler_items
+
+  resources :production_order_handlers
+
   resources :production_order_item_labels
 
   root :to => 'welcome#index'

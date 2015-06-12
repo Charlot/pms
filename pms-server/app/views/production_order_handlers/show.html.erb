@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nr:</strong>
+  <%= @production_order_handler.nr %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @production_order_handler.desc %>
+</p>
+
+<p>
+  <strong>Remark:</strong>
+  <%= @production_order_handler.remark %>
+</p>
+
+<%= link_to 'Edit', edit_production_order_handler_path(@production_order_handler) %> |
+<%= link_to 'Back', production_order_handlers_path %>

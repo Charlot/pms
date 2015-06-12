@@ -49,7 +49,7 @@ class Kanban < ActiveRecord::Base
     if /^0/.match(v)
       return Kanban.find_by_nr(v)
     else
-       /\d+\/\d+/.match(v)
+      /\d+\/\d+/.match(v)
       if /\d+\/\d+/.match(v)
         puts '9999999999'.red
         return Kanban.find_by_id(v.sub(/\/\d+/, ''))
@@ -319,11 +319,16 @@ class Kanban < ActiveRecord::Base
     false
   end
 
-  def terminate_produce_item
+  def terminate_produce_item(handler_item=nil)
     if self.ktype==KanbanType::WHITE
       true
     elsif self.ktype==KanbanType::BLUE
-      return ProductionOrderItemBlue.where(kanban_id: self.id, state: ProductionOrderItemState::INIT).first.update(state: ProductionOrderItemState::TERMINATED)
+      return ProductionOrderItemBlue.
+          where(kanban_id: self.id, state: ProductionOrderItemState::INIT).first
+                 .update(state: ProductionOrderItemState::TERMINATED,
+                         terminated_at:  handler_item.item_terminated_at,
+                         terminate_user: handler_item.handler_user,
+                         terminated_kanban_code: handler_item.kanban_code)
     end
     false
   end
