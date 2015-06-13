@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150517053423) do
+ActiveRecord::Schema.define(version: 20150612025426) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -156,9 +156,13 @@ ActiveRecord::Schema.define(version: 20150517053423) do
     t.float    "time",            default: 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.float    "min_length"
+    t.float    "std_time"
   end
 
+  add_index "machine_time_rules", ["length"], name: "index_machine_time_rules_on_length", using: :btree
   add_index "machine_time_rules", ["machine_type_id"], name: "index_machine_time_rules_on_machine_type_id", using: :btree
+  add_index "machine_time_rules", ["min_length"], name: "index_machine_time_rules_on_min_length", using: :btree
   add_index "machine_time_rules", ["oee_code_id"], name: "index_machine_time_rules_on_oee_code_id", using: :btree
 
   create_table "machine_types", force: true do |t|
@@ -337,6 +341,34 @@ ActiveRecord::Schema.define(version: 20150517053423) do
   add_index "process_templates", ["code"], name: "index_process_templates_on_code", using: :btree
   add_index "process_templates", ["type"], name: "index_process_templates_on_type", using: :btree
 
+<<<<<<< HEAD
+=======
+  create_table "production_order_handler_items", force: true do |t|
+    t.string   "nr"
+    t.string   "desc"
+    t.text     "remark"
+    t.string   "kanban_code"
+    t.string   "kanban_nr"
+    t.integer  "result"
+    t.string   "handler_user"
+    t.datetime "item_terminated_at"
+    t.integer  "production_order_handler_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "kanban_id"
+  end
+
+  add_index "production_order_handler_items", ["production_order_handler_id"], name: "production_order_handler_items_poh_index", using: :btree
+
+  create_table "production_order_handlers", force: true do |t|
+    t.string   "nr"
+    t.string   "desc"
+    t.string   "remark"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+>>>>>>> cf3443abe345804926fe9d6aa05990a9aebcb809
   create_table "production_order_item_labels", force: true do |t|
     t.integer  "production_order_item_id"
     t.integer  "bundle_no"
@@ -353,24 +385,30 @@ ActiveRecord::Schema.define(version: 20150517053423) do
 
   create_table "production_order_items", force: true do |t|
     t.string   "nr"
-    t.integer  "state",               default: 100
+    t.integer  "state",                  default: 100
     t.string   "code"
     t.text     "message"
     t.integer  "kanban_id"
     t.integer  "production_order_id"
     t.integer  "machine_id"
-    t.float    "optimise_index",      default: 0.0
+    t.float    "optimise_index",         default: 0.0
     t.datetime "optimise_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "produced_qty"
-    t.float    "machine_time",        default: 0.0
-    t.float    "prev_index",          default: 0.0
+    t.float    "machine_time",           default: 0.0
+    t.float    "prev_index",             default: 0.0
     t.string   "user_nr"
     t.string   "user_group_nr"
-    t.integer  "type",                default: 100
+    t.integer  "type",                   default: 100
     t.string   "tool1"
     t.string   "tool2"
+    t.float    "kanban_qty",             default: 0.0
+    t.float    "kanban_bundle",          default: 0.0
+    t.boolean  "is_urgent",              default: false
+    t.datetime "terminated_at"
+    t.string   "terminate_user"
+    t.string   "terminated_kanban_code"
   end
 
   add_index "production_order_items", ["kanban_id"], name: "index_production_order_items_on_kanban_id", using: :btree
@@ -383,6 +421,7 @@ ActiveRecord::Schema.define(version: 20150517053423) do
     t.integer  "state",      default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "type",       default: 100
   end
 
   add_index "production_orders", ["nr"], name: "index_production_orders_on_nr", using: :btree
@@ -473,6 +512,7 @@ ActiveRecord::Schema.define(version: 20150517053423) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "nr"
   end
 
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree

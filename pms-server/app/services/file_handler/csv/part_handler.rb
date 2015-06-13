@@ -77,7 +77,7 @@ module FileHandler
       def self.export(user_agent)
         msg = Message.new
         begin
-          tmp_file = KanbanHandler.full_tmp_path('part.csv') unless tmp_file
+          tmp_file = PartHandler.full_tmp_path('part.csv') unless tmp_file
 
           CSV.open(tmp_file, 'wb', write_headers: true,
                    headers: IMPORT_HEADERS,
@@ -156,6 +156,18 @@ module FileHandler
           when 'Cross Section'
             :cross_section
           else
+        end
+      end
+
+      def self.get_encoding(user_agent)
+        os=System::Base.os_by_user_agent(user_agent)
+        case os
+          when 'windows'
+            return 'GB18030:UTF-8'
+          when 'linux', 'macintosh'
+            return 'UTF-8:UTF-8'
+          else
+            return 'UTF-8:UTF-8'
         end
       end
     end

@@ -8,22 +8,11 @@ module FileHandler
 
       def export_optimized(items, user_agent, tmp_path=nil)
         msg=Message.new
-        begin
+        # begin
           tmp_file = ProductionOrderItemHandler.full_tmp_path('优化数据.csv') unless tmp_file
           CSV.open(tmp_file, 'wb', write_headers: true,
                    headers: EXPORT_CSV_HEADERS,
                    col_sep: ';', encoding: ProductionOrderItemHandler.get_encoding(user_agent)) do |csv|
-            # items.each_with_index do |item, i|
-            #   material = item.kanban.material.collect { |p| "#{p.nr}|#{PartType.display(p.type)}" }.join(";")
-            #   csv<<[i+1,
-            #         item.nr,
-            #         item.kanban_nr,
-            #         item.machine_nr,
-            #         item.production_order_nr,
-            #         item.kanban.wire_nr,
-            #         material
-            #   ]
-            # end
             items=ProductionOrderItemPresenter.init_preview_presenters(items)
             items.each_with_index do |item, i|
               row=[]
@@ -36,15 +25,15 @@ module FileHandler
           end
           msg.result =true
           msg.content =tmp_file
-        rescue => e
-          msg.content =e.message
-        end
+        # rescue => e
+        #   msg.content =e.message
+        # end
         msg
       end
 
       def export_by_state(params, user_agent, tmp_path=nil)
         msg=Message.new
-        begin
+        # begin
           tmp_file = ProductionOrderItemHandler.full_tmp_path('订单数据.csv') unless tmp_file
           CSV.open(tmp_file, 'wb', write_headers: true,
                    headers: STATE_EXPORT_CSV_HEADERS,
@@ -73,9 +62,9 @@ module FileHandler
           end
           msg.result =true
           msg.content =tmp_file
-        rescue => e
-          msg.content =e.message
-        end
+        # rescue => e
+        #   msg.content =e.message
+        # end
         msg
       end
 

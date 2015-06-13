@@ -4,7 +4,7 @@
 <div class="btn-group btn-group-sm" role="group" aria-label="...">
   <%= link_to '编辑', edit_kanban_path, class: "btn btn-default" %>
   <%= link_to '编辑Routing', manage_routing_kanban_path(kanban), class: "btn btn-default" %>
-  <%= link_to '发布', release_kanban_path(kanban), class: "btn btn-info", method: :post %>
-  <%= link_to '锁定', lock_kanban_path(kanban), class: "btn btn-danger", method: :post %>
-  <%= link_to '销毁', discard_kanban_path(kanban), class: "btn btn-warning", method: :delete %>
+  <%= link_to '发布', release_kanban_path(kanban), class: "btn btn-success", method: :post %>
+  <%= link_to '锁定', lock_kanban_path(kanban), class: "btn btn-warning", method: :post %>
+  <%= link_to '销毁', discard_kanban_path(kanban), class: "btn btn-danger", method: :delete %>
 </div>

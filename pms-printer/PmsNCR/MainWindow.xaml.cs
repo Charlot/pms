@@ -116,5 +116,10 @@ namespace PmsNCR
         {
             new SPCWindow().ShowDialog();
         }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            new AdminWindow().Show();
+        }
     }
 }

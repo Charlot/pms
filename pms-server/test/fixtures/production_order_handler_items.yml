@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nr: MyString
+  desc: MyString
+  remark: MyString
+  kanban_code: MyString
+  kanban_nr: MyString
+  result: 1
+  handler_user: MyString
+  item_terminated_at: 2015-06-12 08:46:37
+  production_order_handler_id: 
+
+two:
+  nr: MyString
+  desc: MyString
+  remark: MyString
+  kanban_code: MyString
+  kanban_nr: MyString
+  result: 1
+  handler_user: MyString
+  item_terminated_at: 2015-06-12 08:46:37
+  production_order_handler_id: 

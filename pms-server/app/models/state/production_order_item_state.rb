@@ -74,6 +74,14 @@ class ProductionOrderItemState<BaseType
   end
 
   def self.passed_states
-    [STARTED,RESTARTED,TERMINATED,ABORTED,MANUAL_ABORTED,SYSTEM_ABORTED,INTERRUPTED,PAUSED]
+    [STARTED, RESTARTED, TERMINATED, ABORTED, MANUAL_ABORTED, SYSTEM_ABORTED, INTERRUPTED, PAUSED]
+  end
+
+  def self.to_blue_select
+    select_options = []
+    [INIT,DISTRIBUTE_SUCCEED, TERMINATED].each do |v|
+      select_options << SelectOption.new(display: self.display(v), value: v, key: self.key(v))
+    end
+    select_options
   end
 end

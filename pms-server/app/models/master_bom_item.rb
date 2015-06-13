@@ -21,6 +21,10 @@ class MasterBomItem < ActiveRecord::Base
     unless params[:department_id].blank?
       q=q.where(department_id: params[:department_id])
     end
+
+    unless params[:department_code].blank?
+      q=q.where(departments: {code: params[:department_code]})
+    end
     q
   end
 end

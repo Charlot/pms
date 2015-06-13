@@ -127,18 +127,18 @@ class PartsController < ApplicationController
   end
 =end
 
-  def export
-    msg=Message.new
-    begin
-      msg=FileHandler::Csv::PartHandler.export(request.user_agent)
-      if msg.result
-        send_file msg.content
-      else
-        @content = msg.to_json
-        render 'shared/error'
-      end
-    end
-  end
+  # def export
+  #   msg=Message.new
+  #   begin
+  #     msg=FileHandler::Excel::PartHandler.export()
+  #     if msg.result
+  #       send_file msg.content
+  #     else
+  #       @content = msg.to_json
+  #       render 'shared/error'
+  #     end
+  #   end
+  # end
 
   def import
     # authorize(Part)
@@ -146,7 +146,7 @@ class PartsController < ApplicationController
       msg = Message.new
       begin
         file=params[:files][0]
-        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
         fd.save
         file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
         msg = FileHandler::Csv::PartHandler.import(file)
@@ -163,7 +163,7 @@ class PartsController < ApplicationController
       msg = Message.new
       begin
         file=params[:files][0]
-        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
         fd.save
         file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
         msg = FileHandler::Csv::PartHandler.update(file)
@@ -183,6 +183,6 @@ class PartsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def part_params
-    params.require(:part).permit(:nr, :custom_nr, :type, :strip_length, :resource_group_id, :measure_unit_id, :description)
+    params.require(:part).permit(:nr, :custom_nr, :type, :cross_section,:strip_length,:component_type, :resource_group_id, :measure_unit_id, :description)
   end
 end

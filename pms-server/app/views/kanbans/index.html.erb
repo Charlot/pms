@@ -2,6 +2,5 @@
 <%= link_to "导入看板更新数量",import_update_quantity_kanbans_path ,class:'btn btn-default'%>
 <%= link_to "导出", export_kanbans_path({q:@q,model:current_model}), class: "btn btn-default", data: {confirm: "数据量较大，确定导出?"} %>
 <%= link_to "导出 白卡", export_white_kanbans_path, class: "btn btn-warning", data: {confirm: "数据量较大，确定导出?"} %>
-
 <%= link_to "导入投卡", import_to_scan_kanbans_path, class: "btn btn-default"%>
 <%= render partial: 'list' %>

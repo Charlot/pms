@@ -171,10 +171,12 @@ module FileHandler
                     end
 
                     pe.custom_fields.select { |cf| cf.name != "default_wire_nr" }.each_with_index { |cf, index|
+                      cvs = pe.custom_values.where(custom_field_id: cf.id).all
                       cv = pe.custom_values.where(custom_field_id: cf.id).first
-
+                      if cvs.count>1
+                        cvs.last(cvs.count-1).each{|c| c.destroy}
+                      end
                       if CustomFieldFormatType.part?(cf.field_format)
-
                         if custom_fields_val[index].blank?
                           if cv
                             cv.destroy
@@ -199,23 +201,23 @@ module FileHandler
                         end
                       else
                         if cv
+                          cv.update(value: cf.get_field_format_value(custom_fields_val[index]))
+                        else
                           cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
                           pe.custom_values<<cv
-                        else
-                          cv.update(value: cf.get_field_format_value(custom_fields_val[index]))
                         end
                       end
                     }
                     pe.process_parts.destroy_all
-
                     temp_quantity = template_fields.select{|tf| tf[:type] == "part"}.collect{|a|a[:ext]}
-
                     pe.custom_values.select { |cv| (cv.custom_field.name != "default_wire_nr")&&(cv.custom_field.field_format=="part") }.each_with_index do |cv, index|
                       cf=cv.custom_field
                       if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
-                        puts "#{template_fields}".red
-                        puts "#{Part.find_by_id(cv.value).nr},#{temp_quantity[index]},#{index}".red
-                        pe.process_parts<<ProcessPart.new(part_id: cv.value, quantity: temp_quantity[index].to_f)
+                        # puts "#{template_fields}-----#{cv}".red
+                       # puts "#{Part.find_by_id(cv.value).nr},#{temp_quantity[index]},#{index}".red
+                        if cv.value #&& Part.find_by_id(cv.value)
+                             pe.process_parts<<ProcessPart.new(part_id: cv.value, quantity: temp_quantity[index].to_f)
+                          end
                       end
                     end
                     pe.save

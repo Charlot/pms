@@ -1,0 +1,8 @@
+﻿<Window x:Class="PmsNCR.AdminWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AdminWindow" Height="367" Width="489">
+    <Grid>
+        <Button Content="Search" Height="38" HorizontalAlignment="Left" Margin="12,20,0,0" Name="button1" VerticalAlignment="Top" Width="85" Click="button1_Click" />
+    </Grid>
+</Window>

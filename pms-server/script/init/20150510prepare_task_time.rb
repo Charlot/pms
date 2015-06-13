@@ -1,4 +1,4 @@
-oee_codes = %w(CC CW CS WW SW SS)
+oee_codes = %w(CC CW CS WW WS SS)
 oee_des = [
     "两端压端子",
     "一端压端子，一端剥线",

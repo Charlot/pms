@@ -247,5 +247,35 @@ namespace PmsNCRWcf
             }
             return true;
         }
+
+
+        public Msg<List<OrderItemCheck>> SearchOrderItem(params string[] conditions)
+        {
+            Msg<List<OrderItemCheck>> msg = new Msg<List<OrderItemCheck>>();
+            try
+            {
+                var req = new RestRequest(ApiConfig.OrderItemSearchAction, Method.GET);
+                req.RequestFormat = DataFormat.Json;
+                req.AddParameter("wire_nr", conditions[0]);
+                var res = new ApiClient().Execute(req);
+                var data = JSONHelper.parse<List<OrderItemCheck>>(res.Content);
+                if (data != null)
+                {
+                    msg.Result = true;
+                    msg.Object = data;
+                }
+                else
+                {
+                    msg.Content = "API ERROR";
+                }
+            }
+            catch (Exception e)
+            {
+                msg.Result = false;
+                msg.Content = e.Message;
+                LogUtil.Logger.Error(e.Message);
+            }
+            return msg;
+        }
     }
 }

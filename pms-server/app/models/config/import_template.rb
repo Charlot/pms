@@ -10,7 +10,10 @@ class ImportTemplate
   KANBAN_CSV_TEMPLATE='kanban.csv'
   KANBAN_EXCEL_TEMPLATE='kanban.xlsx'
   KANBAN_SCAN_EXCEL_TEMPLATE='kanban_scan.xlsx'
+  KANBAN_FINISH_SCAN_EXCEL_TEMPLATE='kanban_finish_scan.xlsx'
   KANBAN_UPDATE_EXCEL_TEMPLATE='kanban_update_quantity.xlsx'
+  KANBAN_LOCK_EXCEL_TEMPLATE='kanban_lock.xlsx'
+  KANBAN_RELEASE_EXCEL_TEMPLATE='kanban_release.xlsx'
   KANBAN_GET_LIST_CSV_TEMPLATE='get_kanban_list.csv'
   KANBAN_UPDATE_BASE_TEMPLATE='kanban_update_base_template.csv'
   MACHINE_CSV_TEMPLATE='machine.csv'
@@ -18,9 +21,10 @@ class ImportTemplate
   MACHINE_TIME_RULE_EXCEL_TEMPLATE='machine_time_rule.xlsx'
   TOOL_CSV_TEMPLATE='tool.csv'
   PART_POSITION_CSV_TEMPLATE='part_position.csv'
-  MASTER_BOM_CSV_TEMPLATE='master_bom_template.xlsx'
+  MASTER_BOM_EXCEL_TEMPLATE='master_bom_template.xlsx'
+  MASTER_BOM_DELETE_EXCEL_TEMPLATE='master_bom_delete_template.xlsx'
   ORDER_BOM_CSV_TEMPLATE='order_transport.csv'
-
+  ORDER_BOM_EXCEL_TEMPLATE='order_transport.xlsx'
 
   def self.method_missing(method_name, *args, &block)
     if method_name.to_s.include?('_template')

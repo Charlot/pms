@@ -1,7 +1,9 @@
 module Enum
   class PageInfo
-    @@models = {KANBAN: "KANBAN", MACHINE: "机器", MEASURE_UNIT: "单位", PRODUCTION_ORDER: "生产订单",
-                PRODUCTION_ORDER_ITEM: "生产任务", PART: "零件", PART_BOM: "零件Bom",
+    @@models = {KANBAN: "KANBAN", MACHINE: "机器", MEASURE_UNIT: "单位",
+                PRODUCTION_ORDER: "白卡生产订单", PRODUCTION_ORDER_BLUE: "兰卡生产订单",
+                PRODUCTION_ORDER_ITEM: "白卡生产任务", PRODUCTION_ORDER_ITEM_BLUE:'兰卡生产任务',
+                PART: "零件", PART_BOM: "零件Bom",
                 PROCESS_TEMPLATE: "Routing模板", PROCESS_ENTITY: "Routing", RESOURCE_GROUP_MACHINE: "机器组",
                 RESOURCE_GROUP_TOOL: "模具组", TOOL: "模具", SETTING: "设置", MASTER_BOM_ITEM: 'Master BOM',
                 PART_POSITION: "Cutting原材料库存",
@@ -43,6 +45,8 @@ module Enum
           "编辑#{model}"
         when "import"
           "导入#{model}"
+        when 'export'
+          "导出#{model}"
         when 'import_update'
           "更新#{model}"
         when 'state_export'
@@ -51,6 +55,10 @@ module Enum
           "获取看板列表"
         when "panel"
           "#{model}控制面板"
+        when 'import_lock'
+          "#{model}导入锁定"
+        when 'import_unlock'
+          "#{model}导入解除锁定"
         when 'transport'
           case model
             when 'Master BOM'

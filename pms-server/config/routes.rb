@@ -1,12 +1,29 @@
 require 'devise'
 Rails.application.routes.draw do
+  resources :production_order_handler_items
+
+  resources :production_order_handlers
+
   resources :production_order_item_labels
 
   root :to => 'welcome#index'
 
-  devise_for :users, controllers: {
-                 sessions: 'users/sessions'
-                   }
+  # devise_for :users, controllers: {
+  #                sessions: 'users/sessions'
+  #                  }
+
+  devise_for :users, :controllers => { registrations: :user_registrations}
+
+  devise_scope :user do
+    get '/users/sign_out' => 'user_sessions#destroy'
+    post '/user_sessions/locale' => 'user_sessions#locale'
+    get '/user_sessions/new' => 'user_sessions#new'
+    post '/user_sessions/' => 'user_sessions#create'
+    get '/user_sessions/destroy' => 'user_sessions#destroy'
+    delete '/api/user_sessions/' => 'user_sessions#destroy'
+    post '/api/user_sessions/' => 'user_sessions#create'
+    get '/user_sessions/finish_guide' => 'user_sessions#finish_guide'
+  end
 
   resources :users do
     collection do
@@ -49,6 +66,7 @@ Rails.application.routes.draw do
       match :transport, to: :transport, via: [:get, :post]
       match :export, to: :export, via: [:get, :post]
       get :search
+      match :import_delete,to: :import_delete,via:[:get,:post]
     end
   end
 
@@ -64,21 +82,42 @@ Rails.application.routes.draw do
 
   resources :production_order_items do
     resources :production_order_item_labels
-
     collection do
       get :search
       post :optimise
       post :distribute
       post :export
+      post :export_scand
+      post :move
+      post :change_state
+      post :set_urgent
       match :state_export, to: :state_export, via: [:get, :post]
     end
   end
+
 
   resources :production_orders do
     resources :production_order_items
 
     collection do
       get :preview
+    end
+  end
+
+  resources :production_order_item_blues do
+    collection do
+      get :search
+      post :distribute
+      post :export
+      post :export_scand
+    end
+  end
+
+
+  resources :production_order_blues do
+    resources :production_order_item_blues
+    collection do
+      get :search
     end
   end
 
@@ -188,9 +227,12 @@ Rails.application.routes.draw do
       match :import, to: :import, via: [:get, :post]
       match :scan_finish, to: :scan_finish, via: [:get, :post]
       match :import_to_scan, to: :import_to_scan, via: [:get, :post]
+      match :import_to_finish_scan, to: :import_to_finish_scan, via: [:get, :post]
       match :import_to_get_kanban_list, to: :import_to_get_kanban_list, via: [:get, :post]
       match :import_update_quantity, to: :import_update_quantity, via: [:get, :post]
       match :import_update_base, to: :import_update_base, via: [:get, :post]
+      match :import_lock, to: :import_lock, via: [:get, :post]
+      match :import_unlock, to: :import_unlock, via: [:get, :post]
     end
   end
 

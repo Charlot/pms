@@ -18,6 +18,8 @@ class Kanban < ActiveRecord::Base
   accepts_nested_attributes_for :kanban_process_entities, allow_destroy: true
 
   scoped_search on: :nr
+  # scoped_search on: :des_storage
+
   scoped_search in: :product, on: :nr
   scoped_search in: :process_entities, on: :nr
   scoped_search in: :process_entities, on: :nr, ext_method: :find_by_wire_nr
@@ -28,12 +30,34 @@ class Kanban < ActiveRecord::Base
   # after_destroy :destroy_part_bom
   # after_update :update_part_bom
 
-  has_paper_trail
+  has_paper_trail :only => [:quantity, :product_id, :bundle, :des_warehouse, :des_storage, :print_time, :remark, :remark2]
 
-  # def find_by_version(v)
-  #   v=v.to_i
-  #   self.versions.offset(v.to_i-1).first.reify
-  # end
+  def has_same_content(kanban)
+    begin
+      [:quantity, :product_id, :bundle, :des_warehouse, :des_storage, :remark, :remark2].each do |attr|
+        puts "#{attr}--#{self.send(attr)}---#{kanban.send(attr)}".red
+        if self.send(attr)!=kanban.send(attr)
+          return false
+        end
+      end
+    rescue => e
+      puts e.message
+      return false
+    end
+    return true
+  end
+
+  def self.find_by_nr_or_id(v)
+    if /^0/.match(v)
+      return Kanban.find_by_nr(v)
+    else
+      /\d+\/\d+/.match(v)
+      if /\d+\/\d+/.match(v)
+        puts '9999999999'.red
+        return Kanban.find_by_id(v.sub(/\/\d+/, ''))
+      end
+    end
+  end
 
   def self.find_by_wire_nr key, operator, value
     parts = Part.where("nr LIKE '%_#{value}%'").map(&:id)
@@ -204,53 +228,45 @@ class Kanban < ActiveRecord::Base
   end
 
   def task_time
-    return 0
     task_time = 0.0
-    case self.ktype
-      when KanbanType::WHITE
-        if self.production_order_items.count == 0
-          return task_time
-        end
-
-        #因为全自动工时与机器有关，而要知道机器，一定要优化结束才能知道
-        #所以，这里选择一张看板的最后生产的任务的机器来做判断
-        poi = self.production_order_items.last
-        machine = poi.machine
-        process_entity = self.process_entities.first
-        if machine.nil? || process_entity.nil?
-          return task_time
-        end
-
-        #根据全自动看的工艺来查找出操作代码
-        oee = OeeCode.find_by_nr(process_entity.oee_code)
-
-        if oee.nil?
-          return task_time
-        end
-
-        #查找全部满足的全自动工时规则，并且以断线长度升序排序
-        machinetimerule = MachineTimeRule.where({oee_code_id: oee.id, machine_type_id: machine.machine_type_id}).order(length: :asc)
-
-        timerule = nil
-puts "#{machine.machine_type.nr}----#{process_entity.value_wire_qty_factor}".red
-        #一定要断线长度正好超过规则，才选择这个规则
-        # design bug
-        # query improvment
-        machinetimerule.each { |mtr|
-          if process_entity.value_wire_qty_factor.to_f > mtr.length.to_f
-            timerule = mtr
+    begin
+      case self.ktype
+        when KanbanType::WHITE
+          process_entity = self.process_entities.first
+          #因为全自动工时与机器有关，而要知道机器，一定要优化结束才能知道
+          #所以，这里选择一张看板的最后生产的任务的机器来做判断
+          if (poi = self.production_order_items.last) && (machine=poi.machine) && (machine_type_id = machine.machine_type_id)
+          else
+            machine_type_id = MachineType.find_by_nr('CC36').id
           end
-        }
 
-        if timerule.nil?
-          return task_time
-        end
+          if machine_type_id.nil? || process_entity.nil?
+            return task_time
+          end
 
-        task_time = timerule.time * self.quantity
-      when KanbanType::BLUE
+          #根据全自动看的工艺来查找出操作代码
+          oee = OeeCode.find_by_nr(process_entity.oee_code)
 
+          if oee.nil?
+            return task_time
+          end
+
+          #查找全部满足的全自动工时规则，并且以断线长度升序排序
+          timerule = nil
+          wire_length_value = process_entity.value_wire_qty_factor.to_f
+          timerule = MachineTimeRule.where(["oee_code_id = ? AND machine_type_id = ? AND min_length <= ? AND length > ?", oee.id, machine_type_id, wire_length_value, wire_length_value]).first
+
+          if timerule.nil?
+            return task_time
+          end
+          task_time = timerule.time * self.quantity
+        when KanbanType::BLUE
+
+      end
+    rescue => e
+      task_time=0
     end
-    task_time
+    task_time.round(2)
   end
 
   def source_position
@@ -284,6 +300,39 @@ puts "#{machine.machine_type.nr}----#{process_entity.value_wire_qty_factor}".red
   # part_nr,product_nr
   def self.search(part_nr="", product_nr="")
     kanbans = joins(:product).where('parts.nr LIKE ?', "%#{product_nr}%")
+  end
+
+
+  def not_in_produce?
+    if self.ktype==KanbanType::WHITE
+      return self.production_order_items.where(state: ProductionOrderItemState::DISTRIBUTE_SUCCEED).count==0
+    elsif self.ktype==KanbanType::BLUE
+      return self.production_order_item_blues.where(state: ProductionOrderItemState::DISTRIBUTE_SUCCEED).count==0
+    end
+    false
+  end
+
+  def generate_produce_item
+    if self.ktype==KanbanType::WHITE
+      return ProductionOrderItem.create(kanban_id: self.id, code: self.printed_2DCode, kanban_qty: self.quantity, kanban_bundle: self.bundle)
+    elsif self.ktype==KanbanType::BLUE
+      return ProductionOrderItemBlue.create(kanban_id: self.id, code: self.printed_2DCode, kanban_qty: self.quantity, kanban_bundle: self.bundle)
+    end
+    false
+  end
+
+  def terminate_produce_item(handler_item=nil)
+    if self.ktype==KanbanType::WHITE
+      true
+    elsif self.ktype==KanbanType::BLUE
+      return ProductionOrderItemBlue.
+          where(kanban_id: self.id, state: ProductionOrderItemState::DISTRIBUTE_SUCCEED).first
+                 .update(state: ProductionOrderItemState::TERMINATED,
+                         terminated_at:  handler_item.item_terminated_at,
+                         terminate_user: handler_item.handler_user,
+                         terminated_kanban_code: handler_item.kanban_code)
+    end
+    false
   end
 
   #

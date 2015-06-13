@@ -97,7 +97,6 @@ class KanbansController < ApplicationController
       puts "======="
       puts kanban_params.to_json
       if @kanban.can_update? && @kanban.update(kanban_params)
-        #if @kanban.update(kanban_params)
         format.html { redirect_to @kanban, notice: 'Kanban was successfully updated.' }
         format.json { respond_with_bip(@kanban) }
       else
@@ -215,7 +214,7 @@ class KanbansController < ApplicationController
       msg = Message.new
       begin
         file=params[:files][0]
-        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
         fd.save
         msg = FileHandler::Excel::KanbanHandler.import(fd)
       rescue => e
@@ -232,7 +231,7 @@ class KanbansController < ApplicationController
       msg = Message.new
       begin
         file=params[:files][0]
-        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
         fd.save
         msg = FileHandler::Excel::KanbanHandler.import_update_quantity(fd.full_path)
       rescue => e
@@ -242,12 +241,20 @@ class KanbansController < ApplicationController
     end
   end
 
+  def import_lock
+    import_lock_unlock(KanbanState::LOCKED)
+  end
+
+  def import_unlock
+    import_lock_unlock(KanbanState::RELEASED)
+  end
+
   def import_update_base
     if request.post?
       msg = Message.new
       begin
         file=params[:files][0]
-        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
         fd.save
         file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
         msg = FileHandler::Csv::KanbanHandler.import_update(file)
@@ -260,19 +267,35 @@ class KanbansController < ApplicationController
 
   # 导入看板卡进行投卡
   def import_to_scan
-    @hide_sidebar = true
     # authorize(Kanban)
     if request.post?
       msg = Message.new
-      begin
-        file=params[:files][0]
-        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
-        fd.save
-        #file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
-        msg = FileHandler::Excel::KanbanHandler.import_scan(fd.full_path)
-      rescue => e
-        msg.content = e.message
-      end
+      # begin
+      file=params[:files][0]
+      fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
+      fd.save
+      #file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
+      msg = FileHandler::Excel::KanbanHandler.import_scan(fd.full_path)
+      # rescue => e
+      #   msg.content = e.message
+      # end
+      render json: msg
+    end
+  end
+
+  def import_to_finish_scan
+    # authorize(Kanban)
+    if request.post?
+      msg = Message.new
+      # begin
+      file=params[:files][0]
+      fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
+      fd.save
+      #file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
+      msg = FileHandler::Excel::KanbanHandler.import_finish_scan(fd.full_path)
+      # rescue => e
+      #   msg.content = e.message
+      # end
       render json: msg
     end
   end
@@ -283,7 +306,7 @@ class KanbansController < ApplicationController
       msg = Message.new
       # begin
       file=params[:files][0]
-      fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%H%M%S%L')}~#{file.original_filename}")
+      fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
       fd.save
       file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
       msg = FileHandler::Csv::KanbanHandler.import_to_get_kanban_list(file)
@@ -303,7 +326,7 @@ class KanbansController < ApplicationController
       parsed_code = Kanban.parse_printed_2DCode(params[:code])
       render json: {result: false, content: "扫描错误！"} and return unless parsed_code
 
-      @kanban = Kanban.find_by_id(parsed_code[:id])
+      @kanban = Kanban.find_by_nr_or_id(params[:code])
       render json: {result: false, content: '看板不存在'} and return unless @kanban
       #check version of Kanban
       #render json: {result: false, content: "Kanban not fount for#{parsed_code.to_json}"} and return unless @kanban
@@ -318,10 +341,10 @@ class KanbansController < ApplicationController
         render json: {result: false, content: "只销兰卡!"} and return
         # end
       else
-        if item=ProductionOrderItemBlue.where(kanban_id: @kanban.id, state: ProductionOrderItemState::INIT).first
+        if item=ProductionOrderItemBlue.where(kanban_id: @kanban.id, state: ProductionOrderItemState::DISTRIBUTE_SUCCEED).first
           item.update(state: ProductionOrderItemState::TERMINATED)
-          @kanban.process_entities.update_all(state:ProductionOrderItemState::TERMINATED)
-          render json: {result: false, content: '销卡成功'} and return
+          @kanban.kanban_process_entities.update_all(state: ProductionOrderItemState::TERMINATED)
+          render json: {result: true, content: '销卡成功'} and return
           # item.update
         else
           render json: {result: false, content: '看板未生产，不可销卡'} and return
@@ -343,19 +366,28 @@ class KanbansController < ApplicationController
     parsed_code = Kanban.parse_printed_2DCode(params[:code])
     render json: {result: false, content: "输入错误"} and return unless parsed_code
 
-    @kanban = Kanban.find_by_id(parsed_code[:id])
+    @kanban = Kanban.find_by_nr_or_id(params[:code])
     # authorize(@kanban)
+
+    render json: {result: false, content: "看板未找到：#{params[:code]}"} and return unless @kanban
 
     #check Kanban State
     render json: {result: false, content: "看板未发布"} and return unless @kanban.state == KanbanState::RELEASED
 
     #check version of Kanban
-    render json: {result: false, content: "看板未找到：#{parsed_code.to_json}"} and return unless @kanban
-    render json: {result: false, content: "看板版本错误#{parsed_code[:version_nr]}"} and return unless (version = @kanban.versions.where(id: parsed_code[:version_nr]))
+    #render json: {result: false, content: "看板版本错误#{parsed_code[:version_nr]}"} and return unless (version = @kanban.versions.where(id: parsed_code[:version_nr]))
     #last_version = @kanban.versions.last
     #need_update = last_version.created_at > version.created_at
+    render json: {result: false, content: "看板版本错误#{parsed_code[:version_nr]}"} and return if (parsed_code[:version_nr].to_i-1)<0
 
-    need_update = @kanban.versions.count > parsed_code[:version_nr].to_i
+
+    @kanban_version=@kanban.versions[parsed_code[:version_nr].to_i-1].reify
+    if @kanban_version
+      need_update=!@kanban.has_same_content(@kanban_version)
+    else
+      need_update = @kanban.versions.count > parsed_code[:version_nr].to_i
+    end
+    #need_update = @kanban.versions.count > parsed_code[:version_nr].to_i
 
     #response dependent on Kanban type
     render json: {result: false, content: "看板已经更新，请重新打印!"} and return if need_update && @kanban.ktype == KanbanType::BLUE
@@ -366,31 +398,22 @@ class KanbansController < ApplicationController
     #2015-3-10 李其
     #不做扫描之后验证是否已经扫入，由工作人员控制
     #注释了这段代码，暂时不实现标注唯一的一张纸质看板卡
+    unless @kanban.not_in_produce?
+      render json: {result: false, content: "卡已投过，不可重复投卡"} and return
+    end
     if @kanban.ktype==KanbanType::WHITE
-      if ProductionOrderItem.where("kanban_id = ? AND state= ?", @kanban.id, ProductionOrderItemState::INIT).count > 0
-        render json: {result: false, content: "卡已投过，不可重复投卡"} and return
-      end
-
-      unless (@order = ProductionOrderItem.create(kanban_id: @kanban.id, code: params[:code]))
+      unless (@order = @kanban.generate_produce_item)
         render json: {result: false, content: "Production Order Item Created Failed"} and return
       end
     elsif @kanban.ktype==KanbanType::BLUE
-      if ProductionOrderItemBlue.where(kanban_id: @kanban.id, state: ProductionOrderItemState::INIT).count>0
-        render json: {result: false, content: "卡已投过，不可重复投卡"} and return
-      end
-      if (@order = ProductionOrderItemBlue.create(kanban_id: @kanban.id, code: @kanban.printed_2DCode, produced_qty: @kanban.quantity))
-        @kanban.process_entities.update_all(state:ProductionOrderItemState::STARTED)
+      if (@order =@kanban.generate_produce_item)
+        @kanban.kanban_process_entities.update_all(state: ProductionOrderItemState::STARTED)
       else
         render json: {result: false, content: "Production Order Item Created Failed"} and return
       end
-      # if @kanban.state == KanbanState::LOCKED
-      #   render json: {result: false, content: "卡已投过，不可重复投卡"} and return
-      # else
-      #   @kanban.update(state: KanbanState::LOCKED)
-      # end
     end
 
-    if need_update && @kanban.type == KanbanType::WHITE
+    if need_update && @kanban.ktype == KanbanType::WHITE
       render json: {result: true, content: @order}
     else
       render json: {result: true, contnet: @order}
@@ -424,10 +447,25 @@ class KanbansController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def kanban_params
     #params[:kanban]
-    params.require(:kanban).permit(:id, :state, :remark, :quantity, :bundle,
+    params.require(:kanban).permit(:id, :state, :remark, :remark2, :quantity, :bundle,
                                    :safety_stock, :des_warehouse,
                                    :des_storage, :print_time, :part_id,
                                    :version, :ktype, :copies, :product_id
     )
+  end
+
+  def import_lock_unlock(state)
+    if request.post?
+      msg = Message.new
+      begin
+        file=params[:files][0]
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
+        fd.save
+        msg = FileHandler::Excel::KanbanHandler.import_lock_unlock(fd.full_path, state)
+      rescue => e
+        msg.content = e.message
+      end
+      render json: msg
+    end
   end
 end

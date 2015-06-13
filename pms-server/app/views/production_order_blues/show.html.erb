@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nr:</strong>
+  <%= @production_order.nr %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @production_order.state %>
+</p>
+
+<%= link_to 'Edit', edit_production_order_path(@production_order) %> |
+<%= link_to 'Back', production_orders_path %>

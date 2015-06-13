@@ -40,6 +40,7 @@ module V1
             if machine=Machine.find_by_nr(params[:machine_nr])
               order = ProductionOrderItem.first_wait_produce(machine)
               if order
+                puts order.to_json.red
                 r= ProductionOrderItemPresenter.new(order).to_check_material_order
               else
                 r= {}
@@ -55,14 +56,14 @@ module V1
           # preview order item list
           get :preview do
             if machine=Machine.find_by_nr(params[:machine_nr])
-              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(machine).all)
+              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(machine))
             end
           end
 
           # get order item passed
           get :passed do
             if machine=Machine.find_by_nr(params[:machine_nr])
-              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_passed(machine).limit(20))
+              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_passed(machine).limit(30))
             end
           end
 
@@ -107,6 +108,20 @@ module V1
                 return r
               end
             end
+          end
+
+
+          get :item_search do
+            items=ProductionOrderItem
+            if params[:wire_nr]
+              ids= Kanban.search_for(params[:wire_nr]).pluck(:id)
+              items=items.joins(:kanban).where(kanbans: {id: ids}) if ids.count>0
+            end
+            items=items.limit(100)
+            if items.count>0
+              return ProductionOrderItemPresenter.init_preview_presenters(items)
+            end
+            return nil
           end
         end
 

@@ -1,49 +1,59 @@
 module Ncr
   class Order
-    attr_accessor :production_order
+    attr_accessor :production_order, :type
 
-    def initialize(production_order=nil)
+    def initialize(production_order=nil, type=ProductionOrderType::WHITE)
       self.production_order=production_order
-      puts "#{production_order.class}--------------------------------"
+      self.type=type
     end
 
     def distribute
       msg=Message.new
       begin
-        ProductionOrderItem.transaction do
-          items=ProductionOrderItem.for_distribute(self.production_order)
-          items.each do |item|
-            # puts item.to_json
-            begin
-              puts "$$$$$#{write_order_api(item)}"
-              # response=RestClient.post(write_order_api(item), {params: post_params(item).to_json},
-              #                          accept: :json)
-              # rb=JSON.parse(response.body)
-              # if rb['Result']
-              # if (kb=Kanban.find_by_id(item.kanban_id)) && kb.quantity<200
-              item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_SUCCEED)
-              # end
-                # else
-                #   item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_FAIL, message: rb['Content'])
-                # end
-                # puts JSON.parse(response.body)['Result'].class
-            rescue => e
-              puts "#{e.class}---#{e.message}-----------------------------"
-              # raise(e)
-              if e.is_a?(Errno::ECONNREFUSED)
-                item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_FAIL, message: e.message)
+
+        if self.type ==ProductionOrderType::WHITE
+          ProductionOrderItem.transaction do
+            items=ProductionOrderItem.for_distribute(self.production_order)
+            items.each do |item|
+              # puts item.to_json
+              begin
+                # response=RestClient.post(write_order_api(item), {params: post_params(item).to_json},
+                #                          accept: :json)
+                # rb=JSON.parse(response.body)
+                # if rb['Result']
+                # if (kb=Kanban.find_by_id(item.kanban_id)) && kb.quantity<200
+                item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_SUCCEED)
+                  # end
+                  # else
+                  #   item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_FAIL, message: rb['Content'])
+                  # end
+                  # puts JSON.parse(response.body)['Result'].class
+              rescue => e
+                if e.is_a?(Errno::ECONNREFUSED)
+                  item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_FAIL, message: e.message)
+                end
               end
             end
-            puts '***********************************'
-            puts '***********************************'
           end
-          # raise
+        elsif self.type =ProductionOrderType::BLUE
+          ProductionOrderItemBlue.transaction do
+            order=ProductionOrderBlue.new
+            i=0
+            ProductionOrderItemBlue.for_distribute.each do |item|
+              item.update_attributes(state: ProductionOrderItemState::DISTRIBUTE_SUCCEED)
+              order.production_order_item_blues<<item
+              i+=1
+            end
+
+            order.save
+            self.production_order=order
+          end
         end
+        msg.result=true
       rescue => e
-        puts "#{e.class}--------------------------------"
         msg.result =false
         msg.content =e.message
-        raise(e)
+        # raise(e)
       end
       msg
     end
@@ -192,7 +202,7 @@ module Ncr
           NewWire: {
               WireKey: wire.nr,
               WireGroup: 'Group0',
-              ElectricalSizeMM2: '0.50', #process_entity.value_wire_qty_factor,
+              ElectricalSizeMM2: wire.cross_section==0 ? '' : wire.cross_section, #0605leoni charlot #process_entity.value_wire_qty_factor,
               Diameter: wire.cross_section==0 ? '' : wire.cross_section,
               Color: 'RD',
               Name: wire.nr,
