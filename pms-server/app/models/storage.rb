@@ -12,7 +12,7 @@ class Storage < ActiveRecord::Base
   scoped_search in: :part,on: :nr
   scoped_search in: :position,on: :detail
 
-  has_paper_trail
+  # has_paper_trail
 
   # 添加库存
   # 参数: 零件号（完整的零件号，针对线号而言），数量，以及位置
