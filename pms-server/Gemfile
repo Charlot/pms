@@ -90,3 +90,6 @@ gem 'pundit'
 gem 'sidekiq'
 gem 'sinatra',require: false
 gem 'whenever'
+
+# active observer, removed from core since 4.0
+gem 'rails-observers'

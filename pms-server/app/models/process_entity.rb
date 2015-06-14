@@ -1,6 +1,8 @@
 class ProcessEntity < ActiveRecord::Base
   validates :nr, presence: {message: 'nr cannot be blank'}
   validates_uniqueness_of :nr, :scope => :product_id
+  include PartBomable
+
 
   belongs_to :process_template
   belongs_to :workstation_type

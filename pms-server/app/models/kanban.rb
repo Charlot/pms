@@ -1,5 +1,7 @@
 class Kanban < ActiveRecord::Base
   include AutoKey
+  include PartBomable
+
   validates :nr, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
   validates :product_id, :presence => true
 
