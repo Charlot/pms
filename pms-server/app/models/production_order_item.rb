@@ -11,7 +11,7 @@ class ProductionOrderItem < ActiveRecord::Base
   default_scope { where(type: ProductionOrderItemType::WHITE) }
   # after_update :enter_store
   # after_update :move_store
-  has_paper_trail
+  # has_paper_trail
 
   def self.for_optimise
     joins(:kanban).where(kanbans: {ktype: KanbanType::WHITE}, state: ProductionOrderItemState.optimise_states)
