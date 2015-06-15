@@ -417,22 +417,26 @@ module FileHandler
                     kanban = Kanban.find_by_nr(row['Nr'])
                     kanban.update(params)
                     # 暴力法，一律删除然后重新创建
-                    #kanban.kanban_process_entities.destroy_all
-
+                    # kanban.kanban_process_entities.destroy_all
+                    old_kpes=kanban.kanban_process_entities.pluck(:id)
                     process_nrs = row['Process List'].split(',')
-                    kanban_process_entities = []
+                    # kanban_process_entities = []
                     process_nrs.each_with_index { |pr, i|
                       pe = ProcessEntity.where({nr: pr, product_id: product.id}).first
-                     kanban_process_entities << KanbanProcessEntity.new({process_entity_id: pe.id, position: i})
-                      # if kpe=kanban.kanban_process_entities.where(process_entity_id:pe.id).first
-                      #   kpe.update(position:i)
-                      # else
-                      #   kanban_process_entities << KanbanProcessEntity.new({process_entity_id: pe.id, position: i})
-                      # end
+                       # kanban_process_entities << KanbanProcessEntity.new({process_entity_id: pe.id, position: i})
+                      if kpe=kanban.kanban_process_entities.where(process_entity_id:pe.id).first
+                        kpe.update(position:i)
+                        old_kpes.delete(kpe.id)
+                      else
+                        kanban.kanban_process_entities << KanbanProcessEntity.new({process_entity_id: pe.id, position: i})
+                      end
                     }
+                    old_kpes.each do |i|
+                      KanbanProcessEntity.find_by_id(i).destroy
+                    end
                     #process_nrs = row['Process List'].split(',')
                     #kanban_process_entities = ProcessEntity.where({nr: process_nrs, product_id: product.id}).collect { |pe| KanbanProcessEntity.new({process_entity_id: pe.id}) }
-                    kanban.kanban_process_entities = kanban_process_entities
+                   # kanban.kanban_process_entities = kanban_process_entities
                     kanban.save
                   when 'delete'
                     kanban = Kanban.find_by_nr(row['Nr'])
