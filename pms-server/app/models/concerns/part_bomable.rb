@@ -9,7 +9,7 @@ module PartBomable
   def update_part_bom
     if self.is_a?(ProcessEntity)
       self.kanbans.each do |kanban|
-        kanban.update_bom_by_process_entity(self)
+
       end
     end
   end
@@ -20,23 +20,31 @@ module PartBomable
     end
   end
 
-  def part_nr
+  def kanban_part_nr
     if self.is_a?(Kanban)
-      @part_nr||=("#{Part.find_by_id(self.product_id).nr}_#{ProcessEntity.find_by_id(self.process_entities.first.id).nr}")
+      @kanban_part_nr||= (self.full_wire_nr || ("#{Part.find_by_id(self.product_id).nr}_#{ProcessEntity.find_by_id(self.process_entities.first.id).nr}"))
     else
-      @part_nr||=nil
+      @kanban_part_nr||=nil
     end
   end
 
-  def part
+  def kanban_part
     if self.is_a?(Kanban)
-      @part= Part.find_by_nr(@virtual_part_nr)
+      @kanban_part||= Part.find_by_nr(@kanban_part_nr||kanban_part_nr)
     else
-      @part||=nil
+      @kanban_part||=nil
     end
   end
 
-  def update_bom_by_process_entity(process_entity)
+  def generate_part_bom
+    if self.is_a?(Kanban)
+      part=if self.kanban_part
+             self.kanban_part
+           else
+             Part.create(type: PartType::PRODUCT_SEMIFINISHED, remark: '创建BOM时系统自动生成', nr: self.kanban_part_nr)
+           end
 
+
+    end
   end
 end
