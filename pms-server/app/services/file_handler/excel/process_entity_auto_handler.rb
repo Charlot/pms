@@ -74,7 +74,7 @@ module FileHandler
                     process_entity.custom_values.each do |cv|
                       cf=cv.custom_field
                       if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
-                        process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: process_entity.process_part_quantity_by_cf(cf.name.to_sym))
+                        process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: process_entity.process_part_quantity_by_cf(cf.name.to_sym), custom_value_id: cv.id)
                       end
                     end
                   when 'update'
@@ -113,16 +113,24 @@ module FileHandler
                       end
                     end
 
-                    pe.process_parts.destroy_all
+                    # pe.process_parts.destroy_all
+                    arrs=pe.process_parts.pluck(:id)
                     pe.custom_values.each do |cv|
                       cf=cv.custom_field
                       if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
-                        pe.process_parts<<ProcessPart.new(part_id: cv.value, quantity: pe.process_part_quantity_by_cf(cf.name.to_sym))
+                        if ppp=pe.process_parts.where(custom_value_id: cv.id).first
+                          ppp.update_attributes(quantity: pe.process_part_quantity_by_cf(cf.name.to_sym))
+                          arrs.delete(ppp.id)
+                        else
+                          pe.process_parts<<ProcessPart.new(part_id: cv.value, quantity: pe.process_part_quantity_by_cf(cf.name.to_sym), custom_value_id: cv.id)
+                        end
                       end
                     end
+                    pe.process_parts.where(id:arrs).destroy_all
+                    pe.save
                   when 'delete'
                     pe = ProcessEntity.where({nr: params[:nr], product_id: product.id}).first
-                    pe.destroy
+                  # pe.destroy
                 end
               end
             end
@@ -258,49 +266,49 @@ module FileHandler
         if product.nil?
           msg.contents << "Product Nr: #{row['Product Nr']}不存在"
 
-else
-        wire = Part.where({nr: "#{row['Product Nr']}_#{row['Wire NO']}"}, type: PartType::PRODUCT_SEMIFINISHED).first
-        pe = ProcessEntity.where({nr: row['Nr'], product_id: product.id})
+        else
+          wire = Part.where({nr: "#{row['Product Nr']}_#{row['Wire NO']}"}, type: PartType::PRODUCT_SEMIFINISHED).first
+          pe = ProcessEntity.where({nr: row['Nr'], product_id: product.id})
 
-        case row['Operator']
-          when 'new', ''
-            #if wire
-            #  msg.contents << "Wire NO:#{row['Wire NO']}已经存在"
+          case row['Operator']
+            when 'new', ''
+              #if wire
+              #  msg.contents << "Wire NO:#{row['Wire NO']}已经存在"
+              #end
+              if pe.count > 0
+                msg.contents << "Nr :#{row['Nr']}已经存在"
+              end
+            when 'update'
+              if pe.count <= 0
+                msg.content << "Nr: #{row['Nr']}未找到"
+              end
+
+            #unless wire
+            #msg.contents << "Wire NO:#{row['Wire NO']}不存在"
             #end
-            if pe.count > 0
-              msg.contents << "Nr :#{row['Nr']}已经存在"
-            end
-          when 'update'
-            if pe.count <= 0
-              msg.content << "Nr: #{row['Nr']}未找到"
-            end
-
-          #unless wire
-          #msg.contents << "Wire NO:#{row['Wire NO']}不存在"
-          #end
-          when 'delete'
-            if pe.count <= 0
-              msg.content << "Nr: #{row['Nr']}未找到"
-            end
-        end
-
-        #验证模板
-        template = ProcessTemplate.find_by_code(row['Template Code'].to_i.to_s)
-        if template.nil?
-          msg.contents << "Template Code: #{row['Template Code'].to_i.to_s}不存在"
-        end
-
-        #验证步骤属性
-        ['T1', 'T2', 'S1', 'S2', 'Component'].each { |header|
-          material = Part.find_by_nr(row[header])
-          if material.nil? && row[header].present?
-            msg.contents << "#{header}: #{row[header]}不存在"
+            when 'delete'
+              if pe.count <= 0
+                msg.content << "Nr: #{row['Nr']}未找到"
+              end
           end
 
-          if material && !PartType.is_material?(material.type)
-            msg.contents << "#{header}: #{row[header]}零件类型错误"
+          #验证模板
+          template = ProcessTemplate.find_by_code(row['Template Code'].to_i.to_s)
+          if template.nil?
+            msg.contents << "Template Code: #{row['Template Code'].to_i.to_s}不存在"
           end
-        }
+
+          #验证步骤属性
+          ['T1', 'T2', 'S1', 'S2', 'Component'].each { |header|
+            material = Part.find_by_nr(row[header])
+            if material.nil? && row[header].present?
+              msg.contents << "#{header}: #{row[header]}不存在"
+            end
+
+            if material && !PartType.is_material?(material.type)
+              msg.contents << "#{header}: #{row[header]}零件类型错误"
+            end
+          }
         end
         unless msg.result=(msg.contents.size==0)
           msg.content=msg.contents.join('/')
