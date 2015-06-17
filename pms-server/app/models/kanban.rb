@@ -1,6 +1,6 @@
 class Kanban < ActiveRecord::Base
   include AutoKey
-  #include PartBomable
+  include PartBomable
 
   validates :nr, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
   validates :product_id, :presence => true
@@ -83,29 +83,21 @@ class Kanban < ActiveRecord::Base
     {conditions: "kanbans.nr like '%#{value}%'"}
   end
 
-  def create_part_bom
-    #TODO Kanban Update Part Bom
-    # part=self.part
-    # product=self.product
-    # unless PartBom.where(part_id: product.id, bom_item_id: part.id).first
-    #   PartBom.create(part_id: product.id, bom_item_id: part.id, quantity: 1)
-    # end
-  end
 
   # 看板中消耗额零件
   # 返回
   # {
   # 零件号:数量
   # }
-  def process_parts
-    parts = {}
-    process_entities.each do |pe|
-      pe.process_parts.each { |pp|
-        parts[pp.part_id] = pp.quantity
-      }
-    end
-    parts
-  end
+  # def process_parts
+  #   parts = {}
+  #   process_entities.each do |pe|
+  #     pe.process_parts.each { |pp|
+  #       parts[pp.part_id] = pp.quantity
+  #     }
+  #   end
+  #   parts
+  # end
 
   #
   def destroy_part_bom
