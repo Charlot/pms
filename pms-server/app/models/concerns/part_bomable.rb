@@ -81,15 +81,11 @@ module PartBomable
   end
 
 
-  # def generate_part_bom
-  #   if self.is_a?(Kanban)
-  #     part=if self.kanban_part
-  #            self.kanban_part
-  #          else
-  #            Part.create(type: PartType::PRODUCT_SEMIFINISHED, remark: '创建BOM时系统自动生成', nr: self.kanban_part_nr)
-  #          end
-  #
-  #
-  #   end
-  # end
+  def materials
+    if self.kanban_part
+      self.kanban_part.materials
+    else
+      []
+    end
+  end
 end

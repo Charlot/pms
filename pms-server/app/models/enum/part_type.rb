@@ -6,6 +6,7 @@ class PartType<BaseType
   PRODUCT_SEMIFINISHED=4 #半成品
   PRODUCT=5 #成品
 
+  @@MaterialTypes= [MATERIAL_WIRE, MATERIAL_TERMINAL, MATERIAL_SEAL, MATERIAL_OTHER]
 
   def self.display type
     case type
@@ -68,6 +69,11 @@ class PartType<BaseType
   end
 
   def self.is_material?(type)
-    [MATERIAL_WIRE, MATERIAL_TERMINAL, MATERIAL_SEAL, MATERIAL_OTHER].include?(type.to_i)
+    @@MaterialTypes.include?(type.to_i)
   end
+
+  def self.MaterialTypes
+    @@MaterialTypes
+  end
+
 end
