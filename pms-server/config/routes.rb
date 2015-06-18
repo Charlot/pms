@@ -233,6 +233,7 @@ Rails.application.routes.draw do
       match :import_update_base, to: :import_update_base, via: [:get, :post]
       match :import_lock, to: :import_lock, via: [:get, :post]
       match :import_unlock, to: :import_unlock, via: [:get, :post]
+      match :transport, to: :transport, via: [:get, :post]
     end
   end
 

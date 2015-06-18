@@ -178,21 +178,6 @@ class KanbansController < ApplicationController
     end
   end
 
-  # GET /kanbans/search.json
-  # Search by part_nr and product_nr
-=begin
-  def search
-    msg = Message.new
-    @q = params[:q]
-
-    @kanbans = Kanban.search_for(params[:q]).paginate(:page => params[:page])
-    msg.result = true
-    msg.content = @kanbans
-
-    render :index
-  end
-=end
-
   # GET /kanbans/add_routing_template
   def add_routing_template
     # authorize(Kanban)
@@ -468,4 +453,20 @@ class KanbansController < ApplicationController
       render json: msg
     end
   end
+
+  def transport
+    if request.post?
+      msg = Message.new
+      begin
+        file=params[:files][0]
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
+        fd.save
+        msg = FileHandler::Excel::MasterBomItemHandler.transport(fd)
+      rescue => e
+        msg.content = e.message
+      end
+      render json: msg
+    end
+  end
+
 end

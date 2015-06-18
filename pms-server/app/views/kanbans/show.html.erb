@@ -60,6 +60,18 @@
               <label><%= KanbanDesc::REMARK %>:</label>
               <ins><%= @kanban.remark %></ins>
             </li>
+            <li class="list-group-item">
+              <label><%= KanbanDesc::REMARK2 %>:</label>
+              <ins><%= @kanban.remark2 %></ins>
+            </li>
+            <li class="list-group-item">
+              <label>BOM:</label>
+              <ins>
+                <% if @kanban.kanban_part %>
+                    <%= link_to 'BOM表', part_bom_path(@kanban.kanban_part.id) %>
+                <% end %>
+              </ins>
+            </li>
           </ul>
         </div>
         <div class="col-md-4">
