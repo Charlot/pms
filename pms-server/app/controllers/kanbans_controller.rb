@@ -459,9 +459,9 @@ class KanbansController < ApplicationController
       msg = Message.new
       begin
         file=params[:files][0]
-        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path)
         fd.save
-        msg = FileHandler::Excel::MasterBomItemHandler.transport(fd)
+        msg = FileHandler::Excel::KanbanHandler.transport(fd)
       rescue => e
         msg.content = e.message
       end

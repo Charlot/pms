@@ -21,10 +21,10 @@ module PartBomable
           # create part for kanban
           if !self.kanban_part
             # if self.ktype==KanbanType::BLUE
-              if self.kanban_part_nr
-                self.kanban_part=Part.create(nr: self.kanban_part_nr, type: PartType::PRODUCT_SEMIFINISHED, remark: '创建BOM时系统自动生成')
-                puts "-----create kanban part nr#{self.kanban_part.to_json}---------".blue
-              end
+            if self.kanban_part_nr
+              self.kanban_part=Part.create(nr: self.kanban_part_nr, type: PartType::PRODUCT_SEMIFINISHED, remark: '创建BOM时系统自动生成')
+              puts "-----create kanban part nr#{self.kanban_part.to_json}---------".blue
+            end
             # end
           end
 
@@ -37,12 +37,13 @@ module PartBomable
             puts "#{process_part.to_json}".red
             if part_bom_item=Part.find_by_id(process_part.part_id)
               if item=part.part_boms.find_by_bom_item_id(part_bom_item.id)
+                qty=process_part.quantity||0
                 if part_bom_item.type==PartType::PRODUCT_SEMIFINISHED
                   puts "update semi part ----#{part_bom_item.nr}".blue
-                  item.update_attributes(quantity: process_part.quantity) if item.quantity==0
+                  item.update_attributes(quantity: qty) if item.quantity==0
                 elsif PartType.is_material?(part_bom_item.type)
                   puts "update material ----#{part_bom_item.nr}".yellow
-                  item.update_attributes(quantity: item.quantity+process_part.quantity)
+                  item.update_attributes(quantity: item.quantity+qty)
                 end
                 arrs.delete(item.id)
               else
