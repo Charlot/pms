@@ -100,21 +100,26 @@ class ProductionOrderItem < ActiveRecord::Base
 
   def create_label bundle
     bundle=bundle.to_i
-    if self.kanban
-      unless self.production_order_item_labels.where(bundle_no: bundle).first
-        qty=0
-        if (bundle*self.kanban.bundle)<=self.kanban.quantity
-          qty=self.kanban.bundle
-        else
-          qty=self.kanban.quantity-(bundle-1)*self.kanban.bundle
+    unless self.production_order_item_labels.where(bundle_no: bundle).first
+      qty=0
+      if (bundle*self.kanban_bundle)<=self.kanban_qty
+        qty=self.kanban_bundle
+      else
+        qty=self.kanban_qty-(bundle-1)*self.kanban_bundle
+      end
+      if qty>0
+        position_nr=Warehouse::DEFAULT_POSITION
+        whouse_nr=Warehouse::DEFAULT_WAREHOUSE
+        if self.kanban
+          position_nr= self.kanban.des_storage
+          whouse_nr=Warehouse.get_whouse_by_position_prefix(self.kanban.des_storage)
         end
-        if qty>0
-          self.production_order_item_labels.create(nr: "#{self.nr}-#{bundle}",
-                                                   qty: qty,
-                                                   bundle_no: bundle,
-                                                   position_nr: self.kanban.des_storage,
-                                                   whouse_nr: Warehouse.get_whouse_by_position_prefix(self.kanban.des_storage))
-        end
+
+        self.production_order_item_labels.create(nr: "#{self.nr}-#{bundle}",
+                                                 qty: qty,
+                                                 bundle_no: bundle,
+                                                 position_nr: position_nr,
+                                                 whouse_nr: whouse_nr)
       end
     end
   end
@@ -122,7 +127,7 @@ class ProductionOrderItem < ActiveRecord::Base
   def update_qty_to_terminate
     if self.produced_qty_changed?
       unless self.state==ProductionOrderItemState::TERMINATED
-        if self.kanban && self.produced_qty>=kanban.quantity
+        if self.produced_qty>=self.kanban_qty
           self.update(state: ProductionOrderItemState::TERMINATED)
         end
       end
@@ -132,24 +137,31 @@ class ProductionOrderItem < ActiveRecord::Base
 
   def generate_production_item_label
     if self.produced_qty_changed?
-      if self.kanban && self.produced_qty>0
-        if self.produced_qty % self.kanban.bundle==0
-          bundle=self.produced_qty / self.kanban.bundle
+      position_nr=Warehouse::DEFAULT_POSITION
+      whouse_nr=Warehouse::DEFAULT_WAREHOUSE
+      if self.kanban
+        position_nr= self.kanban.des_storage
+        whouse_nr=Warehouse.get_whouse_by_position_prefix(self.kanban.des_storage)
+      end
+
+      if self.produced_qty>0
+        if self.produced_qty % self.kanban_bundle==0
+          bundle=self.produced_qty / self.kanban_bundle
           unless self.production_order_item_labels.where(bundle_no: bundle).first
             self.production_order_item_labels.create(nr: "#{self.nr}-#{bundle}",
                                                      qty: self.kanban.bundle,
                                                      bundle_no: bundle,
-                                                     position_nr: self.kanban.des_storage,
-                                                     whouse_nr: Warehouse.get_whouse_by_position_prefix(self.kanban.des_storage))
+                                                     position_nr: position_nr,
+                                                     whouse_nr: whouse_nr)
           end
-        elsif (self.state==ProductionOrderItemState::TERMINATED && self.produced_qty>=self.kanban.quantity)
-          bundle=self.produced_qty / self.kanban.bundle+1
-          qty=self.produced_qty-(bundle-1)*self.kanban.bundle
+        elsif (self.state==ProductionOrderItemState::TERMINATED && self.produced_qty>=self.kanban_qty)
+          bundle=self.produced_qty / self.kanban_bundle+1
+          qty=self.produced_qty-(bundle-1)*self.kanban_bundle
           self.production_order_item_labels.create(nr: "#{self.nr}-#{bundle}",
                                                    qty: qty,
                                                    bundle_no: bundle,
-                                                   position_nr: self.kanban.des_storage,
-                                                   whouse_nr: Warehouse.get_whouse_by_position_prefix(self.kanban.des_storage))
+                                                   position_nr: position_nr,
+                                                   whouse_nr: whouse_nr)
         end
       end
     end if self.type==ProductionOrderItemType::WHITE

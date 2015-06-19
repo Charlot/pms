@@ -63,7 +63,7 @@ module PartBomable
 
   def kanban_part_nr
     if self.is_a?(Kanban)
-      @kanban_part_nr||= (self.full_wire_nr || ("#{Part.find_by_id(self.product_id).nr}_#{ProcessEntity.find_by_id(self.process_entities.first.id).nr}"))
+      @kanban_part_nr||= (self.full_wire_nr || (self.process_entities.first.nil? ? nil : "#{Part.find_by_id(self.product_id).nr}_#{self.process_entities.first.nr}"))
     else
       @kanban_part_nr||=nil
     end

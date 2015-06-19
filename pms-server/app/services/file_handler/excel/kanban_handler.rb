@@ -369,14 +369,15 @@ module FileHandler
 
       def self.transport(file)
         msg=Message.new
+
         book=Roo::Excelx.new file.full_path
         transport_file=full_tmp_path(file.original_name)
         header=['Kanban Nr', 'Qty']
 
-        origin_header=['Kanban Nr', 'Qty', 'Msg']
+        origin_header=['Kanban Nr', 'Qty', 'Product Nr', 'WireNr', '单线用料', '看板用料']
         origin_rows=[]
         result_header=['Part', 'Qty']
-        result_rows=[]
+        result_rows={}
         2.upto(book.last_row) do |line|
           origin_row=[]
           row={}
@@ -387,14 +388,30 @@ module FileHandler
           end
 
           kanban=Kanban.find_by_nr_or_id(row['Kanban Nr'])
-          unless kanban
-            origin_row<<"看板：#{row['Kanban Nr']} 不存在"
-          else
-            materials=[]
-            kanban.materials.each do |m|
-              materials<<"#{m.nr}|#{m.quantity}"
+          if kanban
+            if kanban.process_entities.first.nil?
+              origin_row<<"看板：#{row['Kanban Nr']} 不存在步骤"
+            else
+              origin_row<<kanban.product.nr
+              origin_row<<kanban.kanban_part.nr
+              s_materials=[]
+              t_materials=[]
+
+              kanban.materials.each do |m|
+                s_materials<<"#{m.nr}|#{m.quantity}"
+                qty=BigDecimal.new(m.quantity.to_s)*(row['Qty'].to_f)
+                t_materials<<"#{m.nr}|#{qty}"
+                if result_rows.has_key?(m.nr)
+                  result_rows[m.nr]+=qty
+                else
+                  result_rows[m.nr]=qty
+                end
+              end
+              origin_row<<s_materials.join(',')
+              origin_row<<t_materials.join(',')
             end
-            origin_row<<materials.join(',')
+          else
+            origin_row<<"看板：#{row['Kanban Nr']} 不存在"
           end
           origin_rows<<origin_row
         end
@@ -403,15 +420,24 @@ module FileHandler
         package.workbook.add_worksheet(name: 'Kanban Sheet') do |sheet|
           sheet.add_row origin_header
           origin_rows.each do |origin_row|
-            sheet.add_row origin_row, types: [:string, :string, :string]
+            sheet.add_row origin_row, types: [:string, :string, :string, :string, :string, :string]
           end
         end
+
+        package.workbook.add_worksheet(name: '汇总') do |sheet|
+          sheet.add_row result_header
+          result_rows.each do |k, v|
+            sheet.add_row [k, v], types: [:string, :string]
+          end
+        end
+
 
         package.serialize(transport_file)
 
         msg.result=true
+        msg.content = "请下载文成功文件<a href='/files/#{Base64.urlsafe_encode64(transport_file)}'>#{::File.basename(transport_file)}</a>"
 
-        msg.content =transport_file
+        msg
       end
 
       def self.import file

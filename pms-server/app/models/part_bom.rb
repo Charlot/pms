@@ -29,7 +29,7 @@ class PartBom < ActiveRecord::Base
 
   def self.leaf_by_part(part, type=nil)
     leaf=[]
-    if part_boms=by_part_id(part.id)
+    if part_boms=by_part_id(part.id,type)
       call_leaf_by_part(part_boms, leaf, type)
     end
     return leaf

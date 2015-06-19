@@ -13,8 +13,8 @@ class ProductionOrderItemPresenter<Presenter
     {
         Id: @production_order_item.id,
         ItemNr: @production_order_item.nr,
-        TotalQuantity: kanban.quantity,
-        BundleQuantity: kanban.bundle,
+        TotalQuantity: @production_order_item.kanban_qty,
+        BundleQuantity: @production_order_item.kanban_bundle,
         ProducedQty: @production_order_item.produced_qty
     }
   end
@@ -28,7 +28,6 @@ class ProductionOrderItemPresenter<Presenter
   end
 
   def to_check_material_order(no=0)
-
     kanban=@production_order_item.kanban
     puts @production_order_item.id
     # puts kanbanz.red
@@ -59,8 +58,8 @@ class ProductionOrderItemPresenter<Presenter
           FileName: "#{@production_order_item.nr}.json",
           ProductNr: product.nil? ? '' : product.nr,
           KanbanNr: kanban.nr,
-          KanbanQuantity: kanban.quantity,
-          KanbanBundle: kanban.bundle,
+          KanbanQuantity: @production_order_item.kanban_qty,
+          KanbanBundle: @production_order_item.kanban_bundle,
           ProducedQty: @production_order_item.produced_qty,
           KanbanWireNr: kanban.wire_nr,
           WireNr:wire.nil? ? '' : wire.nr,

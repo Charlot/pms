@@ -422,6 +422,21 @@ class KanbansController < ApplicationController
     end
   end
 
+  def transport
+    if request.post?
+      msg = Message.new
+      # begin
+        file=params[:files][0]
+        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path)
+        fd.save
+        msg = FileHandler::Excel::KanbanHandler.transport(fd)
+      # rescue => e
+      #   msg.content = e.message
+      # end
+      render json: msg
+    end
+  end
+
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_kanban
@@ -454,19 +469,5 @@ class KanbansController < ApplicationController
     end
   end
 
-  def transport
-    if request.post?
-      msg = Message.new
-      begin
-        file=params[:files][0]
-        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path)
-        fd.save
-        msg = FileHandler::Excel::KanbanHandler.transport(fd)
-      rescue => e
-        msg.content = e.message
-      end
-      render json: msg
-    end
-  end
 
 end
