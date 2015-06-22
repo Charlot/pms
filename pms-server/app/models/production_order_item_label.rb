@@ -31,7 +31,7 @@ class ProductionOrderItemLabel < ActiveRecord::Base
   end
 
   def move_stock
-    # ItemLabelMoveStockWorker.perform_async(self.id)
+    ItemLabelMoveStockWorker.perform_async(self.id)
   end
 
   def update_tool_cut_count

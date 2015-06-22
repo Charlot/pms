@@ -374,7 +374,7 @@ module FileHandler
         transport_file=full_tmp_path(file.original_name)
         header=['Kanban Nr', 'Qty']
 
-        origin_header=['Kanban Nr', 'Qty', 'Product Nr', 'WireNr', '单线用料', '看板用料']
+        origin_header=['Kanban Nr', 'Qty','Kanban Id', 'Product Nr', 'WireNr', '单线用料', '看板用料']
         origin_rows=[]
         result_header=['Part', 'Qty']
         result_rows={}
@@ -392,6 +392,7 @@ module FileHandler
             if kanban.process_entities.first.nil?
               origin_row<<"看板：#{row['Kanban Nr']} 不存在步骤"
             else
+              origin_row<<kanban.id
               origin_row<<kanban.product.nr
               origin_row<<kanban.kanban_part.nr
               s_materials=[]

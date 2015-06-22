@@ -1,7 +1,6 @@
 class SettingsController < ApplicationController
   before_action :set_setting, only: [:show, :edit, :update, :destroy]
 
-  # GET /settings
   # GET /settings.json
   def index
     @settings = Setting.all
@@ -71,6 +70,6 @@ class SettingsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def setting_params
-      params.require(:setting).permit(:name, :value, :stype)
+      params.require(:setting).permit(:name, :value, :stype,:code)
     end
 end

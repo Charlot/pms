@@ -3,8 +3,8 @@ class ProductionOrderItemLabelService
     ProductionOrderItemLabel.transaction do
       if (label=ProductionOrderItemLabel.find_by_id(id)) && (label.state==ProductionOrderItemLabel::INIT)
         r=false
-        if (kb=label.production_order_item.kanban) && kb.full_wire_nr
-          r=Whouse::Storage.new.enter_stock({partNr: kb.full_wire_nr,
+        if (kb=label.production_order_item.kanban) && kb.kanban_part_nr
+          r=Whouse::Storage.new.enter_stock({partNr: kb.kanban_part_nr,
                                              qty: label.qty,
                                              fifo: label.created_at.localtime,
                                              toWh: label.whouse_nr,

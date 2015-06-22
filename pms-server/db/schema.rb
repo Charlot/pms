@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150615061340) do
+ActiveRecord::Schema.define(version: 20150620052615) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -465,6 +465,7 @@ ActiveRecord::Schema.define(version: 20150615061340) do
     t.integer  "stype"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "code"
   end
 
   create_table "storages", force: true do |t|
