@@ -58,6 +58,11 @@ User.transaction do
   end
 
 
+unless huangjianyun = User.find_by_user_name("jianyun.huang")
+    huangjianyun = User.create({user_name: "jianyun.huang", password: "huangjianyun567", password_confirmation: "huangjianyun567"})
+    huangjianyun.add_role :kanban
+  end
+
   unless sunlihong = User.find_by_user_name("lihong.sun")
     sunlihong = User.create({user_name: "lihong.sun", password: "sunlihong234", password_confirmation: "sunlihong234"})
     sunlihong.add_role :admin
