@@ -308,8 +308,8 @@ class KanbansController < ApplicationController
     # authorize(Kanban)
     if request.post?
       #parse code
-      parsed_code = Kanban.parse_printed_2DCode(params[:code])
-      render json: {result: false, content: "扫描错误！"} and return unless parsed_code
+      # parsed_code = Kanban.parse_printed_2DCode(params[:code])
+      # render json: {result: false, content: "扫描错误！"} and return unless parsed_code
 
       @kanban = Kanban.find_by_nr_or_id(params[:code])
       render json: {result: false, content: '看板不存在'} and return unless @kanban
@@ -348,8 +348,9 @@ class KanbansController < ApplicationController
   # 扫描看板卡
   def scan
     #parse code
+    need_update =false
     parsed_code = Kanban.parse_printed_2DCode(params[:code])
-    render json: {result: false, content: "输入错误"} and return unless parsed_code
+    # render json: {result: false, content: "输入错误"} and return unless parsed_code
 
     @kanban = Kanban.find_by_nr_or_id(params[:code])
     # authorize(@kanban)
@@ -363,14 +364,15 @@ class KanbansController < ApplicationController
     #render json: {result: false, content: "看板版本错误#{parsed_code[:version_nr]}"} and return unless (version = @kanban.versions.where(id: parsed_code[:version_nr]))
     #last_version = @kanban.versions.last
     #need_update = last_version.created_at > version.created_at
-    render json: {result: false, content: "看板版本错误#{parsed_code[:version_nr]}"} and return if (parsed_code[:version_nr].to_i-1)<0
+    render json: {result: false, content: "看板版本错误#{parsed_code[:version_nr]}"} and return if parsed_code && (parsed_code[:version_nr].to_i-1)<0
 
-
-    @kanban_version=@kanban.versions[parsed_code[:version_nr].to_i-1].reify
-    if @kanban_version
-      need_update=!@kanban.has_same_content(@kanban_version)
-    else
-      need_update = @kanban.versions.count > parsed_code[:version_nr].to_i
+    if parsed_code
+      @kanban_version=@kanban.versions[parsed_code[:version_nr].to_i-1].reify
+      if @kanban_version
+        need_update=!@kanban.has_same_content(@kanban_version)
+      else
+        need_update = @kanban.versions.count > parsed_code[:version_nr].to_i
+      end
     end
     #need_update = @kanban.versions.count > parsed_code[:version_nr].to_i
 
@@ -426,10 +428,10 @@ class KanbansController < ApplicationController
     if request.post?
       msg = Message.new
       # begin
-        file=params[:files][0]
-        fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path)
-        fd.save
-        msg = FileHandler::Excel::KanbanHandler.transport(fd)
+      file=params[:files][0]
+      fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path)
+      fd.save
+      msg = FileHandler::Excel::KanbanHandler.transport(fd)
       # rescue => e
       #   msg.content = e.message
       # end
