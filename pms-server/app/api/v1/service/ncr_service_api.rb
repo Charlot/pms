@@ -23,9 +23,10 @@ module V1
           post :tool do
             if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
               puts "-------------------#{params.to_json}".red
-              item.without_versioning do
+              # item.without_versioning do
                 item.update_attributes(tool1: params[:tool1_nr], tool2: params[:tool2_nr])
-              end
+            # end
+
             end
             msg=ServiceMessage.new
             msg.Result=true
