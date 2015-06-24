@@ -226,7 +226,7 @@ module FileHandler
                         end
                       end
                     end
-
+                    pe.process_parts.where(id:arrs).destroy_all
                     pe.save
                   when 'delete'
                     # pe.destroy
