@@ -30,8 +30,10 @@ class ProductionOrderItemLabel < ActiveRecord::Base
     ItemLabelInStockWorker.perform_async(self.id)
   end
 
-  def move_stock
-    # ItemLabelMoveStockWorker.perform_async(self.id)
+  def move_stocke
+    if Setting.auto_move_kanban?
+      ItemLabelMoveStockWorker.perform_async(self.id)
+    end
   end
 
   def update_tool_cut_count

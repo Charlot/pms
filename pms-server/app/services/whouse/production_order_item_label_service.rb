@@ -10,7 +10,7 @@ class ProductionOrderItemLabelService
                                              toWh: label.whouse_nr,
                                              toPosition: label.position_nr,
                                              packageId: label.nr,
-                                             uniq:true
+                                             uniq: true
                                             })
         end
         if r
@@ -26,7 +26,7 @@ class ProductionOrderItemLabelService
   def self.move_stock(id, from_whouse='SR01', from_position='SR01')
     ProductionOrderItemLabel.transaction do
       if (label=ProductionOrderItemLabel.find_by_id(id)) && (item =label.production_order_item)
-        if (kb=item.kanban) && (pe=kb.process_entities.first)
+        if kb=item.kanban
           base_params={
               toWh: label.whouse_nr,
               toPosition: label.whouse_nr,
@@ -34,21 +34,33 @@ class ProductionOrderItemLabelService
               fromPosition: from_position
           }
           moves=[]
-          if part=Part.find_by_id(pe.value_default_wire_nr)
-            part.part_boms.joins(:bom_item).select('part_boms.*,parts.nr,parts.type as part_type').each do |pb|
-              # TODO check if the part is material wire!
-              qty = pb.quantity.to_f>10 ? pb.quantity/1000 : pb.quantity
-              moves<<base_params.merge({
-                                           qty: qty,
-                                           partNr: pb.nr
-                                       })
-
-            end
-            puts "#{moves}".red
-            Whouse::Storage.new.move_stocks(moves) if moves.size>0
+          kb.materials.each do |material|
+            moves<<base_params.merge({
+                                         qty: material.quantity,
+                                         partNr: material.nr
+                                     })
           end
+          Whouse::Storage.new.move_stocks(moves) if moves.size>0
         end
       end
+    end
+  end
+
+  def self.move_blue_stock(id, from_whouse='SR01', from_position='SR01')
+    if (item=ProductionOrderItemBlue.find_by_id(id)) && (kb =item.kanban)
+      toWh=toPosition=Warehouse.get_whouse_by_position_prefix(kb.des_storage)
+      base_params={toWh: toWh,
+                   toPosition: toPosition,
+                   fromWh: from_whouse,
+                   fromPosition: from_position}
+      moves=[]
+      kb.materials.each do |material|
+        moves<<base_params.merge({
+                                     qty: material.quantity,
+                                     partNr: material.nr
+                                 })
+      end
+      Whouse::Storage.new.move_stocks(moves) if moves.size>0
     end
   end
 end
