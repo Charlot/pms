@@ -18,5 +18,6 @@ class KanbanDesc
   SOURCE_STORAGE="取料库位"
   DES_WAREHOUSE="送料仓库"
   DES_STORAGE="送料库位"
-  REMARK="备注"
+  REMARK="备注1/特殊工艺"
+  REMARK2="备注2/APAP"
 end

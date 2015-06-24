@@ -1,14 +1,17 @@
 class Kanban < ActiveRecord::Base
   include AutoKey
+  include PartBomable
+
   validates :nr, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
   validates :product_id, :presence => true
-
+  after_create :create_part_bom
 
   #belongs_to :part
   belongs_to :product, class_name: 'Part'
   has_many :kanban_process_entities, -> { order('position ASC') }, dependent: :destroy
   has_many :process_entities, through: :kanban_process_entities
   has_many :custom_values, through: :process_entities
+  has_many :process_parts, through: :process_entities
   delegate :nr, to: :part, prefix: true, allow_nil: true
   delegate :nr, to: :product, prefix: true, allow_nil: true
   delegate :custom_nr, to: :product, prefix: true, allow_nil: true
@@ -80,29 +83,21 @@ class Kanban < ActiveRecord::Base
     {conditions: "kanbans.nr like '%#{value}%'"}
   end
 
-  def create_part_bom
-    #TODO Kanban Update Part Bom
-    # part=self.part
-    # product=self.product
-    # unless PartBom.where(part_id: product.id, bom_item_id: part.id).first
-    #   PartBom.create(part_id: product.id, bom_item_id: part.id, quantity: 1)
-    # end
-  end
 
   # 看板中消耗额零件
   # 返回
   # {
   # 零件号:数量
   # }
-  def process_parts
-    parts = {}
-    process_entities.each do |pe|
-      pe.process_parts.each { |pp|
-        parts[pp.part_id] = pp.quantity
-      }
-    end
-    parts
-  end
+  # def process_parts
+  #   parts = {}
+  #   process_entities.each do |pe|
+  #     pe.process_parts.each { |pp|
+  #       parts[pp.part_id] = pp.quantity
+  #     }
+  #   end
+  #   parts
+  # end
 
   #
   def destroy_part_bom
@@ -166,23 +161,23 @@ class Kanban < ActiveRecord::Base
 
   # 获得看板卡生产的线号
   def wire_nr
-    if (self.ktype == KanbanType::WHITE) && self.process_entities.first && self.process_entities.first.wire
-      name = self.process_entities.first.wire.nr.split("_")
-      # puts name
-      name = (name - [name.first])
-      name.join("_")
-    else
-      nil
-    end
+    @wire_nr||=if (self.ktype == KanbanType::WHITE) && self.process_entities.first && self.process_entities.first.wire
+                 name = self.process_entities.first.wire.nr.split("_")
+                 # puts name
+                 name = (name - [name.first])
+                 name.join("_")
+               else
+                 nil
+               end
   end
 
   # 获得看板卡的生产的完整的零件号
   def full_wire_nr
-    if (self.ktype == KanbanType::WHITE) && self.process_entities.first && self.process_entities.first.wire
-      self.process_entities.first.wire.nr
-    else
-      nil
-    end
+    @full_wire_nr||=if (self.ktype == KanbanType::WHITE) && self.process_entities.first && self.process_entities.first.wire
+                      self.process_entities.first.wire.nr
+                    else
+                      nil
+                    end
   end
 
   def wire_length
@@ -328,7 +323,7 @@ class Kanban < ActiveRecord::Base
       return ProductionOrderItemBlue.
           where(kanban_id: self.id, state: ProductionOrderItemState::DISTRIBUTE_SUCCEED).first
                  .update(state: ProductionOrderItemState::TERMINATED,
-                         terminated_at:  handler_item.item_terminated_at,
+                         terminated_at: handler_item.item_terminated_at,
                          terminate_user: handler_item.handler_user,
                          terminated_kanban_code: handler_item.kanban_code)
     end

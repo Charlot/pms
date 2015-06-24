@@ -16,6 +16,7 @@ class ImportTemplate
   KANBAN_RELEASE_EXCEL_TEMPLATE='kanban_release.xlsx'
   KANBAN_GET_LIST_CSV_TEMPLATE='get_kanban_list.csv'
   KANBAN_UPDATE_BASE_TEMPLATE='kanban_update_base_template.csv'
+  KANBAN_TRANSPORT_EXCEL_TEMPLATE='kanban_transport.xlsx'
   MACHINE_CSV_TEMPLATE='machine.csv'
   MACHINE_COMBINATION_CSV_TEMPLATE='machine_combination.csv'
   MACHINE_TIME_RULE_EXCEL_TEMPLATE='machine_time_rule.xlsx'

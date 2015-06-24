@@ -1,6 +1,8 @@
 class ProcessEntity < ActiveRecord::Base
   validates :nr, presence: {message: 'nr cannot be blank'}
   validates_uniqueness_of :nr, :scope => :product_id
+  # include PartBomable
+
 
   belongs_to :process_template
   belongs_to :workstation_type
@@ -166,16 +168,12 @@ class ProcessEntity < ActiveRecord::Base
 
   def process_part_quantity_by_cf(cf_name)
     if quantity_cf_name=ProcessTemplateAuto.process_part_quantity_field(cf_name)
-      puts "#{self.to_json}*********************#{quantity_cf_name}"
       self.send(quantity_cf_name)
     end
   end
 
   # for auto process entity
   def t1_strip_length
-    puts "-----#{self.value_t1_strip_length}---#{self.value_t1_default_strip_length}***************************"
-    # @t1_strip_length ||=(self.value_t1_default_strip_length self.value_t1_default_strip_length!='0' && || self.value_t1_strip_length)
-    # @t1_strip_length
     @t1_strip_length=if self.value_t1_default_strip_length && (self.value_t1_default_strip_length.to_f!=0)
       self.value_t1_default_strip_length
     else

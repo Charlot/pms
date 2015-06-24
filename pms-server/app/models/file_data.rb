@@ -1,14 +1,20 @@
 class FileData<BaseClass
   attr_accessor :type, :original_name, :size, :path, :path_name, :data, :extension, :uuid_name, :full_path
 
-  def default
-    {:uuid_name => SecureRandom.uuid}
-  end
+  # def default
+  #   # {:uuid_name => SecureRandom.uuid}
+  # end
 
   def save
     begin
       @extension=File.extname(@original_name).downcase
-      @path_name=@uuid_name+@extension if @path_name.nil?
+      if @path_name.nil?
+        if @uuid_name
+          @path_name=@uuid_name+@extension
+        else
+          @path_name= "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{@original_name}"
+        end
+      end
       @full_path=File.join(@path, @path_name)
       File.open(@full_path, 'wb') do |f|
         if @data.kind_of?(String)

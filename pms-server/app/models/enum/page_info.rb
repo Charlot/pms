@@ -62,9 +62,9 @@ module Enum
         when 'transport'
           case model
             when 'Master BOM'
-              "订单BOM转换"
+              "订单BOM分解"
             else
-              'N/A'
+              "#{model}分解"
           end
         when 'import_update_base'
           "#{model}更新基本信息"

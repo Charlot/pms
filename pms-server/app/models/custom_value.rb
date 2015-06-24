@@ -2,6 +2,8 @@ class CustomValue < ActiveRecord::Base
   belongs_to :custom_field
   belongs_to :customized, :polymorphic => true
 
+  # after_update :update_process_entity_part
+
   has_paper_trail
 
   def initialize(attributes=nil, *args)
@@ -32,4 +34,9 @@ class CustomValue < ActiveRecord::Base
                                  custom_fields: {name:  %w(t2_default_strip_length t2_strip_length)}).update_all(value: part.strip_length)
     end
   end
+
+  # def update_process_entity_part
+  #   if self.customized.is_a?(ProcessEntity)
+  #   end
+  # end
 end

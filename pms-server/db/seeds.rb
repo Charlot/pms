@@ -21,41 +21,6 @@ Machine.update_all(print_time: 45, seal_time: 40, terminal_time: 15, wire_time: 
 
 puts 'Create users'
 User.transaction do
-  unless admin = User.find_by_user_name("admin")
-    admin = User.create({user_name: "admin", password: "123456", password_confirmation: "123456"})
-    admin.add_role :admin
-  end
-
-  unless av = User.find_by_user_name("av")
-    av = User.create({user_name: "av", password: "123456", password_confirmation: "123456"})
-    av.add_role :av
-  end
-
-  unless cutting = User.find_by_user_name("cutting")
-    cutting = User.create({user_name: "cutting", password: "123456", password_confirmation: "123456"})
-    cutting.add_role :cutting
-  end
-
-  unless system = User.find_by_user_name("system")
-    system = User.create({user_name: "system", password:"123456",password_confirmation:"123456"})
-    system.add_role :system
-  end
-  #
-  # unless test=User.find_by_user_name("test")
-  #   test = User.create({user_name: "test", password:"123456",password_confirmation:"123456"})
-  #   test.add_role :admin
-  # end
-
-
-  unless kanban=User.find_by_user_name("kanban")
-    kanban = User.create({user_name: "kanban", password:"123456",password_confirmation:"123456"})
-    kanban.add_role :kanban
-  end
-
-
-  User.destroy_all
-  #
-
   unless caigaoming = User.find_by_user_name("gaoming.cai")
     caigaoming = User.create({user_name: "gaoming.cai", password: "caigaoming123", password_confirmation: "caigaoming123"})
     caigaoming.add_role :admin
@@ -99,7 +64,13 @@ User.transaction do
   end
 
   unless system = User.find_by_user_name("system")
-    system = User.create({user_name: "system", password:"123456system",password_confirmation:"123456system"})
+    system = User.create({user_name: "system", password: "123456system", password_confirmation: "123456system"})
     system.add_role :system
+  end
+end
+
+Setting.transaction do
+  unless Setting.find_by_code('auto_move_kanban')
+    Setting.create(code: Setting::AUTO_MOVE_KANBAN_CODE, value: '0', name: '自动销卡')
   end
 end

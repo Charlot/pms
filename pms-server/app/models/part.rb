@@ -6,7 +6,7 @@ class Part < ActiveRecord::Base
   belongs_to :resource_group
   belongs_to :measure_unit
   has_many :part_boms
-  has_many :part_process_entities#, dependent: :destroy
+  has_many :part_process_entities #, dependent: :destroy
   has_many :process_entities, through: :part_process_entities
   has_many :kanbans
   has_one :resource_group_part
@@ -28,7 +28,7 @@ class Part < ActiveRecord::Base
     if type
       {conditions: "parts.type=#{type} or parts.nr like '%#{value}%'"}
     else
-      {conditions: "parts.nr like '%#{value}%' " }
+      {conditions: "parts.nr like '%#{value}%' "}
     end
   end
 
@@ -147,6 +147,11 @@ class Part < ActiveRecord::Base
     else
       nr
     end
+  end
+
+
+  def materials
+    PartBom.leaf_by_part(self,PartType.MaterialTypes)
   end
 
 

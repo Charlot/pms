@@ -15,14 +15,12 @@
     <%= f.label :name %><br>
     <%= f.text_field :name %>
   </div>
+
   <div class="field">
     <%= f.label :value %><br>
     <%= f.text_field :value %>
   </div>
-  <div class="field">
-    <%= f.label :stype %><br>
-    <%= f.select(:stype,setting_type_options,{include_blank: false}) %>
-  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>

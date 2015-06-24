@@ -50,6 +50,7 @@
                 <li><a href="<%= master_bom_items_path %>">Master BOM</a></li>
                 <li><a href="<%= process_templates_path %>">步骤模板</a></li>
                 <li><a href="<%= process_entities_path %>">步骤</a></li>
+                <li><a href="<%= departments_path %>">部门</a></li>
             <% end %>
             <li><a href="<%= kanbans_path %>">KANBAN</a></li>
           </ul>
@@ -69,16 +70,16 @@
               </ul>
             </li>
             <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#">部门/仓库<span class="caret"></span></a>
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">数据管理<span class="caret"></span></a>
               <ul class="dropdown-menu" role="manage">
-                <li><a href="<%= departments_path %>">部门</a></li>
-                <li><a href="<%= warehouses_path %>">仓库</a></li>
+                <li><a href="<%= transport_kanbans_path %>">看板分解</a></li>
+                <li><a href="<%= transport_master_bom_items_path %>">订单分解</a></li>
               </ul>
             </li>
         <% end %>
         <% if current_user.admin? || current_user.system? %>
             <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#">管理<span class="caret"></span></a>
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">系统管理<span class="caret"></span></a>
               <ul class="dropdown-menu" role="manage">
                 <li><a href="<%= users_path %>">用户</a></li>
                 <li><a href="<%= settings_path %>">设置</a></li>

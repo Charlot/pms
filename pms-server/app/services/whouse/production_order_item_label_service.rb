@@ -3,8 +3,8 @@ class ProductionOrderItemLabelService
     ProductionOrderItemLabel.transaction do
       if (label=ProductionOrderItemLabel.find_by_id(id)) && (label.state==ProductionOrderItemLabel::INIT)
         r=false
-        if (kb=label.production_order_item.kanban) && kb.full_wire_nr
-          r=Whouse::Storage.new.enter_stock({partNr: kb.full_wire_nr,
+        if (kb=label.production_order_item.kanban) && kb.kanban_part_nr
+          r=Whouse::Storage.new.enter_stock({partNr: kb.kanban_part_nr,
                                              qty: label.qty,
                                              fifo: label.created_at.localtime,
                                              toWh: label.whouse_nr,
@@ -37,7 +37,7 @@ class ProductionOrderItemLabelService
           if part=Part.find_by_id(pe.value_default_wire_nr)
             part.part_boms.joins(:bom_item).select('part_boms.*,parts.nr,parts.type as part_type').each do |pb|
               # TODO check if the part is material wire!
-              qty = pb.quanity.to_f>10 ? pb.quantity/1000 : pb.quantity
+              qty = pb.quantity.to_f>10 ? pb.quantity/1000 : pb.quantity
               moves<<base_params.merge({
                                            qty: qty,
                                            partNr: pb.nr
