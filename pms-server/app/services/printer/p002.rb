@@ -20,8 +20,8 @@ module Printer
           parts_info["#{cf}_custom_nr".to_sym] = part.custom_nr
           parts_info["#{cf}_nr".to_sym] = part.nr
         else
-          parts_info["#{cf}_custom_nr".to_sym]= nil
-          parts_info["#{cf}_nr".to_sym] = nil
+          parts_info["#{cf}_custom_nr".to_sym]= ''
+          parts_info["#{cf}_nr".to_sym] = ''
         end
       }
 
@@ -33,9 +33,9 @@ module Printer
           wire_nr: @kanban.wire_nr,
           customer_nr: @kanban.product_custom_nr,
           card_quantity: @kanban.quantity,
-          safe_quantity: "",#@kanban.safety_stock.to_i,
+          safe_quantity: "", #@kanban.safety_stock.to_i,
           card_number: @kanban.copies,
-          work_time: @kanban.task_time,
+          work_time: '',
           send_position: @kanban.des_storage,
           wire_description: wire_desc,
 
@@ -61,7 +61,7 @@ module Printer
       end
 
       self.data_set<<heads
-
+      puts self.data_set.to_json.red
     end
   end
 end
