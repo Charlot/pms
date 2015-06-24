@@ -115,7 +115,7 @@ class ProductionOrderItem < ActiveRecord::Base
           whouse_nr=Warehouse.get_whouse_by_position_prefix(self.kanban.des_storage)
         end
 
-        self.production_order_item_labels.create(nr: "#{self.nr}-#{bundle}",
+        self.production_order_item_labels.create(nr: "#{self.nr}-#{bundle.to_i.to_s}",
                                                  qty: qty,
                                                  bundle_no: bundle,
                                                  position_nr: position_nr,
@@ -148,7 +148,7 @@ class ProductionOrderItem < ActiveRecord::Base
         if self.produced_qty % self.kanban_bundle==0
           bundle=self.produced_qty / self.kanban_bundle
           unless self.production_order_item_labels.where(bundle_no: bundle).first
-            self.production_order_item_labels.create(nr: "#{self.nr}-#{bundle}",
+            self.production_order_item_labels.create(nr: "#{self.nr}-#{bundle.to_i.to_s}",
                                                      qty: self.kanban.bundle,
                                                      bundle_no: bundle,
                                                      position_nr: position_nr,
@@ -157,7 +157,7 @@ class ProductionOrderItem < ActiveRecord::Base
         elsif (self.state==ProductionOrderItemState::TERMINATED && self.produced_qty>=self.kanban_qty)
           bundle=self.produced_qty / self.kanban_bundle+1
           qty=self.produced_qty-(bundle-1)*self.kanban_bundle
-          self.production_order_item_labels.create(nr: "#{self.nr}-#{bundle}",
+          self.production_order_item_labels.create(nr: "#{self.nr}-#{bundle.to_i.to_s}",
                                                    qty: qty,
                                                    bundle_no: bundle,
                                                    position_nr: position_nr,
