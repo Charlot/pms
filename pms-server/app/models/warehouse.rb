@@ -5,6 +5,9 @@ class Warehouse < ActiveRecord::Base
   PREFIX_WHOUSE={'^MC' => 'SRPL',
                  '^FC' => 'SRPL',
                  '^TC' => 'SRPL',
+                 # '^XM' => '3Main',
+                 # '^XF' => '3Floor',
+                 # '^XT' => '3PL'
                  '^XM' => '3PL',
                  '^XF' => '3PL',
                  '^XT' => '3PL'
