@@ -341,8 +341,6 @@ ActiveRecord::Schema.define(version: 20150612025426) do
   add_index "process_templates", ["code"], name: "index_process_templates_on_code", using: :btree
   add_index "process_templates", ["type"], name: "index_process_templates_on_type", using: :btree
 
-<<<<<<< HEAD
-=======
   create_table "production_order_handler_items", force: true do |t|
     t.string   "nr"
     t.string   "desc"
@@ -368,7 +366,6 @@ ActiveRecord::Schema.define(version: 20150612025426) do
     t.datetime "updated_at"
   end
 
->>>>>>> cf3443abe345804926fe9d6aa05990a9aebcb809
   create_table "production_order_item_labels", force: true do |t|
     t.integer  "production_order_item_id"
     t.integer  "bundle_no"
