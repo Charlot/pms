@@ -15,6 +15,7 @@
     <th>客户号</th>
     <th>类型</th>
     <th>颜色</th>
+    <th>颜色描述</th>
     <th>Component Type</th>
     <th>截面</th>
     <th>剥线长度</th>
@@ -31,6 +32,7 @@
         <td><%= best_in_place part, :custom_nr, as: :input %></td>
         <td><%= best_in_place part, :type, as: :select, collection: PartType.to_select.collect { |s| [s.value, s.display] }.to_h %></td>
         <td><%= best_in_place part, :color, as: :input %></td>
+        <td><%= best_in_place part, :color_desc, as: :input %></td>
         <td><%= best_in_place part, :component_type, as: :input %></td>
         <td><%= best_in_place part, :cross_section, as: :input %></td>
         <td><%= best_in_place part, :strip_length, as: :input %></td>
