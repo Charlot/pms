@@ -218,13 +218,18 @@ module FileHandler
                         # puts "#{template_fields}-----#{cv}".red
                         # puts "#{Part.find_by_id(cv.value).nr},#{temp_quantity[index]},#{index}".red
                         if cv.value #&& Part.find_by_id(cv.value)
+                          qty=temp_quantity[index].to_f
+                          if (part=Part.find_by_id(cv.value)) && (part.type==PartType::MATERIAL_WIRE) && qty>10
+                            qty=qty/1000
+                          end if Setting.auto_convert_material_length?
                           if ppp=pe.process_parts.where(custom_value_id: cv.id,part_id:cv.value).first
-                            ppp.update_attributes(quantity: temp_quantity[index].to_f)
+                            ppp.update_attributes(quantity: qty)
                             arrs.delete(ppp.id)
                           else
-                            pe.process_parts<<ProcessPart.new(part_id: cv.value, quantity: temp_quantity[index].to_f, custom_value_id: cv.id)
+                            pe.process_parts<<ProcessPart.new(part_id: cv.value, quantity: qty, custom_value_id: cv.id)
                           end
                         end
+
                       end
                     end
                     puts arrs.to_json.red

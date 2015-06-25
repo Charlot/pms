@@ -75,7 +75,11 @@ unless huangjianyun = User.find_by_user_name("jianyun.huang")
 end
 
 Setting.transaction do
-  unless Setting.find_by_code('auto_move_kanban')
+  unless Setting.find_by_code(Setting::AUTO_MOVE_KANBAN_CODE)
     Setting.create(code: Setting::AUTO_MOVE_KANBAN_CODE, value: '0', name: '自动销卡')
+  end
+
+  unless Setting.find_by_code(Setting::ROUTING_MATERIAL_LENGTH_UNIT)
+    Setting.create(code: Setting::ROUTING_MATERIAL_LENGTH_UNIT, value: 'mm', name: '步骤原材料线及管子等长度单位')
   end
 end

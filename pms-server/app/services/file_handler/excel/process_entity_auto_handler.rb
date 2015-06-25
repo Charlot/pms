@@ -118,11 +118,16 @@ module FileHandler
                     pe.custom_values.each do |cv|
                       cf=cv.custom_field
                       if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
+                        qty= pe.process_part_quantity_by_cf(cf.name.to_sym).to_f
+                        if (part=Part.find_by_id(cv.value)) && (part.type==PartType::MATERIAL_WIRE) && qty>10
+                          qty=qty/1000
+                        end if Setting.auto_convert_material_length?
+
                         if ppp=pe.process_parts.where(custom_value_id: cv.id,part_id:cv.value).first
-                          ppp.update_attributes(quantity: pe.process_part_quantity_by_cf(cf.name.to_sym))
+                          ppp.update_attributes(quantity:qty)
                           arrs.delete(ppp.id)
                         else
-                          pe.process_parts<<ProcessPart.new(part_id: cv.value, quantity: pe.process_part_quantity_by_cf(cf.name.to_sym), custom_value_id: cv.id)
+                          pe.process_parts<<ProcessPart.new(part_id: cv.value, quantity: qty, custom_value_id: cv.id)
                         end
                       end
                     end

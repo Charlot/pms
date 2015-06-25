@@ -9,7 +9,7 @@ ProcessEntity.transaction do
         qty=pe.process_part_quantity_by_cf(cf.name.to_sym)
         if cv.value.present? && (Part.find(cv.value).type==PartType::MATERIAL_WIRE) && qty.to_f>10
           qty=qty.to_f/1000
-        end
+        end if Setting.auto_convert_material_length?
         pe.process_parts<<ProcessPart.new(part_id: cv.value, quantity: qty, custom_value_id: cv.id)
       end
     end

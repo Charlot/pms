@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150624010230) do
+ActiveRecord::Schema.define(version: 20150625025159) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -278,8 +278,9 @@ ActiveRecord::Schema.define(version: 20150624010230) do
     t.string   "color"
     t.string   "color_desc"
     t.string   "component_type"
-    t.float    "cross_section",     default: 0.0
+    t.float    "cross_section",                              default: 0.0
     t.string   "remark"
+    t.decimal  "convert_unit",      precision: 10, scale: 0
   end
 
   add_index "parts", ["custom_nr"], name: "index_parts_on_custom_nr", using: :btree
