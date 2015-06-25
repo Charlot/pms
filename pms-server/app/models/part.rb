@@ -154,6 +154,9 @@ class Part < ActiveRecord::Base
     PartBom.leaf_by_part(self,PartType.MaterialTypes)
   end
 
+  def material_mark
+    self.type==PartType::MATERIAL_WIRE ? Setting.material_part_mark : Setting.none_material_part_mark
+  end
 
   private
   def update_cv_strip_length

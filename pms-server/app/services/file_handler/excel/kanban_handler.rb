@@ -376,7 +376,7 @@ module FileHandler
 
         origin_header=['Kanban Nr', 'Qty','Kanban Id', 'Product Nr', 'WireNr', '单线用料', '看板用料']
         origin_rows=[]
-        result_header=['Part', 'Qty']
+        result_header=['Part', 'Qty','Mark']
         result_rows={}
         2.upto(book.last_row) do |line|
           origin_row=[]
@@ -395,7 +395,9 @@ module FileHandler
               origin_row<<kanban.id
               origin_row<<kanban.product.nr
               origin_row<<kanban.kanban_part.nr
+              # single kanban material
               s_materials=[]
+              # total kanban material
               t_materials=[]
 
               kanban.materials.each do |m|
@@ -428,7 +430,7 @@ module FileHandler
         package.workbook.add_worksheet(name: '汇总') do |sheet|
           sheet.add_row result_header
           result_rows.each do |k, v|
-            sheet.add_row [k, v], types: [:string, :string]
+            sheet.add_row [k, v,Part.find_by_nr(k).material_mark], types: [:string, :string,:string]
           end
         end
 

@@ -7,8 +7,8 @@ module FileHandler
       EXPORT_HEADERS=['Part No.', 'Component P/N', 'Material Qty Per Harness', 'Dep', 'Delete']
       DELETE_HEADERS=['Part No.', 'Component P/N', 'Dep']
       TRANSPORT_HEADERS=['Part No.', 'Qty']
-      TRANSPORT_SUCCEED_HEADERS=['Component P/N', 'Dep', 'Total Qty']
-      TRANSPORT_SUCCEED_TOTAL_HEADERS=['Component P/N', 'Total Qty']
+      TRANSPORT_SUCCEED_HEADERS=['Component P/N', 'Dep', 'Total Qty','Mark']
+      TRANSPORT_SUCCEED_TOTAL_HEADERS=['Component P/N', 'Total Qty','Mark']
       #INVALID_TRANSPORT_HEADERS=TRANSPORT_HEADERS<<'Error MS'
 
       def self.import(file)
@@ -199,8 +199,9 @@ module FileHandler
               package.workbook.add_worksheet(:name => "分解汇总") do |sheet|
                 sheet.add_row TRANSPORT_SUCCEED_TOTAL_HEADERS
                 total_transport_result.keys.each do |key|
-                  sheet.add_row [Part.find_by_id(key).nr,
-                                 total_transport_result[key]], types: [:string, :float]
+                  part=Part.find_by_id(key)
+                  sheet.add_row [part.nr,
+                                 total_transport_result[key],part.material_mark], types: [:string, :float,:string]
                 end
               end
 
@@ -208,9 +209,10 @@ module FileHandler
                 sheet.add_row TRANSPORT_SUCCEED_HEADERS
                 transport_result.keys.each do |key|
                   p, d=key.split(':')
-                  sheet.add_row [Part.find_by_id(p).nr,
+                  part=Part.find_by_id(p).nr
+                  sheet.add_row [part.nr,
                                  Department.find_by_id(d).name,
-                                 transport_result[key]], types: [:string, :string, :float]
+                                 transport_result[key],part.material_mark], types: [:string, :string, :float,:string]
                 end
               end
               package.use_shared_strings = true

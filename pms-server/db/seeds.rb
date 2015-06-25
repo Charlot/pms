@@ -82,4 +82,16 @@ Setting.transaction do
   unless Setting.find_by_code(Setting::ROUTING_MATERIAL_LENGTH_UNIT)
     Setting.create(code: Setting::ROUTING_MATERIAL_LENGTH_UNIT, value: 'mm', name: '步骤原材料线及管子等长度单位')
   end
+
+  unless Setting.find_by_code(Setting::AUTO_CONVERT_MATERIAL_LENGTH)
+    Setting.create(code: Setting::AUTO_CONVERT_MATERIAL_LENGTH, value: '0', name: '自动转换步骤原材料线及管子等长度')
+  end
+
+  unless Setting.find_by_code(Setting::MATERIAL_PART_MARK)
+    Setting.create(code: Setting::MATERIAL_PART_MARK, value: 'L', name: '原材料线盘点备注')
+  end
+
+  unless Setting.find_by_code(Setting::NONE_MATERIAL_PART_MARK)
+    Setting.create(code: Setting::NONE_MATERIAL_PART_MARK, value: 'M', name: '非原材料线盘点备注')
+  end
 end
