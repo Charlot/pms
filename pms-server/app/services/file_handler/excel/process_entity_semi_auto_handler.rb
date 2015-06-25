@@ -210,6 +210,7 @@ module FileHandler
                     }
                     # pe.process_parts.destroy_all
                     arrs=pe.process_parts.pluck(:id)
+                    puts arrs.to_json.yellow
                     temp_quantity = template_fields.select { |tf| tf[:type] == "part" }.collect { |a| a[:ext] }
                     pe.custom_values.select { |cv| (cv.custom_field.name != "default_wire_nr")&&(cv.custom_field.field_format=="part") }.each_with_index do |cv, index|
                       cf=cv.custom_field
@@ -217,7 +218,7 @@ module FileHandler
                         # puts "#{template_fields}-----#{cv}".red
                         # puts "#{Part.find_by_id(cv.value).nr},#{temp_quantity[index]},#{index}".red
                         if cv.value #&& Part.find_by_id(cv.value)
-                          if ppp=pe.process_parts.where(custom_value_id: cv.id).first
+                          if ppp=pe.process_parts.where(custom_value_id: cv.id,part_id:cv.value).first
                             ppp.update_attributes(quantity: temp_quantity[index].to_f)
                             arrs.delete(ppp.id)
                           else
@@ -226,6 +227,8 @@ module FileHandler
                         end
                       end
                     end
+                    puts arrs.to_json.red
+
                     pe.process_parts.where(id:arrs).destroy_all
                     pe.save
                   when 'delete'

@@ -118,7 +118,7 @@ module FileHandler
                     pe.custom_values.each do |cv|
                       cf=cv.custom_field
                       if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
-                        if ppp=pe.process_parts.where(custom_value_id: cv.id).first
+                        if ppp=pe.process_parts.where(custom_value_id: cv.id,part_id:cv.value).first
                           ppp.update_attributes(quantity: pe.process_part_quantity_by_cf(cf.name.to_sym))
                           arrs.delete(ppp.id)
                         else
