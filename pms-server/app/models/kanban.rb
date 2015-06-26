@@ -16,6 +16,7 @@ class Kanban < ActiveRecord::Base
   delegate :nr, to: :product, prefix: true, allow_nil: true
   delegate :custom_nr, to: :product, prefix: true, allow_nil: true
   has_many :production_order_items
+  has_many :production_order_item_labels,through: :production_order_items
   has_many :production_order_item_blues
 
   accepts_nested_attributes_for :kanban_process_entities, allow_destroy: true
