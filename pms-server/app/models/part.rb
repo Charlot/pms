@@ -151,7 +151,8 @@ class Part < ActiveRecord::Base
 
 
   def materials
-    PartBom.leaf_by_part(self,PartType.MaterialTypes)
+    # PartBom.leaf_by_part(self,PartType.MaterialTypes)
+    PartBom.children_by_part(self).select{|b| PartType.MaterialTypes.include?(b.type)}
   end
 
   def material_mark
