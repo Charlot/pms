@@ -209,7 +209,7 @@ module FileHandler
                 sheet.add_row TRANSPORT_SUCCEED_HEADERS
                 transport_result.keys.each do |key|
                   p, d=key.split(':')
-                  part=Part.find_by_id(p).nr
+                  part=Part.find_by_id(p)
                   sheet.add_row [part.nr,
                                  Department.find_by_id(d).name,
                                  transport_result[key],part.material_mark], types: [:string, :string, :float,:string]
