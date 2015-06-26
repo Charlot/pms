@@ -374,7 +374,7 @@ module FileHandler
         transport_file=full_tmp_path(file.original_name)
         header=['Kanban Nr', 'Qty']
 
-        origin_header=['Kanban Nr', 'Qty','Kanban Id', 'Product Nr', 'WireNr', '单线用料', '看板用料']
+        origin_header=['Kanban Nr', 'Qty','Kanban Id', 'Product Nr', 'WireNr','Routing', '单线用料', '看板用料']
         origin_rows=[]
         result_header=['Part', 'Qty','Mark']
         result_rows={}
@@ -395,6 +395,7 @@ module FileHandler
               origin_row<<kanban.id
               origin_row<<kanban.product.nr
               origin_row<<kanban.kanban_part.nr
+              origin_row<<kanban.process_list
               # single kanban material
               s_materials=[]
               # total kanban material
