@@ -18,7 +18,7 @@ Kanban.transaction do
   end
 end
 ProductionOrderItemLabel.transaction do
-  ProductionOrderItemLabel.where("position_nr like ' % '").each_with_indx do |l,i|
+  ProductionOrderItemLabel.where("position_nr like ' % '").each_with_index do |l,i|
     puts "#{i}---#{l.nr}".red
 
     position_nr=Warehouse::DEFAULT_POSITION
