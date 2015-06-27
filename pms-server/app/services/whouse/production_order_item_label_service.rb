@@ -55,8 +55,7 @@ class ProductionOrderItemLabelService
           base_params={
               toWh: label.whouse_nr,
               toPosition: label.whouse_nr,
-              fromWh: from_whouse,
-              fromPosition: from_position
+              fromWh: from_whouse
           }
           moves=[]
           kb.materials.each do |material|
@@ -78,8 +77,7 @@ class ProductionOrderItemLabelService
           base_params={
               toWh: label.whouse_nr,
               toPosition: label.whouse_nr,
-              fromWh: from_whouse,
-              fromPosition: from_position
+              fromWh: from_whouse
           }
           moves=[]
           kb.materials.each do |material|
