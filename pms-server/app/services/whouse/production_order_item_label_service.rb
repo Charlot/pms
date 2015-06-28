@@ -10,7 +10,7 @@ class ProductionOrderItemLabelService
                                              toWh: label.whouse_nr,
                                              toPosition: label.position_nr,
                                              packageId: label.nr,
-                                             uniq: true
+                                             locked: true
                                             })
         end
         if r
@@ -36,7 +36,7 @@ class ProductionOrderItemLabelService
                                              toWh: label.whouse_nr,
                                              toPosition: label.position_nr,
                                              packageId: label.nr,
-                                             uniq: true
+                                             locked: true
                                             })
         end
         if r

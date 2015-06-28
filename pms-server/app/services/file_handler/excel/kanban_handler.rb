@@ -314,7 +314,7 @@ module FileHandler
               production_order_handler_item=ProductionOrderHandlerItem.new(
                   desc: '兰卡销卡',
                   kanban_code: row['Kanban Nr'],
-                  item_terminated_at: row['Time'],
+                  item_terminated_at: row['Time'].to_time.utc,
                   handler_user: row['User']
               )
 
