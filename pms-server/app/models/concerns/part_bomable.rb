@@ -89,4 +89,12 @@ module PartBomable
       []
     end
   end
+
+  # def materials_with_deep
+  #   if self.kanban_part
+  #     self.kanban_part.materials
+  #   else
+  #     []
+  #   end
+  # end
 end
