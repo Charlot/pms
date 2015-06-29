@@ -16,15 +16,24 @@
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">KANBAN扫描<span class="caret"></span></a>
           <ul class="dropdown-menu" role="manage">
-            <li><a href="<%= panel_kanbans_path(KanbanType::BLUE) %>">[兰卡]扫描投卡</a></li>
-            <li><a href="<%= scan_finish_kanbans_path(KanbanType::BLUE) %>">[兰卡]扫描销卡</a></li>
-            <li>
-              <hr/>
-            </li>
-            <li><a href="<%= panel_kanbans_path(KanbanType::WHITE) %>">[白卡]扫描投卡</a></li>
-            <li><a href="<%= scan_finish_kanbans_path(KanbanType::WHITE) %>">[白卡]扫描销卡</a></li>
+            <li><a href="<%= panel_kanbans_path %>">KANBAN扫描投卡</a></li>
+            <li><a href="<%= scan_finish_kanbans_path %>">KANBAN扫描销卡</a></li>
           </ul>
         </li>
+
+
+        <!--<li class="dropdown">-->
+          <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">KANBAN扫描<span class="caret"></span></a>-->
+          <!--<ul class="dropdown-menu" role="manage">-->
+            <!--<li><a href="<%= panel_kanbans_path(KanbanType::BLUE) %>">[兰卡]扫描投卡</a></li>-->
+            <!--<li><a href="<%= scan_finish_kanbans_path(KanbanType::BLUE) %>">[兰卡]扫描销卡</a></li>-->
+            <!--<li>-->
+              <!--<hr/>-->
+            <!--</li>-->
+            <!--<li><a href="<%= panel_kanbans_path(KanbanType::WHITE) %>">[白卡]扫描投卡</a></li>-->
+            <!--<li><a href="<%= scan_finish_kanbans_path(KanbanType::WHITE) %>">[白卡]扫描销卡</a></li>-->
+          <!--</ul>-->
+        <!--</li>-->
 
         <li><a href="<%= production_order_items_path %>">白卡生产任务</a></li>
         <li class="dropdown">
