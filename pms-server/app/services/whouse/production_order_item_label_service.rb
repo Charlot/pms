@@ -71,7 +71,7 @@ class ProductionOrderItemLabelService
   end
 
   def self.move_blue_stock(id, from_whouse='SR01', from_position='SR01')
-    return false
+    raise '888'
     ProductionOrderItemBlueLabel.transaction do
       if (label=ProductionOrderItemBlueLabel.find_by_id(id)) && (item =label.production_order_item_blue)
         if kb=item.kanban
