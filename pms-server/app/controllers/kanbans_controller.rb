@@ -252,6 +252,8 @@ class KanbansController < ApplicationController
 
   # 导入看板卡进行投卡
   def import_to_scan
+    session[:kanban_type]=params[:type].to_i if params[:type].present?
+
     # authorize(Kanban)
     if request.post?
       msg = Message.new
@@ -260,7 +262,7 @@ class KanbansController < ApplicationController
       fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
       fd.save
       #file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
-      msg = FileHandler::Excel::KanbanHandler.import_scan(fd.full_path)
+      msg = FileHandler::Excel::KanbanHandler.import_scan(fd.full_path,session[:kanban_type])
       # rescue => e
       #   msg.content = e.message
       # end
@@ -269,18 +271,15 @@ class KanbansController < ApplicationController
   end
 
   def import_to_finish_scan
+    session[:kanban_type]=params[:type].to_i if params[:type].present?
+
     # authorize(Kanban)
     if request.post?
       msg = Message.new
-      # begin
       file=params[:files][0]
       fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
       fd.save
-      #file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
-      msg = FileHandler::Excel::KanbanHandler.import_finish_scan(fd.full_path)
-      # rescue => e
-      #   msg.content = e.message
-      # end
+      msg = FileHandler::Excel::KanbanHandler.import_finish_scan(fd.full_path,session[:kanban_type])
       render json: msg
     end
   end
@@ -304,6 +303,8 @@ class KanbansController < ApplicationController
 
   # 扫描销卡
   def scan_finish
+    session[:kanban_type]=params[:type].to_i if params[:type].present?
+
     @hide_sidebar = true
     # authorize(Kanban)
     if request.post?
@@ -357,6 +358,8 @@ class KanbansController < ApplicationController
 
     render json: {result: false, content: "看板未找到：#{params[:code]}"} and return unless @kanban
 
+    render json: {result: false, content: "请投#{KanbanType.display(session[:kanban_type])},此卡为:#{KanbanType.display(@kanban.ktype)}"} and return if @kanban.ktype!=session[:kanban_type]
+
     #check Kanban State
     render json: {result: false, content: "看板未发布"} and return unless @kanban.state == KanbanState::RELEASED
 
@@ -389,7 +392,7 @@ class KanbansController < ApplicationController
     #2015-3-10 李其
     #不做扫描之后验证是否已经扫入，由工作人员控制
     #注释了这段代码，暂时不实现标注唯一的一张纸质看板卡
-    unless @kanban.not_in_produce?
+    unless @kanban.can_put_to_produce?
       render json: {result: false, content: "卡已投过，不可重复投卡"} and return
     end
     if @kanban.ktype==KanbanType::WHITE
@@ -414,6 +417,7 @@ class KanbansController < ApplicationController
   # GET /kanbans/panel
   # GET /kanbans/panel.json
   def panel
+    session[:kanban_type]=params[:type].to_i
     @hide_sidebar= true
     # authorize(Kanban)
   end

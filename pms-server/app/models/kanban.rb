@@ -16,7 +16,7 @@ class Kanban < ActiveRecord::Base
   delegate :nr, to: :product, prefix: true, allow_nil: true
   delegate :custom_nr, to: :product, prefix: true, allow_nil: true
   has_many :production_order_items
-  has_many :production_order_item_labels,through: :production_order_items
+  has_many :production_order_item_labels, through: :production_order_items
   has_many :production_order_item_blues
 
   accepts_nested_attributes_for :kanban_process_entities, allow_destroy: true
@@ -293,9 +293,19 @@ class Kanban < ActiveRecord::Base
 
   # part_nr,product_nr
   def self.search(part_nr="", product_nr="")
-    kanbans = joins(:product).where('parts.nr LIKE ?', "%#{product_nr}%")
+    joins(:product).where('parts.nr LIKE ?', "%#{product_nr}%")
   end
 
+  def can_put_to_produce?
+    if self.ktype==KanbanType::WHITE
+      return self.production_order_items.where(state: [ProductionOrderItemState::INIT,
+                                                       ProductionOrderItemState::DISTRIBUTE_SUCCEED]).count==0
+    elsif self.ktype==KanbanType::BLUE
+      return self.production_order_item_blues.where(state: [ProductionOrderItemState::INIT,
+                                                            ProductionOrderItemState::DISTRIBUTE_SUCCEED]).count==0
+    end
+    false
+  end
 
   def not_in_produce?
     if self.ktype==KanbanType::WHITE
@@ -319,12 +329,15 @@ class Kanban < ActiveRecord::Base
     if self.ktype==KanbanType::WHITE
       true
     elsif self.ktype==KanbanType::BLUE
-      return ProductionOrderItemBlue.
+      blue= ProductionOrderItemBlue.
           where(kanban_id: self.id, state: ProductionOrderItemState::DISTRIBUTE_SUCCEED).first
-                 .update(state: ProductionOrderItemState::TERMINATED,
-                         terminated_at: handler_item.item_terminated_at,
-                         terminate_user: handler_item.handler_user,
-                         terminated_kanban_code: handler_item.kanban_code)
+      puts "#{handler_item.to_json}".red
+     return   blue.update_attributes(
+          produced_qty: (handler_item.qty.nil? ? blue.produced_qty : handler_item.qty),
+          state: ProductionOrderItemState::TERMINATED,
+          terminated_at: handler_item.item_terminated_at,
+          terminate_user: handler_item.handler_user,
+          terminated_kanban_code: handler_item.kanban_code)
     end
     false
   end

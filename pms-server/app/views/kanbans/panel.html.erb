@@ -1,5 +1,5 @@
 <div>
-  <%= link_to "导入投卡", import_to_scan_kanbans_path, class: "btn btn-default" %>
+  <%= link_to "导入投#{KanbanType.display(session[:kanban_type])}", import_to_scan_kanbans_path(session[:kanban_type]), class: "btn btn-default" %>
 </div>
 <div class="row">
   <div class="col-md-5">
@@ -10,7 +10,9 @@
       </div>
       <div class="row">
         <div class="col-md-6">
-          <label>扫描投卡<input type="text" id="scan_Kanban" class="form-control"/></label>
+          <label>
+            <h4>扫描<%=KanbanType.display(session[:kanban_type])%>投卡</h4>
+            <input type="text" id="scan_Kanban" class="form-control"/></label>
 
           <div class="info-warn-div" id="message-div" style="font-size: 20px"></div>
         </div>

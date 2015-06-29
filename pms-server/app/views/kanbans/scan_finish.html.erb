@@ -1,12 +1,14 @@
 <div>
-  <%= link_to "导入销卡", import_to_finish_scan_kanbans_path, class: "btn btn-default" %>
+  <%= link_to "导入销#{KanbanType.display(session[:kanban_type])}", import_to_finish_scan_kanbans_path(session[:kanban_type]), class: "btn btn-default" %>
 </div>
 <div class="row">
   <div class="col-md-5">
     <div class="form-group">
       <div class="row">
         <div class="col-md-6">
-          <label>扫描销卡</label>
+          <label>
+            <h4>扫描<%=KanbanType.display(session[:kanban_type])%>销卡</h4>
+          </label>
           <input type="text" id="scan_Kanban_Finish" class="form-control"/>
           <div class="info-warn-div" id="message-div" style="font-size: 20px"></div>
         </div>

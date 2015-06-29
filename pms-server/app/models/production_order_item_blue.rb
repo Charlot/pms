@@ -22,7 +22,7 @@ class ProductionOrderItemBlue<ProductionOrderItem
       puts whouse_nr.red
 
       self.production_order_item_blue_labels.create(nr: "#{self.nr}-#{bundle.to_i.to_s}",
-                                                    qty: produced_qty,
+                                                    qty: self.produced_qty,
                                                     bundle_no: bundle,
                                                     position_nr: position_nr,
                                                     whouse_nr: whouse_nr)
@@ -51,7 +51,7 @@ class ProductionOrderItemBlue<ProductionOrderItem
 
   def set_produced_qty
     if self.state_changed? && self.state==ProductionOrderItemState::TERMINATED
-      self.produced_qty=self.kanban_qty
+      self.produced_qty=self.kanban_qty if self.produced_qty.nil?
     end
   end
 end

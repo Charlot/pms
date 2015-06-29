@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150628023517) do
+ActiveRecord::Schema.define(version: 20150629184402) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -358,6 +358,7 @@ ActiveRecord::Schema.define(version: 20150628023517) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "kanban_id"
+    t.float    "qty"
   end
 
   add_index "production_order_handler_items", ["production_order_handler_id"], name: "production_order_handler_items_poh_index", using: :btree

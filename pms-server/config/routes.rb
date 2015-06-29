@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   #                sessions: 'users/sessions'
   #                  }
 
-  devise_for :users, :controllers => { registrations: :user_registrations}
+  devise_for :users, :controllers => {registrations: :user_registrations}
 
   devise_scope :user do
     get '/users/sign_out' => 'user_sessions#destroy'
@@ -35,7 +35,7 @@ Rails.application.routes.draw do
 
   resources :machine_time_rules do
     collection do
-      match :import, to: :import,via: [:get,:post]
+      match :import, to: :import, via: [:get, :post]
     end
   end
 
@@ -66,7 +66,7 @@ Rails.application.routes.draw do
       match :transport, to: :transport, via: [:get, :post]
       match :export, to: :export, via: [:get, :post]
       get :search
-      match :import_delete,to: :import_delete,via:[:get,:post]
+      match :import_delete, to: :import_delete, via: [:get, :post]
     end
   end
 
@@ -219,15 +219,21 @@ Rails.application.routes.draw do
 
     collection do
       post :scan
-      get :panel
+      get 'panel/:type', to: :panel, as: 'panel'
       get :scope_search
       get :export
       get :export_white
       get :management
       match :import, to: :import, via: [:get, :post]
-      match :scan_finish, to: :scan_finish, via: [:get, :post]
-      match :import_to_scan, to: :import_to_scan, via: [:get, :post]
-      match :import_to_finish_scan, to: :import_to_finish_scan, via: [:get, :post]
+      get 'scan_finish/:type', to: :scan_finish, as: 'scan_finish'
+      post :scan_finish, to: :scan_finish
+
+      get 'import_to_scan/:type', to: :import_to_scan, as: 'import_to_scan'
+      post :import_to_scan, to: :import_to_scan
+
+      get 'import_to_finish_scan/:type', to: :import_to_finish_scan,as: 'import_to_finish_scan'
+      post :import_to_finish_scan, to: :import_to_finish_scan
+
       match :import_to_get_kanban_list, to: :import_to_get_kanban_list, via: [:get, :post]
       match :import_update_quantity, to: :import_update_quantity, via: [:get, :post]
       match :import_update_base, to: :import_update_base, via: [:get, :post]
@@ -236,7 +242,6 @@ Rails.application.routes.draw do
       match :transport, to: :transport, via: [:get, :post]
     end
   end
-
 
 
   resources :part_boms do
