@@ -4,6 +4,8 @@ class PartBom < ActiveRecord::Base
   belongs_to :part
   belongs_to :bom_item, class_name: 'Part'
 
+  attr_accessor :part_nr
+
   def self.detail_by_part_id(id)
     if part=Part.find_by_id(id)
       return detail_by_part(part)
@@ -11,9 +13,10 @@ class PartBom < ActiveRecord::Base
   end
 
   def self.detail_by_part(part)
-    pbn=PartBomNode.new(node: part, is_root: true)
+    deep=0
+    pbn=PartBomNode.new(node: part, is_root: true, deep: deep)
     if part_boms=by_part_id(part.id)
-      pbn.children=call_detail_by_part(part_boms)
+      pbn.children=call_detail_by_part(part_boms, deep)
     end if by_part_id(part.id).count>0
     return pbn
   end
@@ -27,24 +30,48 @@ class PartBom < ActiveRecord::Base
     return children
   end
 
+  def self.children_node_by_part(part)
+    children=[]
+    deep=0
+    if part_boms=by_part_id(part.id)
+      call_children_node_by_part(part_boms, children, deep)
+    end
+    return children
+  end
+
   def self.leaf_by_part(part, type=nil)
     leaf=[]
-    if part_boms=by_part_id(part.id,type)
+    if part_boms=by_part_id(part.id, type)
       call_leaf_by_part(part_boms, leaf, type)
     end
     return leaf
   end
 
-
-  def self.call_detail_by_part(part_boms)
+  def self.call_detail_by_part(part_boms, deep=0)
+    deep+=1
     nodes=[]
     part_boms.each do |part_bom|
-      node=PartBomNode.new
+      node=PartBomNode.new(deep: deep)
       node.node=part_bom
       nodes<<node
-      node.children=call_detail_by_part(by_part_id(part_bom.bom_item_id))
+      node.children=call_detail_by_part(by_part_id(part_bom.bom_item_id), deep)
     end
     return nodes.size==0 ? nil : nodes
+  end
+
+
+  def self.call_children_node_by_part(part_boms, children, deep=0)
+    deep+=1
+    part_boms.each do |part_bom|
+      children<<PartBomNode.new(id: part_bom.id,
+                                part_nr: part_bom.nr,
+                                part_id: part_bom.bom_item_id,
+                                quantity: part_bom.quantity,
+                                type:part_bom.type,
+                                deep: deep)
+
+      call_children_node_by_part(by_part_id(part_bom.bom_item_id), children,deep)
+    end
   end
 
   def self.call_children_by_part(part_boms, children)

@@ -3,7 +3,7 @@
       <div class='tree'>
         <ul>
           <li class="icon-plus-sign">
-            <a href='#'> <%= @bom.node.nr %></a>
+            <a href='#'> <%= @bom.node.nr %>#deep:<%=@bom.deep%></a>
             <%= render(partial: 'node', locals: {bom: @bom.children}) if @bom.children %>
           </li>
         </ul>

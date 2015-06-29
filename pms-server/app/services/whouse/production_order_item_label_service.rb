@@ -60,7 +60,7 @@ class ProductionOrderItemLabelService
           moves=[]
           kb.materials.each do |material|
             moves<<base_params.merge({
-                                         qty: material.quantity,
+                                         qty: BigDecimal.new(material.quantity.to_s)*label.qty,
                                          partNr: material.nr
                                      })
           end
@@ -71,6 +71,7 @@ class ProductionOrderItemLabelService
   end
 
   def self.move_blue_stock(id, from_whouse='SR01', from_position='SR01')
+    return false
     ProductionOrderItemBlueLabel.transaction do
       if (label=ProductionOrderItemBlueLabel.find_by_id(id)) && (item =label.production_order_item_blue)
         if kb=item.kanban
@@ -80,10 +81,12 @@ class ProductionOrderItemLabelService
               fromWh: from_whouse
           }
           moves=[]
-          kb.materials.each do |material|
+
+          kb.kanban_part.materials_with_deep.each do |material|
             moves<<base_params.merge({
-                                         qty: material.quantity,
-                                         partNr: material.nr
+                                         qty: BigDecimal.new(material.quantity.to_s)*label.qty,
+                                         partNr: material.nr,
+                                         from_whouse: material.deep==1 ? 'SR01' : 'SRPL'
                                      })
           end
           Whouse::Storage.new.move_stocks(moves) if moves.size>0
