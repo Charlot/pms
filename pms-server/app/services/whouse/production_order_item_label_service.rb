@@ -71,7 +71,6 @@ class ProductionOrderItemLabelService
   end
 
   def self.move_blue_stock(id, from_whouse='SR01', from_position='SR01')
-    raise '888'
     ProductionOrderItemBlueLabel.transaction do
       if (label=ProductionOrderItemBlueLabel.find_by_id(id)) && (item =label.production_order_item_blue)
         if kb=item.kanban
@@ -83,9 +82,10 @@ class ProductionOrderItemLabelService
           moves=[]
 
           kb.kanban_part.materials_with_deep.each do |material|
+            puts "#{material.to_json}".yellow
             moves<<base_params.merge({
                                          qty: BigDecimal.new(material.quantity.to_s)*label.qty,
-                                         partNr: material.nr,
+                                         partNr: material.part_nr,
                                          from_whouse: material.deep==1 ? 'SR01' : 'SRPL'
                                      })
           end
