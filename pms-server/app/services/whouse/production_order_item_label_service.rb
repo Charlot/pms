@@ -59,6 +59,7 @@ class ProductionOrderItemLabelService
           }
           moves=[]
           kb.materials.each do |material|
+            puts "blue: #{material.to_json}".red
             moves<<base_params.merge({
                                          qty: BigDecimal.new(material.quantity.to_s)*label.qty,
                                          partNr: material.nr
@@ -82,7 +83,7 @@ class ProductionOrderItemLabelService
           moves=[]
 
           kb.kanban_part.materials_with_deep.each do |material|
-            puts "#{material.to_json}".yellow
+            puts "blue: #{material.to_json}".yellow
             moves<<base_params.merge({
                                          qty: BigDecimal.new(material.quantity.to_s)*label.qty,
                                          partNr: material.part_nr,
