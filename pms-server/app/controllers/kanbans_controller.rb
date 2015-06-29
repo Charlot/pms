@@ -367,11 +367,15 @@ class KanbansController < ApplicationController
     render json: {result: false, content: "看板版本错误#{parsed_code[:version_nr]}"} and return if parsed_code && (parsed_code[:version_nr].to_i-1)<0
 
     if parsed_code
-      @kanban_version=@kanban.versions[parsed_code[:version_nr].to_i-1].reify
-      if @kanban_version
-        need_update=!@kanban.has_same_content(@kanban_version)
+      if parsed_code[:version_nr].to_i==@kanban.versions.count
+        need_update=false
       else
-        need_update = @kanban.versions.count > parsed_code[:version_nr].to_i
+        @kanban_version=@kanban.versions[parsed_code[:version_nr].to_i-1].reify
+        if @kanban_version
+          need_update=!@kanban.has_same_content(@kanban_version)
+        else
+          need_update = @kanban.versions.count > parsed_code[:version_nr].to_i
+        end
       end
     end
     #need_update = @kanban.versions.count > parsed_code[:version_nr].to_i

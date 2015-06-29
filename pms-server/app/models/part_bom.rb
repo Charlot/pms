@@ -11,9 +11,10 @@ class PartBom < ActiveRecord::Base
   end
 
   def self.detail_by_part(part)
-    pbn=PartBomNode.new(node: part, is_root: true)
+    deep=0
+    pbn=PartBomNode.new(node: part, is_root: true,deep:deep)
     if part_boms=by_part_id(part.id)
-      pbn.children=call_detail_by_part(part_boms)
+      pbn.children=call_detail_by_part(part_boms,deep)
     end if by_part_id(part.id).count>0
     return pbn
   end
@@ -36,13 +37,14 @@ class PartBom < ActiveRecord::Base
   end
 
 
-  def self.call_detail_by_part(part_boms)
+  def self.call_detail_by_part(part_boms,deep=0)
+    deep+=1
     nodes=[]
     part_boms.each do |part_bom|
-      node=PartBomNode.new
+      node=PartBomNode.new(deep:deep)
       node.node=part_bom
       nodes<<node
-      node.children=call_detail_by_part(by_part_id(part_bom.bom_item_id))
+      node.children=call_detail_by_part(by_part_id(part_bom.bom_item_id),deep)
     end
     return nodes.size==0 ? nil : nodes
   end

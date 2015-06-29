@@ -60,7 +60,7 @@ class ProductionOrderItemLabelService
           moves=[]
           kb.materials.each do |material|
             moves<<base_params.merge({
-                                         qty: material.quantity,
+                                         qty: BigDecimal.new(material.quantity.to_s)*label.qty,
                                          partNr: material.nr
                                      })
           end
@@ -80,9 +80,10 @@ class ProductionOrderItemLabelService
               fromWh: from_whouse
           }
           moves=[]
+
           kb.materials.each do |material|
             moves<<base_params.merge({
-                                         qty: material.quantity,
+                                         qty: BigDecimal.new(material.quantity.to_s)*label.qty,
                                          partNr: material.nr
                                      })
           end
