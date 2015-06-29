@@ -155,6 +155,10 @@ class Part < ActiveRecord::Base
     PartBom.children_by_part(self).select{|b| PartType.MaterialTypes.include?(b.type)}
   end
 
+  def materials_with_deep
+    PartBom.children_node_by_part(self).select{|b| PartType.MaterialTypes.include?(b.type)}
+  end
+
   def material_mark
     self.type==PartType::MATERIAL_WIRE ? Setting.material_part_mark : Setting.none_material_part_mark
   end
