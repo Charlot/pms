@@ -68,6 +68,9 @@ class ProductionOrderItemLabelService
                                          partNr: material.nr
                                      })
           end
+
+          puts "white kanban#{moves.to_json}".yellow
+
           Whouse::Storage.new.move_stocks(moves) if moves.size>0
         end
       end
@@ -95,6 +98,8 @@ class ProductionOrderItemLabelService
                                          from_whouse: material.deep==1 ? 'SR01' : 'SRPL'
                                      })
           end
+          puts "blue kanban#{moves.to_json}".yellow
+
           Whouse::Storage.new.move_stocks(moves) if moves.size>0
         end
       end
