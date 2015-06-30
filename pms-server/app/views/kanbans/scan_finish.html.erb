@@ -9,7 +9,7 @@
           <label>
             <h4>扫描<%=KanbanType.display(session[:kanban_type])%>销卡</h4>
           </label>
-          <input type="text" id="scan_Kanban_Finish" class="form-control"/>
+          <input type="text" id="scan_kanban_finish" class="form-control"/>
           <div class="info-warn-div" id="message-div" style="font-size: 20px"></div>
         </div>
       </div>
@@ -21,14 +21,14 @@
 <% end %>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#scan_Kanban_Finish').on('keypress', function (event) {
-            var kanban_id = $('#scan_Kanban_Finish').val();
+        $('#scan_kanban_finish').on('keypress', function (event) {
+            var kanban_id = $('#scan_kanban_finish').val();
             if (kanban_id.length > 0 && event.keyCode == 13) {
                 pms.kanban.scan_finish(kanban_id, function (data) {
                     if (data.result) {
 //                        swal("销卡成功！");
                         $("#message-div").text(kanban_id + ",销卡成功！");
-                        $('#scan_Kanban').val('');
+                        $('#scan_kanban_finish').val('');
                     }
                     else {
                         swal(data.content);
