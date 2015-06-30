@@ -266,7 +266,7 @@ module FileHandler
         msg = Message.new(contents: [], result: true)
         handler_file=full_tmp_path("#{KanbanType.display(type)}销卡处理结果.xlsx")
 
-        header = ['看板卡', '数量', '时间', '员工']
+        header = ['看板卡', '时间', '员工','数量']
 
         book = Roo::Excelx.new file
         book.default_sheet = book.sheets.first
