@@ -17,6 +17,9 @@ module PartBomable
         end
       end
     elsif self.is_a?(ProcessPart)
+      self.process_entity.kanbans.each do |kanban|
+        kanban.create_part_bom
+      end
     end
   end
 
