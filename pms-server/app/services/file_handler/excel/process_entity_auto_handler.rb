@@ -73,8 +73,13 @@ module FileHandler
 
                     process_entity.custom_values.each do |cv|
                       cf=cv.custom_field
+                      qty= process_entity.process_part_quantity_by_cf(cf.name.to_sym).to_f
+                      if (part=Part.find_by_id(cv.value)) && (part.type==PartType::MATERIAL_WIRE) && qty>10
+                        qty=qty/1000
+                      end if Setting.auto_convert_material_length?
+
                       if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
-                        process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: process_entity.process_part_quantity_by_cf(cf.name.to_sym), custom_value_id: cv.id)
+                        process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: qty, custom_value_id: cv.id)
                       end
                     end
                   when 'update'

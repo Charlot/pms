@@ -135,8 +135,13 @@ module FileHandler
 
                     process_entity.custom_values.select { |cv| (cv.custom_field.name != "default_wire_nr")&&(cv.custom_field.field_format=="part") }.each_with_index do |cv, index|
                       cf=cv.custom_field
+                      qty=tmp_quantity[index].to_f
+                      if (part=Part.find_by_id(cv.value)) && (part.type==PartType::MATERIAL_WIRE) && qty>10
+                        qty=qty/1000
+                      end if Setting.auto_convert_material_length?
+
                       if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
-                        process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: tmp_quantity[index].to_f, custom_value_id: cv.id, custom_value_id: cv.id)
+                        process_entity.process_parts<<ProcessPart.new(part_id: cv.value, quantity: qty, custom_value_id: cv.id, custom_value_id: cv.id)
                       end
                     end
                   when 'update'
@@ -222,7 +227,7 @@ module FileHandler
                           if (part=Part.find_by_id(cv.value)) && (part.type==PartType::MATERIAL_WIRE) && qty>10
                             qty=qty/1000
                           end if Setting.auto_convert_material_length?
-                          if ppp=pe.process_parts.where(custom_value_id: cv.id,part_id:cv.value).first
+                          if ppp=pe.process_parts.where(custom_value_id: cv.id, part_id: cv.value).first
                             ppp.update_attributes(quantity: qty)
                             arrs.delete(ppp.id)
                           else
@@ -234,7 +239,7 @@ module FileHandler
                     end
                     puts arrs.to_json.red
 
-                    pe.process_parts.where(id:arrs).destroy_all
+                    pe.process_parts.where(id: arrs).destroy_all
                     pe.save
                   when 'delete'
                     # pe.destroy

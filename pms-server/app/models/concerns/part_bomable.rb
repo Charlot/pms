@@ -3,16 +3,22 @@ module PartBomable
 
   included do
     after_create :create_part_bom
-    # after_update :update_part_bom
+    after_create :update_part_bom
+    after_update :update_part_bom
   end
 
-  # def update_part_bom
-  #   if self.is_a?(ProcessEntity)
-  #     self.kanbans.each do |kanban|
-  #
-  #     end
-  #   end
-  # end
+  def update_part_bom
+    if self.is_a?(KanbanProcessEntity)
+      self.kanban.create_part_bom
+    elsif self.is_a?(CustomValue)
+      if self.customized.is_a?(ProcessEntity)
+        self.customized.kanbans.each do |kanban|
+          kanban.create_part_bom
+        end
+      end
+    elsif self.is_a?(ProcessPart)
+    end
+  end
 
   def create_part_bom
     if self.is_a?(Kanban)
@@ -36,8 +42,9 @@ module PartBomable
           self.process_parts.each do |process_part|
             puts "#{process_part.to_json}".red
             if part_bom_item=Part.find_by_id(process_part.part_id)
+              qty=process_part.quantity||0
+              raise '用量超过10' if qty>=10
               if item=part.part_boms.find_by_bom_item_id(part_bom_item.id)
-                qty=process_part.quantity||0
                 if part_bom_item.type==PartType::PRODUCT_SEMIFINISHED
                   puts "update semi part ----#{part_bom_item.nr}".blue
                   item.update_attributes(quantity: qty) if item.quantity==0
@@ -47,7 +54,7 @@ module PartBomable
                 end
                 arrs.delete(item.id)
               else
-                part.part_boms<<PartBom.new(bom_item_id: part_bom_item.id, quantity: process_part.quantity)
+                part.part_boms<<PartBom.new(bom_item_id: part_bom_item.id, quantity: qty)
               end
             else
               raise "kb_id:#{self.to_json},process_entity_id:#{process_part.to_json}#no part id #{process_part.part_id}".red unless process_part.part_id.blank?
