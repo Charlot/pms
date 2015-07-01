@@ -5,6 +5,7 @@ module PartBomable
     after_create :create_part_bom
     after_create :update_part_bom
     after_update :update_part_bom
+    after_destroy :update_part_bom
   end
 
   def update_part_bom
@@ -18,6 +19,10 @@ module PartBomable
       end
     elsif self.is_a?(ProcessPart)
       self.process_entity.kanbans.each do |kanban|
+        kanban.create_part_bom
+      end
+    elsif self.is_a?(ProcessEntity)
+      self.kanbans.each do |kanban|
         kanban.create_part_bom
       end
     end

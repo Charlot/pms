@@ -1,7 +1,7 @@
 class ProcessEntity < ActiveRecord::Base
   validates :nr, presence: {message: 'nr cannot be blank'}
   validates_uniqueness_of :nr, :scope => :product_id
-  # include PartBomable
+  include PartBomable
 
 
   belongs_to :process_template
@@ -57,7 +57,7 @@ class ProcessEntity < ActiveRecord::Base
           if cv
             wire = Part.find_by_id(cv.value)
             if wire
-              pp  = process_parts.where({part_id:wire.id}).first
+              pp = process_parts.where({part_id: wire.id}).first
               "#{wire.parsed_nr}|#{pp.quantity if pp}"
             else
               ""
@@ -95,45 +95,45 @@ class ProcessEntity < ActiveRecord::Base
   # 所以你可以看到我下面的判断的“先后顺序”
   def oee_code(oee = "")
     case oee
-    when ""
-      if value_t1 || value_t2
-        oee = "C"
-        oee_code(oee)
-      elsif value_s1 || value_s2
-        oee = "S"
-        oee_code(oee)
-      elsif value_t1_strip_length || value_t2_strip_length
-        oee = "W"
-        oee_code(oee)
-      else
-        oee << "-"
-      end
-    when "C"
-      if value_t1 && value_t2
-        oee << "C"
-      elsif value_s1 || value_s2
-        oee << "S"
-      elsif ((value_t1.nil? && value_t1_strip_length) || (value_t2.nil? && value_t2_strip_length))
-        oee << "W"
-      else
-        oee << "-"
-      end
-    when "W"
-      if value_t1_strip_length && value_t2_strip_length
-        oee << "W"
-      elsif ((value_t1_strip_length.nil? && value_s1) || (value_t2_strip_length.nil? && value_s2))
-        oee << "S"
-      else
-        oee << "-"
-      end
-    when "S"
-      if value_s1 && value_s2
-        oee << "S"
-      elsif ((value_s1.nil? && value_t1_strip_length) || (value_s2.nil? && value_t2_strip_length))
-        oee << "W"
-      else
-        oee << "-"
-      end
+      when ""
+        if value_t1 || value_t2
+          oee = "C"
+          oee_code(oee)
+        elsif value_s1 || value_s2
+          oee = "S"
+          oee_code(oee)
+        elsif value_t1_strip_length || value_t2_strip_length
+          oee = "W"
+          oee_code(oee)
+        else
+          oee << "-"
+        end
+      when "C"
+        if value_t1 && value_t2
+          oee << "C"
+        elsif value_s1 || value_s2
+          oee << "S"
+        elsif ((value_t1.nil? && value_t1_strip_length) || (value_t2.nil? && value_t2_strip_length))
+          oee << "W"
+        else
+          oee << "-"
+        end
+      when "W"
+        if value_t1_strip_length && value_t2_strip_length
+          oee << "W"
+        elsif ((value_t1_strip_length.nil? && value_s1) || (value_t2_strip_length.nil? && value_s2))
+          oee << "S"
+        else
+          oee << "-"
+        end
+      when "S"
+        if value_s1 && value_s2
+          oee << "S"
+        elsif ((value_s1.nil? && value_t1_strip_length) || (value_s2.nil? && value_t2_strip_length))
+          oee << "W"
+        else
+          oee << "-"
+        end
     end
     oee
   end
@@ -175,10 +175,10 @@ class ProcessEntity < ActiveRecord::Base
   # for auto process entity
   def t1_strip_length
     @t1_strip_length=if self.value_t1_default_strip_length && (self.value_t1_default_strip_length.to_f!=0)
-      self.value_t1_default_strip_length
-    else
-      self.value_t1_strip_length
-    end
+                       self.value_t1_default_strip_length
+                     else
+                       self.value_t1_strip_length
+                     end
   end
 
 
