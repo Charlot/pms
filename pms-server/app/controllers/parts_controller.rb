@@ -55,7 +55,7 @@ class PartsController < ApplicationController
 
   # PATCH/PUT /parts/1
   # PATCH/PUT /parts/1.json
-  def updatete
+  def update
     # authorize @part
     respond_to do |format|
       if @part.update(part_params)
