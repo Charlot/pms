@@ -106,6 +106,65 @@ WarehouseRegex.transaction do
       {regex: '^XM', warehouse_nr: '3PL'},
       {regex: '^XF', warehouse_nr: '3PL'},
       {regex: '^XT', warehouse_nr: '3PL'},
+
+      {regex: '^AM1', warehouse_nr: 'SRPL'},
+      {regex: '^AM2', warehouse_nr: 'SRPL'},
+      {regex: '^AM9', warehouse_nr: 'SRPL'},
+
+      {regex: '^BT1', warehouse_nr: 'SRPL'},
+      {regex: '^BT2', warehouse_nr: 'SRPL'},
+      {regex: '^BT9', warehouse_nr: 'SRPL'},
+
+      {regex: '^AY1', warehouse_nr: 'SRPL'},
+      {regex: '^AY2', warehouse_nr: 'SRPL'},
+      {regex: '^AY9', warehouse_nr: 'SRPL'},
+
+      {regex: '^QM1', warehouse_nr: 'SRPL'},
+      {regex: '^QM2', warehouse_nr: 'SRPL'},
+      {regex: '^QM9', warehouse_nr: 'SRPL'},
+
+      {regex: '^QE1', warehouse_nr: 'SRPL'},
+      {regex: '^QE2', warehouse_nr: 'SRPL'},
+      {regex: '^QE9', warehouse_nr: 'SRPL'},
+
+      {regex: '^CQ1', warehouse_nr: 'SRPL'},
+      {regex: '^CQ2', warehouse_nr: 'SRPL'},
+      {regex: '^CQ9', warehouse_nr: 'SRPL'},
+
+      {regex: '^CF1', warehouse_nr: 'SRPL'},
+      {regex: '^CF2', warehouse_nr: 'SRPL'},
+      {regex: '^CF9', warehouse_nr: 'SRPL'},
+
+      {regex: '^CE1', warehouse_nr: 'SRPL'},
+      {regex: '^CE2', warehouse_nr: 'SRPL'},
+      {regex: '^CE9', warehouse_nr: 'SRPL'},
+
+
+      {regex: '^YF1', warehouse_nr: 'SRPL'},
+      {regex: '^YF2', warehouse_nr: 'SRPL'},
+      {regex: '^YF9', warehouse_nr: 'SRPL'},
+
+      {regex: '^DM1', warehouse_nr: 'SRPL'},
+      {regex: '^DM2', warehouse_nr: 'SRPL'},
+      {regex: '^DM9', warehouse_nr: 'SRPL'},
+
+      {regex: '^DE1', warehouse_nr: 'SRPL'},
+      {regex: '^DE2', warehouse_nr: 'SRPL'},
+      {regex: '^DE9', warehouse_nr: 'SRPL'},
+
+      
+
+      {regex: '^AM3', warehouse_nr: '3PL'},
+      {regex: '^BT3', warehouse_nr: '3PL'},
+      {regex: '^AY3', warehouse_nr: '3PL'},
+      {regex: '^QM3', warehouse_nr: '3PL'},
+      {regex: '^QE3', warehouse_nr: '3PL'},
+      {regex: '^CQ3', warehouse_nr: '3PL'},
+      {regex: '^CF3', warehouse_nr: '3PL'},
+      {regex: '^CE3', warehouse_nr: '3PL'},
+      {regex: '^YF3', warehouse_nr: '3PL'},
+      {regex: '^DM3', warehouse_nr: '3PL'},
+      {regex: '^DE3', warehouse_nr: '3PL'}
   ].each do |v|
     unless WarehouseRegex.where(v).first
       WarehouseRegex.create(v)
