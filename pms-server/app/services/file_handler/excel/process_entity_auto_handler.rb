@@ -128,19 +128,19 @@ module FileHandler
                           qty=qty/1000
                         end if Setting.auto_convert_material_length?
 
-                        if ppp=pe.process_parts.where(custom_value_id: cv.id,part_id:cv.value).first
-                          ppp.update_attributes(quantity:qty)
+                        if ppp=pe.process_parts.where(custom_value_id: cv.id, part_id: cv.value).first
+                          ppp.update_attributes(quantity: qty)
                           arrs.delete(ppp.id)
                         else
                           pe.process_parts<<ProcessPart.new(part_id: cv.value, quantity: qty, custom_value_id: cv.id)
                         end
                       end
                     end
-                    pe.process_parts.where(id:arrs).destroy_all
+                    pe.process_parts.where(id: arrs).destroy_all
                     pe.save
                   when 'delete'
-                    pe = ProcessEntity.where({nr: params[:nr], product_id: product.id}).first
-                  # pe.destroy
+                    # pe = ProcessEntity.where({nr: params[:nr], product_id: product.id}).first
+                    # pe.destroy
                 end
               end
             end

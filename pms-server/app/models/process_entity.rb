@@ -10,9 +10,9 @@ class ProcessEntity < ActiveRecord::Base
   belongs_to :product, class_name: 'Part'
   has_many :kanban_process_entities, dependent: :destroy
   has_many :kanbans, through: :kanban_process_entities
-  has_many :process_parts
+  has_many :process_parts, dependent: :destroy
   has_many :parts, through: :process_parts
-  has_many :custom_values, as: :custom_fieldable
+  has_many :custom_values, as: :custom_fieldable, dependent: :destroy
 
   delegate :custom_fields, to: :process_template, allow_nil: true
   delegate :nr, to: :product, prefix: true, allow_nil: true

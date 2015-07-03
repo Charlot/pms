@@ -43,7 +43,11 @@
         </td>
         <td><%= link_to '详情', process_entity, class: 'btn btn-default' %></td>
         <td><%= link_to '编辑', edit_process_entity_path(process_entity), class: 'btn btn-default' %></td>
-        <!--<td><%= link_to '删除', process_entity, method: :delete, data: {confirm: 'Are you sure?'}, class: 'btn btn-default' %></td>-->
+        <td>
+          <% if current_user.can_delete_data? %>
+              <%= link_to '删除', process_entity, method: :delete, data: {confirm: "确定删除#{process_entity.nr}?"}, class: 'btn btn-default' %>
+          <% end %>
+        </td>
       </tr>
   <% end %>
   </tbody>

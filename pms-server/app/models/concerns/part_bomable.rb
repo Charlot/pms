@@ -51,7 +51,7 @@ module PartBomable
             puts "#{process_part.to_json}".red
             if part_bom_item=Part.find_by_id(process_part.part_id)
               qty=process_part.quantity||0
-              raise '用量超过10' if qty>=10
+              # raise '用量超过100' if qty>=100
               if item=part.part_boms.find_by_bom_item_id(part_bom_item.id)
                 if part_bom_item.type==PartType::PRODUCT_SEMIFINISHED
                   puts "update semi part ----#{part_bom_item.nr}".blue

@@ -54,6 +54,10 @@ class User < ActiveRecord::Base
     av? || admin? || system?
   end
 
+  def can_delete_data?
+    admin? || system?
+  end
+
   private
   def generate_authentication_token
     loop do
