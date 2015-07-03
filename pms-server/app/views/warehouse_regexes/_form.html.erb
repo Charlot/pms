@@ -1,0 +1,29 @@
+<%= form_for(@warehouse_regex) do |f| %>
+  <% if @warehouse_regex.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@warehouse_regex.errors.count, "error") %> prohibited this warehouse_regex from being saved:</h2>
+
+      <ul>
+      <% @warehouse_regex.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :regex,'正则' %><br>
+    <%= f.text_field :regex %>
+  </div>
+  <div class="field">
+    <%= f.label :warehouse_nr,'仓库号' %><br>
+    <%= f.text_field :warehouse_nr %>
+  </div>
+  <div class="field">
+    <%= f.label :desc,'描述' %><br>
+    <%= f.text_field :desc %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150703054144) do
+ActiveRecord::Schema.define(version: 20150703092017) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -542,6 +542,14 @@ ActiveRecord::Schema.define(version: 20150703054144) do
   end
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
+
+  create_table "warehouse_regexes", force: true do |t|
+    t.string   "regex"
+    t.string   "warehouse_nr"
+    t.string   "desc"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "warehouses", force: true do |t|
     t.string   "nr"

@@ -58,7 +58,7 @@ User.transaction do
   end
 
 
-unless huangjianyun = User.find_by_user_name("jianyun.huang")
+  unless huangjianyun = User.find_by_user_name("jianyun.huang")
     huangjianyun = User.create({user_name: "jianyun.huang", password: "huangjianyun567", password_confirmation: "huangjianyun567"})
     huangjianyun.add_role :kanban
   end
@@ -74,6 +74,7 @@ unless huangjianyun = User.find_by_user_name("jianyun.huang")
   end
 end
 
+puts 'create setting regex...'
 Setting.transaction do
   unless Setting.find_by_code(Setting::AUTO_MOVE_KANBAN_CODE)
     Setting.create(code: Setting::AUTO_MOVE_KANBAN_CODE, value: '0', name: '自动销卡')
@@ -84,7 +85,7 @@ Setting.transaction do
   end
 
   unless Setting.find_by_code(Setting::AUTO_CONVERT_MATERIAL_LENGTH)
-    Setting.create(code: Setting::AUTO_CONVERT_MATERIAL_LENGTH, value: '0', name: '自动转换步骤原材料线及管子等长度')
+    Setting.create(code: Setting::AUTO_CONVERT_MATERIAL_LENGTH, value: '1', name: '自动转换步骤原材料线及管子等长度')
   end
 
   unless Setting.find_by_code(Setting::MATERIAL_PART_MARK)
@@ -93,5 +94,21 @@ Setting.transaction do
 
   unless Setting.find_by_code(Setting::NONE_MATERIAL_PART_MARK)
     Setting.create(code: Setting::NONE_MATERIAL_PART_MARK, value: 'M', name: '非原材料线盘点备注')
+  end
+end
+
+puts 'create warehouse regex...'
+WarehouseRegex.transaction do
+  [
+      {regex: '^MC', warehouse_nr: 'SRPL'},
+      {regex: '^FC', warehouse_nr: 'SRPL'},
+      {regex: '^TC', warehouse_nr: 'SRPL'},
+      {regex: '^XM', warehouse_nr: '3PL'},
+      {regex: '^XF', warehouse_nr: '3PL'},
+      {regex: '^XT', warehouse_nr: '3PL'},
+  ].each do |v|
+    unless WarehouseRegex.where(v).first
+      WarehouseRegex.create(v)
+    end
   end
 end

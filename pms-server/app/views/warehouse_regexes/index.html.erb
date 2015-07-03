@@ -1,0 +1,30 @@
+<h1>Listing warehouse_regexes</h1>
+
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+  <tr>
+    <th>#</th>
+    <th>正则</th>
+    <th>仓库号</th>
+    <th>描述</th>
+    <th colspan="2"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @warehouse_regexes.each_with_index do |warehouse_regex, i| %>
+      <tr>
+        <td><%= i+1 %></td>
+        <td><%= warehouse_regex.regex %></td>
+        <td><%= warehouse_regex.warehouse_nr %></td>
+        <td><%= warehouse_regex.desc %></td>
+        <td><%= link_to '编辑', edit_warehouse_regex_path(warehouse_regex) %></td>
+        <td><%= link_to '删除', warehouse_regex, method: :delete, data: {confirm: '确定删除?'} %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to '新 建', new_warehouse_regex_path %>

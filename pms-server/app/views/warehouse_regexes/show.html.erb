@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Regex:</strong>
+  <%= @warehouse_regex.regex %>
+</p>
+
+<p>
+  <strong>Warehouse nr:</strong>
+  <%= @warehouse_regex.warehouse_nr %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @warehouse_regex.desc %>
+</p>
+
+<%= link_to 'Edit', edit_warehouse_regex_path(@warehouse_regex) %> |
+<%= link_to 'Back', warehouse_regexes_path %>

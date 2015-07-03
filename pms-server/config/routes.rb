@@ -1,5 +1,7 @@
 require 'devise'
 Rails.application.routes.draw do
+  resources :warehouse_regexes
+
   resources :production_order_handler_items
 
   resources :production_order_handlers
