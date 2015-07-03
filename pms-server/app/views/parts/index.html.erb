@@ -20,7 +20,10 @@
     <th>截面</th>
     <th>剥线长度</th>
     <th>Resource group</th>
-    <th>Measure unit</th>
+    <th>单位</th>
+    <th>资料品番号P/No</th>
+    <th>Desc1</th>
+    <th>FullDesc</th>
     <th colspan="3"></th>
   </tr>
   </thead>
@@ -37,7 +40,10 @@
         <td><%= best_in_place part, :cross_section, as: :input %></td>
         <td><%= best_in_place part, :strip_length, as: :input %></td>
         <td><%= part.resource_group_tool.nr if part.resource_group_tool %></td>
-        <td><%= part.measure_unit %></td>
+        <td><%= best_in_place part, :unit, as: :input %></td>
+        <td><%= best_in_place part, :pno, as: :input %></td>
+        <td><%= best_in_place part, :desc1, as: :input %></td>
+        <td><%= best_in_place part, :description, as: :input %></td>
         <td><%= link_to '详情', part %></td>
         <td><%= link_to '编辑', edit_part_path(part) %></td>
         <!--<td><%= link_to '删除', part, method: :delete, data: {confirm: 'Are you sure?'} %></td>-->
