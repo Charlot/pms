@@ -3,7 +3,8 @@ class UserRegistrationsController<Devise::RegistrationsController
   prepend_before_filter :require_no_authentication, :only => [:create]
 
   def create
-    build_resource(params.require(:user).permit(:id, :email, :name, :user_name,:nr, :password, :password_confirmation))
+    raise '00000'
+    build_resource(params.require(:user).permit(:id, :email, :name, :user_name, :nr, :password, :password_confirmation))
     respond_to do |format|
       if resource.save
         resource.add_role params[:role]
@@ -38,7 +39,7 @@ class UserRegistrationsController<Devise::RegistrationsController
   protected
 
   def require_no_authentication
-    if current_user && current_user.admin?
+    if current_user && (current_user.admin?||current_user.system?)
       return true
     else
       return super
