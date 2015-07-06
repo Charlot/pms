@@ -3,7 +3,6 @@ class UserRegistrationsController<Devise::RegistrationsController
   prepend_before_filter :require_no_authentication, :only => [:create]
 
   def create
-    raise '00000'
     build_resource(params.require(:user).permit(:id, :email, :name, :user_name, :nr, :password, :password_confirmation))
     respond_to do |format|
       if resource.save
