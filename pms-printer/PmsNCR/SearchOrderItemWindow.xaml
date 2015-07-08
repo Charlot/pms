@@ -64,7 +64,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Column="1" Margin="0,0,0,12"  Grid.Row="0" MaxWidth="165">
-            <Label Content="PartNr:" Height="28" Name="label1" />
+            <Label Content="Params:" Height="28" Name="label1" />
             <TextBox Height="23" Name="PartNrTB" Width="120" />
             <Button Content="Search" Height="30" Name="button1" Width="94" Click="button1_Click" />
             <Button Content="Print Kanban" Height="30" Name="PrintKanbanBtn" Width="94"   Click="PrintKanbanBtn_Click" />
