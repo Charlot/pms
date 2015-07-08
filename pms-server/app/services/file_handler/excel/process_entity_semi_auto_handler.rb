@@ -57,7 +57,7 @@ module FileHandler
         begin
           validate_msg = validate_import(file)
           if validate_msg.result
-            ProcessEntity.transaction do
+            # ProcessEntity.transaction do
               2.upto(book.last_row) do |line|
 
                 row = {}
@@ -228,7 +228,9 @@ module FileHandler
                             qty=qty/1000
                           end if Setting.auto_convert_material_length?
                           if ppp=pe.process_parts.where(custom_value_id: cv.id, part_id: cv.value).first
-                            ppp.update_attributes(quantity: qty)
+                            puts "@@@@@@@@@@update process part:#{ppp.to_json}".blue
+                            ppp.update_attributes!(quantity: qty)
+                            # ppp.update_part_bom
                             arrs.delete(ppp.id)
                           else
                             pe.process_parts<<ProcessPart.new(part_id: cv.value, quantity: qty, custom_value_id: cv.id)
@@ -245,7 +247,7 @@ module FileHandler
                     # pe.destroy
                 end
               end
-            end
+            # end
             msg.result = true
             msg.content = "导入半自动步骤成功"
           else
