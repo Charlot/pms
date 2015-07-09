@@ -53,7 +53,7 @@ class Kanban < ActiveRecord::Base
 
   def self.find_by_nr_or_id(v)
     if /^0/.match(v)
-      return Kanban.find_by_nr(v)
+        return Kanban.find_by_nr(v.sub(/\/\d+/,''))
     else
       if /\d+\/\d+/.match(v)
         return Kanban.find_by_id(v.sub(/\/\d+/, ''))
@@ -218,7 +218,7 @@ class Kanban < ActiveRecord::Base
   # 条形码内容
   # kanban_id/当前版本号
   def printed_2DCode
-    "#{id}/#{version_now}"
+    "#{nr}/#{version_now}"
   end
 
   def task_time
@@ -332,7 +332,7 @@ class Kanban < ActiveRecord::Base
       blue= ProductionOrderItemBlue.
           where(kanban_id: self.id, state: ProductionOrderItemState::DISTRIBUTE_SUCCEED).first
       puts "#{handler_item.to_json}".red
-     return   blue.update_attributes(
+      return blue.update_attributes(
           produced_qty: (handler_item.qty.nil? ? blue.produced_qty : handler_item.qty),
           state: ProductionOrderItemState::TERMINATED,
           terminated_at: handler_item.item_terminated_at,
