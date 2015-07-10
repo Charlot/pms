@@ -50,13 +50,8 @@
   </form>
 </div>
 
-<div class="row" style="float: right;margin-right: 30px">
-  <div class="col-md-1">
-    <input type="button" value="手动终止" class="btn btn-warning" onclick="change_state(<%=ProductionOrderItemState::MANUAL_ABORTED%>)"/>
-    <br/>
-    <input type="button" value="设置紧急/取消紧急" class="btn btn-info" onclick="set_urgent()"/>
-  </div>
-</div>
+
+<%=render 'production_order_items/handle_item'%>
 
 <div class="digg_pagination">
   <div class="page_info">
@@ -117,7 +112,7 @@
         <td><%= link_to 'Edit', edit_production_order_item_path(production_order_item) %></td>
         <td>
           <% if current_user.can_modify_data? %>
-              <%= link_to 'Destroy', production_order_item, method: :delete, data: {confirm: 'Are you sure?'} %>
+              <%= link_to '删除', production_order_item, method: :delete, data: {confirm: '确定删除?'} %>
           <% end %>
         </td>
       </tr>

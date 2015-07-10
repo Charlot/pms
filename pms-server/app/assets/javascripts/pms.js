@@ -49,6 +49,21 @@ function move_order_item() {
     });
 }
 
+function check_all_box(box_class) {
+    var checked = $(this).attr('current-state') == '1';
+    console.log(checked);
+    if(checked){
+        $(this).val('全选本页');
+        $(this).attr('current-state','0');
+        $('input:checkbox').removeAttr('checked');
+    }else{
+        $(this).val('取消全选本页');
+        $(this).attr('current-state','1');
+        $('input:checkbox').prop('checked',true);
+    }
+
+}
+
 function change_state(state) {
     if (confirm('确定执行？？？')) {
         var items = get_items();
