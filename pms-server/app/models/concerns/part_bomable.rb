@@ -3,8 +3,9 @@ module PartBomable
 
   included do
     after_create :create_part_bom
-    after_create :update_part_bom
-    after_update :update_part_bom
+    # after_create :update_part_bom
+    after_save :update_part_bom
+    # after_commit :update_part_bom
     after_destroy :update_part_bom
   end
 
@@ -19,14 +20,17 @@ module PartBomable
       end
     elsif self.is_a?(ProcessPart)
       self.process_entity.kanbans.each do |kanban|
+        puts "$$$$$$$ ProcessPart : #{self.to_json}".yellow
         kanban.create_part_bom
       end
     elsif self.is_a?(ProcessEntity)
-      self.kanbans.each do |kanban|
-        kanban.create_part_bom
-      end
+      # self.kanbans.each do |kanban|
+      #   kanban.create_part_bom
+      # end
     end
   end
+
+
 
   def create_part_bom
     if self.is_a?(Kanban)
@@ -47,7 +51,7 @@ module PartBomable
           arrs=part.part_boms.pluck(:id)
 
           part.part_boms.update_all(quantity: 0)
-          self.process_parts.each do |process_part|
+          self.process_parts.reload.each do |process_part|
             puts "#{process_part.to_json}".red
             if part_bom_item=Part.find_by_id(process_part.part_id)
               qty=process_part.quantity||0

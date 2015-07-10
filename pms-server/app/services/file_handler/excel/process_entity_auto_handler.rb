@@ -129,7 +129,11 @@ module FileHandler
                         end if Setting.auto_convert_material_length?
 
                         if ppp=pe.process_parts.where(custom_value_id: cv.id, part_id: cv.value).first
-                          ppp.update_attributes(quantity: qty)
+                          # ppp.update_attributes(quantity: qty)
+                          puts "@@@@@@@@@@update process part:#{ppp.to_json}".blue
+
+                          ppp.update_attributes!(quantity: qty)
+
                           arrs.delete(ppp.id)
                         else
                           pe.process_parts<<ProcessPart.new(part_id: cv.value, quantity: qty, custom_value_id: cv.id)

@@ -116,7 +116,7 @@ module V1
             items=ProductionOrderItem
             if params[:wire_nr]
               ids= Kanban.search_for(params[:wire_nr]).pluck(:id)
-              items=items.joins(:kanban).where(kanbans: {id: ids}) if ids.count>0
+              items=items.joins(:kanban).where(kanbans: {id: ids}).order(nr: :desc) if ids.count>0
             end
             items=items.limit(100)
             if items.count>0
