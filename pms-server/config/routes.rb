@@ -225,6 +225,7 @@ Rails.application.routes.draw do
       get :scope_search
       get :export
       get :export_white
+      get :export_simple
       get :management
       match :import, to: :import, via: [:get, :post]
       get 'scan_finish/:type', to: :scan_finish, as: 'scan_finish'

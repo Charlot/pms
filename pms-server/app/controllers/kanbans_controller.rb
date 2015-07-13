@@ -432,6 +432,16 @@ class KanbansController < ApplicationController
     end
   end
 
+  def export_simple
+    msg = FileHandler::Excel::KanbanHandler.export_simple(params[:q])
+    if msg.result
+      send_file msg.content
+    else
+      render json: msg
+    end
+  end
+
+
   def transport
     if request.post?
       msg = Message.new

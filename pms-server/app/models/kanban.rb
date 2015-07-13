@@ -221,6 +221,10 @@ class Kanban < ActiveRecord::Base
     "#{nr}/#{version_now}"
   end
 
+  def old_printed_2DCode
+    "#{id}/#{version_now}"
+  end
+
   def task_time
     task_time = 0.0
     begin

@@ -202,6 +202,48 @@ module FileHandler
       end
 
 
+      def self.export_simple(q)
+        msg = Message.new
+        begin
+          tmp_file = full_export_path("看板条码信息.xlsx") unless tmp_file
+
+          p = Axlsx::Package.new
+          p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
+            sheet.add_row ['看板号', '新条码', '旧条码','卡量','捆扎量',
+                           '总成号','半成品线号',
+                           '送料位置', '类型']
+            kanbans = []
+            if q.nil?
+              kanbans= Kanban.all
+            else
+              kanbans = Kanban.search_for(q).all
+            end
+            kanbans.each do |k|
+              sheet.add_row [
+                                k.nr,
+                                k.printed_2DCode,
+                                k.old_printed_2DCode,
+                                k.quantity,
+                                k.bundle,
+                                k.product_nr,
+                                k.wire_nr,
+                                k.des_storage,
+                                KanbanType.display(k.ktype)
+                            ], types: [:string, :string, :string, :string, :string,:string, :string, :string, :string, :string]
+            end
+          end
+          p.use_shared_strings = true
+          p.serialize(tmp_file)
+
+          msg.result =true
+          msg.content =tmp_file
+        rescue => e
+          puts e.backtrace
+          msg.content = e.message
+        end
+        msg
+      end
+
       def self.import_scan(file, type=KanbanType::WHITE)
         msg = Message.new(contents: [])
         handler_file=full_tmp_path("#{KanbanType.display(type)}投卡处理结果.xlsx")
@@ -266,7 +308,7 @@ module FileHandler
         msg = Message.new(contents: [], result: true)
         handler_file=full_tmp_path("#{KanbanType.display(type)}销卡处理结果.xlsx")
 
-        header = ['看板卡', '时间', '员工','数量']
+        header = ['看板卡', '时间', '员工', '数量']
 
         book = Roo::Excelx.new file
         book.default_sheet = book.sheets.first
