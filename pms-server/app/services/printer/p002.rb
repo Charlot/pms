@@ -35,7 +35,7 @@ module Printer
           card_quantity: @kanban.quantity,
           safe_quantity: "", #@kanban.safety_stock.to_i,
           card_number: @kanban.copies,
-          work_time: '',
+          work_time: @kanban.task_time,
           send_position: @kanban.des_storage,
           wire_description: wire_desc,
 
