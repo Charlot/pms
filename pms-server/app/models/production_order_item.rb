@@ -179,6 +179,9 @@ class ProductionOrderItem < ActiveRecord::Base
 
   def can_change_state?
     [ProductionOrderItemState::INIT,
+     ProductionOrderItemState::OPTIMISE_FAIL,
+     ProductionOrderItemState::OPTIMISE_SUCCEED,
+     ProductionOrderItemState::OPTIMISE_CANCELED,
      ProductionOrderItemState::DISTRIBUTE_SUCCEED,
      ProductionOrderItemState::DISTRIBUTE_FAIL,
      ProductionOrderItemState::MANUAL_ABORTED].include?(self.state)

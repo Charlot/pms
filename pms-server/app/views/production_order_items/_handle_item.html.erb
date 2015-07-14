@@ -1,0 +1,15 @@
+<div>
+  <div class="row">
+    <div class="col-md-1">
+      <input type="button" value="全选/取消全选本页" class="btn btn-warning"
+             current-state="0" onclick="check_all_box();"/>
+    </div>
+  </div>
+  <div class="row" style="float: right;margin-right: 30px">
+    <div class="col-md-1">
+      <input type="button" value="手动终止" class="btn btn-warning" onclick="change_state(<%=ProductionOrderItemState::MANUAL_ABORTED%>)"/>
+      <br/>
+      <input type="button" value="设置紧急/取消紧急" class="btn btn-info" onclick="set_urgent()"/>
+    </div>
+  </div>
+</div>
