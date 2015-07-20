@@ -1,15 +1,18 @@
-<div>
-  <%= link_to "导入销#{KanbanType.display(session[:kanban_type])}", import_to_finish_scan_kanbans_path(session[:kanban_type]), class: "btn btn-default" %>
-</div>
+<% if session[:kanban_type]==KanbanType::BLUE %>
+    <div>
+      <%= link_to "导入销#{KanbanType.display(session[:kanban_type])}", import_to_finish_scan_kanbans_path(session[:kanban_type]), class: "btn btn-default" %>
+    </div>
+<% end %>
 <div class="row">
   <div class="col-md-5">
     <div class="form-group">
       <div class="row">
         <div class="col-md-6">
           <label>
-            <h4>扫描<%=KanbanType.display(session[:kanban_type])%>销卡</h4>
+            <h4>扫描<%= KanbanType.display(session[:kanban_type]) %>销卡</h4>
           </label>
-          <input type="text" id="scan_kanban_finish" class="form-control"/>
+          <input type="text" id="scan_kanban_finish" class="form-control" kanban_type="<%= session[:kanban_type] %>"/>
+
           <div class="info-warn-div" id="message-div" style="font-size: 20px"></div>
         </div>
       </div>
@@ -23,18 +26,26 @@
     $(document).ready(function () {
         $('#scan_kanban_finish').on('keypress', function (event) {
             var kanban_id = $('#scan_kanban_finish').val();
+            var kanban_type = $('#scan_kanban_finish').attr('kanban_type');
+            var auto_post = true;
             if (kanban_id.length > 0 && event.keyCode == 13) {
-                pms.kanban.scan_finish(kanban_id, function (data) {
-                    if (data.result) {
+                auto_post = (kanban_type ==<%=KanbanType::BLUE%>);
+                if (!auto_post) {
+                    auto_post = confirm('确定销卡？');
+                }
+                if (auto_post) {
+                    pms.kanban.scan_finish(kanban_id, function (data) {
+                        if (data.result) {
 //                        swal("销卡成功！");
-                        $("#message-div").text(kanban_id + ",销卡成功！");
-                        $('#scan_kanban_finish').val('');
-                    }
-                    else {
-                        swal(data.content);
-                        $("#message-div").text();
-                    }
-                })
+                            $("#message-div").text(kanban_id + ",销卡成功！");
+                            $('#scan_kanban_finish').val('');
+                        }
+                        else {
+                            swal(data.content);
+                            $("#message-div").text();
+                        }
+                    })
+                }
             }
         });
     });

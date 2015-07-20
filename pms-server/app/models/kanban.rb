@@ -53,7 +53,7 @@ class Kanban < ActiveRecord::Base
 
   def self.find_by_nr_or_id(v)
     if /^0/.match(v)
-        return Kanban.find_by_nr(v.sub(/\/\d+/,''))
+      return Kanban.find_by_nr(v.sub(/\/\d+/, ''))
     else
       if /\d+\/\d+/.match(v)
         return Kanban.find_by_id(v.sub(/\/\d+/, ''))
@@ -320,18 +320,24 @@ class Kanban < ActiveRecord::Base
     false
   end
 
-  def generate_produce_item
+  def generate_produce_item(auto=true)
     if self.ktype==KanbanType::WHITE
-      return ProductionOrderItem.create(kanban_id: self.id, code: self.printed_2DCode, kanban_qty: self.quantity, kanban_bundle: self.bundle)
+      return ProductionOrderItem.create(kanban_id: self.id, code: self.printed_2DCode, kanban_qty: self.quantity, kanban_bundle: self.bundle, auto: auto)
     elsif self.ktype==KanbanType::BLUE
-      return ProductionOrderItemBlue.create(kanban_id: self.id, code: self.printed_2DCode, kanban_qty: self.quantity, kanban_bundle: self.bundle)
+      return ProductionOrderItemBlue.create(kanban_id: self.id, code: self.printed_2DCode, kanban_qty: self.quantity, kanban_bundle: self.bundle, auto: auto)
     end
     false
   end
 
+  # handler item is from file handle kanban
   def terminate_produce_item(handler_item=nil)
     if self.ktype==KanbanType::WHITE
-      true
+      if handler_item.blank?
+        item=self.generate_produce_item(false)
+        item.update_attributes(produced_qty: item.kanban_qty, state: ProductionOrderItemState::TERMINATED)
+      else
+        return true
+      end
     elsif self.ktype==KanbanType::BLUE
       blue= ProductionOrderItemBlue.
           where(kanban_id: self.id, state: ProductionOrderItemState::DISTRIBUTE_SUCCEED).first

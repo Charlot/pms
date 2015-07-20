@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150703092017) do
+ActiveRecord::Schema.define(version: 20150720023255) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -416,6 +416,7 @@ ActiveRecord::Schema.define(version: 20150703092017) do
     t.datetime "terminated_at"
     t.string   "terminate_user"
     t.string   "terminated_kanban_code"
+    t.boolean  "auto",                   default: true
   end
 
   add_index "production_order_items", ["kanban_id"], name: "index_production_order_items_on_kanban_id", using: :btree

@@ -262,7 +262,7 @@ class KanbansController < ApplicationController
       fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
       fd.save
       #file=FileHandler::Csv::File.new(user_agent: request.user_agent.downcase, file_path: fd.full_path, file_name: file.original_filename)
-      msg = FileHandler::Excel::KanbanHandler.import_scan(fd.full_path,session[:kanban_type])
+      msg = FileHandler::Excel::KanbanHandler.import_scan(fd.full_path, session[:kanban_type])
       # rescue => e
       #   msg.content = e.message
       # end
@@ -279,7 +279,7 @@ class KanbansController < ApplicationController
       file=params[:files][0]
       fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
       fd.save
-      msg = FileHandler::Excel::KanbanHandler.import_finish_scan(fd.full_path,session[:kanban_type])
+      msg = FileHandler::Excel::KanbanHandler.import_finish_scan(fd.full_path, session[:kanban_type])
       render json: msg
     end
   end
@@ -324,7 +324,8 @@ class KanbansController < ApplicationController
 
       if @kanban.ktype == KanbanType::WHITE
         # unless ((order_items = @kanban.production_order_items.where(state: ProductionOrderItemState.wait_scan_states)).count == 1)
-        render json: {result: false, content: "只销兰卡!"} and return
+        @kanban.terminate_produce_item
+        #render json: {result: false, content: "只销兰卡!"} and return
         # end
       else
         if item=ProductionOrderItemBlue.where(kanban_id: @kanban.id, state: ProductionOrderItemState::DISTRIBUTE_SUCCEED).first

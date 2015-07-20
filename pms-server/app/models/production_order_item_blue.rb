@@ -29,13 +29,6 @@ class ProductionOrderItemBlue<ProductionOrderItem
     end
   end
 
-  def move_stock
-    if self.state_changed? and self.state==ProductionOrderItemState::TERMINATED
-      if Setting.auto_move_kanban?
-        ItemBlueMoveStockWorker.perform_async(self.id)
-      end
-    end
-  end
 
   def self.in_produces
     where(state: ProductionOrderItemState::INIT)

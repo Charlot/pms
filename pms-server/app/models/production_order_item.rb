@@ -4,14 +4,20 @@ class ProductionOrderItem < ActiveRecord::Base
   belongs_to :production_order
   belongs_to :machine
   has_many :production_order_item_labels
-  after_update :update_qty_to_terminate
-  after_update :generate_production_item_label
+  after_update :update_qty_to_terminate, if: :auto?
+  after_update :generate_production_item_label, if: :auto?
   after_update :set_terminated_at
+
+  after_update :generate_production_item_not_auto_label, :if => :not_auto?
+
   self.inheritance_column = :_type_disabled
   default_scope { where(type: ProductionOrderItemType::WHITE) }
   # after_update :enter_store
   # after_update :move_store
   # has_paper_trail
+  def not_auto?
+    !self.auto
+  end
 
   def self.for_optimise
     joins(:kanban).where(kanbans: {ktype: KanbanType::WHITE}, state: ProductionOrderItemState.optimise_states)
@@ -121,6 +127,25 @@ class ProductionOrderItem < ActiveRecord::Base
                                                  position_nr: position_nr,
                                                  whouse_nr: whouse_nr)
       end
+    end
+  end
+
+  def generate_production_item_not_auto_label
+    bundle=1
+    unless self.production_order_item_labels.where(bundle_no: bundle).first
+      qty=self.produced_qty
+      position_nr=Warehouse::DEFAULT_POSITION
+      whouse_nr=Warehouse::DEFAULT_WAREHOUSE
+      if self.kanban
+        position_nr= self.kanban.des_storage
+        whouse_nr=Warehouse.get_whouse_by_position_prefix(self.kanban.des_storage)
+      end
+
+      self.production_order_item_labels.create(nr: "#{self.nr}-#{bundle.to_i.to_s}",
+                                               qty: qty,
+                                               bundle_no: bundle,
+                                               position_nr: position_nr,
+                                               whouse_nr: whouse_nr)
     end
   end
 
