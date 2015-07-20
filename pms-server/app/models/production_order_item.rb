@@ -146,7 +146,7 @@ class ProductionOrderItem < ActiveRecord::Base
                                                bundle_no: bundle,
                                                position_nr: position_nr,
                                                whouse_nr: whouse_nr)
-    end
+    end if self.auto==false
   end
 
   def update_qty_to_terminate
