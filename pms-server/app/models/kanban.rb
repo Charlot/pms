@@ -62,24 +62,25 @@ class Kanban < ActiveRecord::Base
   end
 
   def self.find_by_wire_nr key, operator, value
+	  puts '-------------'
     parts = Part.where("nr LIKE '%_#{value}%'").map(&:id)
     if parts.count > 0
+		puts parts.to_json.red
       process = ProcessEntity.joins(custom_values: :custom_field).where(
           "custom_values.value IN (#{parts.join(',')}) AND custom_fields.field_format = 'part'"
       ).map(&:id)
-      if process.count > 0
+	  if process.count > 0
+		puts '--------------------'.yellow
         kanbans = Kanban.joins(:process_entities).where("process_entities.id IN(#{process.join(',')})").map(&:id)
+	  else
+	    return {conditions: "kanbans.nr like '%#{value}%'"}  
       end
       if kanbans.count > 0
+		  puts "#{kanbans.to_json}".blue
         return {conditions: "kanbans.id IN(#{kanbans.join(',')})"}
-      else
-        {conditions: "kanbans.nr like '%#{value}%'"}
       end
-      {conditions: "kanbans.nr like '%#{value}%'"}
-    else
-      {conditions: "kanbans.nr like '%#{value}%'"}
     end
-    {conditions: "kanbans.nr like '%#{value}%'"}
+   return {conditions: "kanbans.nr like '%#{value}%'"}
   end
 
 
