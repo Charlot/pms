@@ -83,7 +83,7 @@ class PartBom < ActiveRecord::Base
 
   def self.call_leaf_by_part(part_boms, leaf, type=nil,leaf_id=nil)
     part_boms.each do |part_bom|
-		if left_id=nil
+		if left_id.nil?
             leaf<<part_bom
 		else
 			left<< part_bom if part_bom.item_id=leaf_id
