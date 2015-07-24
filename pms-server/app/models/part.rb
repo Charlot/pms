@@ -155,6 +155,9 @@ class Part < ActiveRecord::Base
     PartBom.children_by_part(self).select{|b| PartType.MaterialTypes.include?(b.type)}
   end
 
+  def leaf leaf_id=nil
+	  PartBom.leaf_by_part(self,nil,left_id)
+  end
   def materials_with_deep
     PartBom.children_node_by_part(self).select{|b| PartType.MaterialTypes.include?(b.type)}
   end
