@@ -32,8 +32,10 @@ module PartBomable
 
 
 
-  def create_part_bom
+  def create_part_bom(force=true)
     if self.is_a?(Kanban)
+	  if force && self.kanban_part.nil?
+	  
       PartBom.transaction do
         if self.process_entities.count>0
           # create part for kanban
@@ -78,6 +80,7 @@ module PartBomable
         end
       end
     end
+   end
   end
 
   def kanban_part_nr

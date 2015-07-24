@@ -89,6 +89,8 @@ class ProductionOrderItemLabelService
           moves=[]
           puts "blue kanban#{kb.to_json}".red
 
+		  kb.create_part_bom(false)
+		  
           kb.kanban_part.materials_with_deep.each do |material|
             puts "blue: #{material.to_json}".yellow
             moves<<base_params.merge({
