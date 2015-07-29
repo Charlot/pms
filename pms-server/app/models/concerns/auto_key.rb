@@ -13,7 +13,7 @@ module AutoKey
       if key.to_s.length<6
         self.nr= '%06d' % redis_incr_key
       else
-        self.nr= "%#{key.to_s.length+1}d" % redis_incr_key
+        self.nr= "%0#{key.to_s.length+1}d" % redis_incr_key
       end
     end
 
