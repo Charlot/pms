@@ -11,9 +11,9 @@ module AutoKey
     def generate_auto_key
       key=redis_incr_key
       if key.to_s.length<6
-        self.nr= '%06d' % redis_incr_key
+        self.nr= '%06d' % key
       else
-        self.nr= "%0#{key.to_s.length+1}d" % redis_incr_key
+        self.nr= "%0#{key.to_s.length+1}d" % key
       end
     end
 
