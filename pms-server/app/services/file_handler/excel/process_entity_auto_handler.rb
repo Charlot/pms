@@ -40,6 +40,8 @@ module FileHandler
                                           process_template_id: process_template.id
                                       })
 
+                pe = ProcessEntity.where({nr: params[:nr], product_id: product.id}).first
+
                 case row['Operator']
                   when 'new', ''
                     if row['Wire NO'].present?
@@ -83,7 +85,8 @@ module FileHandler
                       end
                     end
                   when 'update'
-                    pe = ProcessEntity.where({nr: params[:nr], product_id: product.id}).first
+                    # pe = ProcessEntity.where({nr: params[:nr], product_id: product.id}).first
+                    if ped
                     wire = Part.where({nr: "#{product.nr}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED}).first
                     if wire.nil?
                       part = Part.create({nr: "#{row['Product Nr']}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED})
@@ -142,9 +145,9 @@ module FileHandler
                     end
                     pe.process_parts.where(id: arrs).destroy_all
                     pe.save
+                    end
                   when 'delete'
-                    # pe = ProcessEntity.where({nr: params[:nr], product_id: product.id}).first
-                    # pe.destroy
+                    pe.destroy if pe
                 end
               end
             end
