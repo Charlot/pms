@@ -73,6 +73,19 @@ namespace PmsNCR
             }
             TemplateLB.Content = printer.Template;
             CopyTB.Text = printer.Copy.ToString();
+
+            ChangeStockCB.IsChecked = printer.ChangeStock;
+            StockNameTB.Text = printer.StockName;
+            StockIDTB.Text = printer.StockID.ToString();
+
+            for (int i = 0; i < OrientationCB.Items.Count; i++)
+            {
+                if (int.Parse((OrientationCB.Items[i] as ComboBoxItem).Tag.ToString()) == printer.Orientation)
+                {
+                    OrientationCB.SelectedIndex = i;
+                    break;
+                }
+            }
         }
 
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
@@ -97,6 +110,13 @@ namespace PmsNCR
                     printer.Name = PrinterCB.SelectedItem.ToString();
                     printer.Type = int.Parse((PrintTypeCB.SelectedItem as ComboBoxItem).Tag.ToString());
                     printer.Copy = copy;
+                    
+                    printer.ChangeStock = ChangeStockCB.IsChecked.Value;
+                    printer.StockName = StockNameTB.Text;
+                    printer.StockID = int.Parse(StockIDTB.Text);
+                    printer.Orientation = int.Parse((OrientationCB.SelectedItem as ComboBoxItem).Tag.ToString());
+
+
                     PrinterConfig.Save(printer);
                     MessageBox.Show("Printer Setting Success");
                 }

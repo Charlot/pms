@@ -63,6 +63,8 @@ namespace PmsPrinterWpf.Setting
             printerConfig.Set("Name", printer.Name, printer.Id);
             printerConfig.Set("Type", printer.Type, printer.Id);
             printerConfig.Set("Copy", printer.Copy, printer.Id);
+
+         
             printerConfig.Save();
         }
 

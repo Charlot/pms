@@ -34,6 +34,7 @@ namespace PmsNCRWcf.Config
                 printerConfig = new ConfigUtil("Ini/printers.ini");
                 List<string> printerIds = printerConfig.Notes();
                 printers = new List<Printer>();
+
                 foreach (string id in printerIds)
                 {
                     printers.Add(new Printer()
@@ -43,7 +44,12 @@ namespace PmsNCRWcf.Config
                         Template = printerConfig.Get("Template", id),
                         Name = printerConfig.Get("Name", id),
                         Type = int.Parse(printerConfig.Get("Type", id)),
-                        Copy = int.Parse(printerConfig.Get("Copy", id))
+                        Copy = int.Parse(printerConfig.Get("Copy", id)),
+
+                        ChangeStock = printerConfig.Get("ChangeStock", id) == null ? false : bool.Parse(printerConfig.Get("ChangeStock", id)),
+                        StockName = printerConfig.Get("StockName", id) == null ? null : printerConfig.Get("StockName", id),
+                        StockID = printerConfig.Get("StockID", id) == null ? 0 : int.Parse(printerConfig.Get("StockID", id)),
+                        Orientation = printerConfig.Get("Orientation", id) == null ? 1 : int.Parse(printerConfig.Get("Orientation", id))
                     });
                 }
             }
@@ -63,6 +69,14 @@ namespace PmsNCRWcf.Config
             printerConfig.Set("Name", printer.Name, printer.Id);
             printerConfig.Set("Type", printer.Type, printer.Id);
             printerConfig.Set("Copy", printer.Copy, printer.Id);
+
+            // for change stock
+
+            printerConfig.Set("ChangeStock", printer.ChangeStock, printer.Id);
+            printerConfig.Set("StockName", printer.StockName, printer.Id);
+            printerConfig.Set("StockID", printer.StockID, printer.Id);
+            printerConfig.Set("Orientation", printer.Orientation, printer.Id);
+
             printerConfig.Save();
         }
 
