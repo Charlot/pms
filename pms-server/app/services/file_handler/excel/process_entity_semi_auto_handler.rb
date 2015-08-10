@@ -102,18 +102,24 @@ module FileHandler
                     row['Template Fields'].split(',').each do |cf|
                       a = cf.split("|")
                       custom_fields_val << a.first
+                      # raise "#{a.to_json}|#{a.size}#{a.count}"
                       if a.count == 2
-                        custom_fields_quantity << a.last
+                        custom_fields_quantity << a.last.to_f
                       else
                         custom_fields_quantity << 1
                       end
                     end
 
+                    puts "#{custom_fields_quantity.to_json}---#{ process_entity.custom_fields.select { |cf| cf.name != "default_wire_nr" }.to_json}"
+
+
                     # pe.custom_fields.select { |cf| cf.name != "default_wire_nr" }.each_with_index do |cf,index|
                     #   template_fields << {:type => cf.field_format,:value=>custom_fields_val[index],:ext => custom_fields_quantity[index]}
                     # end
+                  # raise "#{custom_fields_quantity.to_json}---#{ process_entity.custom_fields.select { |cf| cf.name != "default_wire_nr" }}"
 
                     process_entity.custom_fields.select { |cf| cf.name != "default_wire_nr" }.each_with_index do |cf, index|
+                      template_fields << {:type => cf.field_format,:value=>custom_fields_val[index],:ext => custom_fields_quantity[index]}
                       cv = nil
                       if CustomFieldFormatType.part?(cf.field_format)
                         if custom_fields_val[index].blank?
