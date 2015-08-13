@@ -530,7 +530,7 @@ module FileHandler
                     kanban.save
                   when 'delete'
                     kanban = Kanban.find_by_nr(row['Nr'])
-                  #  kanban.destroy
+                    kanban.destroy
                 end
               end
             end

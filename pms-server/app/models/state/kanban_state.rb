@@ -3,6 +3,7 @@ class KanbanState < BaseClass
   RELEASED = 1
   LOCKED = 2
   DELETED = 3
+  DESTROYED=4
 
   # 2015-2-26 added by Tesla Lee
   # Versioned 状态废弃
@@ -18,6 +19,8 @@ class KanbanState < BaseClass
       'Locked'
     when DELETED
       'Deleted'
+	when DESTROYED
+		'DESTROYED'
     end
   end
 
