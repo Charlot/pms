@@ -86,7 +86,7 @@ module FileHandler
                     end
                   when 'update'
                     # pe = ProcessEntity.where({nr: params[:nr], product_id: product.id}).first
-                    if ped
+                   # if ped
                     wire = Part.where({nr: "#{product.nr}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED}).first
                     if wire.nil?
                       part = Part.create({nr: "#{row['Product Nr']}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED})
