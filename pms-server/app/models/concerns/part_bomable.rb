@@ -11,7 +11,7 @@ module PartBomable
 
   def update_part_bom
     if self.is_a?(KanbanProcessEntity)
-      self.kanban.create_part_bom
+      self.kanban.create_part_bom if self.kanban
     elsif self.is_a?(CustomValue)
       if self.customized.is_a?(ProcessEntity)
         self.customized.kanbans.each do |kanban|
