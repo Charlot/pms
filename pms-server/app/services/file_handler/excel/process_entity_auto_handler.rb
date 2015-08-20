@@ -86,65 +86,65 @@ module FileHandler
                     end
                   when 'update'
                     # pe = ProcessEntity.where({nr: params[:nr], product_id: product.id}).first
-                    if ped
-                    wire = Part.where({nr: "#{product.nr}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED}).first
-                    if wire.nil?
-                      part = Part.create({nr: "#{row['Product Nr']}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED})
-                    end
-                    pe.update(params.except(:nr))
+                    if pe
+                      wire = Part.where({nr: "#{product.nr}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED}).first
+                      if wire.nil?
+                        part = Part.create({nr: "#{row['Product Nr']}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED})
+                      end
+                      pe.update(params.except(:nr))
 
-                    custom_fields = {}
-                    ['Wire NO', 'Component', 'Qty Factor', 'Bundle Qty', 'T1', 'T1 Qty Factor', 'T1 Strip Length', 'T2', 'T2 Qty Factor', 'T2 Strip Length', 'S1', 'S1 Qty Factor', 'S2', 'S2 Qty Factor'].each { |header|
-                      custom_fields = custom_fields.merge(header_to_custom_fields(header, row[header])) if row[header]
-                    }
+                      custom_fields = {}
+                      ['Wire NO', 'Component', 'Qty Factor', 'Bundle Qty', 'T1', 'T1 Qty Factor', 'T1 Strip Length', 'T2', 'T2 Qty Factor', 'T2 Strip Length', 'S1', 'S1 Qty Factor', 'S2', 'S2 Qty Factor'].each { |header|
+                        custom_fields = custom_fields.merge(header_to_custom_fields(header, row[header])) if row[header]
+                      }
 
-                    custom_fields.each do |k, v|
-                      if cf = pe.custom_fields.find { |cf| cf.name == k.to_s }
-                        if cv = pe.custom_values.where({custom_field_id: cf.id}).first
-                          #找到了，更新
-                          #puts "找到了".red
-                          puts "#{product.nr}_#{v}".green
-                          if cf.name == "default_wire_nr"
-                            cv = cv.update(value: cf.get_field_format_value("#{product.nr}_#{v}"))
+                      custom_fields.each do |k, v|
+                        if cf = pe.custom_fields.find { |cf| cf.name == k.to_s }
+                          if cv = pe.custom_values.where({custom_field_id: cf.id}).first
+                            #找到了，更新
+                            #puts "找到了".red
+                            puts "#{product.nr}_#{v}".green
+                            if cf.name == "default_wire_nr"
+                              cv = cv.update(value: cf.get_field_format_value("#{product.nr}_#{v}"))
+                            else
+                              cv = cv.update(value: cf.get_field_format_value(v))
+                            end
                           else
-                            cv = cv.update(value: cf.get_field_format_value(v))
+                            #未找到，创建
+                            if cf.name == "default_wire_nr"
+                              cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: cf.is_for_out_stock, value: cf.get_field_format_value("#{product.nr}_#{v}"))
+                            else
+                              cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: cf.is_for_out_stock, value: cf.get_field_format_value(v))
+                            end
+                            pe.custom_values<<cv
                           end
-                        else
-                          #未找到，创建
-                          if cf.name == "default_wire_nr"
-                            cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: cf.is_for_out_stock, value: cf.get_field_format_value("#{product.nr}_#{v}"))
-                          else
-                            cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: cf.is_for_out_stock, value: cf.get_field_format_value(v))
-                          end
-                          pe.custom_values<<cv
                         end
                       end
-                    end
 
-                    # pe.process_parts.destroy_all
-                    arrs=pe.process_parts.pluck(:id)
-                    pe.custom_values.each do |cv|
-                      cf=cv.custom_field
-                      if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
-                        qty= pe.process_part_quantity_by_cf(cf.name.to_sym).to_f
-                        if (part=Part.find_by_id(cv.value)) && (part.type==PartType::MATERIAL_WIRE) && qty>10
-                          qty=qty/1000
-                        end if Setting.auto_convert_material_length?
+                      # pe.process_parts.destroy_all
+                      arrs=pe.process_parts.pluck(:id)
+                      pe.custom_values.each do |cv|
+                        cf=cv.custom_field
+                        if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
+                          qty= pe.process_part_quantity_by_cf(cf.name.to_sym).to_f
+                          if (part=Part.find_by_id(cv.value)) && (part.type==PartType::MATERIAL_WIRE) && qty>10
+                            qty=qty/1000
+                          end if Setting.auto_convert_material_length?
 
-                        if ppp=pe.process_parts.where(custom_value_id: cv.id, part_id: cv.value).first
-                          # ppp.update_attributes(quantity: qty)
-                          puts "@@@@@@@@@@update process part:#{ppp.to_json}".blue
+                          if ppp=pe.process_parts.where(custom_value_id: cv.id, part_id: cv.value).first
+                            # ppp.update_attributes(quantity: qty)
+                            puts "@@@@@@@@@@update process part:#{ppp.to_json}".blue
 
-                          ppp.update_attributes!(quantity: qty)
+                            ppp.update_attributes!(quantity: qty)
 
-                          arrs.delete(ppp.id)
-                        else
-                          pe.process_parts<<ProcessPart.new(part_id: cv.value, quantity: qty, custom_value_id: cv.id)
+                            arrs.delete(ppp.id)
+                          else
+                            pe.process_parts<<ProcessPart.new(part_id: cv.value, quantity: qty, custom_value_id: cv.id)
+                          end
                         end
                       end
-                    end
-                    pe.process_parts.where(id: arrs).destroy_all
-                    pe.save
+                      pe.process_parts.where(id: arrs).destroy_all
+                      pe.save
                     end
                   when 'delete'
                     pe.destroy if pe
@@ -162,6 +162,7 @@ module FileHandler
           msg.result = false
           msg.content = e.message
         end
+
         msg
       end
 
