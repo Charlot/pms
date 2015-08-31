@@ -243,6 +243,8 @@ Rails.application.routes.draw do
       match :import_lock, to: :import_lock, via: [:get, :post]
       match :import_unlock, to: :import_unlock, via: [:get, :post]
       match :transport, to: :transport, via: [:get, :post]
+
+      delete :batch_destroy
     end
   end
 

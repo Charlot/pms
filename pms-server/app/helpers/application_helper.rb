@@ -1,17 +1,33 @@
 module ApplicationHelper
+
+  def batch_destroy
+    begin
+      model.transaction do
+        params[:items].each do |id|
+          if item=model.find_by_id(id)
+            item.destroy
+          end
+        end
+      end
+      render json: {result: true}
+    rescue => e
+      render json: {result: false, content: e.message}
+    end
+  end
+
   def search
     model = params[:controller].classify.constantize
     condition = {}
-    params[:q].each { |k,v|
+    params[:q].each { |k, v|
       condition[k] = v
     }
 
     results = model.where(condition)
-    instance_variable_set("@#{params[:controller].pluralize}",results)
+    instance_variable_set("@#{params[:controller].pluralize}", results)
 
     respond_to do |format|
-      format.json {render json: {result:true,content:results}}
-      format.html {render partial: "search_result"}
+      format.json { render json: {result: true, content: results} }
+      format.html { render partial: "search_result" }
     end
   end
 
@@ -27,8 +43,8 @@ module ApplicationHelper
   def scope_search
     model = params[:model].classify.constantize
     @q = params[:q]
-    resultes = model.search_for(@q).paginate(:page=>params[:page])
-    instance_variable_set("@#{params[:controller]}",resultes)
+    resultes = model.search_for(@q).paginate(:page => params[:page])
+    instance_variable_set("@#{params[:controller]}", resultes)
     render :index
   end
 
