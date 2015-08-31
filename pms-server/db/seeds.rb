@@ -152,7 +152,9 @@ WarehouseRegex.transaction do
       {regex: '^DE2', warehouse_nr: 'SRPL'},
       {regex: '^DE9', warehouse_nr: 'SRPL'},
 
-
+      {regex: '^SM1', warehouse_nr: 'SRPL'},
+      {regex: '^SM2', warehouse_nr: 'SRPL'},
+      {regex: '^SM9', warehouse_nr: 'SRPL'},
 
       {regex: '^AM3', warehouse_nr: '3PL'},
       {regex: '^BT3', warehouse_nr: '3PL'},
@@ -164,7 +166,8 @@ WarehouseRegex.transaction do
       {regex: '^CE3', warehouse_nr: '3PL'},
       {regex: '^YF3', warehouse_nr: '3PL'},
       {regex: '^DM3', warehouse_nr: '3PL'},
-      {regex: '^DE3', warehouse_nr: '3PL'}
+      {regex: '^DE3', warehouse_nr: '3PL'},
+      {regex: '^SM3', warehouse_nr: '3PL'}
   ].each do |v|
     unless WarehouseRegex.where(v).first
       WarehouseRegex.create(v)
