@@ -12,6 +12,7 @@
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
+    <th><input type="checkbox" onclick="check_all_box()"></th>
     <th>#</th>
     <th><%= KanbanDesc::NR %></th>
     <th><%= KanbanDesc::TYPE %></th>
@@ -35,6 +36,9 @@
   <tbody>
   <% @kanbans.each_with_index do |kanban, index| %>
       <tr>
+        <td>
+          <input type="checkbox" item="<%= kanban.id %>" class="order-item-check"/>
+        </td>
         <td><%= index + 1 %></td>
         <td><%= kanban.nr %> , <%= kanban.printed_2DCode %></td>
         <td><%= KanbanType.display(kanban.ktype) %></td>
