@@ -52,14 +52,14 @@ function move_order_item() {
 function check_all_box(box_class) {
     var checked = $(this).attr('current-state') == '1';
     console.log(checked);
-    if(checked){
+    if (checked) {
         $(this).val('全选本页');
-        $(this).attr('current-state','0');
+        $(this).attr('current-state', '0');
         $('input:checkbox').removeAttr('checked');
-    }else{
+    } else {
         $(this).val('取消全选本页');
-        $(this).attr('current-state','1');
-        $('input:checkbox').prop('checked',true);
+        $(this).attr('current-state', '1');
+        $('input:checkbox').prop('checked', true);
     }
 
 }
@@ -107,6 +107,31 @@ function set_urgent() {
                 window.location.reload();
             } else {
                 swal('执行失败，请联系管理员');
+            }
+        });
+
+    }
+}
+
+function delete_item(url) {
+    if (confirm('确定删除？？？')) {
+        var items = get_items();
+        console.log(items);
+        if (items.length == 0) {
+            swal('请选择要删除的数据');
+            return;
+        }
+        $.ajax({
+            type: 'delete',
+            url: url,
+            data: items,
+            success: function (data) {
+                if (data.result) {
+                    swal('删除成功！');
+                    window.location.reload();
+                } else {
+                    swal('删除失败，请联系管理员');
+                }
             }
         });
 
