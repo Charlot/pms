@@ -8,7 +8,7 @@ module FileHandler
           'Destination Storage', 'Process List', 'Operator'
       ]
 
-      WHITE_HEADERS=['Nr', 'Quantity', 'Safety Stock', 'Copies',
+      WHITE_HEADERS=['Nr', 'Quantity', 'Safety Stock', 'Copies', 'Task Time',
                      'Remark', 'Remark2', 'Wire Nr', 'Product Nr', 'Type',
                      'Bundle', 'Destination Warehouse',
                      'Destination Storage', 'Process List', 'Row Wire Nr', 'Diameter', 'Length', 'T1', 'T2', 'S1', 'S2']
@@ -169,6 +169,7 @@ module FileHandler
                                 k.quantity,
                                 k.safety_stock,
                                 k.copies,
+                                k.task_time,
                                 k.remark,
                                 k.remark2,
                                 k.wire_nr,
@@ -201,92 +202,258 @@ module FileHandler
       end
 
 
-      def self.import_scan file
-        msg = Message.new(contents: [], result: true)
+      def self.export_simple(q)
+        msg = Message.new
+        begin
+          tmp_file = full_export_path("看板条码信息.xlsx") unless tmp_file
 
-        header = ['Kanban Nr', 'Wire Nr', 'Product Nr']
+          p = Axlsx::Package.new
+          p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
+            sheet.add_row ['看板号', '新条码', '旧条码','卡量','捆扎量',
+                           '总成号','半成品线号',
+                           '送料位置', '类型']
+            kanbans = []
+            if q.nil?
+              kanbans= Kanban.all
+            else
+              kanbans = Kanban.search_for(q).all
+            end
+            kanbans.each do |k|
+              sheet.add_row [
+                                k.nr,
+                                k.printed_2DCode,
+                                k.old_printed_2DCode,
+                                k.quantity,
+                                k.bundle,
+                                k.product_nr,
+                                k.wire_nr,
+                                k.des_storage,
+                                KanbanType.display(k.ktype)
+                            ], types: [:string, :string, :string, :string, :string,:string, :string, :string, :string, :string]
+            end
+          end
+          p.use_shared_strings = true
+          p.serialize(tmp_file)
+
+          msg.result =true
+          msg.content =tmp_file
+        rescue => e
+          puts e.backtrace
+          msg.content = e.message
+        end
+        msg
+      end
+
+      def self.import_scan(file, type=KanbanType::WHITE)
+        msg = Message.new(contents: [])
+        handler_file=full_tmp_path("#{KanbanType.display(type)}投卡处理结果.xlsx")
+
+        begin
+          header = ['Kanban Nr', 'Wire Nr', 'Product Nr']
+
+          book = Roo::Excelx.new file
+          book.default_sheet = book.sheets.first
+
+          package=Axlsx::Package.new
+          package.workbook.add_worksheet(name: 'Kanban Sheet') do |sheet|
+            sheet.add_row header+['看板号', 'Msg']
+            ProductionOrderItem.transaction do
+              2.upto(book.last_row) do |line|
+                row = {}
+                header.each_with_index do |k, i|
+                  row[k] = book.cell(line, i+1).to_s.strip # Strip
+                end
+                handler_msg=nil
+                kanban = Kanban.find_by_nr_or_id(row['Kanban Nr'])
+
+                if kanban.nil?
+                  handler_msg='看板不存在'
+                elsif type!=kanban.ktype
+                  handler_msg="此卡为:#{KanbanType.display(kanban.ktype)},请投#{KanbanType.display(type)}"
+                elsif kanban.quantity <= 0
+                  handler_msg='看板量不大于0'
+                elsif kanban.state != KanbanState::RELEASED
+                  handler_msg='看板未发布'
+                elsif kanban.can_put_to_produce?
+                  if kanban.process_entities.count>0
+                    if kanban.generate_produce_item
+                      handler_msg='投卡成功!'
+                    end
+                  else
+                    handler_msg='没有步骤，请联系AV'
+                  end
+                else
+                  handler_msg='已投卡,不可重复投卡'
+                end
+                sheet.add_row row.values+["#{kanban.nil? ? '' : kanban.nr}", handler_msg],
+                              types: [:string, :string, :string, :string, :string]
+              end
+            end
+          end
+
+          package.use_shared_strings = true
+          package.serialize(handler_file)
+
+          msg.result=true
+          msg.content = "请下载处理后文件<a href='/files/#{Base64.urlsafe_encode64(handler_file)}'>#{::File.basename(handler_file)}</a>"
+        rescue => e
+          msg.result =false
+          msg.content =e.message
+        end
+        msg
+      end
+
+
+      def self.import_finish_scan file, type
+        msg = Message.new(contents: [], result: true)
+        handler_file=full_tmp_path("#{KanbanType.display(type)}销卡处理结果.xlsx")
+
+        header = ['看板卡', '时间', '员工', '数量']
 
         book = Roo::Excelx.new file
         book.default_sheet = book.sheets.first
-        begin
-          ProductionOrderItem.transaction do
+        ProductionOrderItem.transaction do
+          production_order_handler=ProductionOrderHandler.new(desc: '兰卡销卡')
+          package=Axlsx::Package.new
+          package.workbook.add_worksheet(name: 'Kanban Sheet') do |sheet|
+            sheet.add_row header+['看板号', 'Msg']
             2.upto(book.last_row) do |line|
               row = {}
               header.each_with_index do |k, i|
                 row[k] = book.cell(line, i+1).to_s.strip # Strip
               end
-
+              puts "#{row.to_json}"
               kanban = nil
+              production_order_handler_item=ProductionOrderHandlerItem.new(
+                  desc: '兰卡销卡',
+                  kanban_code: row['看板卡'],
+                  qty: row['数量'].present? ? row['数量'] : nil,
+                  item_terminated_at: row['时间'].to_time.utc,
+                  handler_user: row['员工']
+              )
+              puts "#{row.to_json}:#{production_order_handler_item.to_json}"
 
-              if row['Kanban Nr'].present?
-                kanban = Kanban.find_by_nr(row['Kanban Nr'])
-              else
-                product = Part.where({nr: row['Product Nr'], type: PartType::PRODUCT}).first
-                if product.nil?
-                  msg.contents << "Row #{line}: 总成号:#{row['Product Nr']}未找到!"
-                  puts "总成号未找到"
-                  next
-                end
-                wire = Part.find_by_nr("#{product.nr}_#{row['Wire Nr']}")
-                if wire.nil?
-                  msg.contents << "Row #{line}: 线号:#{row['Wire Nr']}未找到!"
-                  puts "线号未找到"
-                  next
-                end
+              production_order_handler.production_order_handler_items<<production_order_handler_item
 
-                pe=ProcessEntity.joins(custom_values: :custom_field).joins(:kanbans).where(
-                    {product_id: product.id, custom_fields: {name: "default_wire_nr"}, custom_values: {value: wire.id}, kanbans: {ktype: KanbanType::WHITE}}
-                ).first
-
-                if pe && (kanban=pe.kanbans.where(ktype: KanbanType::WHITE).first)
-                else
-                  next
-                end
+              if row['看板卡'].present?
+                kanban = Kanban.find_by_nr_or_id(row['看板卡'])
               end
 
+              handler_msg=nil
               if kanban.nil?
-                msg.result=false
-                msg.contents<<"Row:#{line},看板不存在"
-                next
+                handler_msg='看板不存在'
+                msg.contents<<"Row:#{line}.#{row['看板卡'].to_s},看板不存在"
+                production_order_handler_item.remark= msg.contents.join("</br>")
+                production_order_handler_item.result=ProductionOrderHandlerItem::FAIL
+              elsif type!=kanban.ktype
+                handler_msg="此卡为:#{KanbanType.display(kanban.ktype)},请投#{KanbanType.display(type)}"
+                msg.contents<<"Row:#{line}.#{row['看板卡'].to_s},看板不存在"
+                production_order_handler_item.remark= msg.contents.join("</br>")
+                production_order_handler_item.result=ProductionOrderHandlerItem::FAIL
+              elsif kanban.not_in_produce?
+                handler_msg='未投卡，不可销卡'
+                msg.contents<<"Row:#{line}:#{kanban.nr},未投卡，不可销卡"
+                production_order_handler_item.remark= msg.contents.join("</br>")
+                production_order_handler_item.result=ProductionOrderHandlerItem::FAIL
+                production_order_handler_item.kanban_nr=kanban.nr
+                production_order_handler_item.kanban_id=kanban.id
+              elsif kanban.terminate_produce_item(production_order_handler_item)
+                handler_msg='销卡成功'
+                production_order_handler_item.remark= msg.contents.join("</br>")
+                production_order_handler_item.result=ProductionOrderHandlerItem::SUCCESS
+                production_order_handler_item.kanban_nr=kanban.nr
+                production_order_handler_item.kanban_id=kanban.id
               end
-
-              if kanban.quantity <= 0
-                msg.result=false
-                msg.contents<<"Row:#{line}:#{kanban.nr},看板量不大于0"
-                next
-              end
-
-              unless kanban.state == KanbanState::RELEASED
-                msg.result=false
-                msg.contents<<"Row:#{line}:#{kanban.nr},未发布"
-                next
-              end
-
-              unless kanban.in_produce?
-                msg.result=false
-                msg.contents<<"Row:#{line}:#{kanban.nr},已投卡,不可重复投卡"
-                next
-              end
-
-              if kanban.process_entities.count>0
-                if kanban.generate_produce_item
-                  msg.contents<<"Row:#{line}:#{kanban.nr},投卡成功!"
-                end
-              else
-                msg.result=false
-                msg.contents<<"Row:#{line}:#{kanban.nr},没有步骤，请联系AV"
-              end
-            end
-            unless msg.result
-              msg.content = msg.contents.join("</br>")
-            else
-              msg.content = "投卡成功!"
+              sheet.add_row row.values+["#{kanban.nil? ? '' : kanban.nr}", handler_msg],
+                            types: [:string, :string, :string, :string, :string, :string]
             end
           end
-        rescue => e
-          msg.result =false
-          msg.content =e.message
+
+          production_order_handler.save
+          package.use_shared_strings = true
+          package.serialize(handler_file)
+
+          msg.result=true
+          msg.content = "请下载处理后文件<a href='/files/#{Base64.urlsafe_encode64(handler_file)}'>#{::File.basename(handler_file)}</a>"
+
         end
+
+        msg
+      end
+
+      def self.transport(file)
+        msg=Message.new
+
+        book=Roo::Excelx.new file.full_path
+        transport_file=full_tmp_path(file.original_name)
+        header=['Kanban Nr', 'Qty']
+
+        origin_header=['Kanban Nr', 'Qty', 'Kanban Id', 'Product Nr', 'WireNr', 'Routing', '单线用料', '看板用料']
+        origin_rows=[]
+        result_header=['Part', 'Qty', 'Mark']
+        result_rows={}
+        2.upto(book.last_row) do |line|
+          origin_row=[]
+          row={}
+          header.each_with_index do |k, i|
+            row[k]=book.cell(line, i+1).to_s.strip
+            row[k]=row[k].sub(/\.0/, '') if k=='Kanban Nr'
+            origin_row<<book.cell(line, i+1).to_s.strip
+          end
+
+          kanban=Kanban.find_by_nr_or_id(row['Kanban Nr'])
+          if kanban
+            if kanban.process_entities.first.nil?
+              origin_row<<"看板：#{row['Kanban Nr']} 不存在步骤"
+            else
+              origin_row<<kanban.id
+              origin_row<<kanban.product.nr
+              origin_row<<kanban.kanban_part.nr
+              origin_row<<kanban.process_list
+              # single kanban material
+              s_materials=[]
+              # total kanban material
+              t_materials=[]
+
+              kanban.materials.each do |m|
+                s_materials<<"#{m.nr}|#{m.quantity}"
+                qty=BigDecimal.new(m.quantity.to_s)*(row['Qty'].to_f)
+                t_materials<<"#{m.nr}|#{qty}"
+                if result_rows.has_key?(m.nr)
+                  result_rows[m.nr]+=qty
+                else
+                  result_rows[m.nr]=qty
+                end
+              end
+              origin_row<<s_materials.join(',')
+              origin_row<<t_materials.join(',')
+            end
+          else
+            origin_row<<"看板：#{row['Kanban Nr']} 不存在"
+          end
+          origin_rows<<origin_row
+        end
+
+        package=Axlsx::Package.new
+        package.workbook.add_worksheet(name: 'Kanban Sheet') do |sheet|
+          sheet.add_row origin_header
+          origin_rows.each do |origin_row|
+            sheet.add_row origin_row, types: [:string, :string, :string, :string, :string, :string]
+          end
+        end
+
+        package.workbook.add_worksheet(name: '汇总') do |sheet|
+          sheet.add_row result_header
+          result_rows.each do |k, v|
+            sheet.add_row [k, v, Part.find_by_nr(k).material_mark], types: [:string, :string, :string]
+          end
+        end
+
+
+        package.serialize(transport_file)
+
+        msg.result=true
+        msg.content = "请下载文成功文件<a href='/files/#{Base64.urlsafe_encode64(transport_file)}'>#{::File.basename(transport_file)}</a>"
 
         msg
       end
@@ -340,21 +507,30 @@ module FileHandler
                     kanban = Kanban.find_by_nr(row['Nr'])
                     kanban.update(params)
                     # 暴力法，一律删除然后重新创建
-                    kanban.kanban_process_entities.destroy_all
-
+                    # kanban.kanban_process_entities.destroy_all
+                    old_kpes=kanban.kanban_process_entities.pluck(:id)
                     process_nrs = row['Process List'].split(',')
-                    kanban_process_entities = []
+                    # kanban_process_entities = []
                     process_nrs.each_with_index { |pr, i|
                       pe = ProcessEntity.where({nr: pr, product_id: product.id}).first
-                      kanban_process_entities << KanbanProcessEntity.new({process_entity_id: pe.id, position: i})
+                      # kanban_process_entities << KanbanProcessEntity.new({process_entity_id: pe.id, position: i})
+                      if kpe=kanban.kanban_process_entities.where(process_entity_id: pe.id).first
+                        kpe.update(position: i)
+                        old_kpes.delete(kpe.id)
+                      else
+                        kanban.kanban_process_entities << KanbanProcessEntity.new({process_entity_id: pe.id, position: i})
+                      end
                     }
+                    old_kpes.each do |i|
+                      KanbanProcessEntity.find_by_id(i).destroy
+                    end
                     #process_nrs = row['Process List'].split(',')
                     #kanban_process_entities = ProcessEntity.where({nr: process_nrs, product_id: product.id}).collect { |pe| KanbanProcessEntity.new({process_entity_id: pe.id}) }
-                    kanban.kanban_process_entities = kanban_process_entities
+                    # kanban.kanban_process_entities = kanban_process_entities
                     kanban.save
                   when 'delete'
                     kanban = Kanban.find_by_nr(row['Nr'])
-                  #  kanban.destroy
+                    kanban.destroy
                 end
               end
             end

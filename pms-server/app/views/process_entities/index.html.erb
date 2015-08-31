@@ -30,12 +30,12 @@
   <tbody>
   <% @process_entities.each do |process_entity| %>
       <tr>
-        <td><%= process_entity.nr %></td>
-        <td><%= process_entity.name %></td>
-        <th><%= process_entity.product_nr %></th>
-        <th><%= process_entity.parsed_wire_nr %></th>
-        <Td><%= ProcessType.display(process_entity.process_template_type) %></Td>
-        <td><%= process_entity.description %></td>
+        <td><%= best_in_place process_entity, :nr, as: :input %></td>
+        <td><%= best_in_place process_entity, :name, as: :input %></td>
+        <td><%= best_in_place process_entity, :product_nr, as: :input %></td>
+        <td><%= process_entity.parsed_wire_nr %></td>
+        <td><%= ProcessType.display(process_entity.process_template_type) %></td>
+        <td><%= best_in_place process_entity, :description, as: :input %></td>
         <td><%= process_entity.stand_time %></td>
         <td><%= process_entity.process_template_code %></td>
         <td>
@@ -43,7 +43,11 @@
         </td>
         <td><%= link_to '详情', process_entity, class: 'btn btn-default' %></td>
         <td><%= link_to '编辑', edit_process_entity_path(process_entity), class: 'btn btn-default' %></td>
-        <!--<td><%= link_to '删除', process_entity, method: :delete, data: {confirm: 'Are you sure?'}, class: 'btn btn-default' %></td>-->
+        <td>
+          <% if current_user.can_delete_data? %>
+              <%= link_to '删除', process_entity, method: :delete, data: {confirm: "确定删除#{process_entity.nr}?"}, class: 'btn btn-default' %>
+          <% end %>
+        </td>
       </tr>
   <% end %>
   </tbody>

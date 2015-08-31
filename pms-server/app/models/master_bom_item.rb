@@ -11,11 +11,13 @@ class MasterBomItem < ActiveRecord::Base
           .select('master_bom_items.*,parts.nr as product_nr,bom_items.nr as bom_item_nr,departments.name as department_name,departments.code as department_code')
           .order(:product_id)
     unless params[:product_nr].blank?
-      q=q.where(parts: {nr: params[:product_nr]})
+      # q=q.where(parts: {nr: params[:product_nr]})
+      q=q.where("parts.nr like '%#{params[:product_nr]}%'")
     end
 
     unless params[:bom_item_nr].blank?
-      q=q.where(bom_items: {nr: params[:bom_item_nr]})
+      # q=q.where(bom_items: {nr: params[:bom_item_nr]})
+      q=q.where("bom_items.nr like '%#{params[:bom_item_nr]}%'")
     end
 
     unless params[:department_id].blank?

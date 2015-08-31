@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :authentication_keys => [:user_name]
 
+  validates :user_name, presence: true, uniqueness: {message: '登陆名必须唯一'}
+
   scoped_search on: :name
 
   def ensure_autnehtication_token!
@@ -18,9 +20,9 @@ class User < ActiveRecord::Base
     false
   end
 
-  def role=
-    raise
-  end
+  # def role=
+  #   raise
+  # end
 
   def role
     r=roles.first
@@ -45,6 +47,15 @@ class User < ActiveRecord::Base
 
   def system?
     has_role? :system
+  end
+
+
+  def can_modify_data?
+    av? || admin? || system?
+  end
+
+  def can_delete_data?
+    admin? || system?
   end
 
   private

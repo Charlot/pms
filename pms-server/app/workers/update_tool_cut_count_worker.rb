@@ -1,6 +1,6 @@
 class UpdateToolCutCountWorker
   include Sidekiq::Worker
-  sidekiq_options(queue: :tool)
+  sidekiq_options(queue: :tool, retry: false)
 
   def perform(id)
     if (label=ProductionOrderItemLabel.find_by_id(id)) && (item=label.production_order_item)

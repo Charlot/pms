@@ -88,6 +88,8 @@ class MachineTimeRulesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def machine_time_rule_params
-      params.require(:machine_time_rule).permit(:oee_code_id, :machine_type_id, :length, :time)
+      params[:machine_time_rule][:machine_type_id] = MachineType.find_by_nr(params[:machine_time_rule][:machine_type_id]).id
+      params[:machine_time_rule][:oee_code_id] = OeeCode.find_by_nr(params[:machine_time_rule][:oee_code_id]).id
+      params.require(:machine_time_rule).permit(:oee_code_id, :machine_type_id, :min_length, :length, :time, :std_time)
     end
 end

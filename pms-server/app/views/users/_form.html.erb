@@ -12,28 +12,38 @@
     <% end %>
 
     <div class="field">
-      <%= f.label :user_name %><br>
+      <%= f.label :user_name,'登陆名' %><br>
       <%= f.text_field :user_name %>
     </div>
 
     <div class="field">
-      <%= f.label :email %><br>
+      <%= f.label :name,'姓名' %><br>
+      <%= f.text_field :name %>
+    </div>
+
+    <div class="field">
+      <%= f.label :nr,'工号' %><br>
+      <%= f.text_field :nr %>
+    </div>
+
+    <div class="field">
+      <%= f.label :email,'邮箱' %><br>
       <%= f.text_field :email %>
     </div>
 
     <div class="field">
-      <%= f.label :password%>
+      <%= f.label :password,'密码'%>
       <%= f.text_field :password%>
     </div>
 
     <div class="field">
-      <%= f.label :password_confirmation%>
+      <%= f.label :password_confirmation,'确认密码'%>
       <%= f.text_field :password_confirmation%>
     </div>
 
     <div class="field">
-      <%= f.label 'Role'%>
-      <%= select_tag(:role, options_for_select(Role.all.collect{|r|[r.name,r.name]} ,@user.role),include_blank: false)%>
+      <%= f.label 'Role','权限'%>
+      <%= select_tag(:role, options_for_select(Role.where.not(name: 'system').collect{|r|[r.name,r.name]} ,@user.role),include_blank: false)%>
     </div>
 
     <div class="actions">

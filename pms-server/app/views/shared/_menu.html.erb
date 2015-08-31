@@ -16,38 +16,52 @@
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">KANBAN扫描<span class="caret"></span></a>
           <ul class="dropdown-menu" role="manage">
-            <li><a href="<%= panel_kanbans_path %>">KANBAN扫描投卡</a></li>
-            <li><a href="<%= scan_finish_kanbans_path %>">KANBAN扫描销卡</a></li>
+            <li><a href="<%= panel_kanbans_path(KanbanType::WHITE) %>">[白卡]扫描投卡</a></li>
+            <li><a href="<%= scan_finish_kanbans_path(KanbanType::WHITE) %>">[白卡]扫描销卡</a></li>
+            <li>
+              <hr/>
+            </li>
+            <li><a href="<%= panel_kanbans_path(KanbanType::BLUE) %>">[兰卡]扫描投卡</a></li>
+            <li><a href="<%= scan_finish_kanbans_path(KanbanType::BLUE) %>">[兰卡]扫描销卡</a></li>
           </ul>
         </li>
 
         <li><a href="<%= production_order_items_path %>">白卡生产任务</a></li>
-
         <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">生产订单<span class="caret"></span></a>
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">白卡生产订单<span class="caret"></span></a>
           <ul class="dropdown-menu" role="manage">
-            <li><a href="<%= production_orders_path %>">订单列表</a></li>
-            <li><a href="<%= preview_production_orders_path %>">订单预览</a></li>
+            <li><a href="<%= production_orders_path %>">白卡订单列表</a></li>
+            <li><a href="<%= preview_production_orders_path %>">白卡订单预览</a></li>
           </ul>
         </li>
+
         <li><a href="<%= production_order_item_blues_path %>">兰卡生产任务</a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">兰卡生产订单<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="manage">
+            <li><a href="<%= production_order_blues_path %>">兰卡订单列表</a></li>
+          </ul>
+        </li>
 
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">基础数据<span class="caret"></span></a>
           <ul class="dropdown-menu" role="manage">
-            <li><a href="<%= parts_path %>">零件</a></li>
-            <li><a href="<%= warehouses_path %>">仓库</a></li>
-            <li><a href="<%= positions_path %>">库位</a></li>
-            <li><a href="<%= measure_units_path %>">单位</a></li>
-            <li><a href="<%= part_positions_path %>">Cutting原材料库位</a></li>
-            <li><a href="<%= master_bom_items_path %>">Master BOM</a></li>
-            <li><a href="<%= process_templates_path %>">步骤模板</a></li>
-            <li><a href="<%= process_entities_path %>">步骤</a></li>
+            <% if current_user.can_modify_data? %>
+                <li><a href="<%= parts_path %>">零件</a></li>
+                <li><a href="<%= warehouse_regexes_path %>">仓库正则</a></li>
+                <li><a href="<%= positions_path %>">库位</a></li>
+                <li><a href="<%= measure_units_path %>">单位</a></li>
+                <li><a href="<%= part_positions_path %>">Cutting原材料库位</a></li>
+                <li><a href="<%= master_bom_items_path %>">Master BOM</a></li>
+                <li><a href="<%= process_templates_path %>">步骤模板</a></li>
+                <li><a href="<%= process_entities_path %>">步骤</a></li>
+                <li><a href="<%= departments_path %>">部门</a></li>
+            <% end %>
             <li><a href="<%= kanbans_path %>">KANBAN</a></li>
           </ul>
         </li>
 
-        <% if current_user.av? || current_user.admin? || current_user.system? %>
+        <% if current_user.can_modify_data? %>
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">机器与模具<span class="caret"></span></a>
               <ul class="dropdown-menu" role="manage">
@@ -61,19 +75,17 @@
               </ul>
             </li>
             <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#">库存<span class="caret"></span></a>
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">数据管理<span class="caret"></span></a>
               <ul class="dropdown-menu" role="manage">
-                <li><a href="<%= storages_path %>">库存</a></li>
+                <li><a href="<%= transport_kanbans_path %>">看板分解</a></li>
+                <li><a href="<%= transport_master_bom_items_path %>">订单分解</a></li>
               </ul>
             </li>
-
         <% end %>
         <% if current_user.admin? || current_user.system? %>
             <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#">管理<span class="caret"></span></a>
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">系统管理<span class="caret"></span></a>
               <ul class="dropdown-menu" role="manage">
-                <li><a href="<%= departments_path %>">部门</a></li>
-                <li><a href="<%= warehouses_path %>">仓库</a></li>
                 <li><a href="<%= users_path %>">用户</a></li>
                 <li><a href="<%= settings_path %>">设置</a></li>
               </ul>

@@ -23,9 +23,10 @@ module V1
           post :tool do
             if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
               puts "-------------------#{params.to_json}".red
-              item.without_versioning do
+              # item.without_versioning do
                 item.update_attributes(tool1: params[:tool1_nr], tool2: params[:tool2_nr])
-              end
+            # end
+
             end
             msg=ServiceMessage.new
             msg.Result=true
@@ -56,7 +57,7 @@ module V1
           # preview order item list
           get :preview do
             if machine=Machine.find_by_nr(params[:machine_nr])
-              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(machine))
+              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(machine).limit(8))
             end
           end
 
@@ -115,7 +116,7 @@ module V1
             items=ProductionOrderItem
             if params[:wire_nr]
               ids= Kanban.search_for(params[:wire_nr]).pluck(:id)
-              items=items.joins(:kanban).where(kanbans: {id: ids}) if ids.count>0
+              items=items.joins(:kanban).where(kanbans: {id: ids}).order(nr: :desc) if ids.count>0
             end
             items=items.limit(100)
             if items.count>0

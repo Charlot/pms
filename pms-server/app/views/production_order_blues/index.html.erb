@@ -1,0 +1,29 @@
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @production_orders %>
+  </div>
+  <%= will_paginate @production_orders, :container => false %>
+</div>
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+  <tr>
+    <th>#</th>
+    <th>Nr</th>
+    <th>任务量</th>
+    <th>创建时间</th>
+    <th colspan="2"></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @production_orders.each_with_index do |production_order, i| %>
+      <tr>
+        <td><%= i+1 %></td>
+        <td><%= production_order.nr %></td>
+        <td><%= production_order.production_order_item_blues.count %></td>
+        <td><%=production_order.created_at.localtime%></td>
+        <td><%= link_to 'Show', production_order_blue_production_order_item_blues_path(production_order) %></td>
+        <td><%= link_to 'Destroy', production_order, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>

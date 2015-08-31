@@ -183,6 +183,6 @@ class PartsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def part_params
-    params.require(:part).permit(:nr, :custom_nr, :type, :cross_section,:strip_length,:component_type, :resource_group_id, :measure_unit_id, :description)
+    params.require(:part).permit(:nr, :custom_nr, :type, :cross_section,:strip_length,:component_type, :resource_group_id, :measure_unit_id, :description,:color,:color_desc,:unit,:desc1,:pno)
   end
 end

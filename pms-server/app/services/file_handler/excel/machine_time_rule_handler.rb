@@ -2,7 +2,7 @@ module FileHandler
   module Excel
     class MachineTimeRuleHandler<Base
       HEADERS=[
-          'OEE','Machine Type','Length','Time'
+          'OEE','Machine Type','Min Length','Max Length','Time','Std Time'
       ]
 
       def self.import(file)
@@ -23,15 +23,16 @@ module FileHandler
                 puts row['Time']
                 oee = OeeCode.find_by_nr(row['OEE'])
                 machine_type = MachineType.find_by_nr(row['Machine Type'])
-                length = row['Length'].to_f
+                min_length = row['Min Length'].to_f
+                max_length = row['Max Length'].to_f
 
-                rule = MachineTimeRule.where({oee_code_id: oee.id,machine_type_id: machine_type.id,length: length}).first
+                rule = MachineTimeRule.where({oee_code_id: oee.id,machine_type_id: machine_type.id,min_length: min_length,length: max_length}).first
                 if rule
                   #update
-                  rule.update(time:row['Time'].to_f)
+                  rule.update({time:row['Time'].to_f, std_time:row['Std Time'].to_f})
                 else
                   #create
-                  rule = MachineTimeRule.create({oee_code_id:oee.id,machine_type_id:machine_type.id,length:length,time:row['Time'].to_f})
+                  rule = MachineTimeRule.create({oee_code_id:oee.id,machine_type_id:machine_type.id,min_length:min_length,length: max_length,time:row['Time'].to_f,std_time:row['Std Time'].to_f})
                 end
               end
               end
@@ -95,8 +96,12 @@ module FileHandler
           msg.contents << "Machine Type:#{row['Machine Type']} not found!"
         end
 
-        unless row['Length'].to_f > 0
-          msg.contents << "Length: #{row['Length']} should not be 0!"
+        unless row['Min Length'].to_f > 0
+          msg.contents << "Min Length: #{row['Min Length']} should not be 0!"
+        end
+
+        unless row['Max Length'].to_f > 0
+          msg.contents << "Max Length: #{row['Max Length']} should not be 0!"
         end
 
         unless msg.result=(msg.contents.size==0)

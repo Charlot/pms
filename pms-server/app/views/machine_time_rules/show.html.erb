@@ -11,13 +11,23 @@
 </p>
 
 <p>
-  <strong>Length:</strong>
+  <strong>Min Length:</strong>
+  <%= @machine_time_rule.min_length %>
+</p>
+
+<p>
+  <strong>Max Length:</strong>
   <%= @machine_time_rule.length %>
 </p>
 
 <p>
   <strong>Time:</strong>
   <%= @machine_time_rule.time %>
+</p>
+
+<p>
+  <strong>STD Time:</strong>
+  <%= @machine_time_rule.std_time %>
 </p>
 
 <%= link_to 'Edit', edit_machine_time_rule_path(@machine_time_rule) %> |

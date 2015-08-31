@@ -1,10 +1,25 @@
+<% if @production_order.nil? && has_distribute_item_blues %>
+    <%= form_tag('/production_order_item_blues/distribute', method: 'post') do %>
+        <input type="button" value="分发" class="btn btn-info" onclick="if(confirm('distribute?')){form.submit();}"/>
+    <% end %>
+    <%= form_tag('/production_order_item_blues/export_scand', method: 'post') do %>
+        <input type="button" value="导出已扫描" class="btn btn-info" onclick="if(confirm('export?')){form.submit();}"/>
+    <% end %>
+<% elsif @production_order %>
+    <%= form_tag('/production_order_item_blues/export', method: 'post') do %>
+        <%= hidden_field_tag :production_order_id, @production_order.id %>
+        <input type="button" value="导出订单列表任务" class="btn btn-info" onclick="if(confirm('export?')){form.submit();}"/>
+    <% end %>
+<% end %>
+<hr>
+
 <p id="notice"><%= notice %></p>
 <div>
   <form method="get" action="<%= search_production_order_item_blues_path %>">
     <div>
       <div>
          <span>任务号：
-          <input type="text" name="production_order_item_nr" value="<%= @production_order_item_nr %>"/>
+          <input type="text" name="production_order_item_blue_nr" value="<%= @production_order_item_blue_nr %>"/>
         </span>
          <span>看板号：
           <input type="text" name="kanban_nr" value="<%= @kanban_nr %>"/>
@@ -20,6 +35,8 @@
   </form>
 </div>
 
+<%=render 'production_order_items/handle_item'%>
+
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @production_order_items %>
@@ -29,38 +46,47 @@
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
+    <th>#</th>
     <th>No.</th>
-    <th>Nr</th>
-    <th>State</th>
-    <th>Code</th>
-    <th>Kanban</th>
-    <th>ProductNr</th>
-    <th>Kanban Quantity</th>
-    <th>Kanban Bundle</th>
-    <th>Produced Quantity</th>
-    <th>CreatedAt</th>
-    <th>UpdatedAt</th>
-    <th colspan="3"></th>
+    <th>任务号</th>
+    <th>状态</th>
+    <th>投卡看板码</th>
+    <th>看板</th>
+    <th>总成号</th>
+    <th>Kanban 量</th>
+    <th>Kanban 捆扎</th>
+    <th>生产量</th>
+    <th>投卡时间</th>
+    <th>销卡时间</th>
+    <th>销卡员工</th>
+    <th>销卡看板码</th>
+    <th colspan="1"></th>
   </tr>
   </thead>
 
   <tbody>
   <% @production_order_items.each_with_index do |production_order_item, i| %>
-      <tr>
+      <tr class="<%= production_order_item.is_urgent? ? 'item-urgent' : 'item-not-urgent' %>">
+        <td>
+          <input type="checkbox" item="<%= production_order_item.id %>" class="order-item-check"/>
+        </td>
         <td><%= @page*WillPaginate.per_page + i+1 %></td>
         <td><%= production_order_item.nr %></td>
         <td><%= ProductionOrderItemState.display production_order_item.state %></td>
         <td><%= production_order_item.code %></td>
         <td><%= link_to(production_order_item.kanban.nr, kanban_path(production_order_item.kanban)) if production_order_item.kanban %></td>
         <td><%= production_order_item.kanban.product.nr if production_order_item.kanban %></td>
-        <td><%= production_order_item.kanban.quantity if production_order_item.kanban %></td>
-        <td><%= production_order_item.kanban.bundle if production_order_item.kanban %></td>
+        <td><%= production_order_item.kanban_qty if production_order_item.kanban %></td>
+        <td><%= production_order_item.kanban_bundle if production_order_item.kanban %></td>
         <td><%= production_order_item.produced_qty %></td>
         <td><%= production_order_item.created_at.localtime %>
-        <td><%= production_order_item.updated_at.localtime %>
-        <td><%= link_to 'Show', production_order_item %></td>
-        <td><%= link_to 'Edit', edit_production_order_item_blue_path(production_order_item) %></td>
-        <td><%= link_to 'Destroy', production_order_item, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <td><%= production_order_item.terminated_at.localtime if production_order_item.terminated_at %>
+        <td><%= production_order_item.terminate_user %>
+        <td><%= production_order_item.terminated_kanban_code %>
+        <td>
+          <% if current_user.can_modify_data? %>
+              <%= link_to 'Destroy', production_order_item, method: :delete, data: {confirm: 'Are you sure?'} %>
+          <% end %></td>
       </tr>
   <% end %>
   </tbody>

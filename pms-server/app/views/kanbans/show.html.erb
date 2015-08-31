@@ -4,7 +4,9 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       基础信息
-      <%= render partial: 'manage', locals: {kanban: @kanban} %>
+      <% if current_user.can_modify_data? %>
+          <%= render partial: 'manage', locals: {kanban: @kanban} %>
+      <% end %>
     </div>
     <div class="panel-body">
       <div class="row">
@@ -58,6 +60,18 @@
               <label><%= KanbanDesc::REMARK %>:</label>
               <ins><%= @kanban.remark %></ins>
             </li>
+            <li class="list-group-item">
+              <label><%= KanbanDesc::REMARK2 %>:</label>
+              <ins><%= @kanban.remark2 %></ins>
+            </li>
+            <li class="list-group-item">
+              <label>BOM:</label>
+              <ins>
+                <% if @kanban.kanban_part %>
+                    <%= link_to 'BOM表', part_bom_path(@kanban.kanban_part.id) %>
+                <% end %>
+              </ins>
+            </li>
           </ul>
         </div>
         <div class="col-md-4">
@@ -93,7 +107,7 @@
       <ul class="list-group">
         <% @kanban.kanban_process_entities.each do |kpe| %>
             <label>顺序:</label>
-            <%= best_in_place kpe,:position ,as: :input%>
+            <%= best_in_place kpe, :position, as: :input %>
             <%= render partial: 'process_entities/simple', locals: {process_entity: kpe.process_entity} %>
         <% end %>
       </ul>

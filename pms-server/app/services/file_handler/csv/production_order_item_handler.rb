@@ -13,17 +13,6 @@ module FileHandler
           CSV.open(tmp_file, 'wb', write_headers: true,
                    headers: EXPORT_CSV_HEADERS,
                    col_sep: ';', encoding: ProductionOrderItemHandler.get_encoding(user_agent)) do |csv|
-            # items.each_with_index do |item, i|
-            #   material = item.kanban.material.collect { |p| "#{p.nr}|#{PartType.display(p.type)}" }.join(";")
-            #   csv<<[i+1,
-            #         item.nr,
-            #         item.kanban_nr,
-            #         item.machine_nr,
-            #         item.production_order_nr,
-            #         item.kanban.wire_nr,
-            #         material
-            #   ]
-            # end
             items=ProductionOrderItemPresenter.init_preview_presenters(items)
             items.each_with_index do |item, i|
               row=[]

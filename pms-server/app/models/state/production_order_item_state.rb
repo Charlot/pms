@@ -79,7 +79,7 @@ class ProductionOrderItemState<BaseType
 
   def self.to_blue_select
     select_options = []
-    [INIT, TERMINATED].each do |v|
+    [INIT,DISTRIBUTE_SUCCEED, TERMINATED].each do |v|
       select_options << SelectOption.new(display: self.display(v), value: v, key: self.key(v))
     end
     select_options

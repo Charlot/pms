@@ -13,8 +13,8 @@ class ProductionOrderItemPresenter<Presenter
     {
         Id: @production_order_item.id,
         ItemNr: @production_order_item.nr,
-        TotalQuantity: kanban.quantity,
-        BundleQuantity: kanban.bundle,
+        TotalQuantity: @production_order_item.kanban_qty,
+        BundleQuantity: @production_order_item.kanban_bundle,
         ProducedQty: @production_order_item.produced_qty
     }
   end
@@ -28,7 +28,6 @@ class ProductionOrderItemPresenter<Presenter
   end
 
   def to_check_material_order(no=0)
-
     kanban=@production_order_item.kanban
     puts @production_order_item.id
     # puts kanbanz.red
@@ -52,20 +51,21 @@ class ProductionOrderItemPresenter<Presenter
           Id: @production_order_item.id,
           ItemNr: @production_order_item.nr,
           State: @production_order_item.state,
+          IsUrgent: @production_order_item.is_urgent,
           OptimiseIndex: @production_order_item.optimise_index,
           OrderNr: @production_order_item.production_order.nil? ? '' : @production_order_item.production_order.nr,
           Machine: machine.nil? ? '' : machine.nr,
           FileName: "#{@production_order_item.nr}.json",
           ProductNr: product.nil? ? '' : product.nr,
           KanbanNr: kanban.nr,
-          KanbanQuantity: kanban.quantity,
-          KanbanBundle: kanban.bundle,
+          KanbanQuantity: @production_order_item.kanban_qty,
+          KanbanBundle: @production_order_item.kanban_bundle,
           ProducedQty: @production_order_item.produced_qty,
           KanbanWireNr: kanban.wire_nr,
-          WireNr: wire.nr,
-          Diameter: wire.cross_section,
-          WireCusNr: wire.custom_nr||'',
-          WireColor: wire.color,
+          WireNr:wire.nil? ? '' : wire.nr,
+          Diameter:wire.nil? ? '' :  wire.cross_section,
+          WireCusNr:wire.nil? ? '' :  wire.custom_nr||'',
+          WireColor:wire.nil? ? '' :  wire.color,
           WireLength: process_entity.value_wire_qty_factor.to_f,
           Terminal1Nr: t1.nil? ? nil : t1.nr,
           Terminal1CusNr: t1.nil? ? nil : t1.custom_nr,

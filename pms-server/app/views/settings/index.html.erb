@@ -1,29 +1,23 @@
-<h1>Listing settings</h1>
-
 <table class="table table-bordered table-striped table-hover">
   <thead>
-    <tr>
-      <th>Name</th>
-      <th>Value</th>
-      <th>Stype</th>
-      <th colspan="3"></th>
-    </tr>
+  <tr>
+    <th>Name</th>
+    <th>Code</th>
+    <th>Value</th>
+    <th></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @settings.each do |setting| %>
+  <% @settings.each do |setting| %>
       <tr>
         <td><%= setting.name %></td>
+        <td><%= setting.code %></td>
         <td><%= setting.value %></td>
-        <td><%= setting.stype %></td>
-        <td><%= link_to 'Show', setting %></td>
         <td><%= link_to 'Edit', edit_setting_path(setting) %></td>
-        <td><%= link_to 'Destroy', setting, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 
 <br>
-
-<%= link_to 'New Setting', new_setting_path %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150609022828) do
+ActiveRecord::Schema.define(version: 20150720023255) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -157,9 +157,12 @@ ActiveRecord::Schema.define(version: 20150609022828) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "min_length"
+    t.float    "std_time"
   end
 
+  add_index "machine_time_rules", ["length"], name: "index_machine_time_rules_on_length", using: :btree
   add_index "machine_time_rules", ["machine_type_id"], name: "index_machine_time_rules_on_machine_type_id", using: :btree
+  add_index "machine_time_rules", ["min_length"], name: "index_machine_time_rules_on_min_length", using: :btree
   add_index "machine_time_rules", ["oee_code_id"], name: "index_machine_time_rules_on_oee_code_id", using: :btree
 
   create_table "machine_types", force: true do |t|
@@ -275,7 +278,13 @@ ActiveRecord::Schema.define(version: 20150609022828) do
     t.string   "color"
     t.string   "color_desc"
     t.string   "component_type"
-    t.float    "cross_section",     default: 0.0
+    t.float    "cross_section",                              default: 0.0
+    t.string   "remark"
+    t.decimal  "convert_unit",      precision: 10, scale: 0, default: 1
+    t.string   "addr"
+    t.string   "unit"
+    t.string   "desc1"
+    t.string   "pno"
   end
 
   add_index "parts", ["custom_nr"], name: "index_parts_on_custom_nr", using: :btree
@@ -319,8 +328,10 @@ ActiveRecord::Schema.define(version: 20150609022828) do
     t.integer  "unit"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "custom_value_id"
   end
 
+  add_index "process_parts", ["custom_value_id"], name: "index_process_parts_on_custom_value_id", using: :btree
   add_index "process_parts", ["part_id"], name: "index_process_parts_on_part_id", using: :btree
   add_index "process_parts", ["process_entity_id"], name: "index_process_parts_on_process_entity_id", using: :btree
 
@@ -338,6 +349,32 @@ ActiveRecord::Schema.define(version: 20150609022828) do
   add_index "process_templates", ["code"], name: "index_process_templates_on_code", using: :btree
   add_index "process_templates", ["type"], name: "index_process_templates_on_type", using: :btree
 
+  create_table "production_order_handler_items", force: true do |t|
+    t.string   "nr"
+    t.string   "desc"
+    t.text     "remark"
+    t.string   "kanban_code"
+    t.string   "kanban_nr"
+    t.integer  "result"
+    t.string   "handler_user"
+    t.datetime "item_terminated_at"
+    t.integer  "production_order_handler_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "kanban_id"
+    t.float    "qty"
+  end
+
+  add_index "production_order_handler_items", ["production_order_handler_id"], name: "production_order_handler_items_poh_index", using: :btree
+
+  create_table "production_order_handlers", force: true do |t|
+    t.string   "nr"
+    t.string   "desc"
+    t.string   "remark"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "production_order_item_labels", force: true do |t|
     t.integer  "production_order_item_id"
     t.integer  "bundle_no"
@@ -348,32 +385,38 @@ ActiveRecord::Schema.define(version: 20150609022828) do
     t.datetime "updated_at"
     t.string   "whouse_nr"
     t.string   "position_nr"
+    t.integer  "type",                     default: 100
   end
 
   add_index "production_order_item_labels", ["production_order_item_id"], name: "index_production_order_item_labels_on_production_order_item_id", using: :btree
 
   create_table "production_order_items", force: true do |t|
     t.string   "nr"
-    t.integer  "state",               default: 100
+    t.integer  "state",                  default: 100
     t.string   "code"
     t.text     "message"
     t.integer  "kanban_id"
     t.integer  "production_order_id"
     t.integer  "machine_id"
-    t.float    "optimise_index",      default: 0.0
+    t.float    "optimise_index",         default: 0.0
     t.datetime "optimise_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "produced_qty"
-    t.float    "machine_time",        default: 0.0
-    t.float    "prev_index",          default: 0.0
+    t.float    "machine_time",           default: 0.0
+    t.float    "prev_index",             default: 0.0
     t.string   "user_nr"
     t.string   "user_group_nr"
-    t.integer  "type",                default: 100
+    t.integer  "type",                   default: 100
     t.string   "tool1"
     t.string   "tool2"
-    t.float    "kanban_qty",          default: 0.0
-    t.float    "kanban_bundle",       default: 0.0
+    t.float    "kanban_qty",             default: 0.0
+    t.float    "kanban_bundle",          default: 0.0
+    t.boolean  "is_urgent",              default: false
+    t.datetime "terminated_at"
+    t.string   "terminate_user"
+    t.string   "terminated_kanban_code"
+    t.boolean  "auto",                   default: true
   end
 
   add_index "production_order_items", ["kanban_id"], name: "index_production_order_items_on_kanban_id", using: :btree
@@ -386,6 +429,7 @@ ActiveRecord::Schema.define(version: 20150609022828) do
     t.integer  "state",      default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "type",       default: 100
   end
 
   add_index "production_orders", ["nr"], name: "index_production_orders_on_nr", using: :btree
@@ -429,6 +473,7 @@ ActiveRecord::Schema.define(version: 20150609022828) do
     t.integer  "stype"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "code"
   end
 
   create_table "storages", force: true do |t|
@@ -476,6 +521,7 @@ ActiveRecord::Schema.define(version: 20150609022828) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "nr"
   end
 
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
@@ -498,11 +544,20 @@ ActiveRecord::Schema.define(version: 20150609022828) do
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
+  create_table "warehouse_regexes", force: true do |t|
+    t.string   "regex"
+    t.string   "warehouse_nr"
+    t.string   "desc"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "warehouses", force: true do |t|
     t.string   "nr"
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "regex"
   end
 
 end

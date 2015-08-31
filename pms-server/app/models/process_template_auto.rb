@@ -2,8 +2,8 @@ class ProcessTemplateAuto < ProcessTemplate
   OUT_STOCK_FIELD_MAP={wire_nr: 'value_wire_qty_factor',
                        s1: 'value_s1_qty_factor',
                        s2: 'value_s2_qty_factor',
-                       t1: 't1_strip_length',
-                       t2: 't2_strip_length'}
+                       t1: 'value_t1_qty_factor',
+                       t2: 'value_t1_qty_factor'}
   DEFAULT_COMBINATION_FIELDS=%w(wire_nr,t)
 
   def self.process_part_quantity_field(key)

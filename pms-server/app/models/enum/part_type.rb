@@ -5,7 +5,9 @@ class PartType<BaseType
   MATERIAL_OTHER=3
   PRODUCT_SEMIFINISHED=4 #半成品
   PRODUCT=5 #成品
+  MATERIAL_PIPE=6
 
+  @@MaterialTypes= [MATERIAL_WIRE, MATERIAL_TERMINAL, MATERIAL_SEAL,MATERIAL_PIPE, MATERIAL_OTHER]
 
   def self.display type
     case type
@@ -15,6 +17,8 @@ class PartType<BaseType
         '端子'
       when MATERIAL_SEAL
         '防水圈'
+      when MATERIAL_PIPE
+        '管子'
       when MATERIAL_OTHER
         '其它原材料'
       when PRODUCT_SEMIFINISHED
@@ -33,6 +37,8 @@ class PartType<BaseType
         MATERIAL_TERMINAL
       when '防水圈'
         MATERIAL_SEAL
+      when MATERIAL_PIPE
+        '管子'
       when '其它原材料'
         MATERIAL_OTHER
       when '半成品'
@@ -68,6 +74,15 @@ class PartType<BaseType
   end
 
   def self.is_material?(type)
-    [MATERIAL_WIRE, MATERIAL_TERMINAL, MATERIAL_SEAL, MATERIAL_OTHER].include?(type.to_i)
+    @@MaterialTypes.include?(type.to_i)
   end
+
+  def self.MaterialTypes
+    @@MaterialTypes
+  end
+
+  def need_convert?(type)
+
+  end
+
 end

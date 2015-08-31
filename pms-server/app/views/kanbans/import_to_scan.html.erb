@@ -6,7 +6,7 @@
 <p id="notice">
   <%= notice %>
 </p>
-<h3>上传KANBAN文件</h3>
+<h3>上传<%="#{KanbanType.display(session[:kanban_type])}"%>文件投卡</h3>
 <div>
   选择数据文件：
   <input id="item-data-uploader" type="file" name="files[]" data-url="/kanbans/import_to_scan"/>

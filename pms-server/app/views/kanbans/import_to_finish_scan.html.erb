@@ -1,0 +1,32 @@
+<script type="text/javascript">
+    $(document).ready(function () {
+        data_upload("#item-data-uploader");
+    });
+</script>
+<p id="notice">
+  <%= notice %>
+</p>
+<h3>上传<%= "#{KanbanType.display(session[:kanban_type])}" %>文件销卡</h3>
+<div>
+  选择数据文件：
+  <input id="item-data-uploader" type="file" name="files[]" data-url="/kanbans/import_to_finish_scan"/>
+
+  <div id="item-data-uploader-preview" style="display:none;"></div>
+  <div>
+    <a href="/files/<%= ImportTemplate.kanban_finish_scan_excel_template %>">下载模板：<%= ImportTemplate::KANBAN_FINISH_SCAN_EXCEL_TEMPLATE %></a>
+  </div>
+  <div class="info-warn-div">
+    <h5> 说明：</h5>
+
+    <div>
+      模板文件： kanban_finish_scan.xlsm，中包含3列:看板卡, 数量, 时间, 员工 <br/>
+      其中：<br/>
+      看板卡是看板号如004203或112/8<br/>
+      数量是销卡数量，默认为空，为看板默认生产量<br/>
+      时间是销卡时间<br/>
+      员工是销卡员工<br/>
+
+      <h3>模板上传前请**另保存为.xlsx格式**文件！</h3>
+    </div>
+  </div>
+</div>

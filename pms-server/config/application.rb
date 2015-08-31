@@ -24,9 +24,11 @@ module PmsServer
     config.paths['config/database']='config/database_mac.yml' if (ENV['USER']=='liqi' || ENV['USER']=='apple')
     # config.i18n.default_locale = :de
     config.autoload_paths += %W(#{config.root}/lib)
-    %w{models api workers services presenters caches}.each do |namespace|
+    %w{models api workers services presenters}.each do |namespace|
       config.paths.add File.join('app', namespace), glob: File.join('**', '*.rb')
       config.autoload_paths += Dir[Rails.root.join('app', namespace, '**')]
     end
+
+    # config.active_record.observers=:kanban_observer
   end
 end

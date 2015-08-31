@@ -17,7 +17,7 @@
 <% if @production_order %>
     <%= form_tag('/production_order_items/export', method: 'post') do %>
         <%= hidden_field_tag :production_order_id, @production_order.id %>
-        <input type="button" value="导出已优化" class="btn btn-default" onclick="if(confirm('export?')){form.submit();}"/>
+        <input type="button" value="导出订单列表任务" class="btn btn-default" onclick="if(confirm('export?')){form.submit();}"/>
     <% end %>
 <% end %>
 <div>
@@ -50,6 +50,9 @@
   </form>
 </div>
 
+
+<%=render 'production_order_items/handle_item'%>
+
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @production_order_items %>
@@ -59,6 +62,7 @@
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
+    <th>#</th>
     <th>No.</th>
     <th>Nr</th>
     <th>State</th>
@@ -83,7 +87,10 @@
 
   <tbody>
   <% @production_order_items.each_with_index do |production_order_item, i| %>
-      <tr>
+      <tr class="<%= production_order_item.is_urgent? ? 'item-urgent' : 'item-not-urgent' %>">
+        <td>
+          <input type="checkbox" item="<%= production_order_item.id %>" class="order-item-check"/>
+        </td>
         <td><%= @page*WillPaginate.per_page + i+1 %></td>
         <td><%= production_order_item.nr %></td>
         <td><%= ProductionOrderItemState.display production_order_item.state %></td>
@@ -103,7 +110,11 @@
         <td><%= link_to '生产详细', production_order_item_production_order_item_labels_path(production_order_item) %></td>
         <td><%= link_to 'Show', production_order_item %></td>
         <td><%= link_to 'Edit', edit_production_order_item_path(production_order_item) %></td>
-        <td><%= link_to 'Destroy', production_order_item, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <td>
+          <% if current_user.can_modify_data? %>
+              <%= link_to '删除', production_order_item, method: :delete, data: {confirm: '确定删除?'} %>
+          <% end %>
+        </td>
       </tr>
   <% end %>
   </tbody>

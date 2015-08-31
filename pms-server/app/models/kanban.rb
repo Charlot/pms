@@ -1,23 +1,30 @@
 class Kanban < ActiveRecord::Base
   include AutoKey
+  include PartBomable
+  include Destroyable
+
   validates :nr, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
   validates :product_id, :presence => true
-
+  after_create :create_part_bom
 
   #belongs_to :part
   belongs_to :product, class_name: 'Part'
   has_many :kanban_process_entities, -> { order('position ASC') }, dependent: :destroy
   has_many :process_entities, through: :kanban_process_entities
   has_many :custom_values, through: :process_entities
+  has_many :process_parts, through: :process_entities
   delegate :nr, to: :part, prefix: true, allow_nil: true
   delegate :nr, to: :product, prefix: true, allow_nil: true
   delegate :custom_nr, to: :product, prefix: true, allow_nil: true
   has_many :production_order_items
+  has_many :production_order_item_labels, through: :production_order_items
   has_many :production_order_item_blues
 
   accepts_nested_attributes_for :kanban_process_entities, allow_destroy: true
 
   scoped_search on: :nr
+  # scoped_search on: :des_storage
+
   scoped_search in: :product, on: :nr
   scoped_search in: :process_entities, on: :nr
   scoped_search in: :process_entities, on: :nr, ext_method: :find_by_wire_nr
@@ -28,11 +35,11 @@ class Kanban < ActiveRecord::Base
   # after_destroy :destroy_part_bom
   # after_update :update_part_bom
 
-  has_paper_trail :only => [:quantity,:product_id,:bundle,:des_warehouse,:des_storage,:print_time,:remark,:remark2]
+  has_paper_trail :only => [:quantity, :product_id, :bundle, :des_warehouse, :des_storage, :print_time, :remark, :remark2]
 
   def has_same_content(kanban)
     begin
-      [:quantity,:product_id,:bundle,:des_warehouse,:des_storage,:remark,:remark2].each do |attr|
+      [:quantity, :product_id, :bundle, :des_warehouse, :des_storage, :remark, :remark2].each do |attr|
         puts "#{attr}--#{self.send(attr)}---#{kanban.send(attr)}".red
         if self.send(attr)!=kanban.send(attr)
           return false
@@ -45,50 +52,53 @@ class Kanban < ActiveRecord::Base
     return true
   end
 
+  def self.find_by_nr_or_id(v)
+    if /^0/.match(v)
+      return Kanban.find_by_nr(v.sub(/\/\d+/, ''))
+    else
+      if /\d+\/\d+/.match(v)
+        return Kanban.find_by_id(v.sub(/\/\d+/, ''))
+      end
+    end
+  end
+
   def self.find_by_wire_nr key, operator, value
+	  puts '-------------'
     parts = Part.where("nr LIKE '%_#{value}%'").map(&:id)
     if parts.count > 0
+		puts parts.to_json.red
       process = ProcessEntity.joins(custom_values: :custom_field).where(
           "custom_values.value IN (#{parts.join(',')}) AND custom_fields.field_format = 'part'"
       ).map(&:id)
-      if process.count > 0
+	  if process.count > 0
+		puts '--------------------'.yellow
         kanbans = Kanban.joins(:process_entities).where("process_entities.id IN(#{process.join(',')})").map(&:id)
+	  else
+	    return {conditions: "kanbans.nr like '%#{value}%'"}  
       end
       if kanbans.count > 0
+		  puts "#{kanbans.to_json}".blue
         return {conditions: "kanbans.id IN(#{kanbans.join(',')})"}
-      else
-        {conditions: "kanbans.nr like '%#{value}%'"}
       end
-      {conditions: "kanbans.nr like '%#{value}%'"}
-    else
-      {conditions: "kanbans.nr like '%#{value}%'"}
     end
-    {conditions: "kanbans.nr like '%#{value}%'"}
+   return {conditions: "kanbans.nr like '%#{value}%'"}
   end
 
-  def create_part_bom
-    #TODO Kanban Update Part Bom
-    # part=self.part
-    # product=self.product
-    # unless PartBom.where(part_id: product.id, bom_item_id: part.id).first
-    #   PartBom.create(part_id: product.id, bom_item_id: part.id, quantity: 1)
-    # end
-  end
 
   # 看板中消耗额零件
   # 返回
   # {
   # 零件号:数量
   # }
-  def process_parts
-    parts = {}
-    process_entities.each do |pe|
-      pe.process_parts.each { |pp|
-        parts[pp.part_id] = pp.quantity
-      }
-    end
-    parts
-  end
+  # def process_parts
+  #   parts = {}
+  #   process_entities.each do |pe|
+  #     pe.process_parts.each { |pp|
+  #       parts[pp.part_id] = pp.quantity
+  #     }
+  #   end
+  #   parts
+  # end
 
   #
   def destroy_part_bom
@@ -105,13 +115,17 @@ class Kanban < ActiveRecord::Base
   # 获得看板中步骤零件的库位
   def gathered_material
     data =[]
-    process_entities.each { |pe|
-      pe.process_parts.each { |pp|
-        part = pp.part
-        data << [part.parsed_nr, part.positions(self.id, self.product_id, pe).join(",")].join(":") if part
-      }
+    # process_entities.each { |pe|
+    #   pe.process_parts.distinct.each { |pp|
+    #     part = pp.part
+    #     data << [part.parsed_nr, part.positions(self.id, self.product_id, pe).join(",")].join(":") if part
+    #   }
+    # }
+    process_parts.distinct.each { |pp|
+      part = pp.part
+      data << [part.parsed_nr, part.positions(self.id, self.product_id, pp.process_entity).join(",")].join(":") if part
     }
-    data.join('      ')
+    data.uniq.join('      ')
   end
 
   def process_list
@@ -152,23 +166,23 @@ class Kanban < ActiveRecord::Base
 
   # 获得看板卡生产的线号
   def wire_nr
-    if (self.ktype == KanbanType::WHITE) && self.process_entities.first && self.process_entities.first.wire
-      name = self.process_entities.first.wire.nr.split("_")
-      # puts name
-      name = (name - [name.first])
-      name.join("_")
-    else
-      nil
-    end
+    @wire_nr||=if (self.ktype == KanbanType::WHITE) && self.process_entities.first && self.process_entities.first.wire
+                 name = self.process_entities.first.wire.nr.split("_")
+                 # puts name
+                 name = (name - [name.first])
+                 name.join("_")
+               else
+                 nil
+               end
   end
 
   # 获得看板卡的生产的完整的零件号
   def full_wire_nr
-    if (self.ktype == KanbanType::WHITE) && self.process_entities.first && self.process_entities.first.wire
-      self.process_entities.first.wire.nr
-    else
-      nil
-    end
+    @full_wire_nr||=if (self.ktype == KanbanType::WHITE) && self.process_entities.first && self.process_entities.first.wire
+                      self.process_entities.first.wire.nr
+                    else
+                      nil
+                    end
   end
 
   def wire_length
@@ -210,55 +224,53 @@ class Kanban < ActiveRecord::Base
   # 条形码内容
   # kanban_id/当前版本号
   def printed_2DCode
+    "#{nr}/#{version_now}"
+  end
+
+  def old_printed_2DCode
     "#{id}/#{version_now}"
   end
 
   def task_time
     task_time = 0.0
-    case self.ktype
-      when KanbanType::WHITE
-        process_entity = self.process_entities.first
-        #因为全自动工时与机器有关，而要知道机器，一定要优化结束才能知道
-        #所以，这里选择一张看板的最后生产的任务的机器来做判断
-        if (poi = self.production_order_items.last) && (machine=poi.machine) && (machine_type_id = machine.machine_type_id)
-        else
-          machine_type_id = MachineType.find_by_nr('CC36').id
-        end
-
-        if machine_type_id.nil? || process_entity.nil?
-          return task_time
-        end
-
-        #根据全自动看的工艺来查找出操作代码
-        oee = OeeCode.find_by_nr(process_entity.oee_code)
-
-        if oee.nil?
-          return task_time
-        end
-
-        #查找全部满足的全自动工时规则，并且以断线长度升序排序
-        machinetimerule = MachineTimeRule.where({oee_code_id: oee.id, machine_type_id: machine_type_id}).order(length: :asc)
-
-        timerule = nil
-# puts "#{machine.machine_type.nr}----#{process_entity.value_wire_qty_factor}".red
-        #一定要断线长度正好超过规则，才选择这个规则
-        # design bug
-        # query improvment
-        machinetimerule.each { |mtr|
-          if (mtr.min_length.to_f...mtr.length.to_f).include?(process_entity.value_wire_qty_factor.to_f)
-            timerule = mtr
+    begin
+      case self.ktype
+        when KanbanType::WHITE
+          process_entity = self.process_entities.first
+          #因为全自动工时与机器有关，而要知道机器，一定要优化结束才能知道
+          #所以，这里选择一张看板的最后生产的任务的机器来做判断
+          if (poi = self.production_order_items.last) && (machine=poi.machine) && (machine_type_id = machine.machine_type_id)
+          else
+            machine_type_id = MachineType.find_by_nr('CC36').id
           end
-        }
 
-        if timerule.nil?
-          return task_time
-        end
+          if machine_type_id.nil? || process_entity.nil?
+            return task_time
+          end
 
-        task_time = timerule.time * self.quantity
-      when KanbanType::BLUE
+          #根据全自动看的工艺来查找出操作代码
+          oee = OeeCode.find_by_nr(process_entity.oee_code)
 
+          if oee.nil?
+            return task_time
+          end
+
+          #查找全部满足的全自动工时规则，并且以断线长度升序排序
+          timerule = nil
+          wire_length_value = process_entity.value_wire_qty_factor.to_f
+          timerule = MachineTimeRule.where(["oee_code_id = ? AND machine_type_id = ? AND min_length <= ? AND length > ?", oee.id, machine_type_id, wire_length_value, wire_length_value]).first
+
+          if timerule.nil?
+            return task_time
+          end
+          task_time = timerule.time * self.quantity
+        when KanbanType::BLUE
+
+      end
+    rescue => e
+      task_time=0
     end
-    task_time
+    task_time.round(2)
   end
 
   def source_position
@@ -291,27 +303,61 @@ class Kanban < ActiveRecord::Base
 
   # part_nr,product_nr
   def self.search(part_nr="", product_nr="")
-    kanbans = joins(:product).where('parts.nr LIKE ?', "%#{product_nr}%")
+    joins(:product).where('parts.nr LIKE ?', "%#{product_nr}%")
   end
 
-
-  def in_produce?
+  def can_put_to_produce?
     if self.ktype==KanbanType::WHITE
-      return self.production_order_items.where(state: ProductionOrderItemState::INIT).count==0
+      return self.production_order_items.where(state: [ProductionOrderItemState::INIT,
+                                                       ProductionOrderItemState::DISTRIBUTE_SUCCEED]).count==0
     elsif self.ktype==KanbanType::BLUE
-      return self.production_order_item_blues.where(state: ProductionOrderItemState::INIT).count==0
-    end
-     false
-  end
-
-  def generate_produce_item
-    if self.ktype==KanbanType::WHITE
-      return  ProductionOrderItem.create(kanban_id: self.id, code: self.printed_2DCode,kanban_qty:self.quantity,kanban_bundle:self.bundle)
-    elsif self.ktype==KanbanType::BLUE
-      return ProductionOrderItemBlue.create(kanban_id: self.id, code: self.printed_2DCode, produced_qty: self.quantity,kanban_qty:self.quantity,kanban_bundle:self.bundle)
+      return self.production_order_item_blues.where(state: [ProductionOrderItemState::INIT,
+                                                            ProductionOrderItemState::DISTRIBUTE_SUCCEED]).count==0
     end
     false
   end
+
+  def not_in_produce?
+    if self.ktype==KanbanType::WHITE
+      return self.production_order_items.where(state: ProductionOrderItemState::DISTRIBUTE_SUCCEED).count==0
+    elsif self.ktype==KanbanType::BLUE
+      return self.production_order_item_blues.where(state: ProductionOrderItemState::DISTRIBUTE_SUCCEED).count==0
+    end
+    false
+  end
+
+  def generate_produce_item(auto=true)
+    if self.ktype==KanbanType::WHITE
+      return ProductionOrderItem.create(kanban_id: self.id, code: self.printed_2DCode, kanban_qty: self.quantity, kanban_bundle: self.bundle, auto: auto)
+    elsif self.ktype==KanbanType::BLUE
+      return ProductionOrderItemBlue.create(kanban_id: self.id, code: self.printed_2DCode, kanban_qty: self.quantity, kanban_bundle: self.bundle, auto: auto)
+    end
+    false
+  end
+
+  # handler item is from file handle kanban
+  def terminate_produce_item(handler_item=nil)
+    if self.ktype==KanbanType::WHITE
+      if handler_item.blank?
+        item=self.generate_produce_item(false)
+        item.update_attributes(produced_qty: item.kanban_qty, state: ProductionOrderItemState::TERMINATED)
+      else
+        return true
+      end
+    elsif self.ktype==KanbanType::BLUE
+      blue= ProductionOrderItemBlue.
+          where(kanban_id: self.id, state: ProductionOrderItemState::DISTRIBUTE_SUCCEED).first
+      puts "#{handler_item.to_json}".red
+      return blue.update_attributes(
+          produced_qty: (handler_item.qty.nil? ? blue.produced_qty : handler_item.qty),
+          state: ProductionOrderItemState::TERMINATED,
+          terminated_at: handler_item.item_terminated_at,
+          terminate_user: handler_item.handler_user,
+          terminated_kanban_code: handler_item.kanban_code)
+    end
+    false
+  end
+
   #
   private
   def generate_id

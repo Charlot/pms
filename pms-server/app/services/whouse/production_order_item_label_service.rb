@@ -3,14 +3,14 @@ class ProductionOrderItemLabelService
     ProductionOrderItemLabel.transaction do
       if (label=ProductionOrderItemLabel.find_by_id(id)) && (label.state==ProductionOrderItemLabel::INIT)
         r=false
-        if (kb=label.production_order_item.kanban) && kb.full_wire_nr
-          r=Whouse::Storage.new.enter_stock({partNr: kb.full_wire_nr,
+        if (kb=label.production_order_item.kanban) && kb.kanban_part_nr
+          r=Whouse::Storage.new.enter_stock({partNr: kb.kanban_part_nr,
                                              qty: label.qty,
                                              fifo: label.created_at.localtime,
                                              toWh: label.whouse_nr,
                                              toPosition: label.position_nr,
                                              packageId: label.nr,
-                                             uniq:true
+                                             locked: true
                                             })
         end
         if r
@@ -22,31 +22,87 @@ class ProductionOrderItemLabelService
     end
   end
 
+  def self.enter_blue_stock(id)
+    ProductionOrderItemBlueLabel.transaction do
+      if (label=ProductionOrderItemBlueLabel.find_by_id(id)) && (label.state==ProductionOrderItemBlueLabel::INIT)
+        r=false
+        puts '----------------------------------'
+        if (kb=label.production_order_item_blue.kanban) && kb.kanban_part_nr
+          puts '----------------------------------ddd'
+
+          r=Whouse::Storage.new.enter_stock({partNr: kb.kanban_part_nr,
+                                             qty: label.qty,
+                                             fifo: label.created_at.localtime,
+                                             toWh: label.whouse_nr,
+                                             toPosition: label.position_nr,
+                                             packageId: label.nr,
+                                             locked: true
+                                            })
+        end
+        if r
+          label.update(state: ProductionOrderItemBlueLabel::IN_STORE)
+        else
+          label.update(state: ProductionOrderItemBlueLabel::ENTER_STOCK_FAIL)
+        end
+      end
+    end
+  end
 
   def self.move_stock(id, from_whouse='SR01', from_position='SR01')
     ProductionOrderItemLabel.transaction do
       if (label=ProductionOrderItemLabel.find_by_id(id)) && (item =label.production_order_item)
-        if (kb=item.kanban) && (pe=kb.process_entities.first)
+        if kb=item.kanban
           base_params={
               toWh: label.whouse_nr,
               toPosition: label.whouse_nr,
-              fromWh: from_whouse,
-              fromPosition: from_position
+              fromWh: from_whouse
           }
           moves=[]
-          if part=Part.find_by_id(pe.value_default_wire_nr)
-            part.part_boms.joins(:bom_item).select('part_boms.*,parts.nr,parts.type as part_type').each do |pb|
-              # TODO check if the part is material wire!
-              qty = pb.quanity.to_f>10 ? pb.quantity/1000 : pb.quantity
-              moves<<base_params.merge({
-                                           qty: qty,
-                                           partNr: pb.nr
-                                       })
+          puts "white kanban#{kb.to_json}".red
 
-            end
-            puts "#{moves}".red
-            Whouse::Storage.new.move_stocks(moves) if moves.size>0
+          kb.materials.each do |material|
+            puts "white: #{material.to_json}".red
+            moves<<base_params.merge({
+                                         remarks:kb.nr,
+                                         qty: BigDecimal.new(material.quantity.to_s)*label.qty,
+                                         partNr: material.nr
+                                     })
           end
+
+          puts "white kanban#{moves.to_json}".yellow
+
+          Whouse::Storage.new.move_stocks(moves) if moves.size>0
+        end
+      end
+    end
+  end
+
+  def self.move_blue_stock(id, from_whouse='SR01', from_position='SR01')
+    ProductionOrderItemBlueLabel.transaction do
+      if (label=ProductionOrderItemBlueLabel.find_by_id(id)) && (item =label.production_order_item_blue)
+        if kb=item.kanban
+          base_params={
+              toWh: label.whouse_nr,
+              toPosition: label.whouse_nr,
+              fromWh: from_whouse
+          }
+          moves=[]
+          puts "blue kanban#{kb.to_json}".red
+
+		  kb.create_part_bom(false)
+		  
+          kb.kanban_part.materials_with_deep.each do |material|
+            puts "blue: #{material.to_json}".yellow
+            moves<<base_params.merge({
+                                         remarks:kb.nr,
+                                         qty: BigDecimal.new(material.quantity.to_s)*label.qty,
+                                         partNr: material.part_nr,
+                                         from_whouse: material.deep==1 ? 'SR01' : 'SRPL'
+                                     })
+          end
+          puts "blue kanban#{moves.to_json}".yellow
+
+          Whouse::Storage.new.move_stocks(moves) if moves.size>0
         end
       end
     end

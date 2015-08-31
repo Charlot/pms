@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  regex: MyString
+  warehouse_nr: MyString
+  desc: MyString
+
+two:
+  regex: MyString
+  warehouse_nr: MyString
+  desc: MyString

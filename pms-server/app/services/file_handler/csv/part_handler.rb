@@ -2,7 +2,7 @@ require 'csv'
 module FileHandler
   module Csv
     class PartHandler<Base
-      IMPORT_HEADERS=['Part Nr', 'Custom Nr', 'Type', 'Strip Length', 'Color', 'Color Desc', 'Component Type', 'Cross Section', 'Operator']
+      IMPORT_HEADERS=['Part Nr', 'Custom Nr', 'Type', 'Strip Length', 'Color', 'Color Desc', 'Component Type', 'Cross Section','Unit','P/NO.','Desc1','FullDesc', 'Operator']
       INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
 
       def self.import(file)
@@ -21,21 +21,19 @@ module FileHandler
                   end
                 }
                 puts params
-                unless part
-                  Part.create(params)
-                else
-                  puts "Update-------------------------"
-                  if row['Operator'].nil? || row['Operator']=='update'
+                if part
+                  if row['Operator'].blank? || row['Operator']=='update'
                     part.update(params.except(:nr))
-                  elsif row['Operator']=='destory'
+                  elsif row['Operator']=='delete'
                     part.destroy
                   end
-
+                else
+                  Part.create(params) if row['Operator'].blank?
                 end
               end
             end
             msg.result = true
-            msg.content = 'Part 上传成共'
+            msg.content = 'Part 上传成功'
           else
             msg.result = false
             msg.content = validate_msg.content
@@ -92,6 +90,10 @@ module FileHandler
                   part.color_desc,
                   part.component_type,
                   part.cross_section,
+                  part.unit,
+                  part.pno,
+                  part.desc1,
+                  part.description,
                   'update'
               ]
             end
@@ -155,6 +157,14 @@ module FileHandler
             :component_type
           when 'Cross Section'
             :cross_section
+          when 'Unit'
+            :unit
+          when 'P/NO.'
+            :pno
+          when 'Desc1'
+            :desc1
+          when 'FullDesc'
+            :description
           else
         end
       end
