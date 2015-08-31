@@ -1,6 +1,7 @@
 class Kanban < ActiveRecord::Base
   include AutoKey
   include PartBomable
+  include Destroyable
 
   validates :nr, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
   validates :product_id, :presence => true
@@ -114,13 +115,17 @@ class Kanban < ActiveRecord::Base
   # 获得看板中步骤零件的库位
   def gathered_material
     data =[]
-    process_entities.each { |pe|
-      pe.process_parts.each { |pp|
-        part = pp.part
-        data << [part.parsed_nr, part.positions(self.id, self.product_id, pe).join(",")].join(":") if part
-      }
+    # process_entities.each { |pe|
+    #   pe.process_parts.distinct.each { |pp|
+    #     part = pp.part
+    #     data << [part.parsed_nr, part.positions(self.id, self.product_id, pe).join(",")].join(":") if part
+    #   }
+    # }
+    process_parts.distinct.each { |pp|
+      part = pp.part
+      data << [part.parsed_nr, part.positions(self.id, self.product_id, pp.process_entity).join(",")].join(":") if part
     }
-    data.join('      ')
+    data.uniq.join('      ')
   end
 
   def process_list

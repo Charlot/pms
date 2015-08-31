@@ -49,7 +49,7 @@ class ProductionOrdersController < ApplicationController
       @machine_nr = 'All'
       @production_order_items = ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce.all)
     else
-      @production_order_items = ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(@machine).all)
+      @production_order_items = ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(@machine))
     end
     @to_machines=Machine.where.not(nr: params[:machine_nr])
     #item = @production_order_items.first
