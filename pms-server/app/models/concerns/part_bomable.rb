@@ -6,7 +6,7 @@ module PartBomable
     after_save :update_part_bom
     after_destroy :update_part_bom
 
-    after_update :update_part_bom
+    # after_update :update_part_bom
   end
 
   def update_part_bom

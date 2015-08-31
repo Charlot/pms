@@ -124,7 +124,7 @@ function delete_item(url) {
         $.ajax({
             type: 'delete',
             url: url,
-            data: items,
+            data: {items:items},
             success: function (data) {
                 if (data.result) {
                     swal('删除成功！');
