@@ -72,7 +72,7 @@ class Part < ActiveRecord::Base
     #如果是零件，则直接在PartPosition中查找
     if PartType.is_material?(self.type)
       pp = PartPosition.find_by_part_id(self.id)
-      pp.nil? ? ["N/A"] : [pp.storage]
+      pp.nil? ? ["没有维护"] : [pp.storage]
     else
       #如果不是
       kanbans = []
@@ -82,9 +82,14 @@ class Part < ActiveRecord::Base
 
       store = kanban.des_storage.split(" ").first
 
-      cutting_storage = ["FC", "MC", "TC"]
-      assembly_storage = ["XF", "XM", "XT"]
-
+      cutting_storage =WarehouseRegex.where(warehouse_nr: 'SRPL').pluck(:regex).collect { |r| r.sub(/\^/, '') }
+      # puts '------------------------'
+      # puts cutting_storage
+      # puts '------------------------'
+      assembly_storage = WarehouseRegex.where(warehouse_nr: '3PL').pluck(:regex).map { |r| r.sub(/\^/, '') }
+      # puts '------------------------'
+      # puts assembly_storage
+      # puts '------------------------'
       # 如果当前看板卡的宋辽位置在cutting_storage 中
       # 也就是送往半自动线架再加工的
       # 那么，找生产该零件的白卡的送料位置
@@ -134,7 +139,7 @@ class Part < ActiveRecord::Base
       #   else
       # end
       puts "#{kanbans.collect { |k| k.nr }.join(',')}".red
-      kanbans.collect { |k| k.des_storage }
+      kanbans.collect { |k| k.des_storage }.uniq
     end
   end
 
@@ -152,14 +157,15 @@ class Part < ActiveRecord::Base
 
   def materials
     # PartBom.leaf_by_part(self,PartType.MaterialTypes)
-    PartBom.children_by_part(self).select{|b| PartType.MaterialTypes.include?(b.type)}
+    PartBom.children_by_part(self).select { |b| PartType.MaterialTypes.include?(b.type) }
   end
 
   def leaf leaf_id=nil
-	  PartBom.leaf_by_part(self,nil,left_id)
+    PartBom.leaf_by_part(self, nil, left_id)
   end
+
   def materials_with_deep
-    PartBom.children_node_by_part(self).select{|b| PartType.MaterialTypes.include?(b.type)}
+    PartBom.children_node_by_part(self).select { |b| PartType.MaterialTypes.include?(b.type) }
   end
 
   def material_mark
