@@ -63,25 +63,41 @@ class Kanban < ActiveRecord::Base
   end
 
   def self.find_by_wire_nr key, operator, value
-	  puts '-------------'
+
+    q={conditions: "kanbans.nr like '%#{value}%'"}
+    puts "qqqqqqqqqqqqqqqqqqq#{q.to_json}"
+
+
+
+    puts '-------------1'
     parts = Part.where("nr LIKE '%_#{value}%'").map(&:id)
     if parts.count > 0
-		puts parts.to_json.red
+      puts parts.to_json.red
+      puts '-------------2'
+
+
       process = ProcessEntity.joins(custom_values: :custom_field).where(
           "custom_values.value IN (#{parts.join(',')}) AND custom_fields.field_format = 'part'"
-      ).map(&:id)
-	  if process.count > 0
-		puts '--------------------'.yellow
-        kanbans = Kanban.joins(:process_entities).where("process_entities.id IN(#{process.join(',')})").map(&:id)
-	  else
-	    return {conditions: "kanbans.nr like '%#{value}%'"}  
+      ).pluck(:id)
+      kanbans=[]
+      if process.count > 0
+        puts '--------------------'.yellow
+        kanbans = Kanban.joins(:process_entities).where("process_entities.id IN(#{process.join(',')})").pluck(:id)
+      else
+        q= {conditions: "kanbans.nr like '%#{value}%'"}
       end
       if kanbans.count > 0
-		  puts "#{kanbans.to_json}".blue
-        return {conditions: "kanbans.id IN(#{kanbans.join(',')})"}
+        puts "#{kanbans.to_json}".blue
+        q= {conditions: "kanbans.id IN(#{kanbans.join(',')})"}
       end
     end
-   return {conditions: "kanbans.nr like '%#{value}%'"}
+    state=KanbanState.get_value_by_display(value)
+    if state
+      puts '-------------------------------------------------'
+      q={conditions: "kanbans.nr like '%#{value}%' or kanbans.state=#{state}"}
+    end
+    puts "qqqqqqqqqqqqqqqqqqq#{q.to_json}"
+    return q
   end
 
 

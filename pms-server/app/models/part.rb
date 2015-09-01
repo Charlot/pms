@@ -114,7 +114,7 @@ class Part < ActiveRecord::Base
           end
         }
 
-        puts kks
+        # puts kks
 
         # 如果没有找到，则寻找白卡的送料位置
         if kks.count <=0

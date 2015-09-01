@@ -349,7 +349,7 @@ module FileHandler
               msg.contents << "Nr:#{row['Nr']},步骤不存在"
             else
               if row['New Nr'].present? && ProcessEntity.where({nr: row['New Nr'], product_id: product.id}).first
-                msg.contents<<"New Nr: #{row['New Nr']}已经存在，不可更新为此号"
+                msg.contents<<"New Nr: #{row['New Nr']}已经存在，不可更新为此步骤号"
               end
             end
           when 'delete'
