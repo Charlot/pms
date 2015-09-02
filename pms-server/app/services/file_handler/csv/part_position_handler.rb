@@ -62,7 +62,7 @@ module FileHandler
         msg = Message.new({contents: []})
 
         unless Part.find_by_nr(row['Part Nr'])
-          msg.conents << "Part Nr: #{row['Part Nr']} Not Found!"
+          msg.contents << "Part Nr: #{row['Part Nr']} Not Found!"
         end
 
         unless msg.result=(msg.contents.size==0)
