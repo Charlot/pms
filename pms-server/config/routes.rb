@@ -144,6 +144,7 @@ Rails.application.routes.draw do
     collection do
       get :export
       match :import, to: :import, via: [:get, :post]
+      delete :batch_destroy
     end
   end
 
