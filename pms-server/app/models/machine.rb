@@ -133,9 +133,9 @@ class Machine < ActiveRecord::Base
       end
 
 
-      puts '88888888888888888888888888888888'.yellow
-      puts compares.keys.count
-      puts compares.sort_by { |k, v| v }.to_json
+      #puts '88888888888888888888888888888888'.yellow
+     # puts compares.keys.count
+     # puts compares.sort_by { |k, v| v }.to_json
       puts "9999999999999999999999999999999        :::#{compares.keys.count}".yellow
       compared_item=nil
       if compared_item_arr= compares.sort_by { |k, v| v }.first

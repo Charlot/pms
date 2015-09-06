@@ -13,11 +13,11 @@ module FileHandler
           CSV.open(tmp_file, 'wb', write_headers: true,
                    headers: IMPORT_HEADERS,
                    col_sep: ';', encoding: MachineCombinationHandler.get_encoding(user_agent)) do |csv|
-            MachineCombination.all.each_with_index do |mc,i|
+            MachineCombination.joins(:machine).all.order('machines.nr' ).each_with_index do |mc,i|
               parts = {}
               ['w1','t1','t2','s1','s2'].each do |p|
-                part = Part.find_by_id(mc.send(p))
-                if part
+                pid=mc.send(p)
+                if pid && (part = Part.find_by_id(pid))
                   parts[p] = part.nr
                 else
                   parts[p] = nil
