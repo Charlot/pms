@@ -138,7 +138,7 @@ class Part < ActiveRecord::Base
       #     ).distinct
       #   else
       # end
-      puts "#{kanbans.collect { |k| k.nr }.join(',')}".red
+      #puts "#{kanbans.collect { |k| k.nr }.join(',')}".red
       kanbans.collect { |k| k.des_storage }.uniq
     end
   end
