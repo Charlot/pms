@@ -1,5 +1,9 @@
-<%= render partial: 'shared/search' %>
-
+<div style="display: inline-flex;display: -webkit-inline-flex;">
+  <%= render partial: 'shared/search' %>
+  <div>
+    <button id="delete" style="margin:8px 20px;" class="btn btn-danger" onclick="delete_item('/part_positions/batch_destroy')">删除</button>
+  </div>
+</div>
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @part_positions %>
@@ -9,6 +13,8 @@
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
+    <th>
+      <input type="checkbox" onclick="check_all_box()"></th>
     <th>#</th>
     <th>零件号</th>
     <th>库存</th>
@@ -20,6 +26,9 @@
   <tbody>
   <% @part_positions.each_with_index do |part_position, i| %>
       <tr>
+        <td>
+          <input type="checkbox" item="<%= part_position.id %>" class="order-item-check"/>
+        </td>
         <td><%= i+1 %></td>
         <td><%= part_position.part_nr %></td>
         <td><%= part_position.storage %></td>
