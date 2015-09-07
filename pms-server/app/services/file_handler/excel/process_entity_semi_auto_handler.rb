@@ -2,7 +2,7 @@ module FileHandler
   module Excel
     class ProcessEntitySemiAutoHandler<Base
       HEADERS=[
-          'Nr', 'Name', 'Description', 'Stand Time',
+          'Nr','New Nr', 'Name', 'Description', 'Stand Time',
           'Product Nr', 'Template Code', 'WorkStation Type',
           'Cost Center', 'Template Fields', 'Wire Nr', 'Remark', 'Operator'
       ]
@@ -24,6 +24,7 @@ module FileHandler
             process_entities.each do |pe|
               sheet.add_row [
                                 pe.nr,
+                                '',
                                 pe.name,
                                 pe.description,
                                 pe.stand_time,
@@ -158,6 +159,13 @@ module FileHandler
                     end
 
                     pe.update(params.except(:nr))
+
+                    # update nr to new nr
+                    if row['New Nr'].present?
+                      pe.update_attributes(nr:row['New Nr'])
+                    end
+
+
                     if row['Wire Nr'].present? && !pe.parsed_wire_nr.blank? && pe.parsed_wire_nr != row['Wire Nr']
                       pe.wire.update(nr: "#{product.nr}_#{row['Wire Nr']}")
                     end
@@ -273,6 +281,7 @@ module FileHandler
         msg = Message.new(result: true)
         book = Roo::Excelx.new file.full_path
         book.default_sheet = book.sheets.first
+        raise('文件模版错误，请重新上传') unless book.cell(1, HEADERS.length)=='Operator'
 
         p = Axlsx::Package.new
 
@@ -338,6 +347,10 @@ module FileHandler
           when 'update'
             if pe.count <= 0
               msg.contents << "Nr:#{row['Nr']},步骤不存在"
+            else
+              if row['New Nr'].present? && ProcessEntity.where({nr: row['New Nr'], product_id: product.id}).first
+                msg.contents<<"New Nr: #{row['New Nr']}已经存在，不可更新为此步骤号"
+              end
             end
           when 'delete'
             if pe.count <= 0

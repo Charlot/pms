@@ -1,7 +1,7 @@
 class CustomField < ActiveRecord::Base
   self.inheritance_column = nil #:_type_disabled
 
-  has_many :custom_values, :dependent => :delete_all
+  has_many :custom_values, :dependent => :destroy
   belongs_to :custom_fieldable, polymorphic: true
   scope :sorted, lambda { order(:position) }
 

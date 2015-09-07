@@ -42,10 +42,10 @@
         <!--<td><%= link_to 'Destroy', machine, method: :delete, data: {confirm: 'Are you sure?'} %></td>-->
         <% if machine.machine_scope %>
             <td><%= link_to 'Edit Scope', edit_machine_machine_scope_path(machine) %></td>
-            <td><%= link_to 'Create or Edit Combination', machine_machine_combinations_path(machine) %></td>
         <% else %>
             <td><%= link_to 'Create Scope', new_machine_machine_scope_path(machine) %></td>
         <% end %>
+        <td><%= link_to 'Create or Edit Combination', machine_machine_combinations_path(machine) %></td>
       </tr>
   <% end %>
   </tbody>

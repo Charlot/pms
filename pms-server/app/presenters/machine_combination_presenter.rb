@@ -10,7 +10,7 @@ class MachineCombinationPresenter<Presenter
 
   [:w1, :t1, :t2, :s1, :s2, :w2, :t3, :t4, :s3, :s4].each do |m|
     define_method "#{m}_display" do
-      (part=Part.find_by_id(self.send(m))).nil? ? '' : part.nr
+      self.send(m).present? ? ((part=Part.find_by_id(self.send(m))).nil? ? '' : part.nr) : nil
     end
   end
 

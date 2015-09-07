@@ -1,9 +1,9 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  Kanban_id: 
-  ProcessEntity_id: 
-
-two:
-  Kanban_id: 
-  ProcessEntity_id: 
+## Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+#
+#one:
+#  Kanban_id:
+#  ProcessEntity_id:
+#
+#two:
+#  Kanban_id:
+#  ProcessEntity_id:

@@ -5,13 +5,13 @@ module FileHandler
           'Nr', 'Quantity', 'Safety Stock', 'Copies',
           'Remark', 'Remark2', 'Wire Nr', 'Product Nr', 'Type',
           'Bundle', 'Destination Warehouse',
-          'Destination Storage', 'Process List', 'Operator'
+          'Destination Storage', 'Process List', 'State', 'Operator'
       ]
 
       WHITE_HEADERS=['Nr', 'Quantity', 'Safety Stock', 'Copies', 'Task Time',
                      'Remark', 'Remark2', 'Wire Nr', 'Product Nr', 'Type',
                      'Bundle', 'Destination Warehouse',
-                     'Destination Storage', 'Process List', 'Row Wire Nr', 'Diameter', 'Length', 'T1', 'T2', 'S1', 'S2']
+                     'Destination Storage', 'Process List', 'Row Wire Nr', 'Diameter', 'Length', 'T1', 'T2', 'S1', 'S2', 'State']
 
       def self.import_update_quantity(file)
         msg = Message.new(contents: [])
@@ -128,6 +128,7 @@ module FileHandler
                                 k.des_warehouse,
                                 k.des_storage,
                                 k.process_list,
+                                KanbanState.display(k.state),
                                 'update'
                             ], types: [:string, nil, nil, nil, nil, :string, :string]
             end
@@ -186,6 +187,7 @@ module FileHandler
                                 t2.nil? ? '' : t2.nr,
                                 s1.nil? ? '' : s1.nr,
                                 s2.nil? ? '' : s2.nr,
+                                KanbanState.display(k.state)
                             ], types: [:string, nil, nil, nil, nil, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string, :string]
             end
           end
@@ -209,8 +211,8 @@ module FileHandler
 
           p = Axlsx::Package.new
           p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
-            sheet.add_row ['看板号', '新条码', '旧条码','卡量','捆扎量',
-                           '总成号','半成品线号',
+            sheet.add_row ['看板号', '新条码', '旧条码', '卡量', '捆扎量',
+                           '总成号', '半成品线号',
                            '送料位置', '类型']
             kanbans = []
             if q.nil?
@@ -229,7 +231,7 @@ module FileHandler
                                 k.wire_nr,
                                 k.des_storage,
                                 KanbanType.display(k.ktype)
-                            ], types: [:string, :string, :string, :string, :string,:string, :string, :string, :string, :string]
+                            ], types: [:string, :string, :string, :string, :string, :string, :string, :string, :string, :string]
             end
           end
           p.use_shared_strings = true
@@ -482,6 +484,13 @@ module FileHandler
                   row['Bundle'] = row['Quantity']
                 end
 
+
+                if state=KanbanState.get_value_by_display(row['State'])
+                  row['State']=state
+                else
+                  row['State']=KanbanState::RELEASED
+                end
+
                 params = {}
                 HEADERS.each { |header|
                   unless (row[header].nil? || header_to_attr(header).nil?)
@@ -501,7 +510,7 @@ module FileHandler
                       kanban_process_entities << KanbanProcessEntity.new({process_entity_id: pe.id, position: i})
                     }
                     kanban.kanban_process_entities = kanban_process_entities
-                    kanban.state = KanbanState::RELEASED
+                    # kanban.state = KanbanState::RELEASED
                     kanban.save
                   when 'update'
                     kanban = Kanban.find_by_nr(row['Nr'])
@@ -553,6 +562,7 @@ module FileHandler
         msg = Message.new(result: true)
         book = Roo::Excelx.new file.full_path
         book.default_sheet = book.sheets.first
+        raise('文件模版错误，请重新上传') unless book.cell(1, HEADERS.length)=='Operator'
 
         p = Axlsx::Package.new
         p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
@@ -603,6 +613,11 @@ module FileHandler
             end
           else
             msg.contents << "Operator,#{row['Operator']},操作错误"
+        end
+
+        # 验证状态
+        if row['State'].present?
+          msg.contents << "State:#{row['State']} 状态不存在" unless KanbanState.get_value_by_display(row['State'])
         end
 
         # 验证总成号
@@ -659,6 +674,8 @@ module FileHandler
             :des_warehouse
           when "Destination Storage"
             :des_storage
+          when 'State'
+            :state
           else
             nil
         end

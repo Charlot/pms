@@ -34,7 +34,7 @@ bower.json
 # editor cache
 *.*~
 *.~lock*
-/.idea
+/.idea/*
 
 # upload files
 /uploadfiles/**/*

@@ -1,5 +1,5 @@
 module Whouse
-  class Storage<BaseClass
+  class StorageClient<BaseClass
     TOKEN='cd ..T'
     REST_HOST='http://localhost:8000/'
     ENTER_STOCK_API='/api/v3/whouse/enter_stock'

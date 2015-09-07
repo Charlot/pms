@@ -358,9 +358,9 @@ class KanbansController < ApplicationController
     # authorize(@kanban)
 
     render json: {result: false, content: "看板未找到：#{params[:code]}"} and return unless @kanban
-
+if session[:kanban_type]
     render json: {result: false, content: "请投#{KanbanType.display(session[:kanban_type])},此卡为:#{KanbanType.display(@kanban.ktype)}"} and return if @kanban.ktype!=session[:kanban_type]
-
+end
     #check Kanban State
     render json: {result: false, content: "看板未发布"} and return unless @kanban.state == KanbanState::RELEASED
 

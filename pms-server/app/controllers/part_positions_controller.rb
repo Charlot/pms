@@ -4,7 +4,7 @@ class PartPositionsController < ApplicationController
   # GET /part_positions
   # GET /part_positions.json
   def index
-    @part_positions = PartPosition.all
+    @part_positions = PartPosition.paginate(:page => params[:page])
   end
 
   # GET /part_positions/1

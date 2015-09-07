@@ -2,13 +2,14 @@ module FileHandler
   module Excel
     class ProcessEntityAutoHandler<Base
       HEADERS=[
-          'Nr', 'Name', 'Description', 'Stand Time', 'Product Nr', 'Template Code', 'WorkStation Type', 'Cost Center',
+          'Nr', 'New Nr', 'Name', 'Description', 'Stand Time', 'Product Nr', 'Template Code', 'WorkStation Type', 'Cost Center',
           'Wire NO', 'Component', 'Qty Factor', 'Bundle Qty',
           'T1', 'T1 Qty Factor', 'T1 Strip Length',
           'T2', 'T2 Qty Factor', 'T2 Strip Length',
           'S1', 'S1 Qty Factor',
           'S2', 'S2 Qty Factor', 'Operator'
       ]
+
       STRING_HEADERS=['Component', 'T1', 'T2', 'S1', 'S2']
 
       def self.import(file)
@@ -92,6 +93,11 @@ module FileHandler
                         part = Part.create({nr: "#{row['Product Nr']}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED})
                       end
                       pe.update(params.except(:nr))
+
+                      # update nr to new nr
+                      if row['New Nr'].present?
+                        pe.update_attributes(nr:row['New Nr'])
+                      end
 
                       custom_fields = {}
                       ['Wire NO', 'Component', 'Qty Factor', 'Bundle Qty', 'T1', 'T1 Qty Factor', 'T1 Strip Length', 'T2', 'T2 Qty Factor', 'T2 Strip Length', 'S1', 'S1 Qty Factor', 'S2', 'S2 Qty Factor'].each { |header|
@@ -196,6 +202,7 @@ module FileHandler
               wire = Part.find_by_id(pe.value_wire_nr)
               sheet.add_row [
                                 pe.nr,
+                                '',
                                 pe.name,
                                 pe.description,
                                 pe.stand_time,
@@ -245,9 +252,11 @@ module FileHandler
         msg = Message.new(result: true)
         book = Roo::Excelx.new file.full_path
         book.default_sheet = book.sheets.first
+        raise('文件模版错误，请重新上传') unless book.cell(1, HEADERS.length)=='Operator'
 
         p = Axlsx::Package.new
         p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
+
           sheet.add_row HEADERS+['Error Msg']
           #validate file
           2.upto(book.last_row) do |line|
@@ -298,15 +307,18 @@ module FileHandler
               end
             when 'update'
               if pe.count <= 0
-                msg.content << "Nr: #{row['Nr']}未找到"
+                msg.contents << "Nr: #{row['Nr']}未找到"
+              else
+                if row['New Nr'].present? && ProcessEntity.where({nr: row['New Nr'], product_id: product.id}).first
+                  msg.contents<<"New Nr: #{row['New Nr']}已经存在，不可更新为此步骤号"
+                end
               end
-
             #unless wire
             #msg.contents << "Wire NO:#{row['Wire NO']}不存在"
             #end
             when 'delete'
               if pe.count <= 0
-                msg.content << "Nr: #{row['Nr']}未找到"
+                msg.contents << "Nr: #{row['Nr']}未找到"
               end
           end
 

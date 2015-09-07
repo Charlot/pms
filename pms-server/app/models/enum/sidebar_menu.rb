@@ -9,27 +9,27 @@ module Enum
                      import_to_get_kanban_list: ['av', 'admin', 'system', 'kanban'],
                  }
         },
-        PRODUCTION_ORDER: {name: PageInfo.productionorder, actions: [ "index"],
+        PRODUCTION_ORDER: {name: PageInfo.productionorder, actions: ["index"],
                            roles: {
                                new: @@all_roles,
                                index: @@all_roles
                            }},
-        PRODUCTION_ORDER_ITEM: {name: PageInfo.productionorderitem, actions: [ "index", "state_export"],
+        PRODUCTION_ORDER_ITEM: {name: PageInfo.productionorderitem, actions: ["index", "state_export"],
                                 roles: {
                                     new: @@all_roles,
                                     index: @@all_roles,
                                     state_export: @@all_roles
                                 }},
-        PRODUCTION_ORDER_BLUE: {name: PageInfo.productionorderblue, actions: [ "index"],
-                           roles: {
-                               new: @@all_roles,
-                               index: @@all_roles
-                           }},
-        PRODUCTION_ORDER_ITEM_BLUE: {name: PageInfo.productionorderitemblue, actions: [ "index"],
+        PRODUCTION_ORDER_BLUE: {name: PageInfo.productionorderblue, actions: ["index"],
                                 roles: {
                                     new: @@all_roles,
-                                    index: @@all_roles,
+                                    index: @@all_roles
                                 }},
+        PRODUCTION_ORDER_ITEM_BLUE: {name: PageInfo.productionorderitemblue, actions: ["index"],
+                                     roles: {
+                                         new: @@all_roles,
+                                         index: @@all_roles,
+                                     }},
 
         PART: {name: PageInfo.part, actions: ["new", "index", "import", 'import_update']},
         MEASURE_UNIT: {name: PageInfo.measureunit, actions: ["new", "index"]},
@@ -40,7 +40,7 @@ module Enum
         RESOURCE_GROUP_MACHINE: {name: PageInfo.resourcegroupmachine, actions: ["new", "index"]},
         RESOURCE_GROUP_TOOL: {name: PageInfo.resourcegrouptool, actions: ["new", "index"]},
         TOOL: {name: PageInfo.tool, actions: ["new", "index", "import"]},
-        PART_POSITION: {name: PageInfo.partposition, actions: ["new", "index", "import"]},
+        PART_POSITION: {name: PageInfo.partposition, actions: ["index", "import"]},
         MASTER_BOM_ITEM: {name: PageInfo.masterbomitem, actions: ['new', 'index', 'import', 'transport', 'export']},
         DEPARTMENT: {NAME: PageInfo.department, actions: ['new', 'index']},
         WAREHOUSE: {NAME: PageInfo.warehouse, actions: ['new', 'index']},

@@ -114,7 +114,7 @@ class Part < ActiveRecord::Base
           end
         }
 
-        puts kks
+        # puts kks
 
         # 如果没有找到，则寻找白卡的送料位置
         if kks.count <=0
@@ -138,7 +138,7 @@ class Part < ActiveRecord::Base
       #     ).distinct
       #   else
       # end
-      puts "#{kanbans.collect { |k| k.nr }.join(',')}".red
+      #puts "#{kanbans.collect { |k| k.nr }.join(',')}".red
       kanbans.collect { |k| k.des_storage }.uniq
     end
   end
