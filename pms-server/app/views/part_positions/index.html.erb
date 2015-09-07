@@ -1,24 +1,36 @@
+<%= render partial: 'shared/search' %>
+
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @part_positions %>
+  </div>
+  <%= will_paginate @part_positions, :container => false %>
+</div>
 <table class="table table-bordered table-striped table-hover">
   <thead>
-    <tr>
-      <th>零件号</th>
-      <th>库存</th>
-      <th>描述</th>
-      <th colspan="2"></th>
-    </tr>
+  <tr>
+    <th>#</th>
+    <th>零件号</th>
+    <th>库存</th>
+    <th>描述</th>
+    <th colspan="2"></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @part_positions.each do |part_position| %>
+  <% @part_positions.each_with_index do |part_position, i| %>
       <tr>
-        <td><%= part_position.part_nr%></td>
-        <td><%= part_position.storage%></td>
-        <td><%= part_position.description%></td>
+        <td><%= i+1 %></td>
+        <td><%= part_position.part_nr %></td>
+        <td><%= part_position.storage %></td>
+        <td><%= part_position.description %></td>
         <td><%= link_to '编辑', edit_part_position_path(part_position) %></td>
-        <td><%= link_to '删除', part_position, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to '删除', part_position, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 
-<br>
+<div class="digg_pagination">
+  <%= will_paginate @part_positions, :container => false %>
+</div>

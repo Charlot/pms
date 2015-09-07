@@ -59,6 +59,8 @@ Rails.application.routes.draw do
   resources :part_positions do
     collection do
       match :import, to: :import, via: [:get, :post]
+      get :scope_search
+
     end
   end
 
