@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   #                sessions: 'users/sessions'
   #                  }
 
-  devise_for :users, :controllers => {registrations: :user_registrations,sessions: 'users/sessions'}
+  devise_for :users, :controllers => {registrations: :user_registrations, sessions: 'users/sessions'}
 
   devise_scope :user do
     get '/users/sign_out' => 'user_sessions#destroy'
@@ -60,7 +60,7 @@ Rails.application.routes.draw do
     collection do
       match :import, to: :import, via: [:get, :post]
       get :scope_search
-
+      delete :batch_destroy
     end
   end
 
@@ -237,7 +237,7 @@ Rails.application.routes.draw do
       get 'import_to_scan/:type', to: :import_to_scan, as: 'import_to_scan'
       post :import_to_scan, to: :import_to_scan
 
-      get 'import_to_finish_scan/:type', to: :import_to_finish_scan,as: 'import_to_finish_scan'
+      get 'import_to_finish_scan/:type', to: :import_to_finish_scan, as: 'import_to_finish_scan'
       post :import_to_finish_scan, to: :import_to_finish_scan
 
       match :import_to_get_kanban_list, to: :import_to_get_kanban_list, via: [:get, :post]
