@@ -51,6 +51,10 @@ class Machine < ActiveRecord::Base
   end
 
   def sort_order_item
+    # ProductionOrderItemModel.initialize_items(for_sort_order_items).each_with_index do |item, i|
+    #   item.order_item.update_attributes(optimise_index: i+1, state: ProductionOrderItemState::OPTIMISE_SUCCEED)
+    # end
+
     current_index=1
     if current_item=self.for_sort_order_items.order(machine_time: :asc).first
       current_item.update_attributes(optimise_index: current_index,
