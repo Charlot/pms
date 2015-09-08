@@ -128,18 +128,28 @@ class Machine < ActiveRecord::Base
           else
             optimise_index+=self.terminal_time
           end
-        elsif ct1!=it1
-          if ct2==it2
-            optimise_index+=self.terminal_time
-          else
-            optimise_index+=self.terminal_time*2
-          end
-        elsif ct1!=it2
-          if ct2==it1
-            optimise_index+=self.terminal_time
-          else
-            optimise_index+=self.terminal_time*2
-          end
+        else
+
+          o1=if ct1!=it1
+               if ct2==it2
+                 self.terminal_time
+               else
+                 self.terminal_time*2
+               end
+             end
+
+          o2=if ct1!=it2
+               if ct2==it1
+                 optimise_index+=self.terminal_time
+               else
+                 optimise_index+=self.terminal_time*2
+               end
+             end
+          optimise_index+=(o1<o2 ? o1 : o2)
+        end
+
+        if it1.blank? || it2.blank?
+          optimise_index-=2
         end
 
         # if ct1==it1 && ct2==it2
@@ -192,18 +202,24 @@ class Machine < ActiveRecord::Base
           else
             optimise_index+=self.seal_time
           end
-        elsif cs1!=is1
-          if cs2==is2
-            optimise_index+=self.seal_time
-          else
-            optimise_index+=self.seal_time*2
-          end
-        elsif cs1!=is2
-          if cs2==is1
-            optimise_index+=self.seal_time
-          else
-            optimise_index+=self.seal_time*2
-          end
+        else
+
+          o1=if cs1!=is1
+               if cs2==is2
+                 self.seal_time
+               else
+                 self.seal_time*2
+               end
+             end
+
+          o2=if cs1!=is2
+               if cs2==is1
+                 optimise_index+=self.seal_time
+               else
+                 optimise_index+=self.seal_time*2
+               end
+             end
+          optimise_index+=(o1<o2 ? o1 : o2)
         end
 
         #
@@ -232,7 +248,7 @@ class Machine < ActiveRecord::Base
 
       puts '8888888888888888888888888888888888888888888888888888'.yellow
       puts compares.to_json
-      puts compares.sort_by { |k, v| v }.to_json
+      # puts compares.sort_by { |k, v| v }.to_json
       puts "9999999999999999999999999999999        :::#{compares.keys.count}".yellow
       compared_item=nil
 
