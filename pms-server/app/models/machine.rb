@@ -86,8 +86,11 @@ class Machine < ActiveRecord::Base
     if items.count==0
       items=self.for_sort_order_items(nil, current_process, ['t2']).where.not(id: current_item.id)
       if items.count==0
-        # 重新开始新的比较
-        items=self.for_sort_order_items.where.not(id: current_item.id)
+        items=self.for_sort_order_items(nil, current_process, ['wire_nr']).where.not(id: current_item.id)
+        if items.count==0
+          # 重新开始新的比较
+          items=self.for_sort_order_items.where.not(id: current_item.id)
+        end
       end
     end
     # end
