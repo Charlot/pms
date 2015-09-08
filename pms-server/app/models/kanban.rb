@@ -63,7 +63,7 @@ class Kanban < ActiveRecord::Base
   end
 
   def self.find_by_wire_nr key, operator, value
-	  puts '-------------'
+	  puts '------find_by_wire_nr-------'
     parts = Part.where("nr LIKE '%_#{value}%'").map(&:id)
     if parts.count > 0
 		puts parts.to_json.red
@@ -129,7 +129,12 @@ class Kanban < ActiveRecord::Base
   end
 
   def process_list
-    process_entities.collect { |pe|
+    puts '--------------------------------------------------------------------'.blue
+    puts process_entities.to_json.blue
+    puts process_entities.count
+    puts '--------------------------------------------------------------------'.blue
+
+    process_entities.reload.collect { |pe|
       pe.nr
     }.join(",")
   end
@@ -233,43 +238,23 @@ class Kanban < ActiveRecord::Base
 
   def task_time
     task_time = 0.0
-    begin
+    # begin
       case self.ktype
         when KanbanType::WHITE
-          process_entity = self.process_entities.first
-          #因为全自动工时与机器有关，而要知道机器，一定要优化结束才能知道
-          #所以，这里选择一张看板的最后生产的任务的机器来做判断
-          if (poi = self.production_order_items.last) && (machine=poi.machine) && (machine_type_id = machine.machine_type_id)
-          else
-            machine_type_id = MachineType.find_by_nr('CC36').id
+          unless (process_entity = self.process_entities.first).nil?
+            task_time = process_entity.get_process_entity_worktime_by_white(self.production_order_items.last) * self.quantity
           end
-
-          if machine_type_id.nil? || process_entity.nil?
-            return task_time
-          end
-
-          #根据全自动看的工艺来查找出操作代码
-          oee = OeeCode.find_by_nr(process_entity.oee_code)
-
-          if oee.nil?
-            return task_time
-          end
-
-          #查找全部满足的全自动工时规则，并且以断线长度升序排序
-          timerule = nil
-          wire_length_value = process_entity.value_wire_qty_factor.to_f
-          timerule = MachineTimeRule.where(["oee_code_id = ? AND machine_type_id = ? AND min_length <= ? AND length > ?", oee.id, machine_type_id, wire_length_value, wire_length_value]).first
-
-          if timerule.nil?
-            return task_time
-          end
-          task_time = timerule.time * self.quantity
         when KanbanType::BLUE
+          self.process_entities.each_with_index do |process_entity,i|
+            puts "-------#{i}..#{process_entity.process_template.code}----#{process_entity.nr}".yellow
+            task_time += process_entity.get_process_entity_worktime_by_blue
+          end
 
+          task_time = task_time * self.quantity
       end
-    rescue => e
-      task_time=0
-    end
+    # rescue => e
+    #   task_time=0
+    # end
     task_time.round(2)
   end
 
