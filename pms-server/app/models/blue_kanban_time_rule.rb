@@ -35,20 +35,20 @@ class BlueKanbanTimeRule
       when '2209'
         process_types = ["pneumatic crimping machine", "Handing Work"]
       when '2210'
-        process_types = ["Splice crimping"]
+        process_types = ["pneumatic crimping machine"]#["Splice crimping"]
       when '2211'
-        process_types = ["Splice crimping"]
+        process_types = ["pneumatic crimping machine"]#["Splice crimping"]
       when '2212'
-        process_types = ["Splice crimping"]
+        process_types = ["pneumatic crimping machine"]#["Splice crimping"]
 
       when '2220'
-        process_types = ["Splice crimping"]
+        process_types = ["pneumatic crimping machine"]#["Splice crimping"]
       when '2221'
-        process_types = ["Splice crimping"]
+        process_types = ["pneumatic crimping machine"]#["Splice crimping"]
       when '2222'
-        process_types = ["Splice crimping"]
+        process_types = ["pneumatic crimping machine"]#["Splice crimping"]
       when '2240'
-        process_types = ["Splice crimping"]
+        process_types = ["pneumatic crimping machine"]#["Splice crimping"]
       when '2250'
         process_types = ["Handing Work", "pneumatic crimping machine"]
       when '2251'
@@ -61,7 +61,7 @@ class BlueKanbanTimeRule
       when '2410'
         process_types = ["Splice crimping"]
       when '2411'
-        process_types = ["Splice crimping"]
+        process_types = ["pneumatic crimping machine"]#["Splice crimping"]
       when '5200'
         process_types = ["Handing Work"]
       when '5201'

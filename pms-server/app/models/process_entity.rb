@@ -217,51 +217,54 @@ class ProcessEntity < ActiveRecord::Base
 
   def parse_process_entity
     puts '------------------parse_process_entity--------------------'
-    puts self.process_template.code
     args = {}
     process_types = BlueKanbanTimeRule.get_process_types(self.process_template.code)
 
     if ["2210", "2211", "2212", "2411", "2220", "2240", "2221", "2222"].include? self.process_template.code
+      # args[:process_type] = process_types.first
+      # args[:description] = "2 pcs wire"
+      # # case self.process_template.code
+      # #   when "2210"
+      # #     cv_1 = self.custom_values.first.value
+      # #     cv_2 = self.custom_values.second.value
+      # #     length1 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: cv_1}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+      # #     length2 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: cv_2}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+      # #   when "2211"
+      # #     cv_1 = self.custom_values.first.value
+      # #     cv_3 = self.custom_values.third.value
+      # #     length1 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: Part.where("nr like '%#{cv_1}%'")}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+      # #     length2 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: cv_3}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+      # #   when "2212"
+      # #     cv_1 = self.custom_values.first.value
+      # #     cv_3 = self.custom_values.third.value
+      # #     length1 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: Part.where("nr like '%#{cv_1}%'")}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+      # #     length2 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: Part.where("nr like '%#{cv_3}%'")}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+      # #   when "2411"
+      # #     cv_1 = self.custom_values.first.value
+      # #     cv_3 = self.custom_values.third.value
+      # #     length1 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: Part.where("nr like '%#{cv_1}%'")}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+      # #     length2 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: cv_3}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+      # # end
+      #
+      # if length1 > length2
+      #   max = length1
+      #   min = length2
+      # else
+      #   max = length2
+      #   min = length1
+      # end
+      #
+      # if max < 1500
+      #   args[:detail] = "wire length is less than 1.5m"
+      # elsif min >= 1500
+      #   args[:detail] = "2 sides wire length are more than 1.5m"
+      # else
+      #   args[:detail] = "1 side wire length is more than 1.5m"
+      # end
+
       args[:process_type] = process_types.first
-      args[:description] = "2 pcs wire"
-      case self.process_template.code
-        when "2210"
-          cv_1 = self.custom_values.first.value
-          cv_2 = self.custom_values.second.value
-          length1 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: cv_1}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
-          length2 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: cv_2}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
-        when "2211"
-          cv_1 = self.custom_values.first.value
-          cv_3 = self.custom_values.third.value
-          length1 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: Part.where("nr like '%#{cv_1}%'")}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
-          length2 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: cv_3}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
-        when "2212"
-          cv_1 = self.custom_values.first.value
-          cv_3 = self.custom_values.third.value
-          length1 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: Part.where("nr like '%#{cv_1}%'")}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
-          length2 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: Part.where("nr like '%#{cv_3}%'")}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
-        when "2411"
-          cv_1 = self.custom_values.first.value
-          cv_3 = self.custom_values.third.value
-          length1 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: Part.where("nr like '%#{cv_1}%'")}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
-          length2 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: cv_3}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
-      end
-
-      if length1 > length2
-        max = length1
-        min = length2
-      else
-        max = length2
-        min = length1
-      end
-
-      if max < 1500
-        args[:detail] = "wire length is less than 1.5m"
-      elsif min >= 1500
-        args[:detail] = "2 sides wire length are more than 1.5m"
-      else
-        args[:detail] = "1 side wire length is more than 1.5m"
-      end
+      args[:description] = 'several wires'
+      args[:detail] = "2T/8T-continuous terminal"
 
     elsif ["2110", "2115", "2116"].include? self.process_template.code
       args[:process_type] = process_types.first
@@ -302,11 +305,45 @@ class ProcessEntity < ActiveRecord::Base
       args[:description] = 'corrugation pipe cutting'
       args[:detail] = self.custom_field_values[1].value
 
+    elsif ["2410"].include? self.process_template.code
+      args[:process_type] = process_types.first
+      args[:description] = '14 pcs wire'
+
+      left_max = 0.0
+      right_max = 0.0
+      self.custom_field_values.each_with_index do |value, index|
+        unless value.to_s.blank?
+          puts "111--------#{value}----------------#{index}--------------#{self.nr}---------------"
+          if (0...8).include? index
+            length = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: "#{value}"}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+            left_max = left_max > length ? left_max : length
+          elsif (9..16).include? index
+            length = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: "#{value}"}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+            right_max = right_max > length ? right_max : length
+          end
+        end
+      end
+
+      if left_max < 1500 && right_max < 1500
+        args[:detail] = "wire length is less than 1.5m"
+      elsif left_max >= 1500 && right_max >= 1500
+        args[:detail] = "2 sides wire length are more than 1.5m"
+      else
+        args[:detail] = "1 side wire length is more than 1.5m"
+      end
+
+
+    elsif ["5200"].include? self.process_template.code
+      args[:process_type] = process_types.first
+      args[:description] == 'Pull on the pipe'
+#############################步骤模板code为5200  的步骤长度都用0mm≤L≤200mm
+      args[:detail] = 100
+
     elsif ["5201", "5205"].include? self.process_template.code
       args[:process_type] = process_types.first
       args[:description] = 'Pull on the pipe'
       args[:detail] = self.custom_field_values[2].value
-######################################XXX################################################
+      ######################################XXX################################################
     elsif ["5202"].include? self.process_template.code
       args[:process_type] = process_types.first
       args[:description] = 'Pull on the pipe'
@@ -322,9 +359,8 @@ class ProcessEntity < ActiveRecord::Base
     elsif ["5420"].include? self.process_template.code
       args[:process_type] = process_types.first
       args[:description] = "Splice taping"
-
-      length1 = Part.where(id: self.custom_field_values[0].value).first.cross_section.to_f
-      length2 = Part.where(id: self.custom_field_values[1].value.gsub(/\D/, '')).first.cross_section.to_f
+      length1 = Part.where(id: self.custom_field_values[0].value).first.nil? ? 0 : Part.where(id: self.custom_field_values[0].value).first.cross_section.to_f
+      length2 = Part.where(id: self.custom_field_values[1].value).first.nil? ? 0 : Part.where(nr: self.custom_field_values[1].value).first.cross_section.to_f
 
       if length1 > length2
         difference = length1 - length2
@@ -338,9 +374,23 @@ class ProcessEntity < ActiveRecord::Base
         args[:detail] = "2 wires section gap more than 1mm"
       end
 
+    elsif ["5600", "5400", "5410", "2120", "2151"].include? self.process_template.code
+      args[:process_type] = process_types.first
+      args[:description] = 'Shiled wire'
+      case self.process_template.code
+        when "5600"
+          args[:detail] = "peel off"
+        when "5400"
+          args[:detail] = "Shrink the pipe"
+        when "5410"
+          args[:detail] = "Insert the shrinking pipe"
+        when "2120"
+          args[:detail] = "Order the wire"
+        when "2151"
+          args[:detail] = "cut the wire"
+      end
 
     end
-
 
     puts '-----------------------'
     puts args
