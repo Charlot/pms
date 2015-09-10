@@ -292,18 +292,21 @@ class ProcessEntity < ActiveRecord::Base
 
     elsif ["2200", "2207", "2208", "2250", "2251"].include? self.process_template.code
       args[:process_type] = process_types.first
-      args[:description] == 'single wire'
-      args[:detail] == 'continuous terminal-general crimping'
+      args[:description] = 'single wire'
+      args[:detail] = 'continuous terminal-general crimping'
 
     elsif ["2209"].include? self.process_template.code
       args[:process_type] = process_types.first
-      args[:description] == 'single wire and seal'
-      args[:detail] == '2T/8T-continuous terminal'
+      args[:description] = 'single wire and seal'
+      args[:detail] = '2T/8T-continuous terminal'
 
     elsif ["2020", "5210"].include? self.process_template.code
       args[:process_type] = process_types.first
       args[:description] = 'corrugation pipe cutting'
       args[:detail] = self.custom_field_values[1].value
+
+    elsif ["2300", "2301"].include? self.process_template.code
+      args[:process_type] = process_types.first
 
     elsif ["2410"].include? self.process_template.code
       args[:process_type] = process_types.first
@@ -335,7 +338,7 @@ class ProcessEntity < ActiveRecord::Base
 
     elsif ["5200"].include? self.process_template.code
       args[:process_type] = process_types.first
-      args[:description] == 'Pull on the pipe'
+      args[:description] = 'Pull on the pipe'
 #############################步骤模板code为5200  的步骤长度都用0mm≤L≤200mm
       args[:detail] = 100
 
@@ -354,7 +357,7 @@ class ProcessEntity < ActiveRecord::Base
 
     elsif ["5320"].include? self.process_template.code
       args[:process_type] = process_types.first
-      args[:description] == 'Insert the seal'
+      args[:description] = 'Insert the seal'
 
     elsif ["5420"].include? self.process_template.code
       args[:process_type] = process_types.first

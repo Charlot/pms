@@ -36,7 +36,11 @@
         <td><%= process_entity.parsed_wire_nr %></td>
         <td><%= ProcessType.display(process_entity.process_template_type) %></td>
         <td><%= best_in_place process_entity, :description, as: :input %></td>
-        <td><%= process_entity.stand_time %></td>
+        <% if ProcessType.semi_auto?(process_entity.process_template.type) %>
+            <td><%= process_entity.get_process_entity_worktime_by_blue %></td>
+        <% else %>
+            <td><%= process_entity.stand_time %></td>
+        <% end %>
         <td><%= process_entity.process_template_code %></td>
         <td>
           <%= best_in_place process_entity, :remark, as: :input %>

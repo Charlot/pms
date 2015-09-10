@@ -50,13 +50,13 @@ class BlueKanbanTimeRule
       when '2240'
         process_types = ["pneumatic crimping machine"]#["Splice crimping"]
       when '2250'
-        process_types = ["Handing Work", "pneumatic crimping machine"]
+        process_types = ["pneumatic crimping machine", "Handing Work"]
       when '2251'
-        process_types = ["Handing Work", "pneumatic crimping machine"]
+        process_types = ["pneumatic crimping machine", "Handing Work"]
       when '2300'
-        process_types = []
+        process_types = ["Soldering"]
       when '2301'
-        process_types = []
+        process_types = ["Soldering"]
 
       when '2410'
         process_types = ["Splice crimping"]
@@ -427,6 +427,10 @@ class BlueKanbanTimeRule
           process_enrity_time = 0.284
         end
       end
+
+      ###############焊锡
+    elsif params[:process_type] == 'Soldering'
+      process_enrity_time = 0.0
 
       #################手工工艺
     elsif params[:process_type] == 'Handing Work'
