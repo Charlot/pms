@@ -212,12 +212,21 @@ class ProductionOrderItem < ActiveRecord::Base
      ProductionOrderItemState::MANUAL_ABORTED].include?(self.state)
   end
 
+  def kanban_nr
+    @kanban_nr||=self.kanban.nr
+  end
+
+
   def process_entity
     @process_entity ||= (self.kanban.process_entities.first)
   end
 
-  def wire_nr
-    @wire_nr||=process_entity.value_wire_nr.to_i
+  def wire
+    @wire||=process_entity.value_wire_nr.to_i
+  end
+
+  def wire_length
+    @wire_length||=process_entity.value_wire_qty_factor.to_f
   end
 
   def t1
