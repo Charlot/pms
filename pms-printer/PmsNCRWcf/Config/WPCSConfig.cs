@@ -23,6 +23,7 @@ namespace PmsNCRWcf.Config
         private static string machineNr;
         private static string machineIP;
         private static string machineType;
+        private static List<string> machineTypes;
 
         private static string userNr;
         private static string userGroupNr;
@@ -57,7 +58,7 @@ namespace PmsNCRWcf.Config
 
             machineNr = config.Get("MachineNr");
             machineIP = config.Get("MachineIP");
-            machineType = config.Get("MachineType");
+            machineType= config.Get("MachineType");
 
 
             userNr = config.Get("UserNr");
@@ -66,6 +67,12 @@ namespace PmsNCRWcf.Config
 
             foreach (string s in config.Get("UserGroupsNr").Split(',')) {
                 userGroupsNr.Add(s);
+            }
+           
+
+            machineTypes = new List<string>();
+            foreach (string s in config.Get("MachineTypes").Split(',')) {
+                machineTypes.Add(s);
             }
 
             if (!int.TryParse(config.Get("ScanClientFolderInterval"), out scanClientFolderInterval))
@@ -166,6 +173,13 @@ namespace PmsNCRWcf.Config
                 config.Save();
             }
         }
+
+        public static List<string> MachineTypes
+        {
+            get { return WPCSConfig.machineTypes; }
+            set { WPCSConfig.machineTypes = value; }
+        }
+
 
         public static string UserNr
         {

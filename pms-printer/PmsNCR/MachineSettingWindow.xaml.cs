@@ -30,8 +30,17 @@ namespace PmsNCR
         {
             MachineNrTB.Text = WPCSConfig.MachineNr;
             MachineIPTB.Text = WPCSConfig.MachineIP;
-            MachineTypeTB.Text = WPCSConfig.MachineType;
+           // MachineTypeTB.Text = WPCSConfig.MachineType;
+            MachineTypesCB.ItemsSource = WPCSConfig.MachineTypes;
 
+            for (int i = 0; i < MachineTypesCB.Items.Count; i++)
+            {
+                if (MachineTypesCB.Items[i].Equals(WPCSConfig.MachineType))
+                {
+                    MachineTypesCB.SelectedIndex = i;
+                    break;
+                }
+            }
             PrintSleepTB.Text = WPCSConfig.PrintSleep.ToString();
             ServerIPTB.Text = ApiConfig.Host;
         }
@@ -41,7 +50,11 @@ namespace PmsNCR
             WPCSConfig.MachineNr = MachineNrTB.Text;
             WPCSConfig.MachineIP = MachineIPTB.Text;
             WPCSConfig.PrintSleep = int.Parse(PrintSleepTB.Text);
-            WPCSConfig.MachineType = MachineTypeTB.Text;
+
+            if (MachineTypesCB.SelectedIndex > -1)
+            {
+                WPCSConfig.MachineType = MachineTypesCB.SelectedValue.ToString();
+            }
 
             //ApiConfig.Host = ServerIPTB.Text;
             //MachineService ms = new MachineService();

@@ -44,7 +44,7 @@
                     <Label Content="Machine Type"/>
                 </StackPanel>
 
-                <TextBox Name="MachineTypeTB" Width="249" FontSize="20"/>
+                <ComboBox Name="MachineTypesCB" Width="246" />
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Margin="0,5,0,5">
                 <StackPanel Width="150">
