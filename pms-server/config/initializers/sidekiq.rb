@@ -1,5 +1,5 @@
 sidekqi_redis_conn =proc {
-  Redis::Namespace.new('test-sidekiqworker', :redis => $redis)
+  Redis::Namespace.new('sidekiqworker', :redis => $redis)
 }
 #
 
