@@ -14,6 +14,5 @@ namespace PmsNCR.Helper
             }
         }
 
-
     }
 }

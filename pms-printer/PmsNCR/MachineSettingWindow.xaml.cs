@@ -30,6 +30,9 @@ namespace PmsNCR
         {
             MachineNrTB.Text = WPCSConfig.MachineNr;
             MachineIPTB.Text = WPCSConfig.MachineIP;
+            MachineTypeTB.Text = WPCSConfig.MachineType;
+
+            PrintSleepTB.Text = WPCSConfig.PrintSleep.ToString();
             ServerIPTB.Text = ApiConfig.Host;
         }
 
@@ -37,10 +40,13 @@ namespace PmsNCR
         {
             WPCSConfig.MachineNr = MachineNrTB.Text;
             WPCSConfig.MachineIP = MachineIPTB.Text;
-            ApiConfig.Host = ServerIPTB.Text;
-            MachineService ms = new MachineService();
-            Msg<string> msg = ms.SettingIP(WPCSConfig.MachineNr, WPCSConfig.MachineIP);
-            MessageBox.Show(msg.Content);
+            WPCSConfig.PrintSleep = int.Parse(PrintSleepTB.Text);
+            WPCSConfig.MachineType = MachineTypeTB.Text;
+
+            //ApiConfig.Host = ServerIPTB.Text;
+            //MachineService ms = new MachineService();
+            //Msg<string> msg = ms.SettingIP(WPCSConfig.MachineNr, WPCSConfig.MachineIP);
+            //MessageBox.Show(msg.Content);
         }
 
     }

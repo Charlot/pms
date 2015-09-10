@@ -71,12 +71,13 @@ namespace PmsNCRWcf.Config
             printerConfig.Set("Copy", printer.Copy, printer.Id);
 
             // for change stock
-
-            printerConfig.Set("ChangeStock", printer.ChangeStock, printer.Id);
-            printerConfig.Set("StockName", printer.StockName, printer.Id);
-            printerConfig.Set("StockID", printer.StockID, printer.Id);
-            printerConfig.Set("Orientation", printer.Orientation, printer.Id);
-
+            if (printer.ChangeStock)
+            {
+                printerConfig.Set("ChangeStock", printer.ChangeStock, printer.Id);
+                printerConfig.Set("StockName", printer.StockName, printer.Id);
+                printerConfig.Set("StockID", printer.StockID, printer.Id);
+                printerConfig.Set("Orientation", printer.Orientation, printer.Id);
+            }
             printerConfig.Save();
         }
 

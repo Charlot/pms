@@ -13,3 +13,4 @@ C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\bin\Debug\Brilliante
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.csprojResolveAssemblyReference.cache
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.dll
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.pdb
+C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\bin\Debug\Brilliantech.ReportGenConnector.pdb

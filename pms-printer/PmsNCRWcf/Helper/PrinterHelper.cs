@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
 
 namespace PmsNCRWcf.Helper
 {
@@ -26,8 +27,9 @@ namespace PmsNCRWcf.Helper
         //public int With { get; set; }
     }
 
-    public class PrinterHelper
+    public class PrinterHelper : IDisposable
     {
+        private bool disposed = false; 
 
         #region "Private Variables"
         private IntPtr hPrinter = new System.IntPtr();
@@ -205,7 +207,7 @@ namespace PmsNCRWcf.Helper
         public bool ChangePrinterSetting(string PrinterName, PrinterData PS)
         {
 
-            if (((int)PS.Duplex < 1) || ((int)PS.Duplex > 3))
+            if (((int)PS.Duplex < 0))
             {
                 throw new ArgumentOutOfRangeException("nDuplexSetting",
                                          "nDuplexSetting is incorrect.");
@@ -233,7 +235,10 @@ namespace PmsNCRWcf.Helper
                 /*update driver dependent part of the DEVMODE
                 1 = DocumentProperties(IntPtr.Zero, hPrinter, sPrinterName, yDevModeData
                 , ref pinfo.pDevMode, (DM_IN_BUFFER | DM_OUT_BUFFER));*/
-                Marshal.StructureToPtr(pinfo, ptrPrinterInfo, true);
+
+                //Marshal.StructureToPtr(pinfo, ptrPrinterInfo, true);
+
+                Marshal.StructureToPtr(pinfo, ptrPrinterInfo, false);
                 lastError = Marshal.GetLastWin32Error();
                 nRet = Convert.ToInt16(SetPrinter(hPrinter, 2, ptrPrinterInfo, 0));
                 if (nRet == 0)
@@ -329,6 +334,31 @@ namespace PmsNCRWcf.Helper
                 return dm;
             }
         #endregion
+        }
+        SafeHandle handle = new SafeFileHandle(IntPtr.Zero, true);
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);   
+        }
+
+        // Protected implementation of Dispose pattern. 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed)
+                return;
+
+            if (disposing)
+            {
+                handle.Dispose();
+                // Free any other managed objects here. 
+                //
+            }
+
+            // Free any unmanaged objects here. 
+            //
+            disposed = true;
         }
     }
 }

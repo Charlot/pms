@@ -285,7 +285,7 @@ namespace PmsNCR
                 try
                 {
                     OrderService s = new OrderService();
-                    Msg<string> msg = s.GetOrderItemForProduce(orderItem.Id,mirror);
+                    Msg<string> msg = s.GetOrderItemForProduce(orderItem.Id, WPCSConfig.MachineType, mirror);
                     if (msg.Result)
                     {
                         if (OrderItemFile.WirteToFile(orderItem.FileName, msg.Object))
@@ -293,7 +293,7 @@ namespace PmsNCR
                             if (OrderDDSConverter.ConvertJsonOrderToDDS(orderItem.FileName))
                             {
                                 MessageBox.Show("Order Created, Please Use EASY to work!");
-                                s.SetOrderItemTool(orderItem.ItemNr,currentTool1,currentTool2);
+                                s.SetOrderItemTool(orderItem.ItemNr, currentTool1, currentTool2);
                                 this.Close();
                             }
                         }

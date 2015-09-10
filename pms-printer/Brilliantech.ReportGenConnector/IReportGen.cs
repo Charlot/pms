@@ -7,6 +7,6 @@ namespace Brilliantech.ReportGenConnector
 {
     public interface IReportGen
     {
-          void Print(RecordSet records, ReportGenConfig config);
+        void Print(RecordSet records, ReportGenConfig config);
     }
 }

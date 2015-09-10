@@ -22,6 +22,7 @@ namespace PmsNCRWcf.Config
 
         private static string machineNr;
         private static string machineIP;
+        private static string machineType;
 
         private static string userNr;
         private static string userGroupNr;
@@ -36,7 +37,10 @@ namespace PmsNCRWcf.Config
         private static string processsedFileClientFolder;
         private static string processsedFileClientDir;
 
-      
+
+        private static int printSleep = 1000;
+
+
 
         static WPCSConfig()
         {
@@ -53,10 +57,13 @@ namespace PmsNCRWcf.Config
 
             machineNr = config.Get("MachineNr");
             machineIP = config.Get("MachineIP");
+            machineType = config.Get("MachineType");
+
 
             userNr = config.Get("UserNr");
             userGroupNr = config.Get("UserGroupNr");
             userGroupsNr = new List<string>();
+
             foreach (string s in config.Get("UserGroupsNr").Split(',')) {
                 userGroupsNr.Add(s);
             }
@@ -77,6 +84,9 @@ namespace PmsNCRWcf.Config
 
             processsedFileClientFolder = config.Get("ProcesssedFileClientFolder");
             processsedFileClientDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, processsedFileClientFolder);
+
+            printSleep = int.Parse(config.Get("PrintSleep"));
+
         }
 
 
@@ -145,6 +155,18 @@ namespace PmsNCRWcf.Config
             }
         }
 
+
+        public static string MachineType
+        {
+            get { return WPCSConfig.machineType; }
+            set
+            {
+                WPCSConfig.machineType = value;
+                config.Set("MachineType", value);
+                config.Save();
+            }
+        }
+
         public static string UserNr
         {
             get { return WPCSConfig.userNr; }
@@ -206,6 +228,18 @@ namespace PmsNCRWcf.Config
         {
             get { return WPCSConfig.processsedFileClientDir; }
             set { WPCSConfig.processsedFileClientDir = value; }
+        }
+
+
+        public static int PrintSleep
+        {
+            get { return WPCSConfig.printSleep; }
+            set
+            {
+                WPCSConfig.printSleep = value;
+                config.Set("PrintSleep", value);
+                config.Save();
+            }
         }
     }
 }

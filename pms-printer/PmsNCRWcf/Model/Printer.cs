@@ -6,6 +6,8 @@ using System.IO;
 using Brilliantech.ReportGenConnector;
 using TECIT.TFORMer;
 using PmsNCRWcf.Helper;
+using System.Threading;
+using PmsNCRWcf.Config;
  
 namespace PmsNCRWcf.Model
 {
@@ -50,11 +52,19 @@ namespace PmsNCRWcf.Model
             string printerName= string.IsNullOrEmpty(printer_name) ? this.Name : printer_name;
             if (this.ChangeStock)
             {
-                PrinterHelper ph = new PrinterHelper();
-                PmsNCRWcf.Helper.PrinterHelper.DEVMODE dm = ph.GetPrinterSettings(printerName);
-                PrinterData pd = new PrinterData() { Size = this.StockID, Duplex = dm.dmDuplex, Orientation = this.Orientation };
-                ph.ChangePrinterSetting(printerName, pd);
+                using (PrinterHelper ph = new PrinterHelper())
+                {
+                    PrinterData pd = new PrinterData() { Size = this.StockID, Orientation = this.Orientation };
+                    ph.ChangePrinterSetting(printerName, pd);
+                }
             }
+            // theard sleep to make change sotck operate works, otherwise the printer not using the setting,
+            // next print it will.
+            // the sleep time is not a defined value, it maybe related to the os performace!
+            // at least sleep 1000ms!
+            // ** there must anoter way to make it works, not use thread.sleep...
+            Thread.Sleep(WPCSConfig.PrintSleep);
+
             IReportGen gen = new TecITGener();
             ReportGenConfig config = new ReportGenConfig()
             {

@@ -35,8 +35,7 @@ namespace Brilliantech.ReportGenConnector
             job.PrinterName = config.Printer;
             job.PrinterType = config.PrinterType;
             job.NumberOfCopies = config.NumberOfCopies;
-            //job.ConfigFile = "新卷";
-            //job.ConfigFile=""
+         
             for (int i = 0; i <= records.Count - 1; i++)
             {
                 Record rec = new Record();

@@ -52,7 +52,7 @@ namespace PmsNCRWcf
         /// </summary>
         /// <param name="orderItemId"></param>
         /// <returns></returns>
-        public Msg<string> GetOrderItemForProduce(int orderItemId,bool mirror=false)
+        public Msg<string> GetOrderItemForProduce(int orderItemId, string machine_type = null, bool mirror = false)
         {
             Msg<string> msg = new Msg<string>();
             var req = new RestRequest(ApiConfig.OrderItemForProduceAction, Method.GET);
@@ -62,6 +62,11 @@ namespace PmsNCRWcf
             {
                 req.AddParameter("mirror", mirror);
             }
+
+            if (machine_type != null) {
+                req.AddParameter("machine_type", machine_type);
+            }
+            
             var res = new ApiClient().Execute(req);
             var data = res.Content;
             if (data != null)
