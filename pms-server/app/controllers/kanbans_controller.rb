@@ -383,10 +383,10 @@ end
       end
     end
     #need_update = @kanban.versions.count > parsed_code[:version_nr].to_i
-
+if Setting.check_kanban_version?
     #response dependent on Kanban type
     render json: {result: false, content: "看板已经更新，请重新打印!"} and return if need_update && @kanban.ktype == KanbanType::BLUE
-
+end
     #check kanban quantity and bundle
     render json: {result: false, content: "看板数量为0，不能扫描！"} and return if @kanban.quantity == 0
 

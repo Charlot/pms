@@ -5,11 +5,11 @@ module ProductionOrdersHelper
 
   # best in place options
   def production_order_bip_options(production_order)
-    ProductionOrder.where.not(id: production_order.id).offset(offset).limit(100).collect { |p| [p.id, p.nr] }<<[production_order.id, production_order.nr]
+    ProductionOrder.where.not(id: production_order.id).offset(offset).limit(200).collect { |p| [p.id, p.nr] }<<[production_order.id, production_order.nr]
   end
 
   private
   def offset
-    ProductionOrder.count<100 ? 0 : (ProductionOrder.count-100)
+    ProductionOrder.count<200 ? 0 : (ProductionOrder.count-200)
   end
 end
