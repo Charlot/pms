@@ -214,4 +214,259 @@ class ProcessEntity < ActiveRecord::Base
       ''
     end
   end
+
+  def parse_process_entity
+    puts '------------------parse_process_entity--------------------'
+    args = {}
+    process_types = BlueKanbanTimeRule.get_process_types(self.process_template.code)
+
+    if ["2210", "2211", "2212", "2411", "2220", "2240", "2221", "2222"].include? self.process_template.code
+      # args[:process_type] = process_types.first
+      # args[:description] = "2 pcs wire"
+      # # case self.process_template.code
+      # #   when "2210"
+      # #     cv_1 = self.custom_values.first.value
+      # #     cv_2 = self.custom_values.second.value
+      # #     length1 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: cv_1}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+      # #     length2 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: cv_2}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+      # #   when "2211"
+      # #     cv_1 = self.custom_values.first.value
+      # #     cv_3 = self.custom_values.third.value
+      # #     length1 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: Part.where("nr like '%#{cv_1}%'")}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+      # #     length2 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: cv_3}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+      # #   when "2212"
+      # #     cv_1 = self.custom_values.first.value
+      # #     cv_3 = self.custom_values.third.value
+      # #     length1 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: Part.where("nr like '%#{cv_1}%'")}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+      # #     length2 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: Part.where("nr like '%#{cv_3}%'")}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+      # #   when "2411"
+      # #     cv_1 = self.custom_values.first.value
+      # #     cv_3 = self.custom_values.third.value
+      # #     length1 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: Part.where("nr like '%#{cv_1}%'")}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+      # #     length2 = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: cv_3}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+      # # end
+      #
+      # if length1 > length2
+      #   max = length1
+      #   min = length2
+      # else
+      #   max = length2
+      #   min = length1
+      # end
+      #
+      # if max < 1500
+      #   args[:detail] = "wire length is less than 1.5m"
+      # elsif min >= 1500
+      #   args[:detail] = "2 sides wire length are more than 1.5m"
+      # else
+      #   args[:detail] = "1 side wire length is more than 1.5m"
+      # end
+
+      args[:process_type] = process_types.first
+      args[:description] = 'several wires'
+      args[:detail] = "2T/8T-continuous terminal"
+
+    elsif ["2110", "2115", "2116"].include? self.process_template.code
+      args[:process_type] = process_types.first
+      args[:description] = "Strip"
+
+    elsif ["2150"].include? self.process_template.code
+      args[:process_type] = process_types.first
+      args[:description] = "only cutting"
+      args[:detail] = self.custom_field_values[1].value
+
+    elsif ["2165"].include? self.process_template.code
+      args[:process_type] = process_types.first
+      args[:description] = "Twisting"
+      args[:detail] = self.custom_field_values[6].value
+
+    elsif ["2160"].include? self.process_template.code
+      args[:process_type] = process_types.first
+      args[:description] = "Twisting(2 wires)"
+      args[:detail] = self.custom_field_values[3].value
+
+    elsif ["2170"].include? self.process_template.code
+      args[:process_type] = process_types.first
+      args[:description] = "cut wire and sort the wire"
+      args[:detail] = "for RBA"
+
+    elsif ["2200", "2207", "2208", "2250", "2251"].include? self.process_template.code
+      args[:process_type] = process_types.first
+      args[:description] = 'single wire'
+      args[:detail] = 'continuous terminal-general crimping'
+
+    elsif ["2209"].include? self.process_template.code
+      args[:process_type] = process_types.first
+      args[:description] = 'single wire and seal'
+      args[:detail] = '2T/8T-continuous terminal'
+
+    elsif ["2020", "5210"].include? self.process_template.code
+      args[:process_type] = process_types.first
+      args[:description] = 'corrugation pipe cutting'
+      args[:detail] = self.custom_field_values[1].value
+
+    elsif ["2300", "2301"].include? self.process_template.code
+      args[:process_type] = process_types.first
+
+    elsif ["2410"].include? self.process_template.code
+      args[:process_type] = process_types.first
+      args[:description] = '14 pcs wire'
+
+      left_max = 0.0
+      right_max = 0.0
+      self.custom_field_values.each_with_index do |value, index|
+        unless value.to_s.blank?
+          puts "111--------#{value}----------------#{index}--------------#{self.nr}---------------"
+          if (0...8).include? index
+            length = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: "#{value}"}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+            left_max = left_max > length ? left_max : length
+          elsif (9..16).include? index
+            length = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: "#{value}"}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+            right_max = right_max > length ? right_max : length
+          end
+        end
+      end
+
+      if left_max < 1500 && right_max < 1500
+        args[:detail] = "wire length is less than 1.5m"
+      elsif left_max >= 1500 && right_max >= 1500
+        args[:detail] = "2 sides wire length are more than 1.5m"
+      else
+        args[:detail] = "1 side wire length is more than 1.5m"
+      end
+
+
+    elsif ["5200"].include? self.process_template.code
+      args[:process_type] = process_types.first
+      args[:description] = 'Pull on the pipe'
+#############################步骤模板code为5200  的步骤长度都用0mm≤L≤200mm
+      args[:detail] = 100
+
+    elsif ["5201", "5205"].include? self.process_template.code
+      args[:process_type] = process_types.first
+      args[:description] = 'Pull on the pipe'
+      args[:detail] = self.custom_field_values[2].value
+      ######################################XXX################################################
+    elsif ["5202"].include? self.process_template.code
+      args[:process_type] = process_types.first
+      args[:description] = 'Pull on the pipe'
+      args[:detail] = self.custom_field_values[10].value
+
+    elsif ["5300"].include? self.process_template.code
+      args[:process_type] = process_types.first
+
+    elsif ["5320"].include? self.process_template.code
+      args[:process_type] = process_types.first
+      args[:description] = 'Insert the seal'
+
+    elsif ["5420"].include? self.process_template.code
+      args[:process_type] = process_types.first
+      args[:description] = "Splice taping"
+      length1 = Part.where(id: self.custom_field_values[0].value).first.nil? ? 0 : Part.where(id: self.custom_field_values[0].value).first.cross_section.to_f
+      length2 = Part.where(id: self.custom_field_values[1].value).first.nil? ? 0 : Part.where(nr: self.custom_field_values[1].value).first.cross_section.to_f
+
+      if length1 > length2
+        difference = length1 - length2
+      else
+        difference = length2 - length1
+      end
+
+      if difference < 1
+        args[:detail] = "2 wires section gap less than 1mm"
+      else
+        args[:detail] = "2 wires section gap more than 1mm"
+      end
+
+    elsif ["5600", "5400", "5410", "2120", "2151"].include? self.process_template.code
+      args[:process_type] = process_types.first
+      args[:description] = 'Shiled wire'
+      case self.process_template.code
+        when "5600"
+          args[:detail] = "peel off"
+        when "5400"
+          args[:detail] = "Shrink the pipe"
+        when "5410"
+          args[:detail] = "Insert the shrinking pipe"
+        when "2120"
+          args[:detail] = "Order the wire"
+        when "2151"
+          args[:detail] = "cut the wire"
+      end
+
+    end
+
+    puts '-----------------------'
+    puts args
+    args
+  end
+
+  def get_process_entity_worktime(production_order_item=nil)
+    process_enrity_time = 0.000
+    if ProcessType.semi_auto?(self.process_template.type)
+      process_enrity_time = BlueKanbanTimeRule.get_blue_kanban_process_enrity_time(self.parse_process_entity)
+    else
+      if production_order_item && (machine=production_order_item.machine) && (machine_type_id = machine.machine_type_id)
+      else
+        machine_type_id = MachineType.find_by_nr('CC36').id
+      end
+
+      if machine_type_id.nil?
+        return process_enrity_time
+      end
+
+      #根据全自动看的工艺来查找出操作代码
+      oee = OeeCode.find_by_nr(self.oee_code)
+
+      if oee.nil?
+        return process_enrity_time
+      end
+
+      #查找全部满足的全自动工时规则，并且以断线长度升序排序
+      timerule = nil
+      wire_length_value = self.value_wire_qty_factor.to_f
+      timerule = MachineTimeRule.where(["oee_code_id = ? AND machine_type_id = ? AND min_length <= ? AND length > ?", oee.id, machine_type_id, wire_length_value, wire_length_value]).first
+
+      unless timerule.nil?
+        process_enrity_time = timerule.time
+      end
+    end
+
+    process_enrity_time.round(3)
+  end
+
+  def get_process_entity_worktime_by_blue
+    process_enrity_time = BlueKanbanTimeRule.get_blue_kanban_process_enrity_time(self.parse_process_entity)
+  end
+
+  def get_process_entity_worktime_by_white(production_order_item=nil)
+    process_enrity_time = 0.000
+
+    if production_order_item && (machine=production_order_item.machine) && (machine_type_id = machine.machine_type_id)
+    else
+      machine_type_id = MachineType.find_by_nr('CC36').id
+    end
+
+    if machine_type_id.nil?
+      return process_enrity_time
+    end
+
+    #根据全自动看的工艺来查找出操作代码
+    oee = OeeCode.find_by_nr(self.oee_code)
+
+    if oee.nil?
+      return process_enrity_time
+    end
+
+    #查找全部满足的全自动工时规则，并且以断线长度升序排序
+    timerule = nil
+    wire_length_value = self.value_wire_qty_factor.to_f
+    timerule = MachineTimeRule.where(["oee_code_id = ? AND machine_type_id = ? AND min_length <= ? AND length > ?", oee.id, machine_type_id, wire_length_value, wire_length_value]).first
+
+    unless timerule.nil?
+      process_enrity_time = timerule.time
+    end
+
+    process_enrity_time
+  end
+
 end

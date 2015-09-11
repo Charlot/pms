@@ -35,7 +35,7 @@ bower.json
 *.*~
 *.~lock*
 /.idea/*
-
+/.idea
 # upload files
 /uploadfiles/**/*
 !/uploadfiles/**/.keep

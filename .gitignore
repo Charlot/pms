@@ -1,4 +1,4 @@
 # editor cache
 *.*~
 *.~lock*
-/.idea
+/.idea/*

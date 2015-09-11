@@ -154,7 +154,7 @@ class ProcessEntitiesController < ApplicationController
                 puts "#{k}:#{v}"
 
                 if cf=CustomField.find_by_id(k)
-                  cv=CustomValue.new(custom_field_id: k, is_for_out_stock: params[:is_for_out_stock].has_key?(k), value: cf.get_field_format_value(v))
+                  cv=CustomValue.new(custom_field_id: k, is_for_out_stock: (params[:is_for_out_stock].nil? ? 0 : params[:is_for_out_stock].has_key?(k)), value: cf.get_field_format_value(v))
                   @process_entity.custom_values<<cv
                 end
               end
