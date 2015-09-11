@@ -400,6 +400,40 @@ class ProcessEntity < ActiveRecord::Base
     args
   end
 
+  def get_process_entity_worktime(production_order_item=nil)
+    process_enrity_time = 0.000
+    if ProcessType.semi_auto?(self.process_template.type)
+      process_enrity_time = BlueKanbanTimeRule.get_blue_kanban_process_enrity_time(self.parse_process_entity)
+    else
+      if production_order_item && (machine=production_order_item.machine) && (machine_type_id = machine.machine_type_id)
+      else
+        machine_type_id = MachineType.find_by_nr('CC36').id
+      end
+
+      if machine_type_id.nil?
+        return process_enrity_time
+      end
+
+      #根据全自动看的工艺来查找出操作代码
+      oee = OeeCode.find_by_nr(self.oee_code)
+
+      if oee.nil?
+        return process_enrity_time
+      end
+
+      #查找全部满足的全自动工时规则，并且以断线长度升序排序
+      timerule = nil
+      wire_length_value = self.value_wire_qty_factor.to_f
+      timerule = MachineTimeRule.where(["oee_code_id = ? AND machine_type_id = ? AND min_length <= ? AND length > ?", oee.id, machine_type_id, wire_length_value, wire_length_value]).first
+
+      unless timerule.nil?
+        process_enrity_time = timerule.time
+      end
+    end
+
+    process_enrity_time.round(3)
+  end
+
   def get_process_entity_worktime_by_blue
     process_enrity_time = BlueKanbanTimeRule.get_blue_kanban_process_enrity_time(self.parse_process_entity)
   end

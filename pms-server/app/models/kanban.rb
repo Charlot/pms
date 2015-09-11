@@ -242,12 +242,14 @@ class Kanban < ActiveRecord::Base
       case self.ktype
         when KanbanType::WHITE
           unless (process_entity = self.process_entities.first).nil?
-            task_time = process_entity.get_process_entity_worktime_by_white(self.production_order_items.last) * self.quantity
+            task_time = process_entity.get_process_entity_worktime(self.production_order_items.last)
           end
+
+          task_time *= self.quantity
         when KanbanType::BLUE
           self.process_entities.each_with_index do |process_entity,i|
             puts "-------#{i}..#{process_entity.process_template.code}----#{process_entity.nr}".yellow
-            task_time += process_entity.get_process_entity_worktime_by_blue
+            task_time += process_entity.get_process_entity_worktime
           end
 
           task_time = task_time * self.quantity
