@@ -469,4 +469,6 @@ class ProcessEntity < ActiveRecord::Base
     process_enrity_time
   end
 
+  alias :work_time :get_process_entity_worktime
+
 end

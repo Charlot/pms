@@ -45,10 +45,10 @@ module Printer
             route_nr: pe.process_template.code,
             route_name: pe.name.to_i.to_s,
             route_desc: pe.template_text,
-            work_time_of_route: pe.stand_time,
+            work_time_of_route: pe.work_time,
             route_remark: pe.remark,
             route_part_info: '',
-            consume_date: kpe.id #TODO route consume data
+            consume_date: pe.nr #TODO route consume data
         }
 
         route_part_info=''

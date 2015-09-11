@@ -63,17 +63,8 @@ class Kanban < ActiveRecord::Base
   end
 
   def self.find_by_wire_nr key, operator, value
-<<<<<<< HEAD
-
     q={conditions: "kanbans.nr like '%#{value}%'"}
-    puts "qqqqqqqqqqqqqqqqqqq#{q.to_json}"
 
-
-
-    puts '-------------1'
-=======
-	  puts '------find_by_wire_nr-------'
->>>>>>> worktime
     parts = Part.where("nr LIKE '%_#{value}%'").map(&:id)
     if parts.count > 0
       puts parts.to_json.red
@@ -91,7 +82,6 @@ class Kanban < ActiveRecord::Base
         q= {conditions: "kanbans.nr like '%#{value}%'"}
       end
       if kanbans.count > 0
-        puts "#{kanbans.to_json}".blue
         q= {conditions: "kanbans.id IN(#{kanbans.join(',')})"}
       end
     end
@@ -100,7 +90,6 @@ class Kanban < ActiveRecord::Base
       puts '-------------------------------------------------'
       q={conditions: "kanbans.nr like '%#{value}%' or kanbans.state=#{state}"}
     end
-    puts "qqqqqqqqqqqqqqqqqqq#{q.to_json}"
     return q
   end
 
