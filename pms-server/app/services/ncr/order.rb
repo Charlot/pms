@@ -75,7 +75,8 @@ module Ncr
       "#{item.nr}"
     end
 
-    def json_order_item_content(item, mirror=false)
+    # sng: 索尼格
+    def json_order_item_content(item, machine_type=nil, mirror=false)
       kanban=item.kanban
       process_entity=kanban.process_entities.first
       # template=process_entity.process_template
@@ -260,6 +261,37 @@ module Ncr
         }
       end
 
+      puts "----------------------#{machine_type}".yellow
+      puts json
+      if machine_type=='Komax333'
+        puts '------------------'.yellow
+        # remove Name & Hint
+        json.each do |k, v|
+          puts k
+
+          puts v
+          puts v.class
+          if v.is_a?(Hash)
+            v.values.each do |vv|
+              puts '---------------------'.blue
+              puts vv
+              puts vv.class
+              puts '---------------------'.blue
+              vv.delete(:Name)
+              vv.delete(:Hint)
+
+              puts '---------------------'.red
+              puts vv
+              puts vv.class
+              puts '---------------------'.red
+            end
+          end
+        end
+      end
+
+      puts json
+
+      # raise
       # puts "---------------------"
       # puts json.to_json
       # puts "------------------------"

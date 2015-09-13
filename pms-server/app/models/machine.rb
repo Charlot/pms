@@ -36,7 +36,7 @@ class Machine < ActiveRecord::Base
 
       parts=[]
       keys.each do |k|
-        if (v=current_process.send("value_#{k}"))
+        unless (v=current_process.send("value_#{k}")).blank?
           parts<<v
         end
       end
@@ -51,7 +51,7 @@ class Machine < ActiveRecord::Base
   end
 
   def sort_order_item
-    # ProductionOrderItemModel.initialize_items(for_sort_order_items).each_with_index do |item, i|
+    # ProductionOrderItemModel.initialize_items(for_sort_order_items,self).each_with_index do |item, i|
     #   item.order_item.update_attributes(optimise_index: i+1, state: ProductionOrderItemState::OPTIMISE_SUCCEED)
     # end
 
@@ -228,25 +228,6 @@ class Machine < ActiveRecord::Base
              end
           optimise_index+=(o1<o2 ? o1 : o2)
         end
-
-        #
-        # if cs1==is1 && cs2==is2
-        #   optimise_index+=0
-        # elsif cs1!=is1 && cs2==is2
-        #   optimise_index+=self.seal_time
-        # elsif cs1!=is1 && cs2!=is2
-        #   optimise_index+=self.seal_time*2
-        # elsif cs1!=is2 && cs2!=is1
-        #   optimise_index+=self.seal_time*2
-        # elsif cs1!=is2 && cs2==is1
-        #   optimise_index+=self.seal_time
-        # elsif cs1==is1 && cs2!=is2
-        #   optimise_index+=self.seal_time
-        # elsif cs1==is2 && cs2!=is1
-        #   optimise_index+=self.seal_time
-        # elsif cs1==is2 && cs2==is1
-        #   optimise_index+=0
-        # end
 
         compares[item]=optimise_index
         #item.update_attributes(machine_time: optimise_index)
