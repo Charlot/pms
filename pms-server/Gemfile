@@ -1,5 +1,5 @@
-source 'https://rubygems.org'
-# source 'https://ruby.taobao.org'
+# source 'https://rubygems.org'
+source 'https://ruby.taobao.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.0'
@@ -93,3 +93,6 @@ gem 'whenever'
 
 # active observer, removed from core since 4.0
 # gem 'rails-observers'
+
+# backup
+gem 'backup'
