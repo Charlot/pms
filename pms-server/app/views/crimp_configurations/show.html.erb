@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Custom:</strong>
+  <%= @crimp_configuration.custom_id %>
+</p>
+
+<p>
+  <strong>Wire group:</strong>
+  <%= @crimp_configuration.wire_group_name %>
+</p>
+
+<p>
+  <strong>Part:</strong>
+  <%= @crimp_configuration.part_id %>
+</p>
+
+<p>
+  <strong>Wire type:</strong>
+  <%= @crimp_configuration.wire_type %>
+</p>
+
+<p>
+  <strong>Cross section:</strong>
+  <%= @crimp_configuration.cross_section %>
+</p>
+
+<%= link_to 'Edit', edit_crimp_configuration_path(@crimp_configuration) %> |
+<%= link_to 'Back', crimp_configurations_path %>

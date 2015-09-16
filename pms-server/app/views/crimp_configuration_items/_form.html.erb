@@ -1,0 +1,57 @@
+<%= form_for(@crimp_configuration_item) do |f| %>
+  <% if @crimp_configuration_item.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@crimp_configuration_item.errors.count, "error") %> prohibited this crimp_configuration_item from being saved:</h2>
+
+      <ul>
+      <% @crimp_configuration_item.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :side %><br>
+    <%= f.text_field :side %>
+  </div>
+  <div class="field">
+    <%= f.label :min_pulloff %><br>
+    <%= f.text_field :min_pulloff %>
+  </div>
+  <div class="field">
+    <%= f.label :crimp_height %><br>
+    <%= f.text_field :crimp_height %>
+  </div>
+  <div class="field">
+    <%= f.label :crimp_height_iso %><br>
+    <%= f.text_field :crimp_height_iso %>
+  </div>
+  <div class="field">
+    <%= f.label :crimp_width %><br>
+    <%= f.text_field :crimp_width %>
+  </div>
+  <div class="field">
+    <%= f.label :crimp_width_iso %><br>
+    <%= f.text_field :crimp_width_iso %>
+  </div>
+  <div class="field">
+    <%= f.label :i_crimp_height %><br>
+    <%= f.text_field :i_crimp_height %>
+  </div>
+  <div class="field">
+    <%= f.label :i_crimp_height_iso %><br>
+    <%= f.text_field :i_crimp_height_iso %>
+  </div>
+  <div class="field">
+    <%= f.label :i_crimp_width %><br>
+    <%= f.text_field :i_crimp_width %>
+  </div>
+  <div class="field">
+    <%= f.label :i_crimp_width_iso %><br>
+    <%= f.text_field :i_crimp_width_iso %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

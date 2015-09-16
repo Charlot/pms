@@ -1,0 +1,2 @@
+module MeasuredValueRecordsHelper
+end

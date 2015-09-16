@@ -1,0 +1,2 @@
+module WireGroupsHelper
+end

@@ -11,7 +11,48 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150720023255) do
+ActiveRecord::Schema.define(version: 20150915053753) do
+
+  create_table "crimp_configuration_items", force: true do |t|
+    t.integer  "crimp_configuration_id"
+    t.string   "side"
+    t.float    "min_pulloff"
+    t.float    "crimp_height"
+    t.float    "crimp_height_iso"
+    t.float    "crimp_width"
+    t.float    "crimp_width_iso"
+    t.float    "i_crimp_height"
+    t.float    "i_crimp_height_iso"
+    t.float    "i_crimp_width"
+    t.float    "i_crimp_width_iso",      default: 0.0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "crimp_configuration_items", ["crimp_configuration_id"], name: "index_crimp_configuration_items_on_crimp_configuration_id", using: :btree
+
+  create_table "crimp_configurations", force: true do |t|
+    t.string   "custom_id"
+    t.string   "wire_group_name"
+    t.string   "part_id"
+    t.string   "wire_type"
+    t.float    "cross_section",      default: 0.0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.float    "min_pulloff_value",  default: 0.0
+    t.float    "crimp_height",       default: 0.0
+    t.float    "crimp_height_iso",   default: 0.0
+    t.float    "crimp_width",        default: 0.0
+    t.float    "crimp_width_iso",    default: 0.0
+    t.float    "i_crimp_height",     default: 0.0
+    t.float    "i_crimp_height_iso", default: 0.0
+    t.float    "i_crimp_width",      default: 0.0
+    t.float    "i_crimp_width_iso",  default: 0.0
+  end
+
+  add_index "crimp_configurations", ["part_id"], name: "index_crimp_configurations_on_part_id", using: :btree
+  add_index "crimp_configurations", ["wire_group_name"], name: "index_crimp_configurations_on_wire_group_name", using: :btree
+  add_index "crimp_configurations", ["wire_type"], name: "index_crimp_configurations_on_wire_type", using: :btree
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -216,6 +257,25 @@ ActiveRecord::Schema.define(version: 20150720023255) do
   end
 
   add_index "measure_units", ["code"], name: "index_measure_units_on_code", using: :btree
+
+  create_table "measured_value_records", force: true do |t|
+    t.string   "production_order_id"
+    t.string   "part_id"
+    t.float    "crimp_height_1"
+    t.float    "crimp_height_2"
+    t.float    "crimp_height_3"
+    t.float    "crimp_height_4"
+    t.float    "crimp_height_5"
+    t.float    "crimp_width"
+    t.float    "i_crimp_heigth"
+    t.float    "i_crimp_width"
+    t.float    "pulloff_value"
+    t.string   "note"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "measured_value_records", ["production_order_id"], name: "index_measured_value_records_on_production_order_id", using: :btree
 
   create_table "ncr_api_logs", force: true do |t|
     t.string   "machine_nr"
@@ -559,5 +619,16 @@ ActiveRecord::Schema.define(version: 20150720023255) do
     t.datetime "updated_at"
     t.string   "regex"
   end
+
+  create_table "wire_groups", force: true do |t|
+    t.string   "group_name",                            default: ""
+    t.string   "wire_type",                             default: ""
+    t.decimal  "cross_section", precision: 6, scale: 4, default: 0.0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "wire_groups", ["group_name"], name: "index_wire_groups_on_group_name", using: :btree
+  add_index "wire_groups", ["wire_type"], name: "index_wire_groups_on_wire_type", using: :btree
 
 end

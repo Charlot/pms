@@ -24,8 +24,8 @@ module V1
             if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
               puts "-------------------#{params.to_json}".red
               # item.without_versioning do
-                item.update_attributes(tool1: params[:tool1_nr], tool2: params[:tool2_nr])
-            # end
+              item.update_attributes(tool1: params[:tool1_nr], tool2: params[:tool2_nr])
+              # end
 
             end
             msg=ServiceMessage.new
@@ -147,6 +147,66 @@ module V1
                                            order_item_nr: params[:order_item_nr]})
               printer.gen_data
             end
+          end
+        end
+
+        namespace :spc do
+          get :crimp_configuration_by_order do
+            args = {}
+            msg=ServiceMessage.new
+
+            production_order_item = ProductionOrderItem.find_by_id(params[:production_order_item_id])
+            if production_order_item.nil?
+              msg.Content = "This order:#{params[:production_order_item_id]} is not valid!"
+              return msg
+            end
+
+            process_entity = production_order_item.kanban.process_entities.first
+            if process_entity.nil?
+              msg.Content = "Can not find process entity!"
+              return msg
+            end
+
+            wire = Part.find(process_entity.value_wire_nr)
+            if wire.nil?
+              msg.Content = "Can not find wire!"
+              return msg
+            end
+            wire_type = wire.component_type
+            cross_section = wire.cross_section
+            custom_id = wire.custom_nr
+
+            unless process_entity.value_t1.nil?
+              part1_id = Part.find(process_entity.value_t1).nr
+              item1 = CrimpConfiguration.where(custom_id: custom_id, part_id: part1_id, wire_type: wire_type, cross_section: cross_section).first
+              unless item1.nil?
+                args[:side1] = [item1.min_pulloff_value, item1.crimp_height, item1.crimp_height_iso, item1.crimp_width, item1.crimp_width_iso, item1.i_crimp_height, item1.i_crimp_height_iso, item1.i_crimp_width, item1.i_crimp_width_iso]
+              end
+            end
+
+            unless process_entity.value_t2.nil?
+              part2_id = Part.find(process_entity.value_t2).nr
+              item2 = CrimpConfiguration.where(custom_id: custom_id, part_id: part2_id, wire_type: wire_type, cross_section: cross_section).first
+              unless item2.nil?
+                args[:side2] = [item2.min_pulloff_value, item2.crimp_height, item2.crimp_height_iso, item2.crimp_width, item2.crimp_width_iso, item2.i_crimp_height, item2.i_crimp_height_iso, item2.i_crimp_width, item2.i_crimp_width_iso]
+              end
+            end
+            args
+          end
+
+          post :store_measured_data do
+            puts params
+            msg=ServiceMessage.new
+            record = MeasuredValueRecord.new(production_order_id: params[:production_order_id], part_id: params[:part_id], crimp_height_1: params[:crimp_height_1], crimp_height_2: params[:crimp_height_2], crimp_height_3: params[:crimp_height_3], crimp_height_4: params[:crimp_height_4], crimp_height_5: params[:crimp_height_5], crimp_width: params[:crimp_width], i_crimp_heigth: params[:i_crimp_heigth], i_crimp_width: params[:i_crimp_width], pulloff_value: params[:pulloff_value])
+            if record.save
+              msg.Result = true
+              msg.Content = "Success"
+            else
+              msg.Result = false
+              msg.Content = "Failed"
+            end
+
+            msg
           end
         end
 

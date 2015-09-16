@@ -1,0 +1,21 @@
+<h1>ISO 标准值列表</h1>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        data_upload("#item-data-uploader");
+    });
+</script>
+<p id="notice">
+  <%= notice %>
+</p>
+<h3>上传CrimpConfiguration文件</h3>
+<div>
+  选择数据文件：
+  <input id="item-data-uploader" type="file" name="files[]" data-url="/crimp_configuration_items/import"/>
+  <div id="item-data-uploader-preview" style="display:none;"></div>
+  <div>
+    <a href="/files/<%= ImportTemplate.crimp_configration_item_excel_template %>">下载模板：<%= ImportTemplate::CRIMP_CONFIGRATION_ITEM_EXCEL_TEMPLATE %></a>
+  </div>
+</div>
+
+<%= link_to '返回', crimp_configurations_path %>

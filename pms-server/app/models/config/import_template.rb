@@ -26,6 +26,9 @@ class ImportTemplate
   MASTER_BOM_DELETE_EXCEL_TEMPLATE='master_bom_delete_template.xlsx'
   ORDER_BOM_CSV_TEMPLATE='order_transport.csv'
   ORDER_BOM_EXCEL_TEMPLATE='order_transport.xlsx'
+  CRIMP_CONFIGRATION_EXCEL_TEMPLATE='crimp_configration.xlsx'
+  CRIMP_CONFIGRATION_ITEM_EXCEL_TEMPLATE='crimp_configration_item.xlsx'
+  WIRE_GROUP_EXCEL_TEMPLATE='wire_group.xlsx'
 
   def self.method_missing(method_name, *args, &block)
     if method_name.to_s.include?('_template')

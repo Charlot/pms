@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  production_order_id: MyString
+  crimp_height_1: MyString
+  crimp_height_2: MyString
+  crimp_height_3: MyString
+  crimp_height_4: MyString
+  crimp_height_5: MyString
+  crimp_width: MyString
+  i_crimp_heigth: MyString
+  i_crimp_width: MyString
+  pulloff_value: MyString
+  note: MyString
+
+two:
+  production_order_id: MyString
+  crimp_height_1: MyString
+  crimp_height_2: MyString
+  crimp_height_3: MyString
+  crimp_height_4: MyString
+  crimp_height_5: MyString
+  crimp_width: MyString
+  i_crimp_heigth: MyString
+  i_crimp_width: MyString
+  pulloff_value: MyString
+  note: MyString

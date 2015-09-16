@@ -1,0 +1,61 @@
+<%= form_for(@measured_value_record) do |f| %>
+  <% if @measured_value_record.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@measured_value_record.errors.count, "error") %> prohibited this measured_value_record from being saved:</h2>
+
+      <ul>
+      <% @measured_value_record.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :production_order_id %><br>
+    <%= f.text_field :production_order_id %>
+  </div>
+  <div class="field">
+    <%= f.label :crimp_height_1 %><br>
+    <%= f.text_field :crimp_height_1 %>
+  </div>
+  <div class="field">
+    <%= f.label :crimp_height_2 %><br>
+    <%= f.text_field :crimp_height_2 %>
+  </div>
+  <div class="field">
+    <%= f.label :crimp_height_3 %><br>
+    <%= f.text_field :crimp_height_3 %>
+  </div>
+  <div class="field">
+    <%= f.label :crimp_height_4 %><br>
+    <%= f.text_field :crimp_height_4 %>
+  </div>
+  <div class="field">
+    <%= f.label :crimp_height_5 %><br>
+    <%= f.text_field :crimp_height_5 %>
+  </div>
+  <div class="field">
+    <%= f.label :crimp_width %><br>
+    <%= f.text_field :crimp_width %>
+  </div>
+  <div class="field">
+    <%= f.label :i_crimp_heigth %><br>
+    <%= f.text_field :i_crimp_heigth %>
+  </div>
+  <div class="field">
+    <%= f.label :i_crimp_width %><br>
+    <%= f.text_field :i_crimp_width %>
+  </div>
+  <div class="field">
+    <%= f.label :pulloff_value %><br>
+    <%= f.text_field :pulloff_value %>
+  </div>
+  <div class="field">
+    <%= f.label :note %><br>
+    <%= f.text_field :note %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,45 @@
+<h1>Listing measured_value_records</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Production order</th>
+      <th>Crimp height 1</th>
+      <th>Crimp height 2</th>
+      <th>Crimp height 3</th>
+      <th>Crimp height 4</th>
+      <th>Crimp height 5</th>
+      <th>Crimp width</th>
+      <th>I crimp heigth</th>
+      <th>I crimp width</th>
+      <th>Pulloff value</th>
+      <th>Note</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @measured_value_records.each do |measured_value_record| %>
+      <tr>
+        <td><%= measured_value_record.production_order_id %></td>
+        <td><%= measured_value_record.crimp_height_1 %></td>
+        <td><%= measured_value_record.crimp_height_2 %></td>
+        <td><%= measured_value_record.crimp_height_3 %></td>
+        <td><%= measured_value_record.crimp_height_4 %></td>
+        <td><%= measured_value_record.crimp_height_5 %></td>
+        <td><%= measured_value_record.crimp_width %></td>
+        <td><%= measured_value_record.i_crimp_heigth %></td>
+        <td><%= measured_value_record.i_crimp_width %></td>
+        <td><%= measured_value_record.pulloff_value %></td>
+        <td><%= measured_value_record.note %></td>
+        <td><%= link_to 'Show', measured_value_record %></td>
+        <td><%= link_to 'Edit', edit_measured_value_record_path(measured_value_record) %></td>
+        <td><%= link_to 'Destroy', measured_value_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Measured value record', new_measured_value_record_path %>

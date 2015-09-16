@@ -1,0 +1,59 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Production order:</strong>
+  <%= @measured_value_record.production_order_id %>
+</p>
+
+<p>
+  <strong>Crimp height 1:</strong>
+  <%= @measured_value_record.crimp_height_1 %>
+</p>
+
+<p>
+  <strong>Crimp height 2:</strong>
+  <%= @measured_value_record.crimp_height_2 %>
+</p>
+
+<p>
+  <strong>Crimp height 3:</strong>
+  <%= @measured_value_record.crimp_height_3 %>
+</p>
+
+<p>
+  <strong>Crimp height 4:</strong>
+  <%= @measured_value_record.crimp_height_4 %>
+</p>
+
+<p>
+  <strong>Crimp height 5:</strong>
+  <%= @measured_value_record.crimp_height_5 %>
+</p>
+
+<p>
+  <strong>Crimp width:</strong>
+  <%= @measured_value_record.crimp_width %>
+</p>
+
+<p>
+  <strong>I crimp heigth:</strong>
+  <%= @measured_value_record.i_crimp_heigth %>
+</p>
+
+<p>
+  <strong>I crimp width:</strong>
+  <%= @measured_value_record.i_crimp_width %>
+</p>
+
+<p>
+  <strong>Pulloff value:</strong>
+  <%= @measured_value_record.pulloff_value %>
+</p>
+
+<p>
+  <strong>Note:</strong>
+  <%= @measured_value_record.note %>
+</p>
+
+<%= link_to 'Edit', edit_measured_value_record_path(@measured_value_record) %> |
+<%= link_to 'Back', measured_value_records_path %>

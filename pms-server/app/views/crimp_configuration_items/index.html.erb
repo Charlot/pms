@@ -1,0 +1,43 @@
+<h1>Listing crimp_configuration_items</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Side</th>
+      <th>Min pulloff</th>
+      <th>Crimp height</th>
+      <th>Crimp height iso</th>
+      <th>Crimp width</th>
+      <th>Crimp width iso</th>
+      <th>I crimp height</th>
+      <th>I crimp height iso</th>
+      <th>I crimp width</th>
+      <th>I crimp width iso</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @crimp_configuration_items.each do |crimp_configuration_item| %>
+      <tr>
+        <td><%= crimp_configuration_item.side %></td>
+        <td><%= crimp_configuration_item.min_pulloff %></td>
+        <td><%= crimp_configuration_item.crimp_height %></td>
+        <td><%= crimp_configuration_item.crimp_height_iso %></td>
+        <td><%= crimp_configuration_item.crimp_width %></td>
+        <td><%= crimp_configuration_item.crimp_width_iso %></td>
+        <td><%= crimp_configuration_item.i_crimp_height %></td>
+        <td><%= crimp_configuration_item.i_crimp_height_iso %></td>
+        <td><%= crimp_configuration_item.i_crimp_width %></td>
+        <td><%= crimp_configuration_item.i_crimp_width_iso %></td>
+        <td><%= link_to 'Show', crimp_configuration_item %></td>
+        <td><%= link_to 'Edit', edit_crimp_configuration_item_path(crimp_configuration_item) %></td>
+        <td><%= link_to 'Destroy', crimp_configuration_item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Crimp configuration item', new_crimp_configuration_item_path %>
