@@ -35,7 +35,7 @@ module PartBomable
 
   def create_part_bom(force=true)
     if self.is_a?(Kanban)
-      if force && self.kanban_part.nil?
+      if force && !self.kanban_part.nil?
 
         PartBom.transaction do
           if self.process_entities.count>0
