@@ -95,4 +95,4 @@ gem 'whenever'
 # gem 'rails-observers'
 
 # backup
-gem 'backup'
+gem 'backup','~> 4.1.12'
