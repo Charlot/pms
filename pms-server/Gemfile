@@ -92,7 +92,7 @@ gem 'sinatra',require: false
 gem 'whenever'
 
 # back up
-gem 'backup'
+#gem 'backup'
 
 # active observer, removed from core since 4.0
 # gem 'rails-observers'

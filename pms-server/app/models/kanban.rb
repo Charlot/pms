@@ -364,7 +364,7 @@ class Kanban < ActiveRecord::Base
 
   def change_production_order_items_kanban_qty
     if self.bundle_changed? || self.quantity_changed?
-      if Setting.force_change_item_qty?
+      if Setting.kanban_qty_change_order?
         self.production_order_items.where(state: ProductionOrderItem.can_change_kanban_qty_states)
             .update_all(kanban_bundle: self.bundle, kanban_qty: self.quantity)
       end
