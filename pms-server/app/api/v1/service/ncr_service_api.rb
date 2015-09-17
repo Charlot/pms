@@ -152,10 +152,11 @@ module V1
 
         namespace :spc do
           get :crimp_configuration_by_order do
-            args = {}
+            resilt = []
+            index = 0
             msg=ServiceMessage.new
 
-            production_order_item = ProductionOrderItem.find_by_id(params[:production_order_item_id])
+            production_order_item = ProductionOrderItem.find_by_nr(params[:production_order_item_id])
             if production_order_item.nil?
               msg.Content = "This order:#{params[:production_order_item_id]} is not valid!"
               return msg
@@ -180,7 +181,11 @@ module V1
               part1_id = Part.find(process_entity.value_t1).nr
               item1 = CrimpConfiguration.where(custom_id: custom_id, part_id: part1_id, wire_type: wire_type, cross_section: cross_section).first
               unless item1.nil?
-                args[:side1] = [item1.min_pulloff_value, item1.crimp_height, item1.crimp_height_iso, item1.crimp_width, item1.crimp_width_iso, item1.i_crimp_height, item1.i_crimp_height_iso, item1.i_crimp_width, item1.i_crimp_width_iso]
+                args1 = {}
+                args1[:Key] = part1_id
+                args1[:Value] = {Min_pullOff_value: item1.min_pulloff_value, Crimp_height: item1.crimp_height, Crimp_height_iso: item1.crimp_height_iso, Crimp_width: item1.crimp_width, Crimp_width_iso: item1.crimp_width_iso, I_crimp_height: item1.i_crimp_height, I_crimp_height_iso: item1.i_crimp_height_iso, I_crimp_width: item1.i_crimp_width, I_crimp_width_iso: item1.i_crimp_width_iso}
+                resilt[index] = args1
+                index += 1
               end
             end
 
@@ -188,10 +193,16 @@ module V1
               part2_id = Part.find(process_entity.value_t2).nr
               item2 = CrimpConfiguration.where(custom_id: custom_id, part_id: part2_id, wire_type: wire_type, cross_section: cross_section).first
               unless item2.nil?
-                args[:side2] = [item2.min_pulloff_value, item2.crimp_height, item2.crimp_height_iso, item2.crimp_width, item2.crimp_width_iso, item2.i_crimp_height, item2.i_crimp_height_iso, item2.i_crimp_width, item2.i_crimp_width_iso]
+                args2 = {}
+                args2[:Key] = part2_id
+                args2[:Value] = {Min_pullOff_value: item2.min_pulloff_value, Crimp_height: item2.crimp_height, Crimp_height_iso: item2.crimp_height_iso, Crimp_width: item2.crimp_width, Crimp_width_iso: item2.crimp_width_iso, I_crimp_height: item2.i_crimp_height, I_crimp_height_iso: item2.i_crimp_height_iso, I_crimp_width: item2.i_crimp_width, I_crimp_width_iso: item2.i_crimp_width_iso}
+                resilt[index] = args2
               end
             end
-            args
+            {
+                Result: true,
+                Object: resilt
+            }
           end
 
           post :store_measured_data do
