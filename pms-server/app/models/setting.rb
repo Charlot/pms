@@ -16,10 +16,18 @@ class Setting < ActiveRecord::Base
   end
 
   def self.check_kanban_version?
-false
+    false
   end
-  
-def self.auto_move_kanban?
+
+  def self.force_change_item_qty?
+    false
+  end
+
+  def self.force_presenter_change_item_qty?
+    true
+  end
+
+  def self.auto_move_kanban?
     self.auto_move_kanban=='1'
   end
 

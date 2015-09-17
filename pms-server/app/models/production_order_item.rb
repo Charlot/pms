@@ -212,6 +212,20 @@ class ProductionOrderItem < ActiveRecord::Base
      ProductionOrderItemState::MANUAL_ABORTED].include?(self.state)
   end
 
+
+  def self.can_change_kanban_qty_states
+    [ProductionOrderItemState::INIT,
+     ProductionOrderItemState::OPTIMISE_FAIL,
+     ProductionOrderItemState::OPTIMISE_SUCCEED,
+     ProductionOrderItemState::OPTIMISE_CANCELED,
+     ProductionOrderItemState::DISTRIBUTE_SUCCEED,
+     ProductionOrderItemState::DISTRIBUTE_FAIL]
+  end
+
+  def can_change_kanban_qty?
+    ProductionOrderItem.can_change_kanban_qty_states.include?(self.state)
+  end
+
   def kanban_nr
     @kanban_nr||=self.kanban.nr
   end
