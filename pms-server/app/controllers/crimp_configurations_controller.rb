@@ -4,7 +4,7 @@ class CrimpConfigurationsController < ApplicationController
   respond_to :html
 
   def index
-    @crimp_configurations = CrimpConfiguration.all
+    @crimp_configurations = CrimpConfiguration.paginate(:page=>params[:page], :per_page=>15)#all
     respond_with(@crimp_configurations)
   end
 

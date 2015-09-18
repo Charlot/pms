@@ -30,6 +30,7 @@ class ImportTemplate
   CRIMP_CONFIGRATION_ITEM_EXCEL_TEMPLATE='crimp_configration_item.xlsx'
   WIRE_GROUP_EXCEL_TEMPLATE='wire_group.xlsx'
   CUSTOM_DETAIL_EXCEL_TEMPLATE='custom_detail.xlsx'
+  MEASURED_VALUE_RECORD_EXCEL_TEMPLATE='measured_value_record.xlsx'
 
   def self.method_missing(method_name, *args, &block)
     if method_name.to_s.include?('_template')

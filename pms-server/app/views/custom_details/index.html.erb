@@ -1,11 +1,30 @@
 <h1>Listing custom_details</h1>
 
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <span> 客户号：
+        <input type="text" name="custom_detail[custom_id]" value="<%= @custom_nr %>"/>
+      </span>
+      <input type="submit" value="查 找" class="btn btn-primary"/>
+    </div>
+  </form>
+</div>
+
+<br>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @custom_details %>
+  </div>
+  <%= will_paginate @custom_details, :container => false %>
+</div>
+
 <table>
   <thead>
     <tr>
-      <th>Part nr from</th>
-      <th>Part nr to</th>
-      <th>Custom nr</th>
+      <th>零件编码起始</th>
+      <th>零件编码终止</th>
+      <th>客户号</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -24,6 +43,9 @@
   </tbody>
 </table>
 
+<div class="digg_pagination">
+  <%= will_paginate @custom_details, :container => false %>
+</div>
 <br>
 
 <%= link_to 'New Custom detail', new_custom_detail_path %>

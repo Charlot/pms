@@ -4,7 +4,7 @@ class MeasuredValueRecordsController < ApplicationController
   respond_to :html
 
   def index
-    @measured_value_records = MeasuredValueRecord.all
+    @measured_value_records = MeasuredValueRecord.paginate(:page=>params[:page], :per_page=>15)#all
     respond_with(@measured_value_records)
   end
 

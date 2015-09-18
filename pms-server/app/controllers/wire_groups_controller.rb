@@ -4,7 +4,7 @@ class WireGroupsController < ApplicationController
   respond_to :html
 
   def index
-    @wire_groups = WireGroup.all
+    @wire_groups = WireGroup.paginate(:page=>params[:page], :per_page=>15)#all
     respond_with(@wire_groups)
   end
 

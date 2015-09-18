@@ -4,7 +4,7 @@ class CustomDetailsController < ApplicationController
   respond_to :html
 
   def index
-    @custom_details = CustomDetail.all
+    @custom_details = CustomDetail.paginate(:page=>params[:page], :per_page=>15)#all
     respond_with(@custom_details)
   end
 

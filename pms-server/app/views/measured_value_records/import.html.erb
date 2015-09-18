@@ -1,0 +1,17 @@
+<script type="text/javascript">
+  $(document).ready(function(){
+      data_upload("#item-data-uploader");
+  });
+</script>
+<p id="notice">
+  <%= notice %>
+</p>
+<h3>上传检测数据文件</h3>
+<div>
+  选择数据文件：
+  <input id="item-data-uploader" type="file" name="files[]" data-url="/measured_value_records/import"/>
+  <div id="item-data-uploader-preview" style="display:none;"></div>
+  <div>
+    <a href="/files/<%= ImportTemplate.measured_value_record_excel_template %>">下载模板：<%= ImportTemplate::MEASURED_VALUE_RECORD_EXCEL_TEMPLATE %></a>
+  </div>
+</div>

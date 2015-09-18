@@ -2,7 +2,7 @@ module FileHandler
   module Excel
     class CrimpConfigurationHandler<Base
       HEADERS=[
-          "custom_id", "wire_group_name", "part_id", "wire_type", "cross_section", "min_pulloff_value", "crimp_height", "crimp_height_iso",
+          "custom_id", "wire_group_name", "part_id", "cross_section", "min_pulloff_value", "crimp_height", "crimp_height_iso",
           "crimp_width", "crimp_width_iso", "i_crimp_height", "i_crimp_height_iso", "i_crimp_width", "i_crimp_width_iso"
       ]
 
@@ -25,7 +25,7 @@ module FileHandler
                   row[k]=row[k].sub(/\.0/, '') if k=='part_id' || k=='custom_id'
                 end
 
-                if item = CrimpConfiguration.where(custom_id: row["custom_id"], part_id: row["part_id"], wire_type: row["wire_type"], cross_section: row["cross_section"]).first
+                if item = CrimpConfiguration.where(custom_id: row["custom_id"], part_id: row["part_id"], wire_group_name: row["wire_group_name"], cross_section: row["cross_section"]).first
                   item.update(row)
                 else
                   CrimpConfiguration.create(row)
