@@ -175,7 +175,7 @@ module V1
             end
             wire_type = wire.component_type
             cross_section = wire.cross_section
-            custom_id = wire.custom_nr
+            custom_id = production_order_item.kanban.product_id
 
             unless process_entity.value_t1.nil?
               part1_id = Part.find(process_entity.value_t1).nr
@@ -208,7 +208,7 @@ module V1
           post :store_measured_data do
             puts params
             msg=ServiceMessage.new
-            record = MeasuredValueRecord.new(production_order_id: params[:production_order_id], part_id: params[:part_id], crimp_height_1: params[:crimp_height_1], crimp_height_2: params[:crimp_height_2], crimp_height_3: params[:crimp_height_3], crimp_height_4: params[:crimp_height_4], crimp_height_5: params[:crimp_height_5], crimp_width: params[:crimp_width], i_crimp_heigth: params[:i_crimp_heigth], i_crimp_width: params[:i_crimp_width], pulloff_value: params[:pulloff_value])
+            record = MeasuredValueRecord.new(machine_id: params[:machine_id], production_order_id: params[:production_order_id], part_id: params[:part_id], crimp_height_1: params[:crimp_height_1], crimp_height_2: params[:crimp_height_2], crimp_height_3: params[:crimp_height_3], crimp_height_4: params[:crimp_height_4], crimp_height_5: params[:crimp_height_5], crimp_width: params[:crimp_width], i_crimp_heigth: params[:i_crimp_heigth], i_crimp_width: params[:i_crimp_width], pulloff_value: params[:pulloff_value], note: params[:note])
             if record.save
               msg.Result = true
               msg.Content = "Success"

@@ -52,7 +52,8 @@ module Enum
         POSITION: {NAME: PageInfo.position, actions: ['new', 'index']},
         CRIMP_CONFIGURATION: {name: PageInfo.crimpconfiguration, actions: ["new", "index", "import"]},
         WIRE_GROUP: {name: PageInfo.wiregroup, actions: ["new", "index", "import"]},
-        MEASURED_VALUE_RECORD: {name: PageInfo.measuredvaluerecord, actions: ["new", "index", "import"]}
+        MEASURED_VALUE_RECORD: {name: PageInfo.measuredvaluerecord, actions: ["new", "index", "import"]},
+        CUSTOM_DETAIL: {name: PageInfo.customdetail, actions: ["new", "index", "import"]}
     }
 
     class<<self

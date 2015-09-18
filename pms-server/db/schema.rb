@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150915053753) do
+ActiveRecord::Schema.define(version: 20150918014823) do
 
   create_table "crimp_configuration_items", force: true do |t|
     t.integer  "crimp_configuration_id"
@@ -53,6 +53,16 @@ ActiveRecord::Schema.define(version: 20150915053753) do
   add_index "crimp_configurations", ["part_id"], name: "index_crimp_configurations_on_part_id", using: :btree
   add_index "crimp_configurations", ["wire_group_name"], name: "index_crimp_configurations_on_wire_group_name", using: :btree
   add_index "crimp_configurations", ["wire_type"], name: "index_crimp_configurations_on_wire_type", using: :btree
+
+  create_table "custom_details", force: true do |t|
+    t.string   "part_nr_from"
+    t.string   "part_nr_to"
+    t.string   "custom_nr"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "custom_details", ["custom_nr"], name: "index_custom_details_on_custom_nr", using: :btree
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -273,8 +283,10 @@ ActiveRecord::Schema.define(version: 20150915053753) do
     t.string   "note"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "machine_id",          default: ""
   end
 
+  add_index "measured_value_records", ["machine_id"], name: "index_measured_value_records_on_machine_id", using: :btree
   add_index "measured_value_records", ["production_order_id"], name: "index_measured_value_records_on_production_order_id", using: :btree
 
   create_table "ncr_api_logs", force: true do |t|

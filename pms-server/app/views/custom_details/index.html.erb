@@ -1,0 +1,29 @@
+<h1>Listing custom_details</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Part nr from</th>
+      <th>Part nr to</th>
+      <th>Custom nr</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @custom_details.each do |custom_detail| %>
+      <tr>
+        <td><%= custom_detail.part_nr_from %></td>
+        <td><%= custom_detail.part_nr_to %></td>
+        <td><%= custom_detail.custom_nr %></td>
+        <td><%= link_to 'Show', custom_detail %></td>
+        <td><%= link_to 'Edit', edit_custom_detail_path(custom_detail) %></td>
+        <td><%= link_to 'Destroy', custom_detail, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Custom detail', new_custom_detail_path %>

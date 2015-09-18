@@ -13,7 +13,8 @@ module Enum
                 USER: "用户",
                 CRIMP_CONFIGURATION: "ISO标准值",
                 WIRE_GROUP: "线组",
-                MEASURED_VALUE_RECORD: "检测数据记录"
+                MEASURED_VALUE_RECORD: "检测数据记录",
+                CUSTOM_DETAIL: "客户信息"
     }
 
     @@actions = ["new", "index", "show", "edit", "import", "panel", 'transport']

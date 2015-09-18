@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Part nr from:</strong>
+  <%= @custom_detail.part_nr_from %>
+</p>
+
+<p>
+  <strong>Part nr to:</strong>
+  <%= @custom_detail.part_nr_to %>
+</p>
+
+<p>
+  <strong>Custom nr:</strong>
+  <%= @custom_detail.custom_nr %>
+</p>
+
+<%= link_to 'Edit', edit_custom_detail_path(@custom_detail) %> |
+<%= link_to 'Back', custom_details_path %>

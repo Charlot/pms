@@ -1,5 +1,15 @@
 require 'devise'
 Rails.application.routes.draw do
+  resources :custom_details do
+    collection do
+      get :search
+      get :scope_search
+      match :import, to: :import, via: [:get, :post]
+      get :export
+      match :search, to: :search, via: [:get, :post]
+    end
+  end
+
   resources :measured_value_records do
     collection do
       get :search
