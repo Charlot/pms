@@ -58,15 +58,16 @@
         <td><%= crimp_configuration.part_id %></td>
         <td><%= crimp_configuration.wire_type %></td>
         <td><%= crimp_configuration.cross_section %></td>
-        <td><%= crimp_configuration.min_pulloff_value %></td>
-        <td><%= crimp_configuration.crimp_height %></td>
-        <td><%= crimp_configuration.crimp_height_iso %></td>
-        <td><%= crimp_configuration.crimp_width %></td>
-        <td><%= crimp_configuration.crimp_width_iso %></td>
-        <td><%= crimp_configuration.i_crimp_height %></td>
-        <td><%= crimp_configuration.i_crimp_height_iso %></td>
-        <td><%= crimp_configuration.i_crimp_width %></td>
-        <td><%= crimp_configuration.i_crimp_width_iso %></td>
+
+        <td><%= best_in_place crimp_configuration, :min_pulloff_value, as: :input %></td>
+        <td><%= best_in_place crimp_configuration, :crimp_height, as: :input %></td>
+        <td><%= best_in_place crimp_configuration, :crimp_height_iso, as: :input %></td>
+        <td><%= best_in_place crimp_configuration, :crimp_width, as: :input %></td>
+        <td><%= best_in_place crimp_configuration, :crimp_width_iso, as: :input %></td>
+        <td><%= best_in_place crimp_configuration, :i_crimp_height, as: :input %></td>
+        <td><%= best_in_place crimp_configuration, :i_crimp_height_iso, as: :input %></td>
+        <td><%= best_in_place crimp_configuration, :i_crimp_width, as: :input %></td>
+        <td><%= best_in_place crimp_configuration, :i_crimp_width_iso, as: :input %></td>
         <td><%= link_to '详细', crimp_configuration %></td>
         <td><%= link_to '编辑', edit_crimp_configuration_path(crimp_configuration) %></td>
         <td><%= link_to '删除', crimp_configuration, method: :delete, data: {confirm: 'Are you sure?'} %></td>

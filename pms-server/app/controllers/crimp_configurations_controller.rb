@@ -27,8 +27,15 @@ class CrimpConfigurationsController < ApplicationController
   end
 
   def update
-    @crimp_configuration.update(crimp_configuration_params)
-    respond_with(@crimp_configuration)
+    respond_to do |format|
+      if @crimp_configuration.update(crimp_configuration_params)
+        format.html { redirect_to @crimp_configuration, notice: 'crimp configuration was successfully updated.' }
+        format.json { render :show, status: :ok, location: @crimp_configuration }
+      else
+        format.html { render :edit }
+        format.json { render json: @crimp_configuration.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   def destroy
