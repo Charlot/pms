@@ -175,7 +175,8 @@ module V1
             end
             wire_type = wire.component_type
             cross_section = wire.cross_section
-            custom_id = production_order_item.kanban.product_id
+            part_custom_nr = Part.find(production_order_item.kanban.product_id).nr
+            custom_id = CustomDetail.where("part_nr_to >= ? AND part_nr_from <= ?", part_custom_nr, part_custom_nr).first.custom_nr
 
             unless process_entity.value_t1.nil?
               part1_id = Part.find(process_entity.value_t1).nr
