@@ -30,26 +30,27 @@
 
     <div class="col-sm-12">
       <div class="field col-sm-4">
-        <%= f.label :custom_id %>
+        <%= f.label :custom_id, '客户号' %>
         <br>
         <%= f.text_field :custom_id %>
       </div>
       <div class="field col-sm-4">
-        <%= f.label :wire_group_name %>
+        <%= f.label :wire_group_name, '线组' %>
         <br>
-        <%= f.text_field :wire_group_name %>
+        <%= f.text_field :wire_group_name, :readonly => 'readonly' %>
       </div>
       <div class="field col-sm-4">
-        <%= f.label :part_id %>
+        <%= f.label :part_id, '端子号' %>
         <br>
         <%= f.text_field :part_id %>
       </div>
     </div>
+
     <div class="col-sm-12">
       <div class="field col-sm-4">
-        <%= f.label :cross_section %>
+        <%= f.label :cross_section, '截面' %>
         <br>
-        <%= f.text_field :cross_section %>
+        <%= f.text_field :cross_section, :readonly => 'readonly' %>
       </div>
 
       <div class="field col-sm-4">
@@ -57,13 +58,15 @@
         <br>
         <%= f.text_field :min_pulloff_value %>
       </div>
-    </div>
-    <div class="col-sm-12">
+
       <div class="field col-sm-4">
         <%= f.label :crimp_height, '压接高度' %>
         <br>
         <%= f.text_field :crimp_height %>
       </div>
+    </div>
+
+    <div class="col-sm-12">
       <div class="field col-sm-4">
         <%= f.label :crimp_height_iso, '压接高度公差' %>
         <br>
@@ -74,14 +77,13 @@
         <br>
         <%= f.text_field :crimp_width %>
       </div>
-    </div>
-    <div class="col-sm-12">
       <div class="field col-sm-4">
         <%= f.label :crimp_width_iso, '压接宽度公差' %>
         <br>
         <%= f.text_field :crimp_width_iso %>
       </div>
-
+    </div>
+    <div class="col-sm-12">
       <div class="field col-sm-4">
         <%= f.label :i_crimp_height, '绝缘压接高度' %>
         <br>
@@ -92,13 +94,13 @@
         <br>
         <%= f.text_field :i_crimp_height_iso %>
       </div>
-    </div>
-    <div class="col-sm-12">
       <div class="field col-sm-4">
         <%= f.label :i_crimp_width, '绝缘压接宽度' %>
         <br>
         <%= f.text_field :i_crimp_width %>
       </div>
+    </div>
+    <div class="col-sm-12">
       <div class="field col-sm-4">
         <%= f.label :i_crimp_width_iso, '绝缘压接宽度公差' %>
         <br>
@@ -109,8 +111,8 @@
     <hr style="border: 1px solid #ccc">
     <div style="display:inline-flex;">
       <!--<div class="actions">-->
-        <!--<%= f.submit %>-->
-        <button class="btn btn-primary" type="submit">Create Crimp Configuration</button>
+      <!--<%= f.submit %>-->
+      <button class="btn btn-primary" type="submit">创建ISO标准值</button>
       <!--</div>-->
     </div>
 <% end %>

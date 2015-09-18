@@ -1,22 +1,28 @@
+<style type="text/css">
+    p {
+        font-size: 1.2em;
+    }
+
+</style>
+
 <p id="notice"><%= notice %></p>
 
-
 <p>
-  <strong>Group name:</strong>
+  <strong>线组:</strong>
   <%= @wire_group.group_name %>
 </p>
 <hr/>
 <p>
-  <strong>Wire type:</strong>
+  <strong>电线型号:</strong>
   <%= @wire_group.wire_type %>
 </p>
 <hr/>
 
 <p>
-  <strong>Cross section:</strong>
+  <strong>截面:</strong>
   <%= @wire_group.cross_section %>
 </p>
 <hr/>
 
-<%= link_to 'Edit', edit_wire_group_path(@wire_group), :class => 'btn btn-primary', :style => 'color:white;' %>
-<%= link_to 'Back', wire_groups_path, :class => 'btn btn-primary', :style => 'color:white;margin-left:20px;' %>
+<%= link_to '编辑', edit_wire_group_path(@wire_group), :class => 'btn btn-primary', :style => 'color:white;' %>
+<%= link_to '返回', wire_groups_path, :class => 'btn btn-primary', :style => 'color:white;margin-left:20px;' %>

@@ -25,15 +25,15 @@
 
     <div class="col-sm-12">
       <div class="field col-sm-4">
-        <%= f.label :production_order_id %>
+        <%= f.label :production_order_id, '订单号' %>
         <%= f.text_field :production_order_id %>
       </div>
       <div class="field col-sm-4">
-        <%= f.label :crimp_height_1 %>
+        <%= f.label :crimp_height_1, '压接高度1' %>
         <%= f.text_field :crimp_height_1 %>
       </div>
       <div class="field col-sm-4">
-        <%= f.label :crimp_height_2 %>
+        <%= f.label :crimp_height_2, '压接高度2' %>
         <%= f.text_field :crimp_height_2 %>
       </div>
     </div>
@@ -41,15 +41,15 @@
     <div class="col-sm-12">
 
       <div class="field col-sm-4">
-        <%= f.label :crimp_height_3 %>
+        <%= f.label :crimp_height_3, '压接高度3' %>
         <%= f.text_field :crimp_height_3 %>
       </div>
       <div class="field col-sm-4">
-        <%= f.label :crimp_height_4 %>
+        <%= f.label :crimp_height_4, '压接高度4' %>
         <%= f.text_field :crimp_height_4 %>
       </div>
       <div class="field col-sm-4">
-        <%= f.label :crimp_height_5 %>
+        <%= f.label :crimp_height_5, '压接高度5' %>
         <%= f.text_field :crimp_height_5 %>
       </div>
     </div>
@@ -58,15 +58,15 @@
     <div class="col-sm-12">
 
       <div class="field col-sm-4">
-        <%= f.label :crimp_width %>
+        <%= f.label :crimp_width, '压接宽度' %>
         <%= f.text_field :crimp_width %>
       </div>
       <div class="field col-sm-4">
-        <%= f.label :i_crimp_heigth %>
+        <%= f.label :i_crimp_heigth, '绝缘压接高度' %>
         <%= f.text_field :i_crimp_heigth %>
       </div>
       <div class="field col-sm-4">
-        <%= f.label :i_crimp_width %>
+        <%= f.label :i_crimp_width, '绝缘压接宽度' %>
         <%= f.text_field :i_crimp_width %>
       </div>
     </div>
@@ -74,16 +74,16 @@
 
     <div class="col-sm-12">
       <div class="field col-sm-4">
-        <%= f.label :pulloff_value %>
+        <%= f.label :pulloff_value, '最小拉力值' %>
         <%= f.text_field :pulloff_value %>
       </div>
       <div class="field col-sm-8">
-        <%= f.label :note %>
+        <%= f.label :note, '备注' %>
         <%= f.text_field :note %>
       </div>
     </div>
     <hr/>
     <div class="actions">
-      <button type="submit" class="btn btn-primary">Create Measured value record</button>
+      <button type="submit" class="btn btn-primary">新增检测数据记录</button>
     </div>
 <% end %>

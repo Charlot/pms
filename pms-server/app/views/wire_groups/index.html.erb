@@ -1,8 +1,8 @@
 <div style="display: inline-flex;display: -webkit-inline-flex;">
-  <%= link_to 'New Wire group', new_wire_group_path, :class => 'btn btn-primary', :style => 'color:white;' %>
-  <h4 style="margin-left: 20px;">Listing wire_groups</h4>
+  <%= link_to '新增线组', new_wire_group_path, :class => 'btn btn-primary', :style => 'color:white;' %>
+  <!--<h4 style="margin-left: 20px;">Listing wire_groups</h4>-->
 </div>
-
+<hr/>
 
 <div>
   <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
@@ -37,9 +37,9 @@
         <td><%= wire_group.group_name %></td>
         <td><%= wire_group.wire_type %></td>
         <td><%= wire_group.cross_section %></td>
-        <td><%= link_to 'Show', wire_group %></td>
-        <td><%= link_to 'Edit', edit_wire_group_path(wire_group) %></td>
-        <td><%= link_to 'Destroy', wire_group, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+        <td><%= link_to '详细', wire_group %></td>
+        <td><%= link_to '编辑', edit_wire_group_path(wire_group) %></td>
+        <td><%= link_to '删除', wire_group, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
   <% end %>
   </tbody>
