@@ -9,6 +9,7 @@ using PmsNCRWcf.Config;
 using RestSharp;
 using PmsNCRWcf.Helper;
 using PmsNCRWcf.Enmu;
+using System.Collections;
 
 namespace PmsNCRWcf
 {
@@ -272,6 +273,75 @@ namespace PmsNCRWcf
                 else
                 {
                     msg.Content = "API ERROR";
+                }
+            }
+            catch (Exception e)
+            {
+                msg.Result = false;
+                msg.Content = e.Message;
+                LogUtil.Logger.Error(e.Message);
+            }
+            return msg;
+        }
+
+        public Msg<Dictionary<string, SPCStandard>> OrderItemGetConfigAction(params string[] SpcStandard)
+        {
+            
+            Msg<Dictionary<string, SPCStandard>> msg = new Msg<Dictionary<string, SPCStandard>>();
+            try
+            {
+                var req = new RestRequest(ApiConfig.OrderItemGetConfigAction, Method.GET);
+                req.RequestFormat = DataFormat.Json;
+                req.AddParameter("production_order_item_id", SpcStandard[0]);
+                var res = new ApiClient().Execute(req);
+                msg = JSONHelper.parse<Msg<Dictionary<string, SPCStandard>>>(res.Content);
+                if (msg.Result)
+                {
+                    if (msg.Object ==null)
+                    {
+                        msg.Result = false;
+                        msg.Content = "API ERROR";
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                msg.Result = false;
+                msg.Content = e.Message;
+                LogUtil.Logger.Error(e.Message);
+            }
+            return msg;
+        }
+
+        public Msg<string> StoreMeasuredData(params string[] MeasuredData)
+        {
+
+            Msg<string> msg = new Msg<string>();
+            try
+            {
+                var req = new RestRequest(ApiConfig.StoreMeasuredData, Method.POST);
+                req.RequestFormat = DataFormat.Json;
+                req.AddParameter("production_order_id", MeasuredData[0]);
+                req.AddParameter("part_id", MeasuredData[1]);
+                req.AddParameter("crimp_height_1", MeasuredData[2]);
+                req.AddParameter("crimp_height_2", MeasuredData[3]);
+                req.AddParameter("crimp_height_3", MeasuredData[4]);
+                req.AddParameter("crimp_height_4", MeasuredData[5]);
+                req.AddParameter("crimp_height_5", MeasuredData[6]);
+                req.AddParameter("crimp_width", MeasuredData[7]);
+                req.AddParameter("i_crimp_heigth", MeasuredData[8]);
+                req.AddParameter("i_crimp_width", MeasuredData[9]);
+                req.AddParameter("pulloff_value", MeasuredData[10]);
+                req.AddParameter("note", MeasuredData[11]);
+                var res = new ApiClient().Execute(req);
+                msg = JSONHelper.parse<Msg<string>>(res.Content);
+                if (msg.Result)
+                {
+                    if (msg.Object == null)
+                    {
+                        msg.Result = false;
+                        msg.Content = "API ERROR";
+                    }
                 }
             }
             catch (Exception e)

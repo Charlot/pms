@@ -1,0 +1,17 @@
+F:\Work\pms\pms-printer\PmsPrinter\PmsTestConsole\bin\Debug\api.ini
+F:\Work\pms\pms-printer\PmsPrinter\PmsTestConsole\bin\Debug\help.sdc
+F:\Work\pms\pms-printer\PmsPrinter\PmsTestConsole\bin\Debug\Template\t1.tff
+F:\Work\pms\pms-printer\PmsPrinter\PmsTestConsole\bin\Debug\Template\t2.tff
+F:\Work\pms\pms-printer\PmsPrinter\PmsTestConsole\bin\Debug\PmsTestConsole.exe.config
+F:\Work\pms\pms-printer\PmsPrinter\PmsTestConsole\bin\Debug\PmsTestConsole.exe
+F:\Work\pms\pms-printer\PmsPrinter\PmsTestConsole\bin\Debug\PmsTestConsole.pdb
+F:\Work\pms\pms-printer\PmsPrinter\PmsTestConsole\bin\Debug\Brilliantech.Framwork.dll
+F:\Work\pms\pms-printer\PmsPrinter\PmsTestConsole\bin\Debug\Brilliantech.ReportGenConnector.dll
+F:\Work\pms\pms-printer\PmsPrinter\PmsTestConsole\bin\Debug\TECIT.TFORMer.dll
+F:\Work\pms\pms-printer\PmsPrinter\PmsTestConsole\bin\Debug\Nini.dll
+F:\Work\pms\pms-printer\PmsPrinter\PmsTestConsole\bin\Debug\log4net.dll
+F:\Work\pms\pms-printer\PmsPrinter\PmsTestConsole\bin\Debug\Brilliantech.Framwork.pdb
+F:\Work\pms\pms-printer\PmsPrinter\PmsTestConsole\bin\Debug\Brilliantech.ReportGenConnector.pdb
+F:\Work\pms\pms-printer\PmsPrinter\PmsTestConsole\obj\x86\Debug\PmsTestConsole.csprojResolveAssemblyReference.cache
+F:\Work\pms\pms-printer\PmsPrinter\PmsTestConsole\obj\x86\Debug\PmsTestConsole.exe
+F:\Work\pms\pms-printer\PmsPrinter\PmsTestConsole\obj\x86\Debug\PmsTestConsole.pdb

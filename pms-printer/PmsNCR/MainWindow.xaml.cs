@@ -26,7 +26,7 @@ namespace PmsNCR
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static string CurrentOrder = string.Empty;
+        public static OrderItemCheck CurrentOrder;
 
         //WebServiceHost host = null;
 

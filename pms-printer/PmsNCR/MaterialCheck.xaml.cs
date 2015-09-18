@@ -42,6 +42,7 @@ namespace PmsNCR
             {
                 InitCheckGraph();
             }
+
         }
         private bool LoadOrderItemCheck()
         {
@@ -50,7 +51,9 @@ namespace PmsNCR
             if (msg.Result)
             {
                 orderItem = msg.Object;
-                MainWindow.CurrentOrder = orderItem.OrderNr;
+                //MainWindow.CurrentOrderNr = orderItem.OrderNr;
+                MainWindow.CurrentOrder = orderItem;
+
             }
             else
             {

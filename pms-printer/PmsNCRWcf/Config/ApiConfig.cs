@@ -43,6 +43,9 @@ namespace PmsNCRWcf.Config
                 OrderToolSettingAction = config.Get("OrderToolSettingAction");
 
                 OrderItemSearchAction = config.Get("OrderItemSearchAction");
+
+                OrderItemGetConfigAction = config.Get("OrderItemGetConfigAction");
+                StoreMeasuredData = config.Get("StoreMeasuredData");
             }
             catch (Exception e)
             {
@@ -91,5 +94,7 @@ namespace PmsNCRWcf.Config
         public static string OrderListAbortedAction { get; set; }
         public static string OrderToolSettingAction { get; set; }
         public static string OrderItemSearchAction { get; set; }
+        public static string OrderItemGetConfigAction { get; set; }
+        public static string StoreMeasuredData { get; set; }
     }
 }
