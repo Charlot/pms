@@ -1,28 +1,28 @@
-<h1>Listing crimp_configurations</h1>
+<h4>Listing crimp_configurations</h4>
 
-<table>
+<table class="table table-striped table-hover table-bordered">
   <thead>
-    <tr>
-      <th>Custom</th>
-      <th>Wire group</th>
-      <th>Part</th>
-      <th>Wire type</th>
-      <th>Cross section</th>
-      <th>最小拉力值</th>
-      <th>压接高度</th>
-      <th>压接高度公差</th>
-      <th>压接宽度</th>
-      <th>压接宽度公差</th>
-      <th>绝缘压接高度</th>
-      <th>绝缘压接高度公差</th>
-      <th>绝缘压接宽度</th>
-      <th>绝缘压接宽度公差</th>
-      <th colspan="3"></th>
-    </tr>
+  <tr>
+    <th>Custom</th>
+    <th>Wire group</th>
+    <th>Part</th>
+    <th>Wire type</th>
+    <th>Cross section</th>
+    <th>最小拉力值</th>
+    <th>压接高度</th>
+    <th>压接高度公差</th>
+    <th>压接宽度</th>
+    <th>压接宽度公差</th>
+    <th>绝缘压接高度</th>
+    <th>绝缘压接高度公差</th>
+    <th>绝缘压接宽度</th>
+    <th>绝缘压接宽度公差</th>
+    <th colspan="3"></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @crimp_configurations.each do |crimp_configuration| %>
+  <% @crimp_configurations.each do |crimp_configuration| %>
       <tr>
         <td><%= crimp_configuration.custom_id %></td>
         <td><%= crimp_configuration.wire_group_name %></td>
@@ -40,9 +40,9 @@
         <td><%= crimp_configuration.i_crimp_width_iso %></td>
         <td><%= link_to '详细', crimp_configuration %></td>
         <td><%= link_to '编辑', edit_crimp_configuration_path(crimp_configuration) %></td>
-        <td><%= link_to '删除', crimp_configuration, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to '删除', crimp_configuration, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 

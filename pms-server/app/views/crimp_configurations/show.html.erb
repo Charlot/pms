@@ -1,3 +1,10 @@
+<style type="text/css">
+    p {
+        font-family: Arial, Microsoft-YaHei, "黑体", "宋体", sans-serif;
+        font-size: 1.4em;
+    }
+</style>
+
 <p id="notice"><%= notice %></p>
 
 <p>
@@ -5,25 +12,30 @@
   <%= @crimp_configuration.custom_id %>
 </p>
 
+<hr/>
 <p>
   <strong>Wire group:</strong>
   <%= @crimp_configuration.wire_group_name %>
 </p>
+<hr/>
 
 <p>
   <strong>Part:</strong>
   <%= @crimp_configuration.part_id %>
 </p>
+<hr/>
 
 <p>
   <strong>Wire type:</strong>
   <%= @crimp_configuration.wire_type %>
 </p>
+<hr/>
 
 <p>
   <strong>Cross section:</strong>
   <%= @crimp_configuration.cross_section %>
 </p>
+<hr/>
 
-<%= link_to 'Edit', edit_crimp_configuration_path(@crimp_configuration) %> |
-<%= link_to 'Back', crimp_configurations_path %>
+<%= link_to 'Edit', edit_crimp_configuration_path(@crimp_configuration), :class => 'btn btn-primary', :style => 'color:white;' %>
+<%= link_to 'Back', crimp_configurations_path, :class => 'btn btn-primary', :style => 'margin-left:20px;color:white;' %>

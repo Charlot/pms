@@ -1,59 +1,83 @@
+<style type="text/css">
+
+    hr {
+        border: 1px solid #F2F2F2;
+    }
+</style>
+
 <p id="notice"><%= notice %></p>
+<div class="col-sm-12">
+  <p class="col-sm-6">
+    <strong>Production order:</strong>
+    <%= @measured_value_record.production_order_id %>
+  </p>
 
-<p>
-  <strong>Production order:</strong>
-  <%= @measured_value_record.production_order_id %>
-</p>
+  <p class="col-sm-6">
+    <strong>Crimp height 1:</strong>
+    <%= @measured_value_record.crimp_height_1 %>
+  </p>
+</div>
+<hr/>
+<div class="col-sm-12">
+  <p class="col-sm-6">
+    <strong>Crimp height 2:</strong>
+    <%= @measured_value_record.crimp_height_2 %>
+  </p>
 
-<p>
-  <strong>Crimp height 1:</strong>
-  <%= @measured_value_record.crimp_height_1 %>
-</p>
+  <p class="col-sm-6">
+    <strong>Crimp height 3:</strong>
+    <%= @measured_value_record.crimp_height_3 %>
+  </p>
+</div>
+<hr/>
 
-<p>
-  <strong>Crimp height 2:</strong>
-  <%= @measured_value_record.crimp_height_2 %>
-</p>
+<div class="col-sm-12">
+  <p class="col-sm-6">
+    <strong>Crimp height 4:</strong>
+    <%= @measured_value_record.crimp_height_4 %>
+  </p>
 
-<p>
-  <strong>Crimp height 3:</strong>
-  <%= @measured_value_record.crimp_height_3 %>
-</p>
+  <p class="col-sm-6">
+    <strong>Crimp height 5:</strong>
+    <%= @measured_value_record.crimp_height_5 %>
+  </p>
+</div>
+<hr/>
 
-<p>
-  <strong>Crimp height 4:</strong>
-  <%= @measured_value_record.crimp_height_4 %>
-</p>
+<div class="col-sm-12">
+  <p class="col-sm-6">
+    <strong>Crimp width:</strong>
+    <%= @measured_value_record.crimp_width %>
+  </p>
 
-<p>
-  <strong>Crimp height 5:</strong>
-  <%= @measured_value_record.crimp_height_5 %>
-</p>
+  <p class="col-sm-6">
+    <strong>I crimp heigth:</strong>
+    <%= @measured_value_record.i_crimp_heigth %>
+  </p>
+</div>
+<hr/>
 
-<p>
-  <strong>Crimp width:</strong>
-  <%= @measured_value_record.crimp_width %>
-</p>
+<div class="col-sm-12">
+  <p class="col-sm-6">
+    <strong>I crimp width:</strong>
+    <%= @measured_value_record.i_crimp_width %>
+  </p>
 
-<p>
-  <strong>I crimp heigth:</strong>
-  <%= @measured_value_record.i_crimp_heigth %>
-</p>
 
-<p>
-  <strong>I crimp width:</strong>
-  <%= @measured_value_record.i_crimp_width %>
-</p>
+  <p class="col-sm-6">
+    <strong>Pulloff value:</strong>
+    <%= @measured_value_record.pulloff_value %>
+  </p>
+</div>
+<hr/>
 
-<p>
-  <strong>Pulloff value:</strong>
-  <%= @measured_value_record.pulloff_value %>
-</p>
+<div class="col-sm-12">
+  <p class="col-sm-6">
+    <strong>Note:</strong>
+    <%= @measured_value_record.note %>
+  </p>
+</div>
+<hr/>
 
-<p>
-  <strong>Note:</strong>
-  <%= @measured_value_record.note %>
-</p>
-
-<%= link_to 'Edit', edit_measured_value_record_path(@measured_value_record) %> |
-<%= link_to 'Back', measured_value_records_path %>
+<%= link_to 'Edit', edit_measured_value_record_path(@measured_value_record), :class => 'btn btn-primary', :style => 'color:white' %>
+<%= link_to 'Back', measured_value_records_path, :class => 'btn btn-primary', :style => 'color:white;margin-left:20px;' %>
