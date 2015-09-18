@@ -2,10 +2,13 @@
   <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
     <div>
       <span> 订单号：
-        <input type="text" name="measured_value_record[custom_id]" value="<%= @custom_id %>"/>
+        <input type="text" name="measured_value_record[production_order_id]" value="<%= @production_order_id %>"/>
       </span>
       <span> 机器号：
         <input type="text" name="measured_value_record[wire_group_name]" value="<%= @wire_group_name %>"/>
+      </span>
+      <span> 端子号：
+        <input type="text" name="measured_value_record[part_id]" value="<%= @part_id %>"/>
       </span>
       <span>
           创建时间：
@@ -37,6 +40,7 @@
   <tr>
     <th>订单号</th>
     <th>机器号</th>
+    <th>端子号</th>
     <th>创建日期</th>
     <th>压接高度 1</th>
     <th>压接高度 2</th>
@@ -57,6 +61,7 @@
       <tr>
         <td><%= measured_value_record.production_order_id %></td>
         <td><%= measured_value_record.machine_id %></td>
+        <td><%= measured_value_record.part_id %></td>
         <td><%= measured_value_record.created_at.nil? ? '' : measured_value_record.created_at.localtime.strftime('%Y-%m-%d %H:%M:%S') %></td>
         <td><%= measured_value_record.crimp_height_1 %></td>
         <td><%= measured_value_record.crimp_height_2 %></td>
