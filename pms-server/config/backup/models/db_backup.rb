@@ -17,19 +17,19 @@ Model.new(:db_backup, 'Description for db_backup') do
   # MySQL [Database]
   #
 #  database MySQL do |db|
-    ## To dump all databases, set `db.name = :all` (or leave blank)
-    #db.name               = "pmsdb"
-    #db.username           = "pmser"
-    #db.password           = "pmser@"
-    #db.host               = "localhost"
-    #db.port               = 3306
-    #db.socket             = "/var/run/mysqld/mysqld.sock"
-    ## Note: when using `skip_tables` with the `db.name = :all` option,
-    ## table names should be prefixed with a database name.
-    ## e.g. ["db_name.table_to_skip", ...]
+	## To dump all databases, set `db.name = :all` (or leave blank)
+	#db.name               = "pmsdb"
+	#db.username           = "pmser"
+	#db.password           = "pmser@"
+	#db.host               = "localhost"
+	#db.port               = 3306
+	#db.socket             = "/var/run/mysqld/mysqld.sock"
+	## Note: when using `skip_tables` with the `db.name = :all` option,
+	## table names should be prefixed with a database name.
+	## e.g. ["db_name.table_to_skip", ...]
 ##    db.skip_tables        = ["skip", "these", "tables"]
-    ##db.only_tables        = ["only", "these", "tables"]
-    ##db.additional_options = ["--quick", "--single-transaction"]
+	##db.only_tables        = ["only", "these", "tables"]
+	##db.additional_options = ["--quick", "--single-transaction"]
   #end
 
   ##
@@ -68,20 +68,20 @@ Model.new(:db_backup, 'Description for db_backup') do
   # The default delivery method for Mail Notifiers is 'SMTP'.
   # See the documentation for other delivery options.
   #
-#  notify_by Mail do |mail|
-    #mail.on_success           = true
-    #mail.on_warning           = true
-    #mail.on_failure           = true
+  notify_by Mail do |mail|
+	mail.on_success           = true
+	mail.on_warning           = true
+	mail.on_failure           = true
 
-    #mail.from                 = "sender@email.com"
-    #mail.to                   = "receiver@email.com"
-    #mail.address              = "smtp.gmail.com"
-    #mail.port                 = 587
-    #mail.domain               = "your.host.name"
-    #mail.user_name            = "sender@email.com"
-    #mail.password             = "my_password"
-    #mail.authentication       = "plain"
-    #mail.encryption           = :starttls
-  #end
+	mail.from                 = "igoschool@163.com"
+	mail.to                   = "song.wang@cz-tek.com"
+	mail.address              = "smtp.163.com"
+	mail.port                 = 25
+	mail.domain               = "https://cz-tek.com"
+	mail.user_name            = "igoschool@163.com"
+	mail.password             = "igoschool@"
+	mail.authentication       = 'plain'
+	mail.encryption           = :starttls
+  end
 
 end
