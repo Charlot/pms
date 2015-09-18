@@ -7,6 +7,7 @@ class Setting < ActiveRecord::Base
   NONE_MATERIAL_PART_MARK='none_material_part_mark'
   KANBAN_QTY_CHANGE_ORDER='kanban_qty_change_order'
   PRESETER_CHANGE_ITEM_QTY='presenter_change_item_qty'
+  # MACHINE_PREVIEW_QTY='machine_preview_qty'
 
   def self.method_missing(method_name, *args, &block)
     puts method_name

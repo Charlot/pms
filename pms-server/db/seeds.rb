@@ -107,6 +107,10 @@ Setting.transaction do
   unless Setting.find_by_code(Setting::PRESETER_CHANGE_ITEM_QTY)
     Setting.create(code: Setting::PRESETER_CHANGE_ITEM_QTY, value: '1', name: '看板改变量【查看订单时】改变未生产订单量')
   end
+
+  # unless Setting.find_by_code(Setting::MACHINE_PREVIEW_QTY)
+  #   Setting.create(code: Setting::MACHINE_PREVIEW_QTY, value: '30', name: '机器预览订单量')
+  # end
 end
 
 puts 'create warehouse regex...'
