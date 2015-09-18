@@ -1,6 +1,7 @@
-<h1>Editing custom_detail</h1>
+<!--<h1>Editing custom_detail</h1>-->
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @custom_detail %> |
-<%= link_to 'Back', custom_details_path %>
+<hr/>
+<%= link_to '详细', @custom_detail, :class => 'btn btn-primary', :style => 'color:white' %>
+<%= link_to '返回', custom_details_path, :class => 'btn btn-primary', :style => 'color:white' %>

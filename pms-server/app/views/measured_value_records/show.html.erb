@@ -3,29 +3,33 @@
     hr {
         border: 1px solid #F2F2F2;
     }
+
+    p {
+        font-size: 1.1em;
+    }
 </style>
 
 <p id="notice"><%= notice %></p>
 <div class="col-sm-12">
   <p class="col-sm-6">
-    <strong>Production order:</strong>
+    <strong>订单号:</strong>
     <%= @measured_value_record.production_order_id %>
   </p>
 
   <p class="col-sm-6">
-    <strong>Crimp height 1:</strong>
+    <strong>压接高度1:</strong>
     <%= @measured_value_record.crimp_height_1 %>
   </p>
 </div>
 <hr/>
 <div class="col-sm-12">
   <p class="col-sm-6">
-    <strong>Crimp height 2:</strong>
+    <strong>压接高度2:</strong>
     <%= @measured_value_record.crimp_height_2 %>
   </p>
 
   <p class="col-sm-6">
-    <strong>Crimp height 3:</strong>
+    <strong>压接高度3:</strong>
     <%= @measured_value_record.crimp_height_3 %>
   </p>
 </div>
@@ -33,12 +37,12 @@
 
 <div class="col-sm-12">
   <p class="col-sm-6">
-    <strong>Crimp height 4:</strong>
+    <strong>压接高度4:</strong>
     <%= @measured_value_record.crimp_height_4 %>
   </p>
 
   <p class="col-sm-6">
-    <strong>Crimp height 5:</strong>
+    <strong>压接高度5:</strong>
     <%= @measured_value_record.crimp_height_5 %>
   </p>
 </div>
@@ -46,12 +50,12 @@
 
 <div class="col-sm-12">
   <p class="col-sm-6">
-    <strong>Crimp width:</strong>
+    <strong>压接宽度:</strong>
     <%= @measured_value_record.crimp_width %>
   </p>
 
   <p class="col-sm-6">
-    <strong>I crimp heigth:</strong>
+    <strong>绝缘压接高度:</strong>
     <%= @measured_value_record.i_crimp_heigth %>
   </p>
 </div>
@@ -59,13 +63,13 @@
 
 <div class="col-sm-12">
   <p class="col-sm-6">
-    <strong>I crimp width:</strong>
+    <strong>绝缘压接宽度:</strong>
     <%= @measured_value_record.i_crimp_width %>
   </p>
 
 
   <p class="col-sm-6">
-    <strong>Pulloff value:</strong>
+    <strong>最小拉力值:</strong>
     <%= @measured_value_record.pulloff_value %>
   </p>
 </div>
@@ -73,11 +77,11 @@
 
 <div class="col-sm-12">
   <p class="col-sm-6">
-    <strong>Note:</strong>
+    <strong>备注:</strong>
     <%= @measured_value_record.note %>
   </p>
 </div>
 <hr/>
 
-<%= link_to 'Edit', edit_measured_value_record_path(@measured_value_record), :class => 'btn btn-primary', :style => 'color:white' %>
-<%= link_to 'Back', measured_value_records_path, :class => 'btn btn-primary', :style => 'color:white;margin-left:20px;' %>
+<%= link_to '编辑', edit_measured_value_record_path(@measured_value_record), :class => 'btn btn-primary', :style => 'color:white' %>
+<%= link_to '返回', measured_value_records_path, :class => 'btn btn-primary', :style => 'color:white;margin-left:20px;' %>

@@ -1,5 +1,6 @@
-<h1>Listing custom_details</h1>
-
+<!--<h1>Listing custom_details</h1>-->
+<%= link_to '新增客户信息', new_custom_detail_path, :class => 'btn btn-primary', :style => 'color:white' %>
+<hr/>
 <div>
   <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
     <div>
@@ -10,8 +11,7 @@
     </div>
   </form>
 </div>
-
-<br>
+<hr/>
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @custom_details %>
@@ -19,27 +19,27 @@
   <%= will_paginate @custom_details, :container => false %>
 </div>
 
-<table>
+<table class="table table-striped table-hover table-bordered">
   <thead>
-    <tr>
-      <th>零件编码起始</th>
-      <th>零件编码终止</th>
-      <th>客户号</th>
-      <th colspan="3"></th>
-    </tr>
+  <tr>
+    <th>零件编码起始</th>
+    <th>零件编码终止</th>
+    <th>客户号</th>
+    <th colspan="3"></th>
+  </tr>
   </thead>
 
   <tbody>
-    <% @custom_details.each do |custom_detail| %>
+  <% @custom_details.each do |custom_detail| %>
       <tr>
         <td><%= custom_detail.part_nr_from %></td>
         <td><%= custom_detail.part_nr_to %></td>
         <td><%= custom_detail.custom_nr %></td>
-        <td><%= link_to 'Show', custom_detail %></td>
-        <td><%= link_to 'Edit', edit_custom_detail_path(custom_detail) %></td>
-        <td><%= link_to 'Destroy', custom_detail, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to '详细', custom_detail %></td>
+        <td><%= link_to '编辑', edit_custom_detail_path(custom_detail) %></td>
+        <td><%= link_to '删除', custom_detail, method: :delete, data: {confirm: 'Are you sure?'} %></td>
       </tr>
-    <% end %>
+  <% end %>
   </tbody>
 </table>
 
@@ -48,4 +48,3 @@
 </div>
 <br>
 
-<%= link_to 'New Custom detail', new_custom_detail_path %>

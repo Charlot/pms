@@ -1,19 +1,26 @@
+<style type="text/css">
+    p {
+        font-size: 1.2em;
+    }
+</style>
+
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Part nr from:</strong>
+  <strong>零件编码起始:</strong>
   <%= @custom_detail.part_nr_from %>
 </p>
-
+<hr/>
 <p>
-  <strong>Part nr to:</strong>
+  <strong>零件编码终止:</strong>
   <%= @custom_detail.part_nr_to %>
 </p>
-
+<hr/>
 <p>
-  <strong>Custom nr:</strong>
+  <strong>客户号:</strong>
   <%= @custom_detail.custom_nr %>
 </p>
 
-<%= link_to 'Edit', edit_custom_detail_path(@custom_detail) %> |
-<%= link_to 'Back', custom_details_path %>
+<hr/>
+<%= link_to '编辑', edit_custom_detail_path(@custom_detail), :class => 'btn btn-primary', :style => 'color:white' %>
+<%= link_to '返回', custom_details_path, :class => 'btn btn-primary', :style => 'color:white' %>
