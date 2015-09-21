@@ -58,7 +58,7 @@ gem 'twitter-bootstrap-rails'
 
 
 # backup
-gem 'backup','>= 4.1.12'
+gem 'backup'#,'>= 4.1.12'
 #gem 'equalizer','0.0.9' # grape0.12.0-virtus-需要>=0.0.9,backup 需要=0.0.9,但是grape先加载，使用了equalizer0.0.11导致bundle 错误
 
 # For API
