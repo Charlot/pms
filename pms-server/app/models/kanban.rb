@@ -6,6 +6,7 @@ class Kanban < ActiveRecord::Base
   validates :nr, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
   validates :product_id, :presence => true
   after_create :create_part_bom
+  after_update :change_production_order_items_kanban_qty
 
   #belongs_to :part
   belongs_to :product, class_name: 'Part'
@@ -248,21 +249,21 @@ class Kanban < ActiveRecord::Base
   def task_time
     task_time = 0.0
     # begin
-      case self.ktype
-        when KanbanType::WHITE
-          unless (process_entity = self.process_entities.first).nil?
-            task_time = process_entity.get_process_entity_worktime(self.production_order_items.last)
-          end
+    case self.ktype
+      when KanbanType::WHITE
+        unless (process_entity = self.process_entities.first).nil?
+          task_time = process_entity.get_process_entity_worktime(self.production_order_items.last)
+        end
 
-          task_time *= self.quantity
-        when KanbanType::BLUE
-          self.process_entities.each_with_index do |process_entity,i|
-            puts "-------#{i}..#{process_entity.process_template.code}----#{process_entity.nr}".yellow
-            task_time += process_entity.get_process_entity_worktime
-          end
+        task_time *= self.quantity
+      when KanbanType::BLUE
+        self.process_entities.each_with_index do |process_entity, i|
+          puts "-------#{i}..#{process_entity.process_template.code}----#{process_entity.nr}".yellow
+          task_time += process_entity.get_process_entity_worktime
+        end
 
-          task_time = task_time * self.quantity
-      end
+        task_time = task_time * self.quantity
+    end
     # rescue => e
     #   task_time=0
     # end
@@ -358,5 +359,15 @@ class Kanban < ActiveRecord::Base
   private
   def generate_id
     self.nr = "KB#{Time.now.to_milli}"
+  end
+
+
+  def change_production_order_items_kanban_qty
+    if self.bundle_changed? || self.quantity_changed?
+      if Setting.kanban_qty_change_order?
+        self.production_order_items.where(state: ProductionOrderItem.can_change_kanban_qty_states)
+            .update_all(kanban_bundle: self.bundle, kanban_qty: self.quantity)
+      end
+    end
   end
 end

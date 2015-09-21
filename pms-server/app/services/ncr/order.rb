@@ -81,6 +81,9 @@ module Ncr
       process_entity=kanban.process_entities.first
       # template=process_entity.process_template
       wire=Part.find_by_id(process_entity.value_wire_nr)
+      # if Setting.force_presenter_change_item_qty? && item.can_change_kanban_qty?
+      #   item.update_attributes(kanban_bundle:kanban.bundle,kanban_qty:kanban.quantity)
+      # end
       unless mirror
         t1=Part.find_by_id(process_entity.value_t1)
         t2=Part.find_by_id(process_entity.value_t2)
@@ -155,8 +158,8 @@ module Ncr
           NewJob: {
               Job: "J_#{item.nr}",
               ArticleKey: "A_#{item.nr}",
-              TotalPieces: kanban.quantity,
-              BatchSize: kanban.bundle,
+              TotalPieces: item.kanban_qty,
+              BatchSize: item.kanban_bundle,
               Name: "J_#{item.nr}",
               Hint: " Cutting Job: #{item.nr}. Cutting Order: #{self.production_order.nr}. Kanban #{kanban.nr}. Bundle quantity: #{kanban.bundle}. Total quantity: #{kanban.quantity}."
           }
@@ -204,7 +207,7 @@ module Ncr
               WireKey: wire.nr,
               WireGroup: 'Group0',
               ElectricalSizeMM2: wire.cross_section==0 ? '' : wire.cross_section, #0605leoni charlot #process_entity.value_wire_qty_factor,
-              Diameter: wire.cross_section==0 ? '' : wire.cross_section,
+            #  Diameter: wire.cross_section==0 ? '' : wire.cross_section,
               Color: 'RD',
               Name: wire.nr,
               Hint: wire.nr
