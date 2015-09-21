@@ -30,6 +30,7 @@ class ProductionOrderItemPresenter<Presenter
   def to_check_material_order(no=0)
     kanban=@production_order_item.kanban
     puts @production_order_item.id
+    # puts kanban.nr
     # puts kanbanz.red
     if kanban && (process_entity=kanban.process_entities.first)
 

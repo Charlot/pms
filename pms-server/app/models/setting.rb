@@ -11,7 +11,6 @@ class Setting < ActiveRecord::Base
 
   def self.method_missing(method_name, *args, &block)
     puts method_name
-
     if method_name.match(/\?$/)
       puts '----------------------'
       if setting=Setting.where(code: method_name.to_s.sub(/\?$/,'')).first
@@ -24,6 +23,10 @@ class Setting < ActiveRecord::Base
     else
       super
     end
+  end
+
+  def self.get_machine_preview_qty
+    self.machine_preview_qty.to_i
   end
 
 

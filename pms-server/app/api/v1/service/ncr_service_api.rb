@@ -57,7 +57,7 @@ module V1
           # preview order item list
           get :preview do
             if machine=Machine.find_by_nr(params[:machine_nr])
-              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(machine).limit(Setting::MACHINE_PREVIEW_QTY))
+              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(machine).limit(Setting.get_machine_preview_qty))
             end
           end
 
