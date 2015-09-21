@@ -41,7 +41,7 @@ module V1
             if machine=Machine.find_by_nr(params[:machine_nr])
               order = ProductionOrderItem.first_wait_produce(machine)
               if order
-                puts order.to_json.red
+                # puts order.to_json.red
                 r= ProductionOrderItemPresenter.new(order).to_check_material_order
               else
                 r= {}
@@ -57,7 +57,7 @@ module V1
           # preview order item list
           get :preview do
             if machine=Machine.find_by_nr(params[:machine_nr])
-              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(machine).limit(8))
+              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(machine).limit(Setting::MACHINE_PREVIEW_QTY))
             end
           end
 
@@ -71,7 +71,7 @@ module V1
           get :produce_content do
             if item=ProductionOrderItem.find_by_id(params[:order_item_id])
               mirror= params.has_key?(:mirror)
-              return ProductionOrderItemPresenter.new(item).to_produce_order(mirror)
+              return ProductionOrderItemPresenter.new(item).to_produce_order(params[:machine_type],mirror)
             end
           end
 
