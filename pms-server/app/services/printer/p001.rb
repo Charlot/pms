@@ -83,8 +83,6 @@ module Printer
         end
 
         self.data_set<<(heads+bodies)
-        # puts '---------------------------'
-        # puts self.data_set
       end
     end
   end
