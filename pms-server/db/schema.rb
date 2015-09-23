@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150918014823) do
+ActiveRecord::Schema.define(version: 20150921101105) do
 
   create_table "crimp_configuration_items", force: true do |t|
     t.integer  "crimp_configuration_id"
@@ -36,18 +36,18 @@ ActiveRecord::Schema.define(version: 20150918014823) do
     t.string   "wire_group_name"
     t.string   "part_id"
     t.string   "wire_type"
-    t.float    "cross_section",      default: 0.0
+    t.decimal  "cross_section",      precision: 15, scale: 10, default: 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.float    "min_pulloff_value",  default: 0.0
-    t.float    "crimp_height",       default: 0.0
-    t.float    "crimp_height_iso",   default: 0.0
-    t.float    "crimp_width",        default: 0.0
-    t.float    "crimp_width_iso",    default: 0.0
-    t.float    "i_crimp_height",     default: 0.0
-    t.float    "i_crimp_height_iso", default: 0.0
-    t.float    "i_crimp_width",      default: 0.0
-    t.float    "i_crimp_width_iso",  default: 0.0
+    t.float    "min_pulloff_value",                            default: 0.0
+    t.float    "crimp_height",                                 default: 0.0
+    t.float    "crimp_height_iso",                             default: 0.0
+    t.float    "crimp_width",                                  default: 0.0
+    t.float    "crimp_width_iso",                              default: 0.0
+    t.float    "i_crimp_height",                               default: 0.0
+    t.float    "i_crimp_height_iso",                           default: 0.0
+    t.float    "i_crimp_width",                                default: 0.0
+    t.float    "i_crimp_width_iso",                            default: 0.0
   end
 
   add_index "crimp_configurations", ["part_id"], name: "index_crimp_configurations_on_part_id", using: :btree
