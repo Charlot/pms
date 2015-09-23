@@ -45,7 +45,7 @@ module Printer
             route_nr: pe.process_template.code,
             route_name: pe.name.to_i.to_s,
             route_desc: pe.template_text,
-            work_time_of_route: pe.work_time,
+            work_time_of_route: (pe.work_time * @kanban.quantity).round(3),
             route_remark: pe.remark,
             route_part_info: '',
             consume_date: pe.nr #TODO route consume data
@@ -83,8 +83,8 @@ module Printer
         end
 
         self.data_set<<(heads+bodies)
-        puts '---------------------------'
-        puts self.data_set
+        # puts '---------------------------'
+        # puts self.data_set
       end
     end
   end
