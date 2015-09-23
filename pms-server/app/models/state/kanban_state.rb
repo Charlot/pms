@@ -25,9 +25,7 @@ class KanbanState < BaseClass
   end
 
   def self.get_value_by_display(display)
-
     self.const_get(display) if self.constants.include?(display.to_sym)
-
   end
 
   def self.pre_states(state)

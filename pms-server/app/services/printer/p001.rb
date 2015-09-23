@@ -63,7 +63,7 @@ module Printer
 
         ii=0
         puts "------------------#{ pe.value_default_wire_nr}".yellow
-        pe.process_parts.where.not(part_id: nil).each_with_index { |pp, index|
+        pe.process_parts.joins(:part).order('parts.type').where.not(part_id: nil).each_with_index { |pp, index|
           if pe.value_default_wire_nr.nil? || pe.value_default_wire_nr != pp.part.id.to_s
             if pp.part.type == PartType::PRODUCT_SEMIFINISHED && pp.part.nr.include?("_")
               body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr.split("_").last
@@ -73,7 +73,7 @@ module Printer
             end
             body["wiredesc#{index+1}_of_route".to_sym] = pp.part.custom_nr
             body["wire_quantity#{index+1}_of_route".to_sym] = pp.quantity
-            body["unit_of_wire#{index+1}".to_sym] = pp.unit
+            body["unit_of_wire#{index+1}".to_sym] = pp.part.unit
             ii+=1
           end if pp.part && ii<$ROUTE_PART_COUNT
         }
@@ -83,6 +83,8 @@ module Printer
         end
 
         self.data_set<<(heads+bodies)
+        puts '---------------------------'
+        puts self.data_set
       end
     end
   end
