@@ -43,33 +43,34 @@
                     <Label Content="" Height="28" HorizontalAlignment="Left" Margin="123,6,0,0" Name="DrawWaringText" VerticalAlignment="Top" Width="287" Foreground="Red" />
                 </Grid> 
                     <Grid>
-                    <Label Background="Red" Content="" Height="16" HorizontalAlignment="Left" Margin="105,31,0,0" Name="labelredtop" VerticalAlignment="Top" Width="320" />
-                    <Label Background="Yellow" Content="" Height="22" HorizontalAlignment="Left" Margin="105,47,0,0" Name="labelyellowtop" VerticalAlignment="Top" Width="320" />
-                    <Label Background="Green" Content="" Height="53" HorizontalAlignment="Left" Margin="105,69,0,0" Name="labelgreen" VerticalAlignment="Top" Width="320" />
-                    <Label Background="Yellow" Content="" Height="22" HorizontalAlignment="Left" Margin="105,122,0,0" Name="labelyellowbottom" VerticalAlignment="Top" Width="320" />
+                    <Label Background="Red" Content="" Height="16" HorizontalAlignment="Left" Margin="105,40,0,0" Name="labelredtop" VerticalAlignment="Top" Width="320" />
+                    <Label Background="Yellow" Content="" Height="16" HorizontalAlignment="Left" Margin="105,56,0,0" Name="labelyellowtop" VerticalAlignment="Top" Width="320" />
+                    <Label Background="Green" Content="" Height="57" HorizontalAlignment="Left" Margin="105,72,0,0" Name="labelgreen" VerticalAlignment="Top" Width="320" />
+                    <Label Background="Yellow" Content="" Height="15" HorizontalAlignment="Left" Margin="105,129,0,0" Name="labelyellowbottom" VerticalAlignment="Top" Width="320" />
                     <Label Background="Red" Content="" Height="16" HorizontalAlignment="Left" Margin="105,144,0,0" Name="labelredbottom" VerticalAlignment="Top" Width="320" />
 
                     <Grid Name="LineChart1"></Grid>
                 </Grid>
             </StackPanel>
+            
             <StackPanel Height="262" HorizontalAlignment="Left" Margin="7,260,0,0"  VerticalAlignment="Top" Width="472">
                 <Grid Name="LineSide1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="40*" />
                         <ColumnDefinition Width="432*" />
                     </Grid.ColumnDefinitions>
-                    <Rectangle Height="28" Margin="61,210,51,0" Name="rectangle1" Stroke="Black" Width="320" Grid.Column="1" />
-                <Label Content="" Background="Blue" Height="18" HorizontalAlignment="Left" Margin="83,220,0,0" Name="label_501" VerticalAlignment="Top" Width="19" Grid.Column="1" />
-                <Label Content="Values" FontSize="10" Height="28" Margin="103,220,241,0" Name="label_511" 
+                    
+                    <Rectangle Height="28" Margin="65,205,47,15" Name="rectangle1" Stroke="Black" Width="320" Grid.Column="1" />
+                <Label Content="" Background="Blue" Height="18" HorizontalAlignment="Left" Margin="87,210,0,0" Name="label_501" VerticalAlignment="Top" Width="19" Grid.Column="1" />
+                <Label Content="Values" FontSize="10" Height="28" Margin="107,210,237,0" Name="label_511" 
                                VerticalAlignment="Top" Grid.Column="1" />
-                <Label Background="Violet" Content="" Height="18" HorizontalAlignment="Left" Margin="149,220,0,0" Name="label_512" VerticalAlignment="Top" Width="19" Grid.Column="1" />
-                <Label Content="Max" FontSize="10" Height="28" Margin="177,220,0,0" Name="label_513" VerticalAlignment="Top" HorizontalAlignment="Left" Width="41" Grid.Column="1" />
-                <Label Background="Black" Content="" Height="18" HorizontalAlignment="Left" Margin="212,220,0,0" Name="label_541" VerticalAlignment="Top" Width="19" Grid.Column="1" />
-                <Label Content="Min" FontSize="10" Height="28" HorizontalAlignment="Left" Margin="240,220,0,0" Name="label_551" VerticalAlignment="Top" Width="41" Grid.Column="1" />
-                <Label Background="Pink" Content="" Height="18" HorizontalAlignment="Left" Margin="268,220,0,0" Name="label_561" VerticalAlignment="Top" Width="19" Grid.Column="1" />
-                <Label Content="Opt" FontSize="10" Height="28" HorizontalAlignment="Left" Margin="286,220,0,0" Name="label_571" VerticalAlignment="Top" Width="41" Grid.Column="1" />
-                <Label Background="Yellow" Content="" Height="18" HorizontalAlignment="Left" Margin="320,220,0,0" Name="label_581" VerticalAlignment="Top" Width="19" Grid.Column="1" />
-                <Label Content="Avg" FontSize="10" Height="28" HorizontalAlignment="Left" Margin="338,220,0,0" Name="label_591" VerticalAlignment="Top" Width="41" Grid.Column="1" />
+                <Label Background="Green" Content="" Height="18" HorizontalAlignment="Left" Margin="153,210,0,0" Name="label_512" VerticalAlignment="Top" Width="19" Grid.Column="1" />
+                <Label Content="Normal" FontSize="10" Height="28" Margin="181,210,0,0" Name="label_513" VerticalAlignment="Top" HorizontalAlignment="Left" Width="49" Grid.Column="1" />
+                <Label Background="Yellow" Content="" Height="18" HorizontalAlignment="Left" Margin="231,210,0,0" Name="label_541" VerticalAlignment="Top" Width="19" Grid.Column="1" />
+                <Label Content="Warning" FontSize="10" Height="28" HorizontalAlignment="Left" Margin="259,210,0,0" Name="label_551" VerticalAlignment="Top" Width="50" Grid.Column="1" />
+                <Label Background="Red" Content="" Height="18" HorizontalAlignment="Left" Margin="315,210,0,0" Name="label_561" VerticalAlignment="Top" Width="19" Grid.Column="1" />
+                <Label Content="Error" FontSize="10" Height="28" HorizontalAlignment="Right" Margin="0,210,57,0" Name="label_571" VerticalAlignment="Top" Width="41" Grid.Column="1" />
+                
                     <Label Content="" Height="28" HorizontalAlignment="Left" Margin="83,6,0,0" Name="Chart1Title" VerticalAlignment="Top" Width="287" Grid.Column="1" />
                 </Grid>
             </StackPanel>
@@ -78,10 +79,10 @@
                         Margin="481,232,0,0" Name="LineSide2Bg" VerticalAlignment="Top" Width="472" Grid.ColumnSpan="2">
                 <Label Content="" Height="28" HorizontalAlignment="Left" Margin="123,6,0,0" Name="DrawWaringText2" VerticalAlignment="Top" Width="287" Foreground="Red" />
                 <Grid>
-                    <Label Background="Red" Content="" Height="16" HorizontalAlignment="Left" Margin="105,31,0,0" Name="labelredtop2" VerticalAlignment="Top" Width="320" />
-                    <Label Background="Yellow" Content="" Height="22" HorizontalAlignment="Left" Margin="105,47,0,0" Name="labelyellowtop2" VerticalAlignment="Top" Width="320" />
-                    <Label Background="Green" Content="" Height="53" HorizontalAlignment="Left" Margin="105,69,0,0" Name="labelgreen2" VerticalAlignment="Top" Width="320" />
-                    <Label Background="Yellow" Content="" Height="22" HorizontalAlignment="Left" Margin="105,122,0,0" Name="labelyellowbottom2" VerticalAlignment="Top" Width="320" />
+                    <Label Background="Red" Content="" Height="16" HorizontalAlignment="Left" Margin="105,40,0,0" Name="labelredtop2" VerticalAlignment="Top" Width="320" />
+                    <Label Background="Yellow" Content="" Height="16" HorizontalAlignment="Left" Margin="105,56,0,0" Name="labelyellowtop2" VerticalAlignment="Top" Width="320" />
+                    <Label Background="Green" Content="" Height="57" HorizontalAlignment="Left" Margin="105,72,0,0" Name="labelgreen2" VerticalAlignment="Top" Width="320" />
+                    <Label Background="Yellow" Content="" Height="15" HorizontalAlignment="Left" Margin="105,129,0,0" Name="labelyellowbottom2" VerticalAlignment="Top" Width="320" />
                     <Label Background="Red" Content="" Height="16" HorizontalAlignment="Left" Margin="105,144,0,0" Name="labelredbottom2" VerticalAlignment="Top" Width="320" />
 
                     <Grid Name="LineChart2"></Grid>
@@ -90,18 +91,16 @@
             <StackPanel Height="262" HorizontalAlignment="Left" Margin="500,250,0,0" VerticalAlignment="Top" Width="472" Grid.ColumnSpan="2">
                 <Grid Name="LineSide2">
                     <Rectangle Grid.Row="1" Height="28" Margin="20,210,0,0" Name="rectangle2" Stroke="Black" Width="320" />
-                    <Label Content="" Background="Blue" Grid.Row="1" Height="18" HorizontalAlignment="Left" Margin="100,220,0,0" Name="label501" VerticalAlignment="Top" Width="19" />
-                    <Label Content="Values" FontSize="10" Grid.Row="1" Height="28" HorizontalAlignment="Left" Margin="120,220,241,0" Name="label511" 
+                    <Label Content="" Background="Blue" Height="18" HorizontalAlignment="Left" Margin="96,220,0,0" Name="label_5011" VerticalAlignment="Top" Width="19" />
+                    <Label Content="Values" FontSize="10" Height="28" Margin="116,220,228,0" Name="label_5111" 
                                VerticalAlignment="Top" />
-                    <Label Background="Violet" Content="" Height="18" HorizontalAlignment="Left" Margin="170,220,0,0" Name="label512" VerticalAlignment="Top" Width="19" Grid.Row="1" />
-                    <Label Content="Max" FontSize="10" Height="28" Margin="190,220,0,0" 
-                               Name="label513" VerticalAlignment="Top" Grid.Row="1" HorizontalAlignment="Left" Width="41" />
-                    <Label Background="Black" Content="" Height="18" HorizontalAlignment="Left" Margin="230,220,0,0" Name="label541" VerticalAlignment="Top" Width="19" Grid.Row="1" />
-                    <Label Content="Min" FontSize="10" Height="28" HorizontalAlignment="Left" Margin="250,220,0,0" Name="label551" VerticalAlignment="Top" Width="41" Grid.Row="1" />
-                    <Label Background="Pink" Content="" Height="18" HorizontalAlignment="Left" Margin="290,220,0,0" Name="label561" VerticalAlignment="Top" Width="19" />
-                    <Label Content="Opt" FontSize="10" Height="28" HorizontalAlignment="Left" Margin="310,220,0,0" Name="label571" VerticalAlignment="Top" Width="41" Grid.Row="1" />
-                    <Label Background="Yellow" Content="" Height="18" HorizontalAlignment="Left" Margin="350,220,0,0" Name="label581" VerticalAlignment="Top" Width="19" Grid.Row="1" />
-                    <Label Content="Avg" FontSize="10" Height="28" HorizontalAlignment="Left" Margin="370,220,0,0" Name="label591" VerticalAlignment="Top" Width="41" Grid.Row="1" />
+                    <Label Background="Green" Content="" Height="18" HorizontalAlignment="Left" Margin="162,220,0,0" Name="label_5121" VerticalAlignment="Top" Width="19" />
+                    <Label Content="Normal" FontSize="10" Height="28" Margin="190,220,0,0" Name="label_5131" VerticalAlignment="Top" HorizontalAlignment="Left" Width="49" />
+                    <Label Background="Yellow" Content="" Height="18" HorizontalAlignment="Left" Margin="240,220,0,0" Name="label_5411" VerticalAlignment="Top" Width="19" />
+                    <Label Content="Warning" FontSize="10" Height="28" HorizontalAlignment="Left" Margin="275,220,0,0" Name="label_5511" VerticalAlignment="Top" Width="50" />
+                    <Label Background="Red" Content="" Height="18" HorizontalAlignment="Left" Margin="337,220,0,0" Name="label_5611" VerticalAlignment="Top" Width="19" />
+                    <Label Content="Error" FontSize="10" Height="28" HorizontalAlignment="Right" Margin="0,220,63,0" Name="label_5711" VerticalAlignment="Top" Width="41" />
+
                     <Label Content="" Height="28" HorizontalAlignment="Left" Margin="104,16,0,0" Name="Chart2Title" VerticalAlignment="Top" Width="287" />
                 </Grid>
             </StackPanel>
@@ -145,7 +144,7 @@
                 <TextBox FontSize="11" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriHig3Side2" VerticalAlignment="Top" Width="80" />
                 <TextBox FontSize="11" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriHig4Side2" VerticalAlignment="Top" Width="80" />
                 <TextBox FontSize="11" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriHig5Side2" VerticalAlignment="Top" Width="80" />
-                 <TextBox FontSize="11" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriWidSide2" VerticalAlignment="Top" Width="80" />
+                <TextBox FontSize="11" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriWidSide2" VerticalAlignment="Top" Width="80" />
                 <TextBox FontSize="11" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="PullOffSide2" VerticalAlignment="Top" Width="80" />
             </StackPanel>
 
@@ -158,7 +157,7 @@
                 <Label Content="" Height="25" HorizontalAlignment="Left" Margin="0,1,0,0" Name="CriWidWarning" VerticalAlignment="Top" />
                 <Label Content="" Height="25" HorizontalAlignment="Left" Margin="0,1,0,0" Name="PullOffWarning" VerticalAlignment="Top" />
             </StackPanel>
-            <Label Content="" Height="35" Name="ServerError" Width="367" Foreground="Red" FontSize="15" Grid.Column="1" Margin="22,190,26,344" />
+            <Label Content="" Height="35" Name="ServerError" Foreground="Red" FontSize="15" Margin="472,190,26,344" Grid.ColumnSpan="2" />
         </Grid>
     </Grid>
 </Window>
