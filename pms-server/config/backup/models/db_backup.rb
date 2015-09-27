@@ -16,21 +16,21 @@ Model.new(:db_backup, 'Description for db_backup') do
   ##
   # MySQL [Database]
   #
-#  database MySQL do |db|
-	## To dump all databases, set `db.name = :all` (or leave blank)
-	#db.name               = "pmsdb"
-	#db.username           = "pmser"
-	#db.password           = "pmser@"
-	#db.host               = "localhost"
-	#db.port               = 3306
-	#db.socket             = "/var/run/mysqld/mysqld.sock"
-	## Note: when using `skip_tables` with the `db.name = :all` option,
-	## table names should be prefixed with a database name.
-	## e.g. ["db_name.table_to_skip", ...]
-##    db.skip_tables        = ["skip", "these", "tables"]
-	##db.only_tables        = ["only", "these", "tables"]
-	##db.additional_options = ["--quick", "--single-transaction"]
-  #end
+database MySQL do |db|
+	# To dump all databases, set `db.name = :all` (or leave blank)
+	db.name               = "pmsdb"
+	db.username           = "pmser"
+	db.password           = "pmser@"
+	db.host               = "localhost"
+	db.port               = 3306
+	db.socket             = "/var/run/mysqld/mysqld.sock"
+	# Note: when using `skip_tables` with the `db.name = :all` option,
+	# table names should be prefixed with a database name.
+	# e.g. ["db_name.table_to_skip", ...]
+#    db.skip_tables        = ["skip", "these", "tables"]
+	#db.only_tables        = ["only", "these", "tables"]
+	#db.additional_options = ["--quick", "--single-transaction"]
+  end
 
   ##
   # Redis [Database]
