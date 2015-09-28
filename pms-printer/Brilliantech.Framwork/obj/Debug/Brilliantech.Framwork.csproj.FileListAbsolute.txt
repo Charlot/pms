@@ -24,3 +24,4 @@ E:\Work\pms\pms-printer\Brilliantech.Framwork\bin\Debug\Nini.dll
 E:\Work\pms\pms-printer\Brilliantech.Framwork\obj\Debug\Brilliantech.Framwork.csprojResolveAssemblyReference.cache
 E:\Work\pms\pms-printer\Brilliantech.Framwork\obj\Debug\Brilliantech.Framwork.dll
 E:\Work\pms\pms-printer\Brilliantech.Framwork\obj\Debug\Brilliantech.Framwork.pdb
+C:\Users\Charlot\Documents\GitHub\pms\pms-printer\Brilliantech.Framwork\obj\Debug\Brilliantech.Framwork.csprojResolveAssemblyReference.cache
