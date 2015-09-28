@@ -27,6 +27,13 @@
     </div>
 
     <div class="field">
+      <%= f.label :locked, '是否锁定' %><br>
+      <%= f.check_box :locked %>
+    </div>
+
+
+
+    <div class="field">
       <%= f.label :resource_group_id,'模具组' %><br>
       <%= f.select(:resource_group_id, resource_group_tool_options, {include_blank: false}) %>
     </div>
@@ -35,6 +42,7 @@
       <%= f.label :mnt %><br>
       <%= f.number_field :mnt %>
     </div>
+
     <div class="field">
       <%= f.label :used_days %><br>
       <%= f.number_field :used_days %>

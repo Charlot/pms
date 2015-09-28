@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150928025252) do
+ActiveRecord::Schema.define(version: 20150928070456) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -510,6 +510,7 @@ ActiveRecord::Schema.define(version: 20150928025252) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "nr_display"
+    t.boolean  "locked",            default: false
   end
 
   add_index "tools", ["nr"], name: "index_tools_on_nr", using: :btree

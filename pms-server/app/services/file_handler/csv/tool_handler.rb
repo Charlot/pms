@@ -141,7 +141,7 @@ module FileHandler
           unless Part.find_by_nr(part)
             msg.contents << "Part: #{part} 不存在"
           end
-        end
+        end if row['Parts'].present?
 
         unless msg.result=(msg.contents.size==0)
           msg.content=msg.contents.join('/')

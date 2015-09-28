@@ -6,6 +6,16 @@
 </p>
 
 <p>
+  <strong>Name:</strong>
+  <%= @tool.nr_display %>
+</p>
+
+<p>
+  <strong>Locked :</strong>
+  <%= @tool.locked %>
+</p>
+
+<p>
   <strong>Resource group:</strong>
   <%= @tool.resource_group_tool.nr if @tool.resource_group_tool %>
 </p>
