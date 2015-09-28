@@ -21,9 +21,13 @@
       <%= f.text_field :nr %>
     </div>
 
+    <div class="field">
+      <%= f.label :part_nrs, '可用零件(多个以英文逗号分隔)' %><br>
+      <%= f.text_field :part_nrs %>
+    </div>
 
     <div class="field">
-      <%= f.label :resource_group_id %><br>
+      <%= f.label :resource_group_id,'模具组' %><br>
       <%= f.select(:resource_group_id, resource_group_tool_options, {include_blank: false}) %>
     </div>
 

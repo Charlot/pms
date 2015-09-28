@@ -49,19 +49,6 @@ module FileHandler
                       end
                     end
                 end
-                # 处理零件与模具的对应关系,row['Parts'] 列以逗号分割
-                if handle_parts
-                  old_parts=tool.part_tools.pluck(:id)
-                  row['Parts'].split(',').each do |part_nr|
-                    part=Part.find_by_nr(part_nr)
-                    if pt=tool.part_tools.where(part_id: part.id).first
-                      old_parts.delete(pt.id)
-                    else
-                      tool.part_tools<<PartTool.new(part: part)
-                    end
-                  end
-                  tool.part_tools.where(id: old_parts).delete_all
-                end
               end
             end
             msg.result = true
