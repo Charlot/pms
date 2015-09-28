@@ -12,9 +12,6 @@
       <span> 端子号：
         <input type="text" name="crimp_configuration[part_id]" value="<%= @part_id %>"/>
       </span>
-      <span> 电线型号：
-        <input type="text" name="crimp_configuration[wire_type]" value="<%= @wire_type %>"/>
-      </span>
       <input type="submit" value="查 找" class="btn btn-primary"/>
     </div>
   </form>
@@ -33,9 +30,8 @@
   <thead>
   <tr>
     <th>客户号</th>
-    <th>线组</th>
     <th>端子号</th>
-    <th>电线型号</th>
+    <th>线组</th>
     <th>截面</th>
     <th>最小拉力值</th>
     <th>压接高度</th>
@@ -54,9 +50,8 @@
   <% @crimp_configurations.each do |crimp_configuration| %>
       <tr>
         <td><%= crimp_configuration.custom_id %></td>
-        <td><%= crimp_configuration.wire_group_name %></td>
         <td><%= crimp_configuration.part_id %></td>
-        <td><%= crimp_configuration.wire_type %></td>
+        <td><%= crimp_configuration.wire_group_name %></td>
         <td><%= crimp_configuration.cross_section %></td>
 
         <td><%= best_in_place crimp_configuration, :min_pulloff_value, as: :input %></td>

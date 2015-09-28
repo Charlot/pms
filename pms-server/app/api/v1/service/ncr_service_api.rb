@@ -175,12 +175,13 @@ module V1
             end
             wire_type = wire.component_type
             cross_section = wire.cross_section
+            wire_group_name = WireGroup.where(wire_type: wire_type, cross_section: cross_section).first.group_name
             part_custom_nr = Part.find(production_order_item.kanban.product_id).nr
             custom_id = CustomDetail.where("part_nr_to >= ? AND part_nr_from <= ?", part_custom_nr, part_custom_nr).first.custom_nr
 
             unless process_entity.value_t1.nil?
               part1_id = Part.find(process_entity.value_t1).nr
-              item1 = CrimpConfiguration.where(custom_id: custom_id, part_id: part1_id, wire_type: wire_type, cross_section: cross_section).first
+              item1 = CrimpConfiguration.where(custom_id: custom_id, part_id: part1_id, wire_group_name: wire_group_name, cross_section: cross_section).first
               unless item1.nil?
                 args1 = {}
                 args1[:Key] = part1_id
@@ -192,7 +193,7 @@ module V1
 
             unless process_entity.value_t2.nil?
               part2_id = Part.find(process_entity.value_t2).nr
-              item2 = CrimpConfiguration.where(custom_id: custom_id, part_id: part2_id, wire_type: wire_type, cross_section: cross_section).first
+              item2 = CrimpConfiguration.where(custom_id: custom_id, part_id: part2_id, wire_group_name: wire_group_name, cross_section: cross_section).first
               unless item2.nil?
                 args2 = {}
                 args2[:Key] = part2_id

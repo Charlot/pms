@@ -5,12 +5,9 @@ class WireGroup < ActiveRecord::Base
   before_validation :check_data
 
   def check_data
-    items = WireGroup.where(wire_type: self[:wire_type])
-    puts self
-    items.each do |item|
-      if item.cross_section == self[:cross_section].to_f && self[:id] != item.id
-        self.errors.add(:group_name,"wire_type:#{self[:wire_type]}, cross_section:#{self[:cross_section]},该信息已存在线组名：#{item.group_name}")
-      end
+    item = WireGroup.where(wire_type: self.wire_type, cross_section: self.cross_section.to_f).first
+    if !item.nil? && item.id != self.id
+      self.errors.add(:group_name,"wire_type:#{self.wire_type}, cross_section:#{self.cross_section},该信息已存在线组名：#{item.group_name}")
     end
   end
 end
