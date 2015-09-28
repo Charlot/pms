@@ -58,10 +58,10 @@ namespace PmsNCR
                 double CriWidFauSide1Str = System.Convert.ToDouble(CriWidFauSide1.Text);
                 double CriHigHigSide1Str = CriHigStaSid1Str + CriHigStaSid1FauStr;
                 double CriHigLowSide1Str = CriHigStaSid1Str - CriHigStaSid1FauStr;
-                if (CriHig1Side1.Text.Trim() == "")
+                if (CheckStringIsInvalid(CriHig1Side1.Text))
                 {
                     CriHig1Side1.Background = new SolidColorBrush(Colors.Red);
-                    CriHig1Warning.Content = "Crimp Height 1 Can't be Empty";
+                    //CriHig1Warning.Content = CheckCrimpHeightInvalidString("1");//"Crimp Height 1 Can't be Empty";
                     passside1 = false;
                 }
                 else
@@ -73,10 +73,10 @@ namespace PmsNCR
                     }
                 }
 
-                if (CriHig2Side1.Text.Trim() == "")
+                if (CheckStringIsInvalid(CriHig2Side1.Text))
                 {
                     CriHig2Side1.Background = new SolidColorBrush(Colors.Red);
-                    CriHig2Warning.Content = "Crimp Height 2 Can't be Empty";
+                  //  CriHig2Warning.Content = "Crimp Height 2 Can't be Empty";
                     passside1 = false;
                 }
                 else
@@ -88,10 +88,10 @@ namespace PmsNCR
                     }
                 }
 
-                if (CriHig3Side1.Text.Trim() == "")
+                if (CheckStringIsInvalid(CriHig3Side1.Text))
                 {
                     CriHig3Side1.Background = new SolidColorBrush(Colors.Red);
-                    CriHig3Warning.Content = "Crimp Height 3 Can't be Empty";
+                    //CriHig3Warning.Content = "Crimp Height 3 Can't be Empty";
                     passside1 = false;
                 }
                 else
@@ -102,10 +102,10 @@ namespace PmsNCR
                         passside1 = false;
                     }
                 }
-                if (CriHig4Side1.Text.Trim() == "")
+                if (CheckStringIsInvalid(CriHig4Side1.Text))
                 {
                     CriHig4Side1.Background = new SolidColorBrush(Colors.Red);
-                    CriHig4Warning.Content = "Crimp Height 4 Can't be Empty";
+                   // CriHig4Warning.Content = "Crimp Height 4 Can't be Empty";
                     passside1 = false;
                 }
                 else
@@ -117,10 +117,10 @@ namespace PmsNCR
                     }
                 }
 
-                if (CriHig5Side1.Text.Trim() == "")
+                if (CheckStringIsInvalid(CriHig5Side1.Text))
                 {
                     CriHig5Side1.Background = new SolidColorBrush(Colors.Red);
-                    CriHig5Warning.Content = "Crimp Height 5 Can't be Empty";
+                   // CriHig5Warning.Content = "Crimp Height 5 Can't be Empty";
                     passside1 = false;
                 }
                 else
@@ -136,10 +136,10 @@ namespace PmsNCR
                 double CriWidLowSide1Str = CriWidStaSide1Str - CriWidFauSide1Str;
                 double CriWidHigSide1Str = CriWidStaSide1Str + CriWidFauSide1Str;
 
-                if (CriWidSide1.Text.Trim() == "")
+                if (CheckStringIsInvalid(CriWidSide1.Text))
                 {
                     CriWidSide1.Background = new SolidColorBrush(Colors.Red);
-                    CriWidWarning.Content = "Crimp Width Can't be Empty";
+                   // CriWidWarning.Content = "Crimp Width Can't be Empty";
                     passside1 = false;
                 }
                 else
@@ -153,10 +153,10 @@ namespace PmsNCR
                 //Pulloff Standard
                 double PullOffStaSide1Str = System.Convert.ToDouble(PullOffStaSide1.Text);
 
-                if (PullOffSide1.Text.Trim() == "")
+                if (CheckStringIsInvalid(PullOffSide1.Text))
                 {
                     PullOffSide1.Background = new SolidColorBrush(Colors.Red);
-                    PullOffWarning.Content = "Pulloff Can't be Empty";
+                  //  PullOffWarning.Content = "Pulloff Can't be Empty";
                     passside1 = false;
                 }
                 else
@@ -184,10 +184,10 @@ namespace PmsNCR
                 double CriHigHigSide2Str = CriHigStaSid2Str + CriHigStaSid2FauStr;
                 double CriHigLowSide2Str = CriHigStaSid2Str - CriHigStaSid2FauStr;
 
-                if (CriHig1Side2.Text.Trim() == "")
+                if (CheckStringIsInvalid(CriHig1Side2.Text))
                 {
                     CriHig1Side2.Background = new SolidColorBrush(Colors.Red);
-                    CriHig1Warning.Content = "Crimp Height 1 Can't be Empty";
+                    //CriHig1Warning.Content = "Crimp Height 1 Can't be Empty";
                     passside2 = false;
                 }
                 else
@@ -199,10 +199,10 @@ namespace PmsNCR
                     }
                 }
 
-                if (CriHig2Side2.Text.Trim() == "")
+                if (CheckStringIsInvalid(CriHig2Side2.Text))
                 {
                     CriHig2Side2.Background = new SolidColorBrush(Colors.Red);
-                    CriHig2Warning.Content = "Crimp Height 2 Can't be Empty";
+                 //   CriHig2Warning.Content = "Crimp Height 2 Can't be Empty";
                     passside2 = false;
                 }
                 else
@@ -214,10 +214,10 @@ namespace PmsNCR
                     }
                 }
 
-                if (CriHig3Side2.Text.Trim() == "")
+                if (CheckStringIsInvalid(CriHig3Side2.Text))
                 {
                     CriHig3Side2.Background = new SolidColorBrush(Colors.Red);
-                    CriHig3Warning.Content = "Crimp Height 3 Can't be Empty";
+                   // CriHig3Warning.Content = "Crimp Height 3 Can't be Empty";
                     passside2 = false;
                 }
                 else
@@ -230,10 +230,10 @@ namespace PmsNCR
                 }
 
 
-                if (CriHig4Side2.Text.Trim() == "")
+                if (CheckStringIsInvalid(CriHig4Side2.Text))
                 {
                     CriHig4Side2.Background = new SolidColorBrush(Colors.Red);
-                    CriHig4Warning.Content = "Crimp Height 4 Can't be Empty";
+                  //  CriHig4Warning.Content = "Crimp Height 4 Can't be Empty";
                     passside2 = false;
                 }
                 else
@@ -245,10 +245,10 @@ namespace PmsNCR
                     }
                 }
 
-                if (CriHig5Side2.Text.Trim() == "")
+                if (CheckStringIsInvalid( CriHig5Side2.Text))
                 {
                     CriHig5Side2.Background = new SolidColorBrush(Colors.Red);
-                    CriHig5Warning.Content = "Crimp Height 5 Can't be Empty";
+                   // CriHig5Warning.Content = "Crimp Height 5 Can't be Empty";
                     passside2 = false;
                 }
                 else
@@ -263,10 +263,10 @@ namespace PmsNCR
                 double CriWidLowSide2Str = CriWidStaSide2Str - CriWidFauSide2Str;
                 double CriWidHigSide2Str = CriWidStaSide2Str + CriWidFauSide2Str;
 
-                if (CriWidSide2.Text.Trim() == "")
+                if (CheckStringIsInvalid(CriWidSide2.Text))
                 {
                     CriWidSide2.Background = new SolidColorBrush(Colors.Red);
-                    CriWidWarning.Content = "Crimp Width Can't be Empty";
+                    //CriWidWarning.Content = "Crimp Width Can't be Empty";
                     passside2 = false;
                 }
                 else
@@ -279,10 +279,10 @@ namespace PmsNCR
                 }
 
                 double PullOffStaSide2Str = System.Convert.ToDouble(PullOffStaSide2.Text);
-                if (PullOffSide2.Text.Trim() == "")
+                if (CheckStringIsInvalid(PullOffSide2.Text))
                 {
                     PullOffSide2.Background = new SolidColorBrush(Colors.Red);
-                    PullOffWarning.Content = "Pulloff Can't be Empty";
+                    //PullOffWarning.Content = "Pulloff Can't be Empty";
                     passside2 = false;
                 }
                 else
@@ -335,6 +335,8 @@ namespace PmsNCR
         //Check Button
         private void Btn_Check(object sender, RoutedEventArgs e)
         {
+            DrawLine();
+
             bool passside1 = CheckSide1();
             bool passside2 = CheckSide2();
             //Judge
@@ -348,7 +350,6 @@ namespace PmsNCR
              {
                  MeasureSide2("true");
              }
-                MessageBox.Show("OK");
             }
             else if (!passside1 && passside2)
             {
@@ -360,8 +361,10 @@ namespace PmsNCR
                 {
                     MeasureSide2("true");
                 }
-            }else if(passside1&&!passside2){
-               if (order.Terminal1Nr != null)
+            }
+            else if (passside1 && !passside2)
+            {
+                if (order.Terminal1Nr != null)
                 {
                     MeasureSide1("true");
                 }
@@ -369,10 +372,17 @@ namespace PmsNCR
                 {
                     MeasureSide2("false");
                 }
-           }
-                MessageBox.Show("Error");
-           
-            DrawLine();
+            }
+            else {
+                if (order.Terminal1Nr != null)
+                {
+                    MeasureSide1("false");
+                }
+                if (order.Terminal2Nr != null)
+                {
+                    MeasureSide2("false");
+                }
+            }
         }
 
         //Crimp height function
@@ -381,7 +391,7 @@ namespace PmsNCR
             CriHigWarning.Content="";
                 if(CriHigStr<CriHigLowStr||CriHigStr>CriHigHigStr){
                     CriHig.Background = new SolidColorBrush(Colors.Red);
-                    CriHigWarning.Content = "Crimp Height isn't meet requirements";
+                 //   CriHigWarning.Content = "Crimp Height isn't meet requirements";
                     return false;
                 }else{
                     CriHigWarning.Content = "";
@@ -397,7 +407,7 @@ namespace PmsNCR
             if (CriWidStr < CriWidLowStr || CriWidStr > CriWidHigStr)
             {
                 CriWid.Background = new SolidColorBrush(Colors.Red);
-                CriWidWarning.Content = "Crimp Width isn't meet requirements "; 
+            //    CriWidWarning.Content = "Crimp Width isn't meet requirements "; 
                 return false;
             }
             else
@@ -415,7 +425,7 @@ namespace PmsNCR
             if (PullOffStr < PullOffStaStr)
             {
                 PullOff.Background = new SolidColorBrush(Colors.Red);
-                PullOffWarning.Content = "Pulloff isn't meet requirements ";
+              //  PullOffWarning.Content = "Pulloff isn't meet requirements ";
                 return false;
             }
             else
@@ -441,7 +451,6 @@ namespace PmsNCR
                 DrawWaringText.Content = "Crime Height 1 is Empty";
                 CriHig1Side1.Background = new SolidColorBrush(Colors.Red);
                 LineChart1.Children.Clear();
-                //LineChart2.Children.Clear();
             }
             else if (CriHig2Side1.Text.Trim() == "")
             {
@@ -552,7 +561,7 @@ namespace PmsNCR
             //chart.Background = new SolidColorBrush(Colors.Transparent);
             chart.Background = new SolidColorBrush(Color.FromArgb(1, 255, 255, 255));
             chart.AnimationEnabled = true;
-            chart.ColorSet = "VisiRed";
+            chart.ColorSet = "VisiBlue";
 
             chart.ScrollingEnabled = false;
             chart.View3D = false;
@@ -606,7 +615,10 @@ namespace PmsNCR
                 dataPoint = new DataPoint();
                 dataPoint.AxisXLabel = valuex[i];
                 //dataPoint.YValue = System.Convert.ToDouble(valuey[i]);
-                dataPoint.YValue = Convert.ToDouble(valuey[i]);
+                double value=0;
+                double.TryParse(valuey[i], out value);
+                dataPoint.YValue = value;
+                //dataPoint.YValue = Convert.ToDouble(valuey[i]);
                 //dataPoint.MarkerSize = 20;
                 //dataPoint.MarkerColor = new SolidColorBrush(Colors.Red);
                 dataPoint.MouseLeftButtonDown += new MouseButtonEventHandler(dataPoint_MouseLeftButtonDown);
@@ -692,7 +704,12 @@ namespace PmsNCR
                 dataPoint = new DataPoint();
                 dataPoint.AxisXLabel = valuex[i];
                 //dataPoint.YValue = double.Parse(valuey2[i]);
-                dataPoint.YValue = Convert.ToDouble(valuey2[i]);
+
+                double value = 0;
+                double.TryParse(valuey2[i], out value);
+                dataPoint.YValue = value;
+
+                // dataPoint.YValue = Convert.ToDouble(valuey2[i]);
                 dataPoint.MouseLeftButtonDown += new MouseButtonEventHandler(dataPoint_MouseLeftButtonDown);
                 dataSeries.DataPoints.Add(dataPoint);
             }
@@ -704,11 +721,12 @@ namespace PmsNCR
         }
 
         //Hidden Side
+       
         private void HidSide1() {
-            InputSide1.Visibility = Visibility.Hidden;
-            StandardSide1.Visibility = Visibility.Hidden;
-            LineSide1.Visibility = Visibility.Hidden;
-            LineSide1Bg.Visibility = Visibility.Hidden;
+              InputSide1.Visibility = Visibility.Hidden;
+              StandardSide1.Visibility = Visibility.Hidden;
+              LineSide1.Visibility = Visibility.Hidden;
+              LineSide1Bg.Visibility = Visibility.Hidden; 
         }
         private void HidSide2() {
             InputSide2.Visibility = Visibility.Hidden;
@@ -716,7 +734,7 @@ namespace PmsNCR
             LineSide2.Visibility = Visibility.Hidden;
             LineSide2Bg.Visibility = Visibility.Hidden;
         }
-
+       
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             LoadSPCStandard();
@@ -729,7 +747,6 @@ namespace PmsNCR
 
             if (order==null)
             {
-                //MessageBox.Show("No Order!");
                 CurrentJobLab.Content = "No Order!";
                 CurrentJobLab.Foreground = new SolidColorBrush(Colors.Red);
                 HidSide1();
@@ -788,5 +805,34 @@ namespace PmsNCR
                 }
             }
         }
-     }
+    
+    // check input is double
+        private bool CheckStringIsInvalid(string value) {
+            //if (string.IsNullOrWhiteSpace(value)) {
+            //    return false;
+            //}
+            double v = 0;            
+            return !double.TryParse(value, out v);
+        }
+
+        //private string CheckPullOffInvalidString(string input)
+        //{
+        //    return CheckStringInvalidString("PullOff", input);
+        //}
+
+        //private string CheckCrimpWidthInvalidString(string input)
+        //{
+        //    return CheckStringInvalidString("Crimp Width", input);
+        //}
+
+        //private string CheckCrimpHeightInvalidString(string input) {
+        //  return  CheckStringInvalidString("Crimp Height",input);
+        //}
+
+        //private string CheckStringInvalidString( params string[] inputs) {
+        //    return string.Format("%s %s Is Invalid!",inputs);
+        //}
+
+
+    }
 }
