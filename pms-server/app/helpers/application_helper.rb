@@ -40,6 +40,15 @@ module ApplicationHelper
     end
   end
 
+  def export_csv
+    msg = "FileHandler::Csv::#{params[:model]}Handler".constantize.export(request.user_agent,params[:q])
+    if msg.result
+      send_file msg.content
+    else
+      render json: msg
+    end
+  end
+
   def scope_search
     model = params[:model].classify.constantize
     @q = params[:q]

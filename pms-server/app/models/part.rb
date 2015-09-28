@@ -12,9 +12,10 @@ class Part < ActiveRecord::Base
   has_one :resource_group_part
   # delegate :resource_group_tool, to: :resource_group_part
   has_one :resource_group_tool, through: :resource_group_part
-  has_one :tool
   validates :nr, presence: true, uniqueness: {message: 'part nr should be uniq'}
 
+  has_many :part_tools,dependent: :delete_all
+  has_many :tools, through: :part_tools
 
   has_paper_trail
   scoped_search on: :nr

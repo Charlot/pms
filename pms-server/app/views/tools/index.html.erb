@@ -1,4 +1,6 @@
 <%= render partial: 'shared/search' %>
+<%= link_to '导出模具', export_csv_tools_path({q:@q,model:current_model}), :class => 'btn btn-info' , data: {confirm: "数据量较大，确定导出?"} %>
+
 <div class="digg_pagination">
   <div class="page_info">
     <%= page_entries_info @tools %>
@@ -11,7 +13,7 @@
     <th>#</th>
     <th>模具号</th>
     <th>Resource group</th>
-    <th>Part</th>
+    <th>可用零件</th>
     <th>压接次数</th>
     <th>使用天数</th>
     <th>Rql</th>
@@ -27,7 +29,7 @@
         <td><%= i+1 %></td>
         <td><%= tool.nr %></td>
         <td><%= tool.resource_group_tool.nr if tool.resource_group_tool %></td>
-        <td><%= tool.part.nr if tool.part %></td>
+        <td><%= tool.part_nrs %></td>
         <td><%= tool.mnt %></td>
         <td><%= tool.used_days %></td>
         <td><%= tool.rql %></td>

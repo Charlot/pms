@@ -1,0 +1,27 @@
+<h1>Listing part_tools</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Part</th>
+      <th>Tool</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @part_tools.each do |part_tool| %>
+      <tr>
+        <td><%= part_tool.part %></td>
+        <td><%= part_tool.tool %></td>
+        <td><%= link_to 'Show', part_tool %></td>
+        <td><%= link_to 'Edit', edit_part_tool_path(part_tool) %></td>
+        <td><%= link_to 'Destroy', part_tool, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Part tool', new_part_tool_path %>

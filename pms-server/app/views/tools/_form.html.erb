@@ -12,27 +12,21 @@
     <% end %>
 
     <div class="field">
-      <%= f.label :nr_display,'名称' %><br>
+      <%= f.label :nr_display, '名称' %><br>
       <%= f.text_field :nr_display %>
     </div>
 
     <div class="field">
-      <%= f.label :nr,'条码' %><br>
+      <%= f.label :nr, '条码' %><br>
       <%= f.text_field :nr %>
     </div>
 
-    <div class="field">
-      <%= f.label :part %><br>
-      <% if @tool.new_record? && @tool.part.blank? %>
-          <%= f.text_field :part %>
-      <% else %>
-          <%= f.text_field :part, value: @tool.part.nr if @tool.part %>
-      <% end %>
-    </div>
+
     <div class="field">
       <%= f.label :resource_group_id %><br>
-      <%= f.text_field :resource_group_id, disabled: true %>
+      <%= f.select(:resource_group_id, resource_group_tool_options, {include_blank: false}) %>
     </div>
+
     <div class="field">
       <%= f.label :mnt %><br>
       <%= f.number_field :mnt %>
@@ -45,7 +39,7 @@
       <%= f.label :rql %><br>
       <%= f.number_field :rql %>
     </div>
-    
+
     <div class="field">
       <%= f.label :rql_date %><br>
       <%= f.datetime_select :rql_date %>

@@ -1,4 +1,4 @@
-# Print KANBAN
+# Print BLUE KANBAN
 module Printer
   class P001<Base
     HEAD=[:kanban_nr, :part_nr, :customer_nr, :wire_position, :card_number, :card_quantity, :print_date, :remark1, :remark2, :kanban_2dcode]

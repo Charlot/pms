@@ -2,8 +2,7 @@ require 'csv'
 module FileHandler
   module Csv
     class PartHandler<Base
-      IMPORT_HEADERS=['Part Nr', 'Custom Nr', 'Type', 'Strip Length', 'Color', 'Color Desc', 'Component Type', 'Cross Section','Unit','P/NO.','Desc1','FullDesc', 'Operator']
-      INVALID_CSV_HEADERS=IMPORT_HEADERS<<'Error MSG'
+      IMPORT_HEADERS=['Part Nr', 'Custom Nr', 'Type', 'Strip Length', 'Color', 'Color Desc', 'Component Type', 'Cross Section', 'Unit', 'P/NO.', 'Desc1', 'FullDesc', 'Operator']
 
       def self.import(file)
         msg = Message.new
@@ -72,7 +71,7 @@ module FileHandler
         return msg
       end
 
-      def self.export(user_agent)
+      def self.export(user_agent, q=nil)
         msg = Message.new
         begin
           tmp_file = PartHandler.full_tmp_path('part.csv') unless tmp_file
@@ -80,7 +79,13 @@ module FileHandler
           CSV.open(tmp_file, 'wb', write_headers: true,
                    headers: IMPORT_HEADERS,
                    col_sep: SEPARATOR, encoding: PartHandler.get_encoding(user_agent)) do |csv|
-            Part.all.each do |part|
+            if q.nil?
+              parts= Part.all
+            else
+              parts = Part.search_for(q).all
+            end
+
+            parts.each do |part|
               csv<<[
                   part.nr,
                   part.custom_nr,
@@ -110,7 +115,7 @@ module FileHandler
         tmp_file=full_tmp_path(file.file_name)
         msg=Message.new(result: true)
         CSV.open(tmp_file, 'wb', write_headers: true,
-                 headers: INVALID_CSV_HEADERS, col_sep: file.col_sep, encoding: file.encoding) do |csv|
+                 headers: IMPORT_HEADERS+['Error MSG'], col_sep: file.col_sep, encoding: file.encoding) do |csv|
           CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
             mmsg = validate_row(row)
             if mmsg.result
