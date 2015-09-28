@@ -1,5 +1,6 @@
 class Tool < ActiveRecord::Base
   validates :nr, presence: true, uniqueness: {message: 'tool nr should be uniq'}
+  self.inheritance_column = nil
 
   # default_scope { where(locked: false) }
   belongs_to :resource_group_tool, foreign_key: :resource_group_id

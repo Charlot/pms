@@ -71,7 +71,7 @@ module Printer
             else
               body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr
             end
-            body["wiredesc#{index+1}_of_route".to_sym] = pp.part.custom_nr
+            body["wiredesc#{index+1}_of_route".to_sym] = "#{pp.part.custom_nr}#{pp.part.tool_nrs.blank? ? nil : '('+pp.part.tool_nrs+')'}"
             body["wire_quantity#{index+1}_of_route".to_sym] = pp.quantity
             body["unit_of_wire#{index+1}".to_sym] = pp.part.unit
             ii+=1
