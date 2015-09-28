@@ -2,7 +2,7 @@ require 'csv'
 module FileHandler
   module Csv
     class ToolHandler<Base
-      IMPORT_HEADERS=['Nr', 'Nr Display', 'Resource Group', 'Parts', 'MNT', 'Used Days', 'Rql', 'Tol', 'Rql Date', 'Operator']
+      IMPORT_HEADERS=['Nr', 'Nr Display', 'Resource Group', 'Parts','Locked', 'MNT', 'Used Days', 'Rql', 'Tol', 'Rql Date', 'Operator']
 
       def self.import(file)
         msg = Message.new
@@ -12,38 +12,30 @@ module FileHandler
             CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
               row.strip
               Tool.transaction do
-                rg = ResourceGroup.find_by_nr(row['Resource Group'])
+                params={}
+                IMPORT_HEADERS.each do |header|
+                  unless (row[header].nil? || header_to_attr(header).nil?)
+                    params[header_to_attr(header)]=row[header]
+                  end
+                end
 
-                handle_parts=false
+                if rg = ResourceGroup.find_by_nr(row['Resource Group'])
+                  params[:resource_group_id] = rg.id
+                end
+
+                puts '-----------------------------'
+                puts params
+
+                puts '-----------------------------'
+
                 case row['Operator']
                   when 'new', ''
-                    tool = Tool.new({
-                                        nr: row['Nr'],
-                                        nr_display: row['Nr Display'],
-                                        resource_group_id: rg.id,
-                                        part_nrs: row['Parts'],
-                                        mnt: row['MNT'],
-                                        used_days: row['Used Days'],
-                                        rql: row['Rql'],
-                                        tol: row['Tol'],
-                                        rql_date: row['Rql Date']
-                                    })
-                    handle_parts=tool.save
+                    Tool.create(params)
                   when 'update', 'destroy'
                     if tool = Tool.find_by_nr(row['Nr'])
                       #update
                       if row['Operator']=='update'
-                        handle_parts= tool.update({
-                                                      nr: row['Nr'],
-                                                      nr_display: row['Nr Display'],
-                                                      resource_group_id: rg.id,
-                                                      part_nrs: row['Parts'],
-                                                      mnt: row['MNT'],
-                                                      used_days: row['Used Days'],
-                                                      rql: row['Rql'],
-                                                      tol: row['Tol'],
-                                                      rql_date: row['Rql Date']
-                                                  })
+                        tool.update(params)
                       elsif row['Operator']=='delete'
                         tool.destroy
                       end
@@ -86,6 +78,7 @@ module FileHandler
                   tool.nr_display,
                   tool.resource_group_tool.nil? ? '' : tool.resource_group_tool.nr,
                   tool.part_nrs,
+                  tool.locked,
                   tool.mnt,
                   tool.used_days,
                   tool.rql,
@@ -129,10 +122,10 @@ module FileHandler
         msg = Message.new({result: true, contents: []})
 
 
-        rg = ResourceGroup.find_by_nr(row['Resource Group'])
-        unless rg
+        unless ResourceGroup.find_by_nr(row['Resource Group'])
           msg.contents << "Resource Group:#{row['Resource Group']} 不存在"
-        end
+        end if row['Resource Group'].present?
+
         puts '-------------------'
         puts row['Parts']
 
@@ -147,6 +140,29 @@ module FileHandler
           msg.content=msg.contents.join('/')
         end
         return msg
+      end
+
+      def self.header_to_attr header
+        case header
+          when 'Nr'
+            :nr
+          when 'Nr Display'
+            :nr_display
+          when 'Parts'
+            :part_nrs
+          when 'Locked'
+            :locked
+          when 'MNT'
+            :mnt
+          when 'Used Days'
+            :used_days
+          when 'Rql'
+            :rql
+          when 'Tol'
+            :tol
+          when 'Rql Date'
+            :rql_date
+        end
       end
 
     end

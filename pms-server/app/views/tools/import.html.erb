@@ -15,4 +15,23 @@
   <div>
     <a href="/files/<%= ImportTemplate.tool_csv_template %>">下载模板：<%= ImportTemplate::TOOL_CSV_TEMPLATE %></a>
   </div>
+
+  <div class="info-warn-div">
+    <h5> 说明：</h5>
+
+    <div>
+      模板文件：tool.csv，中包含列: Nr;Nr Display;Resource Group;Parts;Locked;MNT;Used Days;Rql;Tol;Rql Date;Operator<br/>
+      Nr-模具号;Nr Display-模具名称;Resource Group-模具组;Parts-可用零件(多个以英文逗号分割);Locked-是否锁定(false/true);<br/>
+      MNT-自上次维护后的压接次数;Used Days-使用天数;Rql;Tol-总压接次数;Rql Date;Operator-操作符（new/update/delete）<br/>
+      当新建/更新时，Nr为必填，其它列为选填。</br>
+      1. 例如，更新模具的可用零件和是否锁定，只保留4列：Nr;Parts;Locked,Operator，其它整列都删除掉</br>
+      e.g.
+      <br/>
+      <img src="/assets/examples/import-tool-csv.png" class="example-image"/>
+      <br/>
+      删除整列是将包含列头都删除掉，不仅仅是删除列内容</br>
+      <br/>
+      </br>
+    </div>
+  </div>
 </div>

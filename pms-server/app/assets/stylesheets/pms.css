@@ -109,3 +109,7 @@ body {
 .item-urgent{
     color:red;
 }
+
+.example-image{
+    border: double greenyellow 5px;
+}
