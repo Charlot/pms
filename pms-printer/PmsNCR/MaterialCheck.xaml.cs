@@ -226,10 +226,11 @@ namespace PmsNCR
                     {
                         if (!Tool1CB.IsChecked.Value)
                         {
-                            Tool1CB.IsChecked = Tool1NrTB.Text.Equals(content);
+                            Tool1CB.IsChecked =CheckMutiTool( Tool1NrTB.Text,content);
                         }
                         if (Tool1CB.IsChecked.Value)
                         {
+                            CurrentMold1.Content = content;
                             CleanScanText();
                         }
                     }
@@ -237,10 +238,11 @@ namespace PmsNCR
                     {
                         if (!Tool2CB.IsChecked.Value)
                         {
-                            Tool2CB.IsChecked = Tool2NrTB.Text.Equals(content);
+                            Tool2CB.IsChecked = CheckMutiTool(Tool2NrTB.Text, content); 
                         }
                         if (Tool2CB.IsChecked.Value)
                         {
+                            CurrentMold2.Content = content;
                             CleanScanText();
                         }
                     }
@@ -251,6 +253,10 @@ namespace PmsNCR
                     StartProduceBtn.IsEnabled = true;
                 }
             }
+        }
+
+        private bool CheckMutiTool(string tools, string tool) {
+            return string.Format(",%s,", tools).Contains(string.Format(",%s,", tool));
         }
 
         private void CleanScanBtn_Click(object sender, RoutedEventArgs e)
@@ -363,6 +369,11 @@ namespace PmsNCR
             Tool1NrTB.Text = Tool2NrTB.Text;
             Tool2NrTB.Text = tool1;
 
+
+            string mold1 = CurrentMold1.Content.ToString();
+            CurrentMold1.Content = CurrentMold2.Content;
+            CurrentMold2.Content = mold1;
+
             Visibility visibility= WorkArea1.Visibility;
             WorkArea1.Visibility = WorkArea2.Visibility;
             WorkArea2.Visibility = visibility;
@@ -382,11 +393,20 @@ namespace PmsNCR
         private void MaterialCB_Checked(object sender, RoutedEventArgs e)
         {
             CheckBox cb = (sender as CheckBox);
+            if (!Tool1NrTB.Text.Contains(",")) {
+                CurrentMold1.Content = Tool1NrTB.Text;
+            }
+
+            if (!Tool2NrTB.Text.Contains(","))
+            {
+                CurrentMold2.Content = Tool2NrTB.Text;
+            }
+
             if (cb.Name == "Tool1CB") {
-                 currentTool1 = Tool1NrTB.Text;
+                 currentTool1 = CurrentMold1.Content.ToString();
             }
             else if (cb.Name == "Tool2CB") {
-                currentTool2 = Tool2NrTB.Text;
+                currentTool2 = CurrentMold2.Content.ToString();
             }
 
             if (AutoCleanScanCB.IsChecked.Value)
