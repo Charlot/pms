@@ -15,17 +15,12 @@
           <input type="text" name="measured_value_record[created_at][start]" class="datepicker" value="<%= @created_at_start %>"/>
           ~  <input type="text" name="measured_value_record[created_at][end]" class="datepicker" value="<%= @created_at_end %>"/>
       </span>
-      <input type="submit" value="查 找" class="btn btn-primary"/>
+      <input type="submit" value="查 找" class="btn btn-primary" name="search"/>
+      <input type="submit" value="导 出" class="btn btn-primary" name="download"/>
     </div>
   </form>
 </div>
 
-
-<div style="display: inline-flex;display: -webkit-inline-flex;">
-  <%= link_to '新建检测数据列表', new_measured_value_record_path, :class => 'btn btn-primary', :style => 'color:white;margin-bottom:10px;' %>
-
-  <!--<h4 style="margin-left: 10px;">Listing measured_value_records</h4>-->
-</div>
 
 <br>
 <div class="digg_pagination">
@@ -38,6 +33,7 @@
 <table class="table table-striped table-hover table-bordered">
   <thead>
   <tr>
+    <th>NO.</th>
     <th>订单号</th>
     <th>机器号</th>
     <th>端子号</th>
@@ -57,8 +53,9 @@
   </thead>
 
   <tbody>
-  <% @measured_value_records.each do |measured_value_record| %>
+  <% @measured_value_records.each_with_index do |measured_value_record, index| %>
       <tr>
+        <td><%= index + @measured_value_records.offset + 1 %></td>
         <td><%= measured_value_record.production_order_id %></td>
         <td><%= measured_value_record.machine_id %></td>
         <td><%= measured_value_record.part_id %></td>

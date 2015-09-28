@@ -1,6 +1,4 @@
 <!--<h1>Listing custom_details</h1>-->
-<%= link_to '新增客户信息', new_custom_detail_path, :class => 'btn btn-primary', :style => 'color:white' %>
-<hr/>
 <div>
   <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
     <div>
@@ -22,6 +20,7 @@
 <table class="table table-striped table-hover table-bordered">
   <thead>
   <tr>
+    <th>NO.</th>
     <th>零件编码起始</th>
     <th>零件编码终止</th>
     <th>客户号</th>
@@ -30,8 +29,9 @@
   </thead>
 
   <tbody>
-  <% @custom_details.each do |custom_detail| %>
+  <% @custom_details.each_with_index do |custom_detail, index| %>
       <tr>
+        <td><%= index + @custom_details.offset + 1 %></td>
         <td><%= custom_detail.part_nr_from %></td>
         <td><%= custom_detail.part_nr_to %></td>
         <td><%= custom_detail.custom_nr %></td>
