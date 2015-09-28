@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
 
   scoped_search on: :name
 
+  attr_accessor :jack
+
   def ensure_autnehtication_token!
     if authentication_token.blank?
       self.authentication_token = generate_authentication_token

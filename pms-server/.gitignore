@@ -35,10 +35,10 @@ bower.json
 *.*~
 *.~lock*
 /.idea/*
-
+/.idea
 # upload files
 /uploadfiles/**/*
 !/uploadfiles/**/.keep
 !/uploadfiles/template/*
 /uploadfiles/template/*.*~
-#/config/database.yml
+*.*~config/database.yml

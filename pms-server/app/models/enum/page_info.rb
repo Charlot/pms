@@ -12,9 +12,9 @@ module Enum
                 MACHINE_TIME_RULE: "机器工时规则",
                 USER: "用户",
                 CRIMP_CONFIGURATION: "ISO标准值",
-                WIRE_GROUP: "线组",
+                WIRE_GROUP: "电线分组",
                 MEASURED_VALUE_RECORD: "检测数据记录",
-                CUSTOM_DETAIL: "客户信息"
+                CUSTOM_DETAIL: "SPC客户分组"
     }
 
     @@actions = ["new", "index", "show", "edit", "import", "panel", 'transport']

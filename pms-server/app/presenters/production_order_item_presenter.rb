@@ -30,6 +30,7 @@ class ProductionOrderItemPresenter<Presenter
   def to_check_material_order(no=0)
     kanban=@production_order_item.kanban
     puts @production_order_item.id
+    # puts kanban.nr
     # puts kanbanz.red
     if kanban && (process_entity=kanban.process_entities.first)
 
@@ -46,6 +47,10 @@ class ProductionOrderItemPresenter<Presenter
 
       s1=Part.find_by_id(process_entity.value_s1)
       s2=Part.find_by_id(process_entity.value_s2)
+      if Setting.presenter_change_item_qty? && @production_order_item.can_change_kanban_qty?
+        @production_order_item.update_attributes(kanban_bundle:kanban.bundle,kanban_qty:kanban.quantity)
+      end
+
       item= {
           No: no,
           Id: @production_order_item.id,
@@ -105,7 +110,7 @@ class ProductionOrderItemPresenter<Presenter
     # }
   end
 
-  def to_produce_order(mirror=false)
-    Ncr::Order.new.json_order_item_content(@production_order_item, mirror)
+  def to_produce_order(machine_type=nil,mirror=false)
+    Ncr::Order.new.json_order_item_content(@production_order_item, machine_type,mirror)
   end
 end

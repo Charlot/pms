@@ -95,6 +95,22 @@ Setting.transaction do
   unless Setting.find_by_code(Setting::NONE_MATERIAL_PART_MARK)
     Setting.create(code: Setting::NONE_MATERIAL_PART_MARK, value: 'M', name: '非原材料线盘点备注')
   end
+
+  unless Setting.find_by_code(Setting::NONE_MATERIAL_PART_MARK)
+    Setting.create(code: Setting::NONE_MATERIAL_PART_MARK, value: 'M', name: '非原材料线盘点备注')
+  end
+
+  unless Setting.find_by_code(Setting::KANBAN_QTY_CHANGE_ORDER)
+    Setting.create(code: Setting::KANBAN_QTY_CHANGE_ORDER, value: '0', name: '看板改变量【立刻】改变未生产订单量')
+  end
+
+  unless Setting.find_by_code(Setting::PRESETER_CHANGE_ITEM_QTY)
+    Setting.create(code: Setting::PRESETER_CHANGE_ITEM_QTY, value: '1', name: '看板改变量【查看订单时】改变未生产订单量')
+  end
+
+  unless Setting.find_by_code(Setting::MACHINE_PREVIEW_QTY)
+    Setting.create(code: Setting::MACHINE_PREVIEW_QTY, value: '8', name: '机器预览订单个数')
+  end
 end
 
 puts 'create warehouse regex...'

@@ -6,6 +6,7 @@
 # Example:
 #
 # set :output, "/path/to/my/cron_log.log"
+set :output, {:error => "#{path}/log/cron_error_log.log", :standard => "#{path}/log/cron_log.log"}
 #
 # every 2.hours do
 #   command "/usr/bin/some_great_command"
@@ -20,4 +21,8 @@ set :environment, :development
 # Learn more: http://github.com/javan/whenever
 every :reboot do
   rake 'sidekiq:start'
+end
+
+every 1.day,:at=>['07:35','11:30','19:35'] do
+  command "backup perform -t db_backup -c #{path}/config/backup/config.rb"
 end
