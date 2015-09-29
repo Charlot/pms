@@ -18,8 +18,11 @@ class Part < ActiveRecord::Base
   has_many :tools, -> { where(locked: false) }, through: :part_tools
 
   has_paper_trail
-  scoped_search on: :nr
-  scoped_search on: :custom_nr
+  scoped_search on: [:nr, :custom_nr]
+  scoped_search on: :unit
+  # scoped_search on: :custom_nr
+  # scoped_search on: :unit
+  # scoped_search on: :cross_section
   scoped_search on: [:nr, :type], ext_method: :find_by_part_type
 
   after_update :update_cv_strip_length
