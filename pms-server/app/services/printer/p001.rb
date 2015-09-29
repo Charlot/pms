@@ -25,7 +25,7 @@ module Printer
           print_date: @kanban.print_time,
           customer_nr: @kanban.product_custom_nr,
           wire_position: @kanban.desc_position,
-          card_number: @kanban.copies,
+          card_number: @kanban.auto_copy_count,
           card_quantity: @kanban.quantity,
           kanban_2dcode: @kanban.printed_2DCode,
           #TODO kanban remark

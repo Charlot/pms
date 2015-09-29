@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150928070456) do
+ActiveRecord::Schema.define(version: 20150929102842) do
 
   create_table "custom_fields", force: true do |t|
     t.string   "custom_fieldable_type"
@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(version: 20150928070456) do
 
   add_index "kanban_process_entities", ["kanban_id"], name: "index_kanban_process_entities_on_kanban_id", using: :btree
   add_index "kanban_process_entities", ["process_entity_id"], name: "index_kanban_process_entities_on_process_entity_id", using: :btree
+  add_index "kanban_process_entities", ["state"], name: "index_kanban_process_entities_on_state", using: :btree
 
   create_table "kanbans", force: true do |t|
     t.string   "nr",                             null: false
@@ -101,10 +102,13 @@ ActiveRecord::Schema.define(version: 20150928070456) do
     t.integer  "product_id",                     null: false
     t.integer  "bundle",           default: 0
     t.string   "remark2",          default: ""
+    t.integer  "auto_copy_count",  default: 1
   end
 
+  add_index "kanbans", ["des_storage"], name: "index_kanbans_on_des_storage", using: :btree
   add_index "kanbans", ["nr"], name: "index_kanbans_on_nr", using: :btree
   add_index "kanbans", ["product_id"], name: "index_kanbans_on_product_id", using: :btree
+  add_index "kanbans", ["state"], name: "index_kanbans_on_state", using: :btree
 
   create_table "machine_combinations", force: true do |t|
     t.integer  "w1"
