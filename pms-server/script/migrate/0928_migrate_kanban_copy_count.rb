@@ -6,6 +6,12 @@
 # end
 
 # check no kanban process entity
-KanbanProcessEntity.pluck(:kanban_id).uniq.each { |kanban_id| puts(kanban_id) unless Kanban.unscoped.find_by_id(kanban_id) }
+# KanbanProcessEntity.pluck(:kanban_id).uniq.each { |kanban_id| puts(kanban_id) unless Kanban.unscoped.find_by_id(kanban_id) }
 
-KanbanProcessEntity.where(position: 0)
+KanbanProcessEntity.where(position: 0).each_with_index do |process, i|
+  puts "#{i+1}....#{process.kanban_id}"
+  if kanban=process.kanban
+    puts "#{kanban.nr}.....".yellow
+
+  end
+end

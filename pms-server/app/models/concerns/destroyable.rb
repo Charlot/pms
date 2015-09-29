@@ -8,7 +8,6 @@ module Destroyable
   def destroy
 	  self.update_attributes(state: CrudState::DESTROYED)
     run_callbacks :destroy
-    # run_callbacks :update
     freeze
   end
 
