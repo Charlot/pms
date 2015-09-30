@@ -7,11 +7,14 @@
 
 # check no kanban process entity
 # KanbanProcessEntity.pluck(:kanban_id).uniq.each { |kanban_id| puts(kanban_id) unless Kanban.unscoped.find_by_id(kanban_id) }
-
-KanbanProcessEntity.where(position: 0).each_with_index do |process, i|
-  puts "#{i+1}....#{process.kanban_id}"
-  if kanban=process.kanban
-    puts "#{kanban.nr}.....".yellow
-
+Kanban.benchmark('kanban auto copy count migrate') do
+  Kanban.joins(:kanban_process_entities)
+      .where(kanban_process_entities: {position: 0}).where.not(kanbans:{state:KanbanState::DELETED})
+      .group(:product_id, :process_entity_id)
+      .select('count(*) as size,product_id,process_entity_id').each_with_index do |item, i|
+    puts "#{i+1}...#{item.to_json}"
+    Kanban.joins(:kanban_process_entities).where(product_id: item.product_id,
+                                                 kanban_process_entities: {position: 0, process_entity_id: item.process_entity_id})
+        .update_all(auto_copy_count: item.size)
   end
 end
