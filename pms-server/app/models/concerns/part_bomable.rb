@@ -3,10 +3,9 @@ module PartBomable
 
   included do
     after_create :create_part_bom
+    # after_update :update_part_bom
     after_save :update_part_bom
     after_destroy :update_part_bom
-
-    # after_update :update_part_bom
   end
 
   def update_part_bom
@@ -28,7 +27,7 @@ module PartBomable
       #   kanban.create_part_bom
       # end
     elsif self.is_a?(Kanban)
-      self.create_part_bom if self.state==KanbanState::DESTROYED
+      #self.create_part_bom #if self.state==KanbanState::DESTROYED
     end
   end
 

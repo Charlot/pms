@@ -6,13 +6,23 @@
 </p>
 
 <p>
+  <strong>Name:</strong>
+  <%= @tool.nr_display %>
+</p>
+
+<p>
   <strong>Resource group:</strong>
   <%= @tool.resource_group_tool.nr if @tool.resource_group_tool %>
 </p>
 
 <p>
-  <strong>Part:</strong>
-  <%= @tool.part.nr if @tool.part %>
+  <strong>可用零件:</strong>
+  <%= @tool.part_nrs %>
+</p>
+
+<p>
+  <strong>是否锁定:</strong>
+  <%= @tool.locked %>
 </p>
 
 <p>
@@ -39,6 +49,26 @@
   <strong>Rql date:</strong>
   <%= @tool.rql_date %>
 </p>
+<h3>可用零件</h3>
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+  <tr>
+    <th>#</th>
+    <th>零件号</th>
+    <th></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @tool.part_tools.each_with_index do |pt, i| %>
+      <tr>
+        <td><%= i+1 %></td>
+        <td><%= pt.part.nil? ? "N/A" : pt.part.nr %></td>
+        <td><%= link_to '删除', pt, method: :delete, data: {confirm: '确定删除?'} %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
 
 <%= link_to 'Edit', edit_tool_path(@tool) %> |
 <%= link_to 'Back', tools_path %>

@@ -1,5 +1,7 @@
 require 'devise'
 Rails.application.routes.draw do
+  resources :part_tools
+
   resources :warehouse_regexes
 
   resources :production_order_handler_items
@@ -131,6 +133,7 @@ Rails.application.routes.draw do
     collection do
       get :scope_search
       match :import, to: :import, via: [:get, :post]
+      get :export_csv
     end
   end
 
@@ -271,6 +274,7 @@ Rails.application.routes.draw do
       match :import, to: :import, via: [:get, :post]
       match :import_update, to: :import_update, via: [:get, :post]
       get :export
+      get :export_csv
       match :search, to: :search, via: [:get, :post]
     end
   end
