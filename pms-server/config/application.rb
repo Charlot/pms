@@ -21,7 +21,8 @@ module PmsServer
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     #config.i18n.default_locale = :en
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
-    config.paths['config/database']='config/database_mac.yml' if (ENV['USER']=='liqi' || ENV['USER']=='apple')
+    #config.paths['config/database']='config/database_mac.yml' if (ENV['USER']=='liqi' || ENV['USER']=='apple')
+    config.paths['config/database']='config/database_mac.yml' if RbConfig::CONFIG['host_os'] =~ /^darwin/
     # config.i18n.default_locale = :de
     config.autoload_paths += %W(#{config.root}/lib)
     %w{models api workers services presenters}.each do |namespace|

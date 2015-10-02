@@ -11,10 +11,10 @@ Kanban.benchmark('kanban auto copy count migrate') do
   Kanban.joins(:kanban_process_entities)
       .where(kanban_process_entities: {position: 0}).where.not(kanbans:{state:KanbanState::DELETED})
       .group(:product_id, :process_entity_id)
-      .select('count(*) as size,product_id,process_entity_id').each_with_index do |item, i|
-    puts "#{i+1}...#{item.to_json}"
+      .select('count(*) as size,product_id,kanban_process_entities.process_entity_id').each_with_index do |item, i|
+    puts "#{i+1}...#{item[:product_id]}----#{item[:process_entity_id]}--------#{item[:size]}"
     Kanban.joins(:kanban_process_entities).where(product_id: item.product_id,
-                                                 kanban_process_entities: {position: 0, process_entity_id: item.process_entity_id})
+                                                 kanban_process_entities: {position: 0, process_entity_id: item[:process_entity_id]})
         .update_all(auto_copy_count: item.size)
   end
 end
