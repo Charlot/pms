@@ -4,4 +4,5 @@ class KanbanProcessEntity < ActiveRecord::Base
   belongs_to :process_entity
   include Destroyable
   include PartBomable
+  include KanbanAutoCountable
 end
