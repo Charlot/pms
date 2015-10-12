@@ -18,7 +18,7 @@
   </div>
 </div>
 
-<%=render 'production_order_items/handle_item'%>
+<%= render 'production_order_items/handle_item' %>
 
 <br/>
 <h2>Preview Orders</h2>
@@ -57,15 +57,19 @@
           <input type="checkbox" item="<%= order_item.id %>" class="order-item-check"/>
         </td>
         <td><%= item[:No] %></td>
-        <th>
-          <%= best_in_place order_item, :production_order_id, as: :select, collection: production_order_bip_options(order_item.production_order).to_h %>
-        </th>
+        <% if current_user.kanban? %>
+            <th><%= best_in_place order_item, :production_order_id, as: :select, collection: production_order_bip_options(order_item.production_order).to_h %></th>
+        <% else %>
+            <td><%= order_item.production_order.nr %></td>
+        <% end %>
         <th>
           <%= best_in_place order_item, :optimise_index, as: :input %>
         </th>
-        <th>
-          <%= best_in_place order_item, :machine_id, as: :select, collection: Machine.all.collect { |machine| [machine.id, machine.nr] }.to_h %>
-        </th>
+        <% if current_user.kanban? %>
+            <th><%= best_in_place order_item, :machine_id, as: :select, collection: Machine.all.collect { |machine| [machine.id, machine.nr] }.to_h %></th>
+        <% else %>
+            <td><%= order_item.machine.nr %></td>
+        <% end %>
         <td><%= best_in_place order_item, :state, as: :select, collection: ProductionOrderItemState.to_select.collect { |s| [s.value, s.display] }.to_h %></td>
         <td><%= item[:ItemNr] %></td>
         <td><%= item[:KanbanNr] %></td>
