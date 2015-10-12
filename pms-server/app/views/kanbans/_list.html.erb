@@ -22,6 +22,8 @@
     <th>捆扎数</th>
     <th>步骤</th>
     <th><%= KanbanDesc::TASK_TIME %></th>
+    <th>机器号</th>
+    <th>机器型号</th>
     <th><%= KanbanDesc::PRINT_DATE %></th>
     <th><%= KanbanDesc::STATE %></th>
     <th><%= KanbanDesc::DES_POSITION %></th>
@@ -53,6 +55,8 @@
         </td>
         <td><%= kanban.process_list %></td>
         <td><%= kanban.task_time %></td>
+        <td><%= kanban.machine_nr %></td>
+        <td><%= kanban.machine_type %></td>
         <td><%= kanban.print_time %></td>
         <td>
           <span class="label <%= kanban_states_class(kanban.state) %>"><%= KanbanState.display(kanban.state) %></span>

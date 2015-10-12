@@ -239,6 +239,14 @@ class Kanban < ActiveRecord::Base
     "#{id}/#{version_now}"
   end
 
+  def machine_nr
+    self.production_order_items.last.nil? ? "" : self.production_order_items.last.machine.nr
+  end
+
+  def machine_type
+    self.production_order_items.last.nil? ? "" : self.production_order_items.last.machine.machine_type.nr
+  end
+
   def task_time
     task_time = 0.0
     # begin
