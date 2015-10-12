@@ -78,7 +78,7 @@ module FileHandler
 
           CSV.open(tmp_file, 'wb', write_headers: true,
                    headers: IMPORT_HEADERS,
-                   col_sep: SEPARATOR, encoding: PartHandler.get_encoding(user_agent)) do |csv|
+                   col_sep: ';', encoding: PartHandler.get_encoding(user_agent)) do |csv|
             if q.nil?
               parts= Part.all
             else
@@ -115,8 +115,8 @@ module FileHandler
         tmp_file=full_tmp_path(file.file_name)
         msg=Message.new(result: true)
         CSV.open(tmp_file, 'wb', write_headers: true,
-                 headers: IMPORT_HEADERS+['Error MSG'], col_sep: file.col_sep, encoding: file.encoding) do |csv|
-          CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+                 headers: IMPORT_HEADERS+['Error MSG'], col_sep: ';', encoding: file.encoding) do |csv|
+          CSV.foreach(file.file_path, headers: file.headers, col_sep: ';', encoding: file.encoding) do |row|
             mmsg = validate_row(row)
             if mmsg.result
               csv<<row.fields
