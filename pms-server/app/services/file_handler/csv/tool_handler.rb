@@ -8,6 +8,7 @@ module FileHandler
         msg = Message.new
         begin
           validate_msg = validate_import(file)
+		  p validate_msg
           if validate_msg.result
             CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
               row.strip
@@ -25,13 +26,13 @@ module FileHandler
 
                 puts '-----------------------------'
                 puts params
-
+p row['Operator']
                 puts '-----------------------------'
 
                 case row['Operator']
                   when 'new', ''
                     Tool.create(params)
-                  when 'update', 'destroy'
+                  when 'update', 'delete'
                     if tool = Tool.find_by_nr(row['Nr'])
                       #update
                       if row['Operator']=='update'
