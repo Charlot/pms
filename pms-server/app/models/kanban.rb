@@ -240,7 +240,7 @@ class Kanban < ActiveRecord::Base
   end
 
   def machine_nr
-    self.production_order_items.last.nil? ? "" : self.production_order_items.last.machine.nr
+    #self.production_order_items.last.nil? ? "" : self.production_order_items.last.machine.nr
   end
 
   def machine_type
