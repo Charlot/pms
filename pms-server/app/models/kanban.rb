@@ -244,7 +244,7 @@ class Kanban < ActiveRecord::Base
   end
 
   def machine_type
-    self.production_order_items.last.nil? ? "" : self.production_order_items.last.machine.machine_type.nr
+    #self.production_order_items.last.nil? ? "" : self.production_order_items.last.machine.machine_type.nr
   end
 
   def task_time
