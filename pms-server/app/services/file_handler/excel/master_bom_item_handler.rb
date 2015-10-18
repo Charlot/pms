@@ -178,15 +178,15 @@ module FileHandler
 
 
                   if total_transport_result.has_key?(total_key)
-                    total_transport_result[total_key]+=item.qty*product_qty[item.product_id.to_s]
+                    total_transport_result[total_key]+=(item.qty||0)*product_qty[item.product_id.to_s]
                   else
-                    total_transport_result[total_key]=item.qty*product_qty[item.product_id.to_s]
+                    total_transport_result[total_key]=(item.qty||0)*product_qty[item.product_id.to_s]
                   end
 
                   if transport_result.has_key?(key)
-                    transport_result[key]+=item.qty*product_qty[item.product_id.to_s]
+                    transport_result[key]+=(item.qty||0)*product_qty[item.product_id.to_s]
                   else
-                    transport_result[key]=item.qty*product_qty[item.product_id.to_s]
+                    transport_result[key]=(item.qty||0)*product_qty[item.product_id.to_s]
                   end
 
                 end
