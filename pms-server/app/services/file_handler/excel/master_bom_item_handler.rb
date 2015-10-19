@@ -176,7 +176,7 @@ module FileHandler
                   total_key="#{item.bom_item_id}"
                   key="#{item.bom_item_id}:#{item.department_id}"
 
-
+                raise("#{Part.find(product_id).nr} bom 基础数据中未存在用量，请更新后分解")  if item.qty.nil?
                   if total_transport_result.has_key?(total_key)
                     total_transport_result[total_key]+=(item.qty||0)*product_qty[item.product_id.to_s]
                   else
