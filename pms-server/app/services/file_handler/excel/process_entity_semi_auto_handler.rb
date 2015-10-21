@@ -189,13 +189,17 @@ module FileHandler
                       template_fields << {:type => cf.field_format, :value => custom_fields_val[index], :ext => custom_fields_quantity[index]}
                     end
 
+                    # 生成CustomValue
                     pe.custom_fields.select { |cf| cf.name != "default_wire_nr" }.each_with_index { |cf, index|
                       cvs = pe.custom_values.where(custom_field_id: cf.id).all
                       cv = pe.custom_values.where(custom_field_id: cf.id).first
+                      # 去除冗余
                       if cvs.count>1
                         cvs.last(cvs.count-1).each { |c| c.destroy }
                       end
+
                       if CustomFieldFormatType.part?(cf.field_format)
+                        # 去除空值
                         if custom_fields_val[index].blank?
                           if cv
                             cv.destroy
@@ -203,9 +207,11 @@ module FileHandler
                           next
                         end
 
+                        # 找到，说明是原材料
+                        # 没找到，则拼接零件号，说明是白卡生产的半成品
                         if Part.find_by_nr(custom_fields_val[index])
                           if cv
-                            cv.update(value: cf.get_field_format_value(custom_fields_val[index]))
+                            cv.update(value: cf.get_field_format_value(custom_fields_val[index]).id)
                           else
                             cv = CustomValue.new(custom_field_id: cf.id, is_for_out_stock: true, value: cf.get_field_format_value(custom_fields_val[index]))
                             pe.custom_values<<cv
@@ -227,11 +233,17 @@ module FileHandler
                         end
                       end
                     }
+
+                    # 保存CustomValue
+                     pe.save
+                    # pe = ProcessEntity.where({product_id: product.id, nr: params[:nr]}).first
+
+                    # 生成ProcessPart
                     # pe.process_parts.destroy_all
                     arrs=pe.process_parts.pluck(:id)
                     puts arrs.to_json.yellow
                     temp_quantity = template_fields.select { |tf| tf[:type] == "part" }.collect { |a| a[:ext] }
-                    pe.custom_values.select { |cv| (cv.custom_field.name != "default_wire_nr")&&(cv.custom_field.field_format=="part") }.each_with_index do |cv, index|
+                    pe.custom_values.reload.select { |cv| (cv.custom_field.name != "default_wire_nr")&&(cv.custom_field.field_format=="part") }.each_with_index do |cv, index|
                       cf=cv.custom_field
                       if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
                         # puts "#{template_fields}-----#{cv}".red
