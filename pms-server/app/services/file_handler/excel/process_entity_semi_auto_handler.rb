@@ -333,7 +333,6 @@ module FileHandler
 
         #验证步骤号
         pe = ProcessEntity.where({nr: row['Nr'], product_id: product.id})
-
         #验证生成的线号
         wire = Part.where({nr: "#{row['Product Nr']}_#{row['Wire Nr']}"}, type: PartType::PRODUCT_SEMIFINISHED).first
         case row['Operator']

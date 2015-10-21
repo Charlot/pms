@@ -15,6 +15,8 @@ module Printer
     #注意，与KANBAN模板一直，一个Routing中最多包含的parts只能有5种
     def generate_data(args=nil)
       @kanban = Kanban.find_by_nr(self.id)
+      puts "------------------------------------------"
+      puts @kanban.product_nr
       @kanban.without_versioning do
         @kanban.update(print_time: Time.now)
       end
