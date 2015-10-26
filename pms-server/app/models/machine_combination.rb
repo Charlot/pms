@@ -99,7 +99,6 @@ class MachineCombinationList< BaseClass
 			  end
 		  }
 	  end
-return nil
     self.nodes.each_with_index do |n, j|
   	  	
       match_start_index =(node.match_start_index>n.match_start_index) ? node.match_start_index : n.match_start_index
