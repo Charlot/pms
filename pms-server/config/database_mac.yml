@@ -56,6 +56,6 @@ production:
 
 data:
   <<: *default
-  database: pmsdb_data
+  database: pmsdb7
   username: pmser
   password: pmser@
