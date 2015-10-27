@@ -310,13 +310,13 @@ class ProcessEntity < ActiveRecord::Base
       left_max = 0.0
       right_max = 0.0
       self.custom_field_values.each_with_index do |value, index|
+        puts "111--------#{value}----------------#{index}--------------#{self.nr}---------------"
         unless value.to_s.blank?
-          puts "111--------#{value}----------------#{index}--------------#{self.nr}---------------"
           if (0...8).include? index
-            length = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: "#{value}"}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+            length = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: "#{value}"}, product_id: self.product_id}).first.nil? ? 0.0 : ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: "#{value}"}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
             left_max = left_max > length ? left_max : length
           elsif (9..16).include? index
-            length = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: "#{value}"}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
+            length = ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: "#{value}"}, product_id: self.product_id}).first.nil? ? 0.0 : ProcessEntity.joins({custom_values: :custom_field}).where({custom_fields: {name: 'default_wire_nr'}, custom_values: {value: "#{value}"}, product_id: self.product_id}).first.value_wire_qty_factor.to_f
             right_max = right_max > length ? right_max : length
           end
         end
