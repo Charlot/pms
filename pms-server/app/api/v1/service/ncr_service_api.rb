@@ -175,9 +175,19 @@ module V1
             end
             wire_type = wire.component_type
             cross_section = wire.cross_section
-            wire_group_name = WireGroup.where(wire_type: wire_type, cross_section: cross_section).first.group_name
+            wire_group = WireGroup.where(wire_type: wire_type, cross_section: cross_section).first
+            if wire_group.blank?
+              msg.Content = "can not find WIRE GROUP: wire_type=#{wire_type}, cross_section=#{cross_section}!"
+              return msg
+            end
+            wire_group_name = wire_group.group_name
             part_custom_nr = Part.find(production_order_item.kanban.product_id).nr
-            custom_id = CustomDetail.where("part_nr_to >= ? AND part_nr_from <= ?", part_custom_nr, part_custom_nr).first.custom_nr
+            custom_info = CustomDetail.where("part_nr_to >= ? AND part_nr_from <= ?", part_custom_nr, part_custom_nr).first
+            if custom_info.blank?
+              msg.Content = "can not find CUSTOM INFO: custom part nr=#{part_custom_nr}!"
+              return msg
+            end
+            custom_id = custom_info.custom_nr
 
             unless process_entity.value_t1.nil?
               part1_id = Part.find(process_entity.value_t1).nr
