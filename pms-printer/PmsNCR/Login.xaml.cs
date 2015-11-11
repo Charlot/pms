@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using PmsNCRWcf.Config;
+using PmsNCR.Helper;
 
 namespace PmsNCR
 {
@@ -28,6 +29,7 @@ namespace PmsNCR
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ShiftCB.ItemsSource = WPCSConfig.UserGroupsNr;
+            VersionLab.Content = SettingReader.Version;
         }
 
         private void OKBtn_Click(object sender, RoutedEventArgs e)

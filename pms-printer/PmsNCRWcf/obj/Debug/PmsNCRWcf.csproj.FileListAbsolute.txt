@@ -10,9 +10,11 @@ C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\bin\Debug\Newtonsoft
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\bin\Debug\RestSharp.dll
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\bin\Debug\Nini.dll
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\bin\Debug\Brilliantech.Framwork.pdb
+C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\bin\Debug\Brilliantech.ReportGenConnector.pdb
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.csprojResolveAssemblyReference.cache
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.dll
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.pdb
+<<<<<<< HEAD
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\bin\Debug\Brilliantech.ReportGenConnector.pdb
 F:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\Template\BaiKa.tff
 F:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\Template\read.ini
@@ -48,3 +50,5 @@ E:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\Brilliantech.ReportGenConnector.pdb
 E:\Work\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.csprojResolveAssemblyReference.cache
 E:\Work\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.dll
 E:\Work\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.pdb
+=======
+>>>>>>> pms_admin
