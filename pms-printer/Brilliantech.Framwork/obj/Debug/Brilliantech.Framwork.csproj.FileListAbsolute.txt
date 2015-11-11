@@ -8,6 +8,5 @@ C:\Users\Charlot\Documents\GitHub\pms\pms-printer\Brilliantech.Framwork\bin\Debu
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\Brilliantech.Framwork\bin\Debug\Brilliantech.Framwork.pdb
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\Brilliantech.Framwork\bin\Debug\log4net.dll
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\Brilliantech.Framwork\bin\Debug\Nini.dll
-C:\Users\Charlot\Documents\GitHub\pms\pms-printer\Brilliantech.Framwork\obj\Debug\Brilliantech.Framwork.csprojResolveAssemblyReference.cache
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\Brilliantech.Framwork\obj\Debug\Brilliantech.Framwork.dll
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\Brilliantech.Framwork\obj\Debug\Brilliantech.Framwork.pdb
