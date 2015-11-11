@@ -1,8 +1,8 @@
 require 'devise'
 Rails.application.routes.draw do
-<<<<<<< HEAD
+
   resources :part_tools
-=======
+
   resources :custom_details do
     collection do
       get :search
@@ -52,7 +52,6 @@ Rails.application.routes.draw do
       match :search, to: :search, via: [:get, :post]
     end
   end
->>>>>>> pms_spc_server
 
   resources :warehouse_regexes
 
