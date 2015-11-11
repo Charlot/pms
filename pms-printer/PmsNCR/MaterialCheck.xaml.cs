@@ -256,7 +256,7 @@ namespace PmsNCR
         }
 
         private bool CheckMutiTool(string tools, string tool) {
-            return string.Format(",%s,", tools).Contains(string.Format(",%s,", tool));
+            return string.Format(",{0},", tools).Contains(string.Format(",{0},", tool));
         }
 
         private void CleanScanBtn_Click(object sender, RoutedEventArgs e)

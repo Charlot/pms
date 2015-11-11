@@ -17,7 +17,18 @@ namespace PmsTestConsole
     class Program
     {
         static void Main(string[] args)
-        { 
+        {
+            Console.WriteLine(CheckMutiTool("WZ001,WZ002","WZ002"));
+            Console.Read();
+        }
+
+        private static bool CheckMutiTool(string tools, string tool)
+        {
+            Console.WriteLine(string.Format(",{0},", tools));
+
+            Console.WriteLine(string.Format(",{0},", tool));
+
+            return string.Format(",{0},", tools).Contains(string.Format(",{0},", tool));
         }
     }
 }
