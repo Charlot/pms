@@ -493,7 +493,7 @@ PLATFORMS
 
 DEPENDENCIES
   axlsx
-  backup (>= 4.1.12)
+  backup
   best_in_place (~> 3.0.1)
   coffee-rails (~> 4.0.0)
   colorize
