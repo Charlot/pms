@@ -1,0 +1,34 @@
+<style type="text/css">
+    span {
+        font-size: 1.2em;
+        color: red;
+    }
+
+    a:hover {
+        text-decoration: none;
+        color: red;
+        background: none;
+    }
+</style>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        data_upload("#item-data-uploader");
+    });
+</script>
+<p id="notice">
+  <%= notice %>
+</p>
+<h3>上传CrimpConfiguration文件</h3>
+<div>
+  <b>选择数据文件： </b>
+  <input id="item-data-uploader" type="file" name="files[]" data-url="/crimp_configurations/import"/>
+
+  <div id="item-data-uploader-preview" style="display:none;"></div>
+  <hr/>
+  <div>
+    <b>下载模板：</b>
+    <a href="/files/<%= ImportTemplate.crimp_configration_excel_template %>"><%= ImportTemplate::CRIMP_CONFIGRATION_EXCEL_TEMPLATE %></a>
+  </div>
+</div>

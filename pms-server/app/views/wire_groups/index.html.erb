@@ -1,0 +1,56 @@
+
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <span> 线组：
+        <input type="text" name="wire_group[group_name]" value="<%= @group_name %>"/>
+      </span>
+      <span> 电线型号：
+        <input type="text" name="wire_group[wire_type]" value="<%= @wire_type %>"/>
+      </span>
+      <span> 截面：
+        <input type="text" name="wire_group[cross_section]" value="<%= @cross_section %>"/>
+      </span>
+      <input type="submit" value="查 找" class="btn btn-primary"/>
+    </div>
+  </form>
+</div>
+
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @wire_groups %>
+  </div>
+  <%= will_paginate @wire_groups, :container => false %>
+</div>
+
+<table class="table table-striped table-hover table-bordered" style="margin-top:10px;">
+  <thead>
+  <tr>
+    <th>NO.</th>
+    <th>线组</th>
+    <th>电线型号</th>
+    <th>截面</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @wire_groups.each_with_index do |wire_group, index| %>
+      <tr>
+        <td><%= index + @wire_groups.offset + 1 %></td>
+        <td><%= wire_group.group_name %></td>
+        <td><%= wire_group.wire_type %></td>
+        <td><%= wire_group.cross_section %></td>
+        <td><%= link_to '详细', wire_group %></td>
+        <td><%= link_to '编辑', edit_wire_group_path(wire_group) %></td>
+        <td><%= link_to '删除', wire_group, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<div class="digg_pagination">
+  <%= will_paginate @wire_groups, :container => false %>
+</div>
+<br>
+

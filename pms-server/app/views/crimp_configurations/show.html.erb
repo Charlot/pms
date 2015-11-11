@@ -1,0 +1,92 @@
+<style type="text/css">
+    p {
+        font-family: Arial, Microsoft-YaHei, "黑体", "宋体", sans-serif;
+        font-size: 1.2em;
+    }
+
+    hr {
+        border: 1px solid #F2F2F2;
+    }
+</style>
+
+<p id="notice"><%= notice %></p>
+
+<div class="col-sm-12">
+  <p class="col-sm-4">
+    <strong>客户号:</strong>
+    <%= @crimp_configuration.custom_id %>
+  </p>
+
+  <p class="col-sm-4">
+    <strong>线组:</strong>
+    <%= @crimp_configuration.wire_group_name %>
+  </p>
+
+  <p class="col-sm-4">
+    <strong>端子号:</strong>
+    <%= @crimp_configuration.part_id %>
+  </p>
+</div>
+<hr/>
+<div class="col-sm-12">
+  <p class="col-sm-4">
+    <strong>截面:</strong>
+    <%= @crimp_configuration.cross_section %>
+  </p>
+
+  <p class="col-sm-4">
+    <strong>最小拉力:</strong>
+    <%= @crimp_configuration.min_pulloff_value %>
+  </p>
+</div>
+<hr/>
+<div class="col-sm-12">
+  <p class="col-sm-4">
+    <strong>压接高度:</strong>
+    <%= @crimp_configuration.crimp_height %>
+  </p>
+
+  <p class="col-sm-4">
+    <strong>压接高度公差:</strong>
+    <%= @crimp_configuration.crimp_height_iso %>
+  </p>
+
+  <p class="col-sm-4">
+    <strong>压接宽度:</strong>
+    <%= @crimp_configuration.crimp_width %>
+  </p>
+</div>
+
+<hr/>
+<div class="col-sm-12">
+  <p class="col-sm-4">
+    <strong>压接宽度公差:</strong>
+    <%= @crimp_configuration.crimp_width_iso %>
+  </p>
+
+  <p class="col-sm-4">
+    <strong>绝缘压接高度:</strong>
+    <%= @crimp_configuration.i_crimp_height %>
+  </p>
+
+  <p class="col-sm-4">
+    <strong>绝缘压接高度公差:</strong>
+    <%= @crimp_configuration.i_crimp_height_iso %>
+  </p>
+</div>
+
+<hr/>
+<div class="col-sm-12">
+  <p class="col-sm-4">
+    <strong>绝缘压接宽度:</strong>
+    <%= @crimp_configuration.i_crimp_width %>
+  </p>
+
+  <p class="col-sm-4">
+    <strong>绝缘压接宽度公差:</strong>
+    <%= @crimp_configuration.i_crimp_width_iso %>
+  </p>
+</div>
+<hr/>
+<%= link_to '编辑', edit_crimp_configuration_path(@crimp_configuration), :class => 'btn btn-primary', :style => 'color:white;' %>
+<%= link_to '返回', crimp_configurations_path, :class => 'btn btn-primary', :style => 'margin-left:20px;color:white;' %>

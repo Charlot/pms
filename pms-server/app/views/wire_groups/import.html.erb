@@ -1,0 +1,33 @@
+<style type="text/css">
+    a:hover {
+        background: none;
+        color: red;
+        text-decoration: none;
+    }
+
+    span {
+        color: red;
+        font-size: 1.2em;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        data_upload("#item-data-uploader");
+    });
+</script>
+<p id="notice">
+  <%= notice %>
+</p>
+<h3>上传线组数据文件</h3>
+<div>
+  <strong>选择数据文件：</strong>
+  <input id="item-data-uploader" type="file" name="files[]" data-url="/wire_groups/import"/>
+
+  <div id="item-data-uploader-preview" style="display:none;"></div>
+  <hr/>
+  <div>
+    <b>下载模板：</b>
+    <a href="/files/<%= ImportTemplate.wire_group_excel_template %>"><%= ImportTemplate::WIRE_GROUP_EXCEL_TEMPLATE %></a>
+  </div>
+</div>

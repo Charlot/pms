@@ -1,0 +1,43 @@
+<style type="text/css">
+    label {
+        width: 110px;
+    }
+
+</style>
+
+
+<%= form_for(@wire_group) do |f| %>
+    <% if @wire_group.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@wire_group.errors.count, "error") %> prohibited this wire_group from being saved:</h2>
+
+          <ul>
+            <% @wire_group.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :group_name, '线组' %>
+      <%= f.text_field :group_name %>
+    </div>
+    <hr/>
+    <div class="field">
+      <%= f.label :wire_type, '电线型号' %>
+      <%= f.text_field :wire_type %>
+    </div>
+    <hr/>
+
+    <div class="field">
+      <%= f.label :cross_section, '截面' %>
+      <%= f.text_field :cross_section %>
+    </div>
+    <hr/>
+
+    <div class="actions">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+    <hr/>
+<% end %>

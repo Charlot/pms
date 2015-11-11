@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  part_nr_from: MyString
+  part_nr_to: MyString
+  custom_nr: MyString
+
+two:
+  part_nr_from: MyString
+  part_nr_to: MyString
+  custom_nr: MyString

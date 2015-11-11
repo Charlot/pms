@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  side: MyString
+  min_pulloff: MyString
+  crimp_height: MyString
+  crimp_height_iso: MyString
+  crimp_width: MyString
+  crimp_width_iso: MyString
+  i_crimp_height: MyString
+  i_crimp_height_iso: MyString
+  i_crimp_width: MyString
+  i_crimp_width_iso: MyString
+
+two:
+  side: MyString
+  min_pulloff: MyString
+  crimp_height: MyString
+  crimp_height_iso: MyString
+  crimp_width: MyString
+  crimp_width_iso: MyString
+  i_crimp_height: MyString
+  i_crimp_height_iso: MyString
+  i_crimp_width: MyString
+  i_crimp_width_iso: MyString

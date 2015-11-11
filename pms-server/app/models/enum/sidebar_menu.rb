@@ -49,7 +49,11 @@ module Enum
         MACHINE_TYPE: {NAME: PageInfo.machinetype, actions: ['new', 'index']},
         MACHINE_TIME_RULE: {NAME: PageInfo.machinetimerule, actions: ['new', 'index', 'import']},
         USER: {NAME: PageInfo.user, actions: ['new', 'index']},
-        POSITION: {NAME: PageInfo.position, actions: ['new', 'index']}
+        POSITION: {NAME: PageInfo.position, actions: ['new', 'index']},
+        CRIMP_CONFIGURATION: {name: PageInfo.crimpconfiguration, actions: ["new", "index", "import"]},
+        WIRE_GROUP: {name: PageInfo.wiregroup, actions: ["new", "index", "import"]},
+        MEASURED_VALUE_RECORD: {name: PageInfo.measuredvaluerecord, actions: ["new", "index"]},
+        CUSTOM_DETAIL: {name: PageInfo.customdetail, actions: ["new", "index", "import"]}
     }
 
     class<<self

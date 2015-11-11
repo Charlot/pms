@@ -1,0 +1,81 @@
+<!--<h4>Listing crimp_configurations</h4>-->
+
+<div>
+  <form method="get" action="<%= send("search_#{@model.pluralize}_path") %>">
+    <div>
+      <span> 客户号：
+        <input type="text" name="crimp_configuration[custom_id]" value="<%= @custom_id %>"/>
+      </span>
+      <span> 线组：
+        <input type="text" name="crimp_configuration[wire_group_name]" value="<%= @wire_group_name %>"/>
+      </span>
+      <span> 端子号：
+        <input type="text" name="crimp_configuration[part_id]" value="<%= @part_id %>"/>
+      </span>
+      <input type="submit" value="查 找" class="btn btn-primary"/>
+    </div>
+  </form>
+</div>
+
+
+<br>
+<div class="digg_pagination">
+  <div class="page_info">
+    <%= page_entries_info @crimp_configurations %>
+  </div>
+  <%= will_paginate @crimp_configurations, :container => false %>
+</div>
+
+<table class="table table-striped table-hover table-bordered">
+  <thead>
+  <tr>
+    <th>NO.</th>
+    <th>客户号</th>
+    <th>端子号</th>
+    <th>线组</th>
+    <th>截面</th>
+    <th>最小拉力值</th>
+    <th>压接高度</th>
+    <th>压接高度公差</th>
+    <th>压接宽度</th>
+    <th>压接宽度公差</th>
+    <th>绝缘压接高度</th>
+    <th>绝缘压接高度公差</th>
+    <th>绝缘压接宽度</th>
+    <th>绝缘压接宽度公差</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @crimp_configurations.each_with_index do |crimp_configuration, index| %>
+      <tr>
+        <td><%= index + @crimp_configurations.offset + 1 %></td>
+        <td><%= crimp_configuration.custom_id %></td>
+        <td><%= crimp_configuration.part_id %></td>
+        <td><%= crimp_configuration.wire_group_name %></td>
+        <td><%= crimp_configuration.cross_section %></td>
+
+        <td><%= best_in_place crimp_configuration, :min_pulloff_value, as: :input %></td>
+        <td><%= best_in_place crimp_configuration, :crimp_height, as: :input %></td>
+        <td><%= best_in_place crimp_configuration, :crimp_height_iso, as: :input %></td>
+        <td><%= best_in_place crimp_configuration, :crimp_width, as: :input %></td>
+        <td><%= best_in_place crimp_configuration, :crimp_width_iso, as: :input %></td>
+        <td><%= best_in_place crimp_configuration, :i_crimp_height, as: :input %></td>
+        <td><%= best_in_place crimp_configuration, :i_crimp_height_iso, as: :input %></td>
+        <td><%= best_in_place crimp_configuration, :i_crimp_width, as: :input %></td>
+        <td><%= best_in_place crimp_configuration, :i_crimp_width_iso, as: :input %></td>
+        <td><%= link_to '详细', crimp_configuration %></td>
+        <td><%= link_to '编辑', edit_crimp_configuration_path(crimp_configuration) %></td>
+        <td><%= link_to '删除', crimp_configuration, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<div class="digg_pagination">
+  <%= will_paginate @crimp_configurations, :container => false %>
+</div>
+
+<br>
+

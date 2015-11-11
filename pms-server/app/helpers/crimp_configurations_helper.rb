@@ -1,0 +1,2 @@
+module CrimpConfigurationsHelper
+end

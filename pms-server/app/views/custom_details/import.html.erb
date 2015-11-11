@@ -1,0 +1,35 @@
+<style type="text/css">
+    a:hover {
+        background: none;
+        color: red;
+        text-decoration: none;
+    }
+
+    span {
+        font-size: 1.2em;
+        color: red;
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        data_upload("#item-data-uploader");
+    });
+</script>
+<p id="notice">
+  <%= notice %>
+</p>
+<h3>上传客户信息文件</h3>
+<hr/>
+<div>
+  选择数据文件：
+  <input id="item-data-uploader" type="file" name="files[]" data-url="/custom_details/import"/>
+
+  <div id="item-data-uploader-preview" style="display:none;"></div>
+  <hr/>
+
+  <div>
+    <b>下载模板：</b>
+    <a href="/files/<%= ImportTemplate.custom_detail_excel_template %>"><%= ImportTemplate::CUSTOM_DETAIL_EXCEL_TEMPLATE %></a>
+  </div>
+</div>

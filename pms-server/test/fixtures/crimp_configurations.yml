@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  custom_id: MyString
+  wire_group_name: MyString
+  part_id: MyString
+  wire_type: MyString
+  cross_section: MyString
+
+two:
+  custom_id: MyString
+  wire_group_name: MyString
+  part_id: MyString
+  wire_type: MyString
+  cross_section: MyString

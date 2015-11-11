@@ -61,6 +61,18 @@
           </ul>
         </li>
 
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">SPC<span class="caret"></span></a>
+          <ul class="dropdown-menu" role="manage">
+            <% if current_user.can_modify_data? %>
+                <li><a href="<%= custom_details_path %>">客户分组</a></li>
+                <li><a href="<%= wire_groups_path %>">电线分组</a></li>
+                <li><a href="<%= crimp_configurations_path %>">ISO标准</a></li>
+                <li><a href="<%= measured_value_records_path %>">检测数据记录</a></li>
+            <% end %>
+          </ul>
+        </li>
+
         <% if current_user.can_modify_data? %>
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">机器与模具<span class="caret"></span></a>

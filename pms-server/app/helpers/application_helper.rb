@@ -15,19 +15,55 @@ module ApplicationHelper
     end
   end
 
+  # def search
+  #   model = params[:controller].classify.constantize
+  #   condition = {}
+  #   params[:q].each { |k, v|
+  #     condition[k] = v
+  #   }
+  #
+  #   results = model.where(condition)
+  #   instance_variable_set("@#{params[:controller].pluralize}", results)
+  #
+  #   respond_to do |format|
+  #     format.json { render json: {result: true, content: results} }
+  #     format.html { render partial: "search_result" }
+  #   end
+  # end
+
   def search
-    model = params[:controller].classify.constantize
-    condition = {}
-    params[:q].each { |k, v|
-      condition[k] = v
-    }
+    @condition=params[@model]
+    query=model.all#.unscoped
+    @condition.each do |k, v|
+      if (v.is_a?(Fixnum) || v.is_a?(String)) && !v.blank?
+        puts @condition.has_key?(k+'_fuzzy')
+        if @condition.has_key?(k+'_fuzzy')
+          query=query.where("#{k} like ?", "%#{v}%")
+        else
+          query=query.where(Hash[k, v])
+        end
+        instance_variable_set("@#{k}", v)
+      end
 
-    results = model.where(condition)
-    instance_variable_set("@#{params[:controller].pluralize}", results)
+      if v.is_a?(Hash) && v.values.count==2 && v.values.uniq!=['']
+        values=v.values.sort
+        values[0]=Time.parse(values[0]).utc.to_s if values[0].is_date? & values[0].include?('-')
+        values[1]=Time.parse(values[1]).utc.to_s if values[1].is_date? & values[1].include?('-')
+        query=query.where(Hash[k, (values[0]..values[1])])
+        v.each do |kk, vv|
+          instance_variable_set("@#{k}_#{kk}", vv)
+        end
+      end
+    end
 
-    respond_to do |format|
-      format.json { render json: {result: true, content: results} }
-      format.html { render partial: "search_result" }
+    if params.has_key? "download"
+      send_data(query.to_xlsx(query),
+                :type => "application/vnd.openxmlformates-officedocument.spreadsheetml.sheet",
+                :filename => @model.pluralize+".xlsx")
+      #render :json => query.to_xlsx(query)
+    else
+      instance_variable_set("@#{@model.pluralize}", query.paginate(:page => params[:page]).all)
+      render :index
     end
   end
 
