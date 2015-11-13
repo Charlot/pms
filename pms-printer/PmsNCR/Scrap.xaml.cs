@@ -34,7 +34,7 @@ namespace PmsNCR
 
 
         OrderItemCheck currentOrder;
-
+        Dictionary<string, string> parts;
         public Scrap()
         {
             InitializeComponent();
@@ -49,7 +49,7 @@ namespace PmsNCR
         }
 
         private void LoadSPCStandard() {
-              currentOrder = MainWindow.CurrentOrder;
+            currentOrder = MainWindow.CurrentOrder;
             if (currentOrder == null)
             {
                 order.Content = "No Order!";
@@ -68,28 +68,54 @@ namespace PmsNCR
                 seal1unit.Content = currentOrder.Seal1Unit;
                 seal2unit.Content = currentOrder.Seal2Unit;
 
+                wire.Tag = wireNr.Content = currentOrder.WireNr;
+                terminal1.Tag = terminal1Nr.Content = currentOrder.Terminal1Nr;
+                terminal2.Tag = terminal2Nr.Content = currentOrder.Terminal2Nr;
+                seal1.Tag = seal1Nr.Content = currentOrder.Seal1Nr;
+                seal2.Tag = seal2Nr.Content = currentOrder.Seal2Nr;
+                if (string.IsNullOrEmpty(currentOrder.WireNr))
+                {
+                    wire.IsEnabled = false;
+                }
+
+                if (string.IsNullOrEmpty(currentOrder.Terminal1Nr))
+                {
+                    terminal1.IsEnabled = false;
+                }
+
+                if (string.IsNullOrEmpty(currentOrder.Terminal2Nr))
+                {
+                    terminal2.IsEnabled = false;
+                }
+                if (string.IsNullOrEmpty(currentOrder.Seal1Nr))
+                {
+                    seal1.IsEnabled = false;
+                }
+
+                if (string.IsNullOrEmpty(currentOrder.Seal2Nr))
+                {
+                   seal2.IsEnabled = false;
+                }
             }
         }
 
         private void ok_Click(object sender, RoutedEventArgs e)
         {
-            ScrapData();
-            ForEach();
-        }
+            if (ForEach() && parts.Count>0){
+                Dictionary<string, object> para = new Dictionary<string, object>()
+                {
+                   {"order_nr",currentOrder.OrderNr},
+                   {"kanban",currentOrder.KanbanNr},
+                   {"machine_nr",WPCSConfig.MachineNr},
+                   {"user",WPCSConfig.UserNr},
+                   {"parts", parts }
+                };
 
-        private void ScrapData() {
-            OrderItemCheck orderNr = MainWindow.CurrentOrder;
-            string[] ScrapAllData = new string[8];
-            ScrapAllData[0] = orderNr.ItemNr;
-            ScrapAllData[1] = orderNr.KanbanNr;
-            ScrapAllData[2] = WPCSConfig.UserNr;
-            ScrapAllData[3] = wire.Text;
-            ScrapAllData[4] = terminal1.Text;
-            ScrapAllData[5] = terminal2.Text;
-            ScrapAllData[6] = seal1.Text;
-            ScrapAllData[7] = seal2.Text;
-            
-           Msg<string> msg = new OrderService().StoreScrapData(ScrapAllData);
+                Msg<string> msg = new OrderService().StoreScrapData(para);
+            }
+            else {
+                parts = null;
+            }
         }
 
         //Is the value Empty
@@ -98,7 +124,10 @@ namespace PmsNCR
             return !double.TryParse(value, out v);
         }
 
-        private void ForEach() {
+        //Get the UI foreach
+        private bool ForEach() {
+            bool result = true;
+            parts = new Dictionary<string, string>();
             foreach (UIElement ui in Input_StackPanel.Children)
             {
                 if (ui is TextBox) {
@@ -110,16 +139,26 @@ namespace PmsNCR
                     else
                     {
                         if (CheckStringIsInvalid(current.Text))
+                        {
                             current.Background = Brushes.Red;
+                            result = false;
+                        }
                         else
+                        {
                             current.Background = Brushes.White;
+                            if(current.Tag!=null){
+                            parts.Add(current.Tag.ToString(), current.Text);
+                            }
+                        }
                     }
                 }
               
             }
+            return result;
            
         }
 
+        //close button
         private void BtnClose(object sender, RoutedEventArgs e)
         {
             this.Close();

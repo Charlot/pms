@@ -352,25 +352,15 @@ namespace PmsNCRWcf
             return msg;
         }
 
-        public Msg<string> StoreScrapData(params string[] ScrapData)
+        public Msg<string> StoreScrapData(Dictionary<string, object> ScrapData)
         {
             Msg<string> msg = new Msg<string>();
             try
             {
                 var req = new RestRequest(ApiConfig.StoreScrapData, Method.POST);
                 req.RequestFormat = DataFormat.Json;
-                req.AddParameter("production_order_id", ScrapData[0]);
-                req.AddParameter("part_id", ScrapData[1]);
-                req.AddParameter("crimp_height_1", ScrapData[2]);
-                req.AddParameter("crimp_height_2", ScrapData[3]);
-                req.AddParameter("crimp_height_3", ScrapData[4]);
-                req.AddParameter("crimp_height_4", ScrapData[5]);
-                req.AddParameter("crimp_height_5", ScrapData[6]);
-                req.AddParameter("crimp_width", ScrapData[7]);
-                req.AddParameter("i_crimp_heigth", ScrapData[8]);
-                req.AddParameter("i_crimp_width", ScrapData[9]);
-                req.AddParameter("pulloff_value", ScrapData[10]);
-                req.AddParameter("note", ScrapData[11]);
+                req.AddParameter("scraps",JSONHelper.stringify( ScrapData));
+                
                 var res = new ApiClient().Execute(req);
                 msg = JSONHelper.parse<Msg<string>>(res.Content);
                 if (msg.Result)

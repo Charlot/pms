@@ -15,3 +15,9 @@ E:\Work\pms\pms-printer\Brilliantech.ReportGenConnector\bin\Debug\TECIT.TFORMer.
 E:\Work\pms\pms-printer\Brilliantech.ReportGenConnector\obj\Debug\Brilliantech.ReportGenConnector.dll
 E:\Work\pms\pms-printer\Brilliantech.ReportGenConnector\obj\Debug\Brilliantech.ReportGenConnector.pdb
 E:\Work\pms\pms-printer\Brilliantech.ReportGenConnector\obj\Debug\Brilliantech.ReportGenConnector.csprojResolveAssemblyReference.cache
+E:\Work\pms\pms\pms-printer\Brilliantech.ReportGenConnector\bin\Debug\Brilliantech.ReportGenConnector.dll
+E:\Work\pms\pms\pms-printer\Brilliantech.ReportGenConnector\bin\Debug\Brilliantech.ReportGenConnector.pdb
+E:\Work\pms\pms\pms-printer\Brilliantech.ReportGenConnector\bin\Debug\TECIT.TFORMer.dll
+E:\Work\pms\pms\pms-printer\Brilliantech.ReportGenConnector\obj\Debug\Brilliantech.ReportGenConnector.csprojResolveAssemblyReference.cache
+E:\Work\pms\pms\pms-printer\Brilliantech.ReportGenConnector\obj\Debug\Brilliantech.ReportGenConnector.dll
+E:\Work\pms\pms\pms-printer\Brilliantech.ReportGenConnector\obj\Debug\Brilliantech.ReportGenConnector.pdb
