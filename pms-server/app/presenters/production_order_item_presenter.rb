@@ -81,7 +81,7 @@ class ProductionOrderItemPresenter<Presenter
           Terminal2StripLength: process_entity.t2_strip_length.nil? ? nil : process_entity.t2_strip_length.to_f,
           Tool2Nr: tool2,
           Seal1Nr: s1.nil? ? nil : s1.nr,
-          Seal2Nr: s2.nil? ? nil : s1.nr,
+          Seal2Nr: s2.nil? ? nil : s2.nr,
           UpdateTime: @production_order_item.updated_at.localtime
       }
       # @production_order_item.update_attributes(tool1: item[:Terminal1Nr], tool2: item[:Terminal2Nr])
