@@ -68,7 +68,7 @@ class ProductionOrderItemPresenter<Presenter
           ProducedQty: @production_order_item.produced_qty,
           KanbanWireNr: kanban.wire_nr,
           WireNr:wire.nil? ? '' : wire.nr,
-		  WireUnit:wire.nil? ? '' : wire.unit; 
+		  WireUnit:wire.nil? ? '' : wire.unit, 
           Diameter:wire.nil? ? '' :  wire.cross_section,
           WireCusNr:wire.nil? ? '' :  wire.custom_nr||'',
           WireColor:wire.nil? ? '' :  wire.color,
