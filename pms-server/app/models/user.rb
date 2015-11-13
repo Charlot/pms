@@ -47,6 +47,10 @@ class User < ActiveRecord::Base
     has_role? :cutting
   end
 
+  def kanban?
+    has_role? :kanban
+  end
+
   def system?
     has_role? :system
   end

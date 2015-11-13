@@ -127,19 +127,6 @@ class PartsController < ApplicationController
   end
 =end
 
-  # def export
-  #   msg=Message.new
-  #   begin
-  #     msg=FileHandler::Excel::PartHandler.export()
-  #     if msg.result
-  #       send_file msg.content
-  #     else
-  #       @content = msg.to_json
-  #       render 'shared/error'
-  #     end
-  #   end
-  # end
-
   def import
     # authorize(Part)
     if request.post?

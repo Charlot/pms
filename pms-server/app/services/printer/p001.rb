@@ -1,4 +1,4 @@
-# Print KANBAN
+# Print BLUE KANBAN
 module Printer
   class P001<Base
     HEAD=[:kanban_nr, :part_nr, :customer_nr, :wire_position, :card_number, :card_quantity, :print_date, :remark1, :remark2, :kanban_2dcode]
@@ -25,7 +25,7 @@ module Printer
           print_date: @kanban.print_time,
           customer_nr: @kanban.product_custom_nr,
           wire_position: @kanban.desc_position,
-          card_number: @kanban.copies,
+          card_number: @kanban.auto_copy_count,
           card_quantity: @kanban.quantity,
           kanban_2dcode: @kanban.printed_2DCode,
           #TODO kanban remark
@@ -45,7 +45,7 @@ module Printer
             route_nr: pe.process_template.code,
             route_name: pe.name.to_i.to_s,
             route_desc: pe.template_text,
-            work_time_of_route: pe.work_time,
+            work_time_of_route: (pe.work_time * @kanban.quantity).round(3),
             route_remark: pe.remark,
             route_part_info: '',
             consume_date: pe.nr #TODO route consume data
@@ -63,7 +63,7 @@ module Printer
 
         ii=0
         puts "------------------#{ pe.value_default_wire_nr}".yellow
-        pe.process_parts.where.not(part_id: nil).each_with_index { |pp, index|
+        pe.process_parts.joins(:part).order('parts.type').where.not(part_id: nil).each_with_index { |pp, index|
           if pe.value_default_wire_nr.nil? || pe.value_default_wire_nr != pp.part.id.to_s
             if pp.part.type == PartType::PRODUCT_SEMIFINISHED && pp.part.nr.include?("_")
               body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr.split("_").last
@@ -71,9 +71,9 @@ module Printer
             else
               body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr
             end
-            body["wiredesc#{index+1}_of_route".to_sym] = pp.part.custom_nr
+            body["wiredesc#{index+1}_of_route".to_sym] = "#{pp.part.custom_nr}#{pp.part.tool_nrs.blank? ? nil : '('+pp.part.tool_nrs+')'}"
             body["wire_quantity#{index+1}_of_route".to_sym] = pp.quantity
-            body["unit_of_wire#{index+1}".to_sym] = pp.unit
+            body["unit_of_wire#{index+1}".to_sym] = pp.part.unit
             ii+=1
           end if pp.part && ii<$ROUTE_PART_COUNT
         }

@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Part:</strong>
+  <%= @part_tool.part %>
+</p>
+
+<p>
+  <strong>Tool:</strong>
+  <%= @part_tool.tool %>
+</p>
+
+<%= link_to 'Edit', edit_part_tool_path(@part_tool) %> |
+<%= link_to 'Back', part_tools_path %>

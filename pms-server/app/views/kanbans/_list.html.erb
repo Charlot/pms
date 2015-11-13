@@ -22,12 +22,15 @@
     <th>捆扎数</th>
     <th>步骤</th>
     <th><%= KanbanDesc::TASK_TIME %></th>
+    <th>机器号</th>
+    <th>机器型号</th>
     <th><%= KanbanDesc::PRINT_DATE %></th>
     <th><%= KanbanDesc::STATE %></th>
     <th><%= KanbanDesc::DES_POSITION %></th>
     <th>&nbsp;</th>
     <th>备注1/特殊工艺</th>
     <th>备注2/APAP</th>
+    <th>看板张数</th>
     <th>历史</th>
     <th colspan="2"></th>
   </tr>
@@ -52,6 +55,8 @@
         </td>
         <td><%= kanban.process_list %></td>
         <td><%= kanban.task_time %></td>
+        <td><%= kanban.machine_nr %></td>
+        <td><%= kanban.machine_type %></td>
         <td><%= kanban.print_time %></td>
         <td>
           <span class="label <%= kanban_states_class(kanban.state) %>"><%= KanbanState.display(kanban.state) %></span>
@@ -62,6 +67,9 @@
         </td>
         <td>  <%= best_in_place kanban, :remark, as: :input %></td>
         <td>  <%= best_in_place kanban, :remark2, as: :input %></td>
+        <td>
+          <%= best_in_place kanban, :auto_copy_count, as: :input %>
+        </td>
         <td><%= link_to '修改历史', history_kanban_path(kanban) %></td>
         <td><%= link_to '详细', kanban, class: "btn btn-default" %></td>
         <td>

@@ -1,7 +1,9 @@
 class Kanban < ActiveRecord::Base
   include AutoKey
-  include PartBomable
   include Destroyable
+  include KanbanAutoCountable
+  include PartBomable
+
 
   validates :nr, :uniqueness => {:message => "#{KanbanDesc::NR} 不能重复！"}
   validates :product_id, :presence => true
@@ -24,17 +26,12 @@ class Kanban < ActiveRecord::Base
   accepts_nested_attributes_for :kanban_process_entities, allow_destroy: true
 
   scoped_search on: :nr
-  # scoped_search on: :des_storage
+  scoped_search on: :des_storage
 
   scoped_search in: :product, on: :nr
   scoped_search in: :process_entities, on: :nr
   scoped_search in: :process_entities, on: :nr, ext_method: :find_by_wire_nr
 
-  #before_create :generate_id
-
-  # after_create :create_part_bom
-  # after_destroy :destroy_part_bom
-  # after_update :update_part_bom
 
   has_paper_trail :only => [:quantity, :product_id, :bundle, :des_warehouse, :des_storage, :print_time, :remark, :remark2]
 
@@ -64,20 +61,17 @@ class Kanban < ActiveRecord::Base
   end
 
   def self.find_by_wire_nr key, operator, value
+    puts "#{value}.....#{key}....#{operator}..........................................."
     q={conditions: "kanbans.nr like '%#{value}%'"}
 
-    parts = Part.where("nr LIKE '%_#{value}%'").map(&:id)
+    parts = Part.where("nr LIKE '%#{value}%'").map(&:id)
     if parts.count > 0
-      puts parts.to_json.red
-      puts '-------------2'
-
 
       process = ProcessEntity.joins(custom_values: :custom_field).where(
           "custom_values.value IN (#{parts.join(',')}) AND custom_fields.field_format = 'part'"
       ).pluck(:id)
       kanbans=[]
       if process.count > 0
-        puts '--------------------'.yellow
         kanbans = Kanban.joins(:process_entities).where("process_entities.id IN(#{process.join(',')})").pluck(:id)
       else
         q= {conditions: "kanbans.nr like '%#{value}%'"}
@@ -88,7 +82,6 @@ class Kanban < ActiveRecord::Base
     end
     state=KanbanState.get_value_by_display(value)
     if state
-      puts '-------------------------------------------------'
       q={conditions: "kanbans.nr like '%#{value}%' or kanbans.state=#{state}"}
     end
     return q
@@ -244,6 +237,14 @@ class Kanban < ActiveRecord::Base
 
   def old_printed_2DCode
     "#{id}/#{version_now}"
+  end
+
+  def machine_nr
+    #self.production_order_items.last.nil? ? "" : self.production_order_items.last.machine.nr
+  end
+
+  def machine_type
+    #self.production_order_items.last.nil? ? "" : self.production_order_items.last.machine.machine_type.nr
   end
 
   def task_time

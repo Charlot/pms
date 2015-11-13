@@ -12,13 +12,17 @@ class Part < ActiveRecord::Base
   has_one :resource_group_part
   # delegate :resource_group_tool, to: :resource_group_part
   has_one :resource_group_tool, through: :resource_group_part
-  has_one :tool
   validates :nr, presence: true, uniqueness: {message: 'part nr should be uniq'}
 
+  has_many :part_tools, dependent: :delete_all
+  has_many :tools, -> { where(locked: false) }, through: :part_tools
 
   has_paper_trail
-  scoped_search on: :nr
-  scoped_search on: :custom_nr
+  scoped_search on: [:nr, :custom_nr]
+  scoped_search on: :unit
+  # scoped_search on: :custom_nr
+  # scoped_search on: :unit
+  # scoped_search on: :cross_section
   scoped_search on: [:nr, :type], ext_method: :find_by_part_type
 
   after_update :update_cv_strip_length
@@ -170,6 +174,10 @@ class Part < ActiveRecord::Base
 
   def material_mark
     self.type==PartType::MATERIAL_WIRE ? Setting.material_part_mark : Setting.none_material_part_mark
+  end
+
+  def tool_nrs
+    tools.order(:nr).pluck(:nr).join(',')
   end
 
   private

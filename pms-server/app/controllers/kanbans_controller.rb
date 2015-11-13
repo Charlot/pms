@@ -471,7 +471,7 @@ end
     params.require(:kanban).permit(:id, :state, :remark, :remark2, :quantity, :bundle,
                                    :safety_stock, :des_warehouse,
                                    :des_storage, :print_time, :part_id,
-                                   :version, :ktype, :copies, :product_id
+                                   :version, :ktype, :copies, :product_id,:auto_copy_count
     )
   end
 

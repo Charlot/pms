@@ -1,6 +1,11 @@
 require 'devise'
 Rails.application.routes.draw do
+<<<<<<< HEAD
   resources :auto_scrap_records
+=======
+
+  resources :part_tools
+>>>>>>> 5600969c5861cd48e5c6eff6b8be08dbf4392b41
 
   resources :custom_details do
     collection do
@@ -183,6 +188,7 @@ Rails.application.routes.draw do
     collection do
       get :scope_search
       match :import, to: :import, via: [:get, :post]
+      get :export_csv
     end
   end
 
@@ -323,6 +329,7 @@ Rails.application.routes.draw do
       match :import, to: :import, via: [:get, :post]
       match :import_update, to: :import_update, via: [:get, :post]
       get :export
+      get :export_csv
       match :search, to: :search, via: [:get, :post]
     end
   end

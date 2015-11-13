@@ -20,7 +20,7 @@ class ProductionOrderItem < ActiveRecord::Base
   end
 
   def self.for_optimise
-    joins(:kanban).where(kanbans: {ktype: KanbanType::WHITE}, state: ProductionOrderItemState.optimise_states)
+    joins(:kanban).where(kanbans: {ktype: KanbanType::WHITE}, state: ProductionOrderItemState.optimise_states).order(created_at: :desc)
   end
 
   def self.for_distribute(production_order=nil)
