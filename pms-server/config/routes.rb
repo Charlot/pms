@@ -1,5 +1,7 @@
 require 'devise'
 Rails.application.routes.draw do
+  resources :auto_scrap_records
+
   resources :custom_details do
     collection do
       get :search

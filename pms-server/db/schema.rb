@@ -11,7 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150921101105) do
+ActiveRecord::Schema.define(version: 20151113091217) do
+
+  create_table "auto_scrap_records", force: true do |t|
+    t.string   "scrap_id"
+    t.string   "order_nr"
+    t.string   "kanban_nr"
+    t.string   "machine_nr"
+    t.string   "part_nr"
+    t.decimal  "qty",        precision: 15, scale: 10
+    t.string   "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "auto_scrap_records", ["order_nr"], name: "index_auto_scrap_records_on_order_nr", using: :btree
+  add_index "auto_scrap_records", ["scrap_id"], name: "index_auto_scrap_records_on_scrap_id", using: :btree
 
   create_table "crimp_configuration_items", force: true do |t|
     t.integer  "crimp_configuration_id"
@@ -133,6 +148,7 @@ ActiveRecord::Schema.define(version: 20150921101105) do
 
   add_index "kanban_process_entities", ["kanban_id"], name: "index_kanban_process_entities_on_kanban_id", using: :btree
   add_index "kanban_process_entities", ["process_entity_id"], name: "index_kanban_process_entities_on_process_entity_id", using: :btree
+  add_index "kanban_process_entities", ["state"], name: "index_kanban_process_entities_on_state", using: :btree
 
   create_table "kanbans", force: true do |t|
     t.string   "nr",                             null: false
@@ -152,10 +168,13 @@ ActiveRecord::Schema.define(version: 20150921101105) do
     t.integer  "product_id",                     null: false
     t.integer  "bundle",           default: 0
     t.string   "remark2",          default: ""
+    t.integer  "auto_copy_count",  default: 1
   end
 
+  add_index "kanbans", ["des_storage"], name: "index_kanbans_on_des_storage", using: :btree
   add_index "kanbans", ["nr"], name: "index_kanbans_on_nr", using: :btree
   add_index "kanbans", ["product_id"], name: "index_kanbans_on_product_id", using: :btree
+  add_index "kanbans", ["state"], name: "index_kanbans_on_state", using: :btree
 
   create_table "machine_combinations", force: true do |t|
     t.integer  "w1"
@@ -336,6 +355,16 @@ ActiveRecord::Schema.define(version: 20150921101105) do
 
   add_index "part_process_entities", ["part_id"], name: "index_part_process_entities_on_part_id", using: :btree
   add_index "part_process_entities", ["process_entity_id"], name: "index_part_process_entities_on_process_entity_id", using: :btree
+
+  create_table "part_tools", force: true do |t|
+    t.integer  "part_id"
+    t.integer  "tool_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "part_tools", ["part_id"], name: "index_part_tools_on_part_id", using: :btree
+  add_index "part_tools", ["tool_id"], name: "index_part_tools_on_tool_id", using: :btree
 
   create_table "parts", force: true do |t|
     t.string   "nr"
@@ -572,6 +601,7 @@ ActiveRecord::Schema.define(version: 20150921101105) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "nr_display"
+    t.boolean  "locked",            default: false
   end
 
   add_index "tools", ["nr"], name: "index_tools_on_nr", using: :btree
@@ -631,16 +661,5 @@ ActiveRecord::Schema.define(version: 20150921101105) do
     t.datetime "updated_at"
     t.string   "regex"
   end
-
-  create_table "wire_groups", force: true do |t|
-    t.string   "group_name",                            default: ""
-    t.string   "wire_type",                             default: ""
-    t.decimal  "cross_section", precision: 6, scale: 4, default: 0.0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "wire_groups", ["group_name"], name: "index_wire_groups_on_group_name", using: :btree
-  add_index "wire_groups", ["wire_type"], name: "index_wire_groups_on_wire_type", using: :btree
 
 end

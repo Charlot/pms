@@ -233,6 +233,17 @@ module V1
           end
         end
 
+        namespace :auto_scrap_records do
+          guard_all!
+
+          post :create_records do
+            puts '9999999999999999999999999999999999999999999999999'
+            puts params[:scraps].inspect
+
+          end
+
+
+        end
       end
     end
   end

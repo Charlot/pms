@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Order nr:</strong>
+  <%= @auto_scrap_record.order_nr %>
+</p>
+
+<p>
+  <strong>Kanban nr:</strong>
+  <%= @auto_scrap_record.kanban_nr %>
+</p>
+
+<p>
+  <strong>Machine nr:</strong>
+  <%= @auto_scrap_record.machine_nr %>
+</p>
+
+<p>
+  <strong>Part nr:</strong>
+  <%= @auto_scrap_record.part_nr %>
+</p>
+
+<p>
+  <strong>Qty:</strong>
+  <%= @auto_scrap_record.qty %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @auto_scrap_record.user_id %>
+</p>
+
+<%= link_to 'Edit', edit_auto_scrap_record_path(@auto_scrap_record) %> |
+<%= link_to 'Back', auto_scrap_records_path %>
