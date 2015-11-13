@@ -315,7 +315,6 @@ namespace PmsNCRWcf
 
         public Msg<string> StoreMeasuredData(params string[] MeasuredData)
         {
-
             Msg<string> msg = new Msg<string>();
             try
             {
@@ -333,6 +332,45 @@ namespace PmsNCRWcf
                 req.AddParameter("i_crimp_width", MeasuredData[9]);
                 req.AddParameter("pulloff_value", MeasuredData[10]);
                 req.AddParameter("note", MeasuredData[11]);
+                var res = new ApiClient().Execute(req);
+                msg = JSONHelper.parse<Msg<string>>(res.Content);
+                if (msg.Result)
+                {
+                    if (msg.Object == null)
+                    {
+                        msg.Result = false;
+                        msg.Content = "API ERROR";
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                msg.Result = false;
+                msg.Content = e.Message;
+                LogUtil.Logger.Error(e.Message);
+            }
+            return msg;
+        }
+
+        public Msg<string> StoreScrapData(params string[] ScrapData)
+        {
+            Msg<string> msg = new Msg<string>();
+            try
+            {
+                var req = new RestRequest(ApiConfig.StoreScrapData, Method.POST);
+                req.RequestFormat = DataFormat.Json;
+                req.AddParameter("production_order_id", ScrapData[0]);
+                req.AddParameter("part_id", ScrapData[1]);
+                req.AddParameter("crimp_height_1", ScrapData[2]);
+                req.AddParameter("crimp_height_2", ScrapData[3]);
+                req.AddParameter("crimp_height_3", ScrapData[4]);
+                req.AddParameter("crimp_height_4", ScrapData[5]);
+                req.AddParameter("crimp_height_5", ScrapData[6]);
+                req.AddParameter("crimp_width", ScrapData[7]);
+                req.AddParameter("i_crimp_heigth", ScrapData[8]);
+                req.AddParameter("i_crimp_width", ScrapData[9]);
+                req.AddParameter("pulloff_value", ScrapData[10]);
+                req.AddParameter("note", ScrapData[11]);
                 var res = new ApiClient().Execute(req);
                 msg = JSONHelper.parse<Msg<string>>(res.Content);
                 if (msg.Result)

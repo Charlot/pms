@@ -121,5 +121,10 @@ namespace PmsNCR
         {
             new AdminWindow().Show();
         }
+
+        private void ScrapBtn_Click(object sender, RoutedEventArgs e)
+        {
+            new Scrap().ShowDialog();
+        }
     }
 }

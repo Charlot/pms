@@ -22,5 +22,6 @@ namespace PmsNCRWcf
         Msg<List<OrderItemCheck>> SearchOrderItem(params string[] conditions);
         Msg<Dictionary<string, SPCStandard>> OrderItemGetConfigAction(params string[] SpcStandard);
         Msg<string> StoreMeasuredData(params string[] MeasuredData);
+        Msg<string> StoreScrapData(params string[] ScrapData);
     }
 }
