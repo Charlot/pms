@@ -15,7 +15,6 @@ C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.dll
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.pdb
 <<<<<<< HEAD
-C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\bin\Debug\Brilliantech.ReportGenConnector.pdb
 F:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\Template\BaiKa.tff
 F:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\Template\read.ini
 F:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\PmsNCRWcf.dll.config
