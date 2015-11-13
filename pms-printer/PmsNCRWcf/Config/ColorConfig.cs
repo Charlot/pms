@@ -21,7 +21,8 @@ namespace PmsNCRWcf.Config
                     Colors.Add(s, colorConfig.Get(s));
                 };
             }
-            catch (Exception e) { }
+            catch (Exception e) {
+            }
         }
     }
 }

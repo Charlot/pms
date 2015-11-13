@@ -807,7 +807,7 @@ namespace PmsNCR
         }
     
     // check input is double
-        private bool CheckStringIsInvalid(string value) {
+        public bool CheckStringIsInvalid(string value) {
             //if (string.IsNullOrWhiteSpace(value)) {
             //    return false;
             //}
