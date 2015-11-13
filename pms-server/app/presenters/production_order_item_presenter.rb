@@ -68,20 +68,25 @@ class ProductionOrderItemPresenter<Presenter
           ProducedQty: @production_order_item.produced_qty,
           KanbanWireNr: kanban.wire_nr,
           WireNr:wire.nil? ? '' : wire.nr,
+		  WireUnit:wire.nil? ? '' : wire.unit; 
           Diameter:wire.nil? ? '' :  wire.cross_section,
           WireCusNr:wire.nil? ? '' :  wire.custom_nr||'',
           WireColor:wire.nil? ? '' :  wire.color,
           WireLength: process_entity.value_wire_qty_factor.to_f,
           Terminal1Nr: t1.nil? ? nil : t1.nr,
           Terminal1CusNr: t1.nil? ? nil : t1.custom_nr,
+		  Terminal1Unit: t1.nil? ? nil : t1.unit,
           Terminal1StripLength: process_entity.t1_strip_length.nil? ? nil : process_entity.t1_strip_length.to_f,
           Tool1Nr: tool1,
           Terminal2Nr: t2.nil? ? nil : t2.nr,
           Terminal2CusNr: t2.nil? ? nil : t2.custom_nr,
+		  Terminal2Unit: t2.nil? ? nil : t2.unit,
           Terminal2StripLength: process_entity.t2_strip_length.nil? ? nil : process_entity.t2_strip_length.to_f,
           Tool2Nr: tool2,
           Seal1Nr: s1.nil? ? nil : s1.nr,
-          Seal2Nr: s2.nil? ? nil : s1.nr,
+		  Seal1Unit: s1.nil? ? nil : s1.unit,
+          Seal2Nr: s2.nil? ? nil : s2.nr,
+		  Seal2Unit: s2.nil? ? nil : s2.unit,
           UpdateTime: @production_order_item.updated_at.localtime
       }
       # @production_order_item.update_attributes(tool1: item[:Terminal1Nr], tool2: item[:Terminal2Nr])
