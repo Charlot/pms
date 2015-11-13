@@ -30,6 +30,8 @@ namespace PmsNCRWcf.Model
         [DataMember]
         public string WireNr { get; set; }
         [DataMember]
+        public string WireUnit { get; set; }
+        [DataMember]
         public string WireColor { get; set; }
         [DataMember]
         public string WireCusNr { get; set; }
@@ -38,6 +40,8 @@ namespace PmsNCRWcf.Model
         [DataMember]
         public string Terminal1Nr { get; set; }
         [DataMember]
+        public string Terminal1Unit { get; set; }
+        [DataMember]
         public string Terminal1CusNr { get; set; }
         [DataMember]
         public string Terminal1StripLength { get; set; }
@@ -45,6 +49,8 @@ namespace PmsNCRWcf.Model
         public string Tool1Nr { get; set; }
         [DataMember]
         public string Terminal2Nr { get; set; }
+      [DataMember]
+        public string Terminal2Unit{get;set;}
         [DataMember]
         public string Terminal2CusNr { get; set; }
         [DataMember]
@@ -54,7 +60,11 @@ namespace PmsNCRWcf.Model
         [DataMember]
         public string Seal1Nr { get; set; }
         [DataMember]
+        public string Seal1Unit { get; set; }
+        [DataMember]
         public string Seal2Nr { get; set; }
+        [DataMember]
+        public string Seal2Unit { get; set; }
         [DataMember]
         public string FileName { get; set; }
     }

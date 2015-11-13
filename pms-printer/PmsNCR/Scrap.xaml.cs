@@ -25,13 +25,15 @@ namespace PmsNCR
     public partial class Scrap : Window
     {
         //disable close button
-        private const int GWL_STYLE = -16;
-        private const int WS_SYSMENU = 0x80000;
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
-        [DllImport("user32.dll")]
-        private static extern int SetWindowLong(IntPtr hwnd, int nIndex, int dwNewLong);
+        //private const int GWL_STYLE = -16;
+        //private const int WS_SYSMENU = 0x80000;
+        //[DllImport("user32.dll", SetLastError = true)]
+        //private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        //[DllImport("user32.dll")]
+        //private static extern int SetWindowLong(IntPtr hwnd, int nIndex, int dwNewLong);
 
+
+        OrderItemCheck currentOrder;
 
         public Scrap()
         {
@@ -40,15 +42,15 @@ namespace PmsNCR
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var hwnd = new WindowInteropHelper(this).Handle;
-            SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_SYSMENU);
+            //var hwnd = new WindowInteropHelper(this).Handle;
+            //SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_SYSMENU);
 
             LoadSPCStandard();
         }
 
         private void LoadSPCStandard() {
-            OrderItemCheck orderNr = MainWindow.CurrentOrder;
-            if (orderNr == null)
+              currentOrder = MainWindow.CurrentOrder;
+            if (currentOrder == null)
             {
                 order.Content = "No Order!";
                 order.Foreground = new SolidColorBrush(Colors.Red);
@@ -56,9 +58,16 @@ namespace PmsNCR
             }
             else
             {
-                order.Content = orderNr.ItemNr;
-                kanban.Content = orderNr.KanbanNr;
+                order.Content = currentOrder.ItemNr;
+                kanban.Content = currentOrder.KanbanNr;
                 user.Content = WPCSConfig.UserNr;
+                
+                wireunit.Content = currentOrder.WireUnit;
+                terminal1unit.Content = currentOrder.Terminal1Unit;
+                terminal2unit.Content = currentOrder.Terminal2Unit;
+                seal1unit.Content = currentOrder.Seal1Unit;
+                seal2unit.Content = currentOrder.Seal2Unit;
+
             }
         }
 
