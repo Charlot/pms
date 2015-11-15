@@ -32,7 +32,7 @@ class Tool < ActiveRecord::Base
   end
 
   def handle_part_nrs
-
+    if @part_nrs
     old_parts=self.part_tools.pluck(:id)
     @part_nrs.split(',').each do |part_nr|
       part=Part.find_by_nr(part_nr)
@@ -41,8 +41,9 @@ class Tool < ActiveRecord::Base
       else
         self.part_tools<<PartTool.new(part: part)
       end
-    end if @part_nrs
+    end
     self.part_tools.where(id: old_parts).delete_all
+	end
   end
 
 end
