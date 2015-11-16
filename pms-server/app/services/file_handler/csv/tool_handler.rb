@@ -10,7 +10,7 @@ module FileHandler
           validate_msg = validate_import(file)
 		  p validate_msg
           if validate_msg.result
-            CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+            CSV.foreach(file.file_path, headers: file.headers, col_sep: ';', encoding: file.encoding) do |row|
               row.strip
               Tool.transaction do
                 params={}
@@ -66,7 +66,7 @@ p row['Operator']
 
           CSV.open(tmp_file, 'wb', write_headers: true,
                    headers: IMPORT_HEADERS,
-                   col_sep: SEPARATOR, encoding: ToolHandler.get_encoding(user_agent)) do |csv|
+                   col_sep: ';', encoding: ToolHandler.get_encoding(user_agent)) do |csv|
             if q.nil?
               tools= Tool.all
             else
@@ -102,8 +102,8 @@ p row['Operator']
         tmp_file=full_tmp_path(file.file_name)
         msg=Message.new(result: true)
         CSV.open(tmp_file, 'wb', write_headers: true,
-                 headers: IMPORT_HEADERS+['Error MSG'], col_sep: file.col_sep, encoding: file.encoding) do |csv|
-          CSV.foreach(file.file_path, headers: file.headers, col_sep: file.col_sep, encoding: file.encoding) do |row|
+                 headers: IMPORT_HEADERS+['Error MSG'], col_sep:';', encoding: file.encoding) do |csv|
+          CSV.foreach(file.file_path, headers: file.headers, col_sep: ';', encoding: file.encoding) do |row|
             mmsg = validate_row(row)
             if mmsg.result
               csv<<row.fields
