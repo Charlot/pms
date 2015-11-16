@@ -84,6 +84,7 @@
     <Compile Include="Model\OrderItemFile.cs" />
     <Compile Include="Model\OrderItemCheck.cs" />
     <Compile Include="Model\Printer.cs" />
+    <Compile Include="Model\ScrapData.cs" />
     <Compile Include="Model\SPCStandard.cs" />
     <Compile Include="OrderService.cs" />
     <Compile Include="PrintService.cs" />
