@@ -240,7 +240,9 @@ module V1
 
           post :create_records do
             puts '9999999999999999999999999999999999999999999999999'
-            puts params[:scraps].inspect
+puts params
+			puts params[:scraps]
+			{result:11}
 
           end
 
