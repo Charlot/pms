@@ -240,8 +240,7 @@ module V1
             msg = nil
             args = {}
             puts params
-            puts scraps = JSON.parse(params[:scraps])
-
+            scraps = JSON.parse(params[:scraps])
             args[:kanban_nr] = scraps["kanban_nr"]
             args[:machine_nr] = scraps["machine_nr"]
             args[:order_nr] = scraps["order_nr"]

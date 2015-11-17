@@ -11,7 +11,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20151113091217) do
 
   create_table "auto_scrap_records", force: true do |t|
@@ -28,9 +27,6 @@ ActiveRecord::Schema.define(version: 20151113091217) do
 
   add_index "auto_scrap_records", ["order_nr"], name: "index_auto_scrap_records_on_order_nr", using: :btree
   add_index "auto_scrap_records", ["scrap_id"], name: "index_auto_scrap_records_on_scrap_id", using: :btree
-=======
-ActiveRecord::Schema.define(version: 20150929102842) do
->>>>>>> 5600969c5861cd48e5c6eff6b8be08dbf4392b41
 
   create_table "crimp_configuration_items", force: true do |t|
     t.integer  "crimp_configuration_id"
@@ -665,5 +661,16 @@ ActiveRecord::Schema.define(version: 20150929102842) do
     t.datetime "updated_at"
     t.string   "regex"
   end
+
+  create_table "wire_groups", force: true do |t|
+    t.string   "group_name",                            default: ""
+    t.string   "wire_type",                             default: ""
+    t.decimal  "cross_section", precision: 6, scale: 4, default: 0.0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "wire_groups", ["group_name"], name: "index_wire_groups_on_group_name", using: :btree
+  add_index "wire_groups", ["wire_type"], name: "index_wire_groups_on_wire_type", using: :btree
 
 end
