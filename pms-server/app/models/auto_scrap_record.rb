@@ -13,7 +13,7 @@ class AutoScrapRecord < ActiveRecord::Base
     errors.add(:scrap_id, '编号不可为空') if self.scrap_id.blank?
   end
 
-  def self.generate__scrap_id
+  def self.generate_scrap_id
     "BF#{Time.now.to_milli}"
   end
 
