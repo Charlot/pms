@@ -126,6 +126,11 @@ namespace PmsNCR
 
 
                 Msg<string> msg = new OrderService().StoreScrapData(scrap);
+                error.Content = msg.Content;
+                if (msg.Result)
+                {
+                    ok.IsEnabled = false;
+                }
             }
             else
             {
