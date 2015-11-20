@@ -92,16 +92,27 @@ class ProductionOrderItemLabelService
           puts "blue kanban#{kb.to_json}".red
 
 		  kb.create_part_bom(false)
-		  
-          kb.kanban_part.materials_with_deep.each do |material|
+
+          # kb.kanban_part.materials_with_deep.each do |material|
+          #   puts "blue: #{material.to_json}".yellow
+          #   moves<<base_params.merge({
+          #                                remarks:kb.nr,
+          #                                qty: BigDecimal.new(material.quantity.to_s)*label.qty,
+          #                                partNr: material.part_nr,
+          #                                from_whouse: material.deep==1 ? 'SR01' : 'SRPL'
+          #                            })
+          # end
+
+
+          kb.kanban_part.materials.each do |material|
             puts "blue: #{material.to_json}".yellow
             moves<<base_params.merge({
                                          remarks:kb.nr,
                                          qty: BigDecimal.new(material.quantity.to_s)*label.qty,
-                                         partNr: material.part_nr,
-                                         from_whouse: 'SRPL' #material.deep==1 ? 'SR01' : 'SRPL'
+                                         partNr: material.nr
                                      })
           end
+
           puts "blue kanban#{moves.to_json}".yellow
 
           Whouse::StorageClient.new.move_stocks(moves) if moves.size>0
