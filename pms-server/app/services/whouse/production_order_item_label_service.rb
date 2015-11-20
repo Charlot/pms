@@ -79,7 +79,7 @@ class ProductionOrderItemLabelService
     end
   end
 
-  def self.move_blue_stock(id, from_whouse='SR01', from_position='SR01')
+  def self.move_blue_stock(id, from_whouse='SRPL', from_position='SRPL')
     ProductionOrderItemBlueLabel.transaction do
       if (label=ProductionOrderItemBlueLabel.find_by_id(id)) && (item =label.production_order_item_blue)
         if kb=item.kanban
@@ -99,7 +99,7 @@ class ProductionOrderItemLabelService
                                          remarks:kb.nr,
                                          qty: BigDecimal.new(material.quantity.to_s)*label.qty,
                                          partNr: material.part_nr,
-                                         from_whouse: material.deep==1 ? 'SR01' : 'SRPL'
+                                         from_whouse: 'SRPL' #material.deep==1 ? 'SR01' : 'SRPL'
                                      })
           end
           puts "blue kanban#{moves.to_json}".yellow
