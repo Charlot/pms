@@ -6,6 +6,8 @@ using Brilliantech.Framwork.Utils.ConfigUtil;
 using PmsNCRWcf.Enmu;
 using PmsNCRWcf.Model;
 using Brilliantech.Framwork.Utils.LogUtil;
+using PmsNCRWcf.Config;
+using System.IO;
 
 namespace PmsNCRWcf.Converter
 {
@@ -59,25 +61,30 @@ namespace PmsNCRWcf.Converter
                         }
                         break;
                     case "ProductionTerminated":
-                        string pOrderNr2 = GetJobNr(config.Get("Job", node));                       
-                        int piece2 = int.Parse(config.Get("TotalGoodPieces", node));
-                        Msg<OrderItem> msg2 = service.ProducePiece(pOrderNr2, piece2);
-                        if (msg2.Result)
+                        string pOrderNr2 = GetJobNr(config.Get("Job", node));
+                        if (config.Get("Manual", node)==null)
                         {
-                            OrderItem item = msg2.Object;
-                            if (piece2 > 0)
+                            int piece2 = int.Parse(config.Get("TotalGoodPieces", node));
+                            Msg<OrderItem> msg2 = service.ProducePiece(pOrderNr2, piece2);
+                            if (msg2.Result)
                             {
-                                if (piece2 % item.BundleQuantity == 0)
+                                OrderItem item = msg2.Object;
+                                if (piece2 > 0)
                                 {
-                                    new PrintService().PrintBundleLabel("P003", pOrderNr2, machineNr, piece2 / item.BundleQuantity);
-                                }
-                                else {
-                                    if (piece2 >= item.TotalQuantity) {
-                                        new PrintService().PrintBundleLabel("P003", pOrderNr2, machineNr, piece2 / item.BundleQuantity+1);
+                                    if (piece2 % item.BundleQuantity == 0)
+                                    {
+                                        new PrintService().PrintBundleLabel("P003", pOrderNr2, machineNr, piece2 / item.BundleQuantity);
+                                    }
+                                    else
+                                    {
+                                        if (piece2 >= item.TotalQuantity)
+                                        {
+                                            new PrintService().PrintBundleLabel("P003", pOrderNr2, machineNr, piece2 / item.BundleQuantity + 1);
+                                        }
                                     }
                                 }
-                            }                             
-                        }                    
+                            }
+                        }          
                        return  service.ChangeOrderItemState(pOrderNr2, OrderItemState.TERMINATED, userNr, userGroupNr).Result; 
                          
                     default:
@@ -85,6 +92,39 @@ namespace PmsNCRWcf.Converter
                 }
             }
             return false;
+        }
+
+        public static void GenerateJobStartedSDC(OrderItemCheck order, string fileName = "JobStarted.sdc")
+        {
+            using (FileStream fs = new FileStream(Path.Combine(WPCSConfig.ServerDataDir, fileName),
+                      FileMode.Create, FileAccess.Write))
+            {
+                using (StreamWriter sw = new StreamWriter(fs))
+                {
+                    sw.WriteLine("[JobStarted]");
+                    sw.WriteLine("Job = J_"+order.ItemNr);
+                }
+            }
+        
+        }
+
+        public static void GenerateProductionTerminatedSDC(OrderItemCheck order, string fileName = "ProductionTerminated.sdc")
+        {
+            using (FileStream fs = new FileStream(Path.Combine(WPCSConfig.ServerDataDir, fileName),
+                      FileMode.Create, FileAccess.Write))
+            {
+                using (StreamWriter sw = new StreamWriter(fs))
+                {
+                    sw.WriteLine("[ProductionTerminated]");
+                    sw.WriteLine("ArticleKey = A_" + order.ItemNr);
+                    sw.WriteLine("Job = J_" + order.ItemNr);
+                    sw.WriteLine("ProductionRequestedPieces = " + order.KanbanQuantity);
+                    sw.WriteLine("TotalGoodPieces = " + order.KanbanQuantity);
+                 //   sw.WriteLine("Manual = true" );
+
+                }
+            }
+
         }
 
         private static string GetJobNr(string jobNr)

@@ -71,15 +71,17 @@
                 </DataGrid.Columns>
             </DataGrid>
         <StackPanel Grid.Column="1" Margin="0,0,0,12"  Grid.Row="0" MaxWidth="165">
-            <ComboBox Name="OrderStateCB"  Margin="20,6,0,0" Height="52"
-                      Width="87" FontStretch="Normal" VerticalContentAlignment="Center">
+            <ComboBox Name="OrderStateCB"  Margin="20,6,0,0" Height="40"
+                      Width="85" FontStretch="Normal" VerticalContentAlignment="Center">
                 <ComboBoxItem Content="NextOrder" IsSelected="True"></ComboBoxItem>
                 <ComboBoxItem Content="PassedOrder"></ComboBoxItem>
             </ComboBox>
-            <Button Content="Refresh" Height="52"
+            <Button Content="Refresh" Height="35"
                   Name="UpdatePreviewBtn" 
-                 Width="87" Click="UpdatePreviewBtn_Click" Margin="20,6,0,0" />
-            <Button Content="Print Kanban" Height="52" Name="PrintKanbanBtn" Width="87" Margin="20,6,0,0" Click="PrintKanbanBtn_Click" />
+                 Width="84" Click="UpdatePreviewBtn_Click" Margin="20,6,0,0" />
+            <Button Content="Print Kanban" Height="38" Name="PrintKanbanBtn" Width="85" Margin="20,6,0,0" Click="PrintKanbanBtn_Click" />
+            <Button Content="Terminate" Height="38" Name="TerminateKanbanBtn" Width="85" Margin="20,6,0,0" Click="TerminatetKanbanBtn_Click" />
+
             <StackPanel Height="126" Name="stackPanel1" Width="138" Margin="10,5,0,0" Background="#FFCACDE5">
                 <Label Content="BundleNo:" Height="28" Name="label1" />
                 <TextBox Height="23" Name="BundleNoTB" Width="120" />

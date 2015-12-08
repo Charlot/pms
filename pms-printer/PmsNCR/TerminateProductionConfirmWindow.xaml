@@ -1,0 +1,17 @@
+﻿<Window x:Class="PmsNCR.TerminateProductionConfirmWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="TerminateProductionConfirmWindow" Height="175" Width="427" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Label Content="Job:" Height="29" HorizontalAlignment="Left" Margin="20,13,0,0" Name="label1" VerticalAlignment="Top" Width="65" />
+        <Label Content="Label" Height="37" HorizontalAlignment="Left" Margin="85,8,0,0" Name="OrderLab" VerticalAlignment="Top" Width="173" FontSize="18" />
+
+        <Button Content="TERMINATE" Height="30" HorizontalAlignment="Right" Margin="0,54,47,0" Name="TerminateBtn" 
+                VerticalAlignment="Top" Width="86" Click="TerminateBtn_Click" />
+        <Label Content="" Height="28"
+               HorizontalAlignment="Left" Margin="12,96,0,0" Name="MsgLabel" VerticalAlignment="Top" Width="249" Foreground="#FFF21313" FontWeight="Bold" />
+        <PasswordBox Height="33" 
+                     HorizontalAlignment="Left" Margin="20,51,0,0" 
+                     Name="PasswdTB" VerticalAlignment="Top" Width="229" FontSize="13" />
+    </Grid>
+</Window>

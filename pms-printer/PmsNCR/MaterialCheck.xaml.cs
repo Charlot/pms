@@ -301,9 +301,14 @@ namespace PmsNCR
                         {
                             if (OrderDDSConverter.ConvertJsonOrderToDDS(orderItem.FileName))
                             {
-                                MessageBox.Show("Order Created, Please Use EASY to work!");
                                 s.SetOrderItemTool(orderItem.ItemNr, currentTool1, currentTool2);
+                                MessageBox.Show("Order Created, Please Use EASY to work!");
+                                // auto load order to print kb
+                                if (MaterialCheckConfig.AutoLoad) {
+                                    OrderSDCConverter.GenerateJobStartedSDC(orderItem);
+                                }
                                 this.Close();
+
                             }
                         }
                     }

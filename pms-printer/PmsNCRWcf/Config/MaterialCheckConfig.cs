@@ -27,6 +27,9 @@ namespace PmsNCRWcf.Config
         private static string toolPattern;
         private static bool toolLockCheck = false;
 
+        private static bool autoLoad = false;
+
+        
         static MaterialCheckConfig()
         {
             try
@@ -49,6 +52,8 @@ namespace PmsNCRWcf.Config
                 toolPrefix = config.Get("ToolPrefix");
                 toolPattern = config.Get("ToolPattern");
                 toolLockCheck = bool.Parse(config.Get("ToolLockCheck"));
+
+                autoLoad = bool.Parse(config.Get("AutoLoad"));
             }
             catch (Exception e)
             {
@@ -130,5 +135,12 @@ namespace PmsNCRWcf.Config
             get { return MaterialCheckConfig.toolLockCheck; }
             set { MaterialCheckConfig.toolLockCheck = value; }
         }
+        public static bool AutoLoad
+        {
+            get { return MaterialCheckConfig.autoLoad; }
+            set { MaterialCheckConfig.autoLoad = value; }
+        }
+
+
     }
 }

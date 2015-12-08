@@ -77,6 +77,15 @@ namespace PmsNCR
             }
         }
 
+        private void TerminatetKanbanBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (PreviewOrderDG.SelectedItems.Count == 1)
+            {
+                OrderItemCheck item = PreviewOrderDG.SelectedItem as OrderItemCheck;
+                new TerminateProductionConfirmWindow(item).ShowDialog();
+            }
+        }
+
         private void PrintBundleLabelBtn_Click(object sender, RoutedEventArgs e)
         {
             int bundleNo = 0;

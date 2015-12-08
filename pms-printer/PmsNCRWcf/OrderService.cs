@@ -363,14 +363,15 @@ namespace PmsNCRWcf
 
                 var res = new ApiClient().Execute(req);
                 msg = JSONHelper.parse<Msg<string>>(res.Content);
-                if (msg.Result)
-                {
-                    if (msg.Object == null)
-                    {
-                        msg.Result = false;
-                        msg.Content = "API ERROR";
-                    }
-                }
+
+                //if (msg.Result)
+                //{
+                //    if (msg.Object == null)
+                //    {
+                //        msg.Result = false;
+                //        msg.Content = "API ERROR";
+                //    }
+                //}
             }
             catch (Exception e)
             {
