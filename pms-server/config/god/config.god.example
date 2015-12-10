@@ -1,0 +1,16 @@
+RAILS_ENV  = ENV['RAILS_ENV']  = 'development'
+RAILS_ROOT = ENV['RAILS_ROOT'] = '/home/charlot/project/brilliantech/pms/pms-server'
+PID_DIR    = '/home/charlot/project/brilliantech/pms/pms-server/tmp/pids'
+BUNDLE_BIN_PATH   = "/home/charlot/.rvm/gems/ruby-2.1.5@global/bin/"
+#UID = 'charlot'
+#GID = 'charlot'
+
+God.pid_file_directory = "#{RAILS_ROOT}/tmp/pids"
+
+God.log_file  = "#{RAILS_ROOT}/log/god.log"
+God.log_level = :info
+
+%w(sidekiq).each do |config|
+  puts '----------------------------'
+  God.load "#{RAILS_ROOT}/config/god/#{config}.god"
+end
