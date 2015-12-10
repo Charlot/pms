@@ -1,0 +1,35 @@
+<h1>Listing auto_scrap_records</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Order nr</th>
+      <th>Kanban nr</th>
+      <th>Machine nr</th>
+      <th>Part nr</th>
+      <th>Qty</th>
+      <th>User</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @auto_scrap_records.each do |auto_scrap_record| %>
+      <tr>
+        <td><%= auto_scrap_record.order_nr %></td>
+        <td><%= auto_scrap_record.kanban_nr %></td>
+        <td><%= auto_scrap_record.machine_nr %></td>
+        <td><%= auto_scrap_record.part_nr %></td>
+        <td><%= auto_scrap_record.qty %></td>
+        <td><%= auto_scrap_record.user_id %></td>
+        <td><%= link_to 'Show', auto_scrap_record %></td>
+        <td><%= link_to 'Edit', edit_auto_scrap_record_path(auto_scrap_record) %></td>
+        <td><%= link_to 'Destroy', auto_scrap_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Auto scrap record', new_auto_scrap_record_path %>
