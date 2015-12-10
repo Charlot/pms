@@ -1,6 +1,8 @@
 require 'devise'
 Rails.application.routes.draw do
 
+  resources :auto_scrap_records
+
   resources :part_tools
 
   resources :custom_details do
