@@ -662,15 +662,4 @@ ActiveRecord::Schema.define(version: 20151113091217) do
     t.string   "regex"
   end
 
-  create_table "wire_groups", force: true do |t|
-    t.string   "group_name",                            default: ""
-    t.string   "wire_type",                             default: ""
-    t.decimal  "cross_section", precision: 6, scale: 4, default: 0.0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "wire_groups", ["group_name"], name: "index_wire_groups_on_group_name", using: :btree
-  add_index "wire_groups", ["wire_type"], name: "index_wire_groups_on_wire_type", using: :btree
-
 end
