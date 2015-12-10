@@ -17,6 +17,12 @@
   <label>生产零件:</label>
   <span><%= process_entity.wire.nr if process_entity.wire%></span>
 
+  <label>单位时间:</label>
+  <span><%= process_entity.work_time %>S</span>
+
+  <label>步骤总时间:</label>
+  <span><%= process_entity.work_time*count %>S</span>
+
   <a href="<%= process_template_path(process_entity.process_template)%>">
     <label>Template:</label>
     <%= process_entity.template_text%>
