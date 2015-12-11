@@ -56,6 +56,8 @@ module V1
 
           # preview order item list
           get :preview do
+            I18n.locale='en'
+
             if machine=Machine.find_by_nr(params[:machine_nr])
               return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(machine).limit(
                                                                               Setting.get_machine_preview_qty
@@ -80,6 +82,7 @@ module V1
           put :update_state do
             if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
               # 当任务结束时，不可以使用API改变状态
+              p item
               r=false
               if item.state==ProductionOrderItemState::TERMINATED
                 r= false

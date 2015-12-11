@@ -56,6 +56,7 @@ class ProductionOrderItemPresenter<Presenter
           Id: @production_order_item.id,
           ItemNr: @production_order_item.nr,
           State: @production_order_item.state,
+          StateDisplay:ProductionOrderItemState.display(@production_order_item.state),
           IsUrgent: @production_order_item.is_urgent,
           OptimiseIndex: @production_order_item.optimise_index,
           OrderNr: @production_order_item.production_order.nil? ? '' : @production_order_item.production_order.nr,

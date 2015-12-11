@@ -1,0 +1,17 @@
+zh:
+  production_order_item_state:
+     INIT: 已扫描
+     OPTIMISE_FAIL: 优化失败
+     OPTIMISE_SUCCEED: 优化成功
+     OPTIMISE_CANCELED: 优化取消
+     DISTRIBUTE_FAIL: 分发失败
+     DISTRIBUTE_SUCCEED: 已分发
+     STARTED: 进行中
+     RESTARTED: 已重启
+     TERMINATED: 已结束
+     ABORTED: 已终止
+     MANUAL_ABORTED: 已手动终止
+     SYSTEM_ABORTED: 已系统终止
+     INTERRUPTED: 已中断
+     PAUSED: 已暂停
+     SCANNED: 已销卡
