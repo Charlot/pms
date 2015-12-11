@@ -14,9 +14,6 @@
 <%= link_to '导入删除Master Bom', import_delete_master_bom_items_path, :class => 'btn btn-info' %>
 
 <div class="digg_pagination">
-  <div class="page_info">
-    <%= page_entries_info @master_bom_items %>
-  </div>
   <%= will_paginate @master_bom_items, :container => false %>
 </div>
 
