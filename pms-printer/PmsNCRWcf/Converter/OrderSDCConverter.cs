@@ -120,8 +120,7 @@ namespace PmsNCRWcf.Converter
                     sw.WriteLine("Job = J_" + order.ItemNr);
                     sw.WriteLine("ProductionRequestedPieces = " + order.KanbanQuantity);
                     sw.WriteLine("TotalGoodPieces = " + order.KanbanQuantity);
-                 //   sw.WriteLine("Manual = true" );
-
+                    sw.WriteLine("Manual = true" );
                 }
             }
 

@@ -54,6 +54,7 @@
                 <DataGridTextColumn Header="No." Binding="{Binding Path=No}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="JobNr" Binding="{Binding Path=ItemNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="OrderNr" Binding="{Binding Path=OrderNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
+                <DataGridTextColumn Header="State" Binding="{Binding Path=StateDisplay}" ElementStyle="{StaticResource contentCenterStyle}" Foreground="Red" />
                 <DataGridTextColumn Header="ProductNr" Binding="{Binding Path=ProductNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="Kanban" Binding="{Binding Path=KanbanNr}" ElementStyle="{StaticResource contentCenterStyle}"/>
                 <DataGridTextColumn Header="Quantity" Binding="{Binding Path=KanbanQuantity}" ElementStyle="{StaticResource contentCenterStyle}"/>
