@@ -195,7 +195,7 @@ class ProductionOrderItem < ActiveRecord::Base
   def set_terminated_at
     if self.state_changed? && self.state==ProductionOrderItemState::TERMINATED
       self.terminated_at= Time.now
-    end if self.type==ProductionOrderItemType::WHITE
+    end# if self.type==ProductionOrderItemType::WHITE
   end
 
   def can_move?
