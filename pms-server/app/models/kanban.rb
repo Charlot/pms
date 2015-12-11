@@ -336,12 +336,13 @@ class Kanban < ActiveRecord::Base
   # handler item is from file handle kanban
   def terminate_produce_item(handler_item=nil)
     if self.ktype==KanbanType::WHITE
-      if handler_item.blank?
-        item=self.generate_produce_item(false)
-        item.update_attributes(produced_qty: item.kanban_qty, state: ProductionOrderItemState::TERMINATED)
-      else
-        return true
-      end
+      # if handler_item.blank?
+      #   #item=self.generate_produce_item(false)
+      #  # item.update_attributes(produced_qty: item.kanban_qty, state: ProductionOrderItemState::TERMINATED)
+      # else
+      #   return true
+      # end
+      return true
     elsif self.ktype==KanbanType::BLUE
       blue= ProductionOrderItemBlue.
           where(kanban_id: self.id, state: ProductionOrderItemState::DISTRIBUTE_SUCCEED).first

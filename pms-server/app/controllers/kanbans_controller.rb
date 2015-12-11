@@ -323,8 +323,14 @@ class KanbansController < ApplicationController
 
 
       if @kanban.ktype == KanbanType::WHITE
+        if item=ProductionOrderItem.where(kanban_id: @kanban.id, state: ProductionOrderItemState::DISTRIBUTE_SUCCEED).first
+          item.update(state: ProductionOrderItemState::TERMINATED)
+          render json: {result: true, content: '销卡成功'} and return
+        else
+          render json: {result: false, content: '看板未生产，不可销卡'} and return
+        end
         # unless ((order_items = @kanban.production_order_items.where(state: ProductionOrderItemState.wait_scan_states)).count == 1)
-        @kanban.terminate_produce_item
+        #@kanban.terminate_produce_item
         #render json: {result: false, content: "只销兰卡!"} and return
         # end
       else
@@ -358,9 +364,9 @@ class KanbansController < ApplicationController
     # authorize(@kanban)
 
     render json: {result: false, content: "看板未找到：#{params[:code]}"} and return unless @kanban
-if session[:kanban_type]
-    render json: {result: false, content: "请投#{KanbanType.display(session[:kanban_type])},此卡为:#{KanbanType.display(@kanban.ktype)}"} and return if @kanban.ktype!=session[:kanban_type]
-end
+    if session[:kanban_type]
+      render json: {result: false, content: "请投#{KanbanType.display(session[:kanban_type])},此卡为:#{KanbanType.display(@kanban.ktype)}"} and return if @kanban.ktype!=session[:kanban_type]
+    end
     #check Kanban State
     render json: {result: false, content: "看板未发布"} and return unless @kanban.state == KanbanState::RELEASED
 
@@ -383,10 +389,10 @@ end
       end
     end
     #need_update = @kanban.versions.count > parsed_code[:version_nr].to_i
-if Setting.check_kanban_version?
-    #response dependent on Kanban type
-    render json: {result: false, content: "看板已经更新，请重新打印!"} and return if need_update && @kanban.ktype == KanbanType::BLUE
-end
+    if Setting.check_kanban_version?
+      #response dependent on Kanban type
+      render json: {result: false, content: "看板已经更新，请重新打印!"} and return if need_update && @kanban.ktype == KanbanType::BLUE
+    end
     #check kanban quantity and bundle
     render json: {result: false, content: "看板数量为0，不能扫描！"} and return if @kanban.quantity == 0
 
@@ -471,7 +477,7 @@ end
     params.require(:kanban).permit(:id, :state, :remark, :remark2, :quantity, :bundle,
                                    :safety_stock, :des_warehouse,
                                    :des_storage, :print_time, :part_id,
-                                   :version, :ktype, :copies, :product_id,:auto_copy_count
+                                   :version, :ktype, :copies, :product_id, :auto_copy_count
     )
   end
 

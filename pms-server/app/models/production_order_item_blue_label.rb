@@ -6,17 +6,17 @@ class ProductionOrderItemBlueLabel < ProductionOrderItemLabel
 
 
   after_create :enter_stock
-  after_create :move_stock
+  # after_create :move_stock
 
 
   def enter_stock
     ItemBlueInStockWorker.perform_async(self.id)
   end
 
-  def move_stock
-    if Setting.auto_move_kanban?
-      ItemBlueMoveStockWorker.perform_async(self.id)
-    end
-  end
+  # def move_stock
+  #   if Setting.auto_move_kanban?
+  #     ItemBlueMoveStockWorker.perform_async(self.id)
+  #   end
+  # end
 
 end

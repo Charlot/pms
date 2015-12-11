@@ -6,7 +6,8 @@ class ProductionOrderItem < ActiveRecord::Base
   has_many :production_order_item_labels
   after_update :update_qty_to_terminate, if: :auto?
   after_update :generate_production_item_label, if: :auto?
-  after_update :set_terminated_at
+  before_update :set_terminated_at
+  after_update :move_stock
 
   after_update :generate_production_item_not_auto_label, :if => :not_auto?
 
@@ -195,7 +196,13 @@ class ProductionOrderItem < ActiveRecord::Base
   def set_terminated_at
     if self.state_changed? && self.state==ProductionOrderItemState::TERMINATED
       self.terminated_at= Time.now
-    end# if self.type==ProductionOrderItemType::WHITE
+    end if self.type==ProductionOrderItemType::WHITE
+  end
+
+  def move_stock
+    if self.state_changed? && self.state==ProductionOrderItemState::TERMINATED
+      ItemMoveStockWorker.perform_async(self.id)
+    end if self.type==ProductionOrderItemType::WHITE
   end
 
   def can_move?

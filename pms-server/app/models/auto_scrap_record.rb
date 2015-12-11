@@ -17,5 +17,4 @@ class AutoScrapRecord < ActiveRecord::Base
     "BF#{Time.now.to_milli}"
   end
 
-
 end

@@ -5,7 +5,7 @@ class ProductionOrderItemBlue<ProductionOrderItem
 
   before_update :set_produced_qty
   # after_update :enter_stock
-  # after_update :move_stock
+  after_update :move_stock
 
   after_update :generate_blue_label
 
@@ -27,6 +27,12 @@ class ProductionOrderItemBlue<ProductionOrderItem
                                                     position_nr: position_nr,
                                                     whouse_nr: whouse_nr)
     end
+  end
+
+  def move_stock
+    if self.state_changed? && self.state==ProductionOrderItemState::TERMINATED
+      ItemBlueMoveStockWorker.perform_async(self.id)
+    end if self.type==ProductionOrderItemType::BLUE
   end
 
 
