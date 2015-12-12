@@ -246,6 +246,45 @@ module FileHandler
         msg
       end
 
+
+      def self.export_items_count(q)
+        msg = Message.new
+        begin
+          tmp_file = full_export_path("看板投卡次数.xlsx") unless tmp_file
+
+          p = Axlsx::Package.new
+          p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
+            sheet.add_row ['序号', '看板号', '看板类型', '状态', '投卡次数']
+            kanbans = []
+            if q.nil?
+              kanbans= Kanban
+            else
+              kanbans = Kanban.search_for(q)
+            end
+            
+
+            kanbans.unscoped.all.each_with_index do |k, i|
+              sheet.add_row [
+                                i+1,
+                                k.nr,
+                                KanbanType.display(k.ktype),
+                                KanbanState.display(k.state),
+                                k.production_order_items.unscoped.where(kanban_id: k.id).count
+                            ], types: [:string, :string, :string, :string]
+            end
+          end
+          p.use_shared_strings = true
+          p.serialize(tmp_file)
+
+          msg.result =true
+          msg.content =tmp_file
+        rescue => e
+          puts e.backtrace
+          msg.content = e.message
+        end
+        msg
+      end
+
       def self.import_scan(file, type=KanbanType::WHITE)
         msg = Message.new(contents: [])
         handler_file=full_tmp_path("#{KanbanType.display(type)}投卡处理结果.xlsx")

@@ -285,6 +285,7 @@ Rails.application.routes.draw do
       get :export
       get :export_white
       get :export_simple
+      get :export_items_count
       get :management
       match :import, to: :import, via: [:get, :post]
       get 'scan_finish/:type', to: :scan_finish, as: 'scan_finish'
