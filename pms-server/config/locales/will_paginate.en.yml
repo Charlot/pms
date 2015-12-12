@@ -1,5 +1,5 @@
 #will_paginate
-zh:
+en:
   will_paginate:
     previous_label: "&#8592; 前一页"
     next_label: "后一页 &#8594;"
