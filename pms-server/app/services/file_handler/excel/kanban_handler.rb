@@ -261,7 +261,7 @@ module FileHandler
             else
               kanbans = Kanban.search_for(q)
             end
-            
+
 
             kanbans.unscoped.all.each_with_index do |k, i|
               sheet.add_row [

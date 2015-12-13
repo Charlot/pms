@@ -29,6 +29,7 @@ class ApplicationController < ActionController::Base
 =end
 
   def set_model
+    I18n.locale='zh'
     @model=self.class.name.gsub(/Controller/, '').tableize.singularize
   end
 
