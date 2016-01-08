@@ -406,8 +406,12 @@ module FileHandler
 
       def self.validate_transport_row(row)
         msg=Message.new(contents: [])
-        unless Part.find_by_nr(row['Part No.'])
+        unless part=Part.find_by_nr(row['Part No.'])
           msg.contents<<"Part No.#{row['Part No.']} 不存在"
+        else
+          if part.product_master_bom_items.count==0
+            msg.contents<<"不存在BOM,请维护"
+          end
         end
 
         if row['Qty'].blank?
