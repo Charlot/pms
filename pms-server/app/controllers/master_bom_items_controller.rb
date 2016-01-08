@@ -129,6 +129,20 @@ class MasterBomItemsController < ApplicationController
     end
   end
 
+  def export_uniq_product
+    msg = Message.new
+    begin
+      msg = FileHandler::Excel::MasterBomItemHandler.export_uniq_product
+    rescue => e
+      msg.content = e.message
+    end
+    if msg.result
+      send_file msg.content
+    else
+      render json: msg
+    end
+  end
+
   def search
     @master_bom_items=MasterBomItem.search(params).paginate(:page => params[:page])
     @product_nr=params[:product_nr]
