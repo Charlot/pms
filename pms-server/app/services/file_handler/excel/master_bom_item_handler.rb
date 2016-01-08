@@ -135,6 +135,32 @@ module FileHandler
       end
 
 
+      def self.export_uniq_product
+        msg = Message.new
+        begin
+          tmp_file = MasterBomItemHandler.full_tmp_path('master_bom_uniq_product.xlsx')
+          p = Axlsx::Package.new
+          p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
+            sheet.add_row %w(零件号 客户号)
+            Part.joins(:product_master_bom_items).uniq.each do |item|
+              sheet.add_row [
+                                item.nr,
+                                item.custom_nr
+                            ], types: [:string, :string]
+            end
+          end
+          p.use_shared_strings = true
+          p.serialize(tmp_file)
+
+          msg.result =true
+          msg.content =tmp_file
+        rescue => e
+          msg.content =e.message
+        end
+        msg
+      end
+
+
       def self.transport(file)
         msg = Message.new
         begin

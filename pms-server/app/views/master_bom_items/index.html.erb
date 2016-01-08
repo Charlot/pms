@@ -12,6 +12,7 @@
 
 <%= link_to '导出Master Bom', export_master_bom_items_path(params), :class => 'btn btn-warning', data: {confirm: "数据量较大，确定导出?"} %>
 <%= link_to '导入删除Master Bom', import_delete_master_bom_items_path, :class => 'btn btn-info' %>
+<%= link_to '导出存在Master Bom的成品', export_uniq_product_master_bom_items_path(params), :class => 'btn btn-default', data: {confirm: "数据量较大，确定导出?"} %>
 
 <div class="digg_pagination">
   <%= will_paginate @master_bom_items, :container => false %>
