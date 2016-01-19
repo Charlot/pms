@@ -42,4 +42,22 @@ class MasterBomItem < ActiveRecord::Base
     end
     q
   end
+
+  def product_nr
+     self.product.nil? ? '' : self.product.nr
+  end
+
+
+  def bom_item_nr
+    self.bom_item.nil? ? '' : self.bom_item.nr
+  end
+
+  def department_name
+    self.department.nil? ? '' : self.department.name
+  end
+
+  def department_code
+    self.department.nil? ? '' : self.department.code
+  end
+
 end
