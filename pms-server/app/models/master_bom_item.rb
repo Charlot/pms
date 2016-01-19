@@ -15,18 +15,18 @@ class MasterBomItem < ActiveRecord::Base
     unless params[:product_nr].blank?
       # q=q.where(parts: {nr: params[:product_nr]})
       products=Part.where("nr like '%#{params[:product_nr]}%'").limit(50).pluck(:id)
-      if products.present?
+      # if products.present?
         q=q.where(product_id: products)
-      end
+       # end
     end
     #
     unless params[:bom_item_nr].blank?
       bom_items=Part.where("nr like '%#{params[:bom_item_nr]}%'").limit(50).pluck(:id)
 
 
-      if bom_items.present?
+      # if bom_items.present?
         q=q.where(bom_item_id: bom_items)
-      end
+      # end
     end
     #
     unless params[:department_id].blank?
@@ -36,6 +36,8 @@ class MasterBomItem < ActiveRecord::Base
     unless params[:department_code].blank?
       if department=Department.find_by_code(params[:department_code])
         q=q.where(department_id: department.id)
+      else
+        q=q.where(department_id: nil)
       end
     end
     q
