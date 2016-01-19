@@ -14,14 +14,18 @@ class MasterBomItem < ActiveRecord::Base
     #       .order(:product_id)
     unless params[:product_nr].blank?
       # q=q.where(parts: {nr: params[:product_nr]})
-      if product=Part.find_by_nr(params[:product_nr])
-        q=q.where(product_id: product.id)
+      products=Part.where("nr like '%#{params[:product_nr]}%'").limit(50).pluck(:id)
+      if products.present?
+        q=q.where(product_id: products)
       end
     end
     #
     unless params[:bom_item_nr].blank?
-      if bom_item=Part.find_by_nr(params[:bom_item_nr])
-        q=q.where(bom_item_id: bom_item.id)
+      bom_items=Part.where("nr like '%#{params[:bom_item_nr]}%'").limit(50).pluck(:id)
+
+
+      if bom_items.present?
+        q=q.where(bom_item_id: bom_items)
       end
     end
     #
