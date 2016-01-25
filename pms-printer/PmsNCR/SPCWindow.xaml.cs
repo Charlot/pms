@@ -29,9 +29,9 @@ namespace PmsNCR
         }
 
         //X axis data is fixed
-        private List<string> strListx = new List<string>() { "1", "2", "3", "4", "5"};
-       
-      
+        private List<string> strListx = new List<string>() { "1", "2", "3", "4", "5" };
+
+
         #region Click
         //Click
         void dataPoint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -46,7 +46,8 @@ namespace PmsNCR
         }
 
         //Judge Side 
-        private bool CheckSide1() {
+        private bool CheckSide1()
+        {
             bool passside1 = true;
             //Judge Side1
             if (CriHigStaSid1.Text != "" && CriHigStaSid1Fau.Text != "" && CriWidStaSide1.Text != "" && CriWidFauSide1.Text != "")
@@ -76,7 +77,7 @@ namespace PmsNCR
                 if (CheckStringIsInvalid(CriHig2Side1.Text))
                 {
                     CriHig2Side1.Background = new SolidColorBrush(Colors.Red);
-                  //  CriHig2Warning.Content = "Crimp Height 2 Can't be Empty";
+                    //  CriHig2Warning.Content = "Crimp Height 2 Can't be Empty";
                     passside1 = false;
                 }
                 else
@@ -105,7 +106,7 @@ namespace PmsNCR
                 if (CheckStringIsInvalid(CriHig4Side1.Text))
                 {
                     CriHig4Side1.Background = new SolidColorBrush(Colors.Red);
-                   // CriHig4Warning.Content = "Crimp Height 4 Can't be Empty";
+                    // CriHig4Warning.Content = "Crimp Height 4 Can't be Empty";
                     passside1 = false;
                 }
                 else
@@ -120,7 +121,7 @@ namespace PmsNCR
                 if (CheckStringIsInvalid(CriHig5Side1.Text))
                 {
                     CriHig5Side1.Background = new SolidColorBrush(Colors.Red);
-                   // CriHig5Warning.Content = "Crimp Height 5 Can't be Empty";
+                    // CriHig5Warning.Content = "Crimp Height 5 Can't be Empty";
                     passside1 = false;
                 }
                 else
@@ -139,7 +140,7 @@ namespace PmsNCR
                 if (CheckStringIsInvalid(CriWidSide1.Text))
                 {
                     CriWidSide1.Background = new SolidColorBrush(Colors.Red);
-                   // CriWidWarning.Content = "Crimp Width Can't be Empty";
+                    // CriWidWarning.Content = "Crimp Width Can't be Empty";
                     passside1 = false;
                 }
                 else
@@ -156,7 +157,7 @@ namespace PmsNCR
                 if (CheckStringIsInvalid(PullOffSide1.Text))
                 {
                     PullOffSide1.Background = new SolidColorBrush(Colors.Red);
-                  //  PullOffWarning.Content = "Pulloff Can't be Empty";
+                    //  PullOffWarning.Content = "Pulloff Can't be Empty";
                     passside1 = false;
                 }
                 else
@@ -170,7 +171,8 @@ namespace PmsNCR
             }
             return passside1;
         }
-        private bool CheckSide2() {
+        private bool CheckSide2()
+        {
             bool passside2 = true;
 
             //side2
@@ -202,7 +204,7 @@ namespace PmsNCR
                 if (CheckStringIsInvalid(CriHig2Side2.Text))
                 {
                     CriHig2Side2.Background = new SolidColorBrush(Colors.Red);
-                 //   CriHig2Warning.Content = "Crimp Height 2 Can't be Empty";
+                    //   CriHig2Warning.Content = "Crimp Height 2 Can't be Empty";
                     passside2 = false;
                 }
                 else
@@ -217,7 +219,7 @@ namespace PmsNCR
                 if (CheckStringIsInvalid(CriHig3Side2.Text))
                 {
                     CriHig3Side2.Background = new SolidColorBrush(Colors.Red);
-                   // CriHig3Warning.Content = "Crimp Height 3 Can't be Empty";
+                    // CriHig3Warning.Content = "Crimp Height 3 Can't be Empty";
                     passside2 = false;
                 }
                 else
@@ -233,7 +235,7 @@ namespace PmsNCR
                 if (CheckStringIsInvalid(CriHig4Side2.Text))
                 {
                     CriHig4Side2.Background = new SolidColorBrush(Colors.Red);
-                  //  CriHig4Warning.Content = "Crimp Height 4 Can't be Empty";
+                    //  CriHig4Warning.Content = "Crimp Height 4 Can't be Empty";
                     passside2 = false;
                 }
                 else
@@ -245,10 +247,10 @@ namespace PmsNCR
                     }
                 }
 
-                if (CheckStringIsInvalid( CriHig5Side2.Text))
+                if (CheckStringIsInvalid(CriHig5Side2.Text))
                 {
                     CriHig5Side2.Background = new SolidColorBrush(Colors.Red);
-                   // CriHig5Warning.Content = "Crimp Height 5 Can't be Empty";
+                    // CriHig5Warning.Content = "Crimp Height 5 Can't be Empty";
                     passside2 = false;
                 }
                 else
@@ -299,7 +301,8 @@ namespace PmsNCR
 
         //"Check" data to send
         OrderItemCheck order = MainWindow.CurrentOrder;
-        private void MeasureSide1(string note) {
+        private void MeasureSide1(string note)
+        {
             string[] MeasuredDataSide1 = new string[12];
             MeasuredDataSide1[0] = order.ItemNr;
             MeasuredDataSide1[1] = WPCSConfig.MachineNr;
@@ -312,10 +315,11 @@ namespace PmsNCR
             MeasuredDataSide1[8] = "";
             MeasuredDataSide1[9] = "";
             MeasuredDataSide1[10] = PullOffSide1.Text;
-            MeasuredDataSide1[11] =note;
+            MeasuredDataSide1[11] = note;
             Msg<string> msg = new OrderService().StoreMeasuredData(MeasuredDataSide1);
         }
-        private void MeasureSide2(string note) {
+        private void MeasureSide2(string note)
+        {
             string[] MeasuredDataSide2 = new string[12];
             MeasuredDataSide2[0] = order.ItemNr;
             MeasuredDataSide2[1] = WPCSConfig.MachineNr;
@@ -341,15 +345,15 @@ namespace PmsNCR
             bool passside2 = CheckSide2();
             //Judge
             if (passside1 && passside2)
-            { 
-             if (order.Terminal1Nr != null)
-             {
-                 MeasureSide1("true");
-              }
-             if (order.Terminal2Nr != null)
-             {
-                 MeasureSide2("true");
-             }
+            {
+                if (order.Terminal1Nr != null)
+                {
+                    MeasureSide1("true");
+                }
+                if (order.Terminal2Nr != null)
+                {
+                    MeasureSide2("true");
+                }
             }
             else if (!passside1 && passside2)
             {
@@ -373,7 +377,8 @@ namespace PmsNCR
                     MeasureSide2("false");
                 }
             }
-            else {
+            else
+            {
                 if (order.Terminal1Nr != null)
                 {
                     MeasureSide1("false");
@@ -386,19 +391,23 @@ namespace PmsNCR
         }
 
         //Crimp height function
-        private bool CheckCriHig(TextBox CriHig,double CriHigStr,double CriHigLowStr,double CriHigHigStr, Label CriHigWarning) {
-            CriHig.Background=new SolidColorBrush(Colors.White);
-            CriHigWarning.Content="";
-                if(CriHigStr<CriHigLowStr||CriHigStr>CriHigHigStr){
-                    CriHig.Background = new SolidColorBrush(Colors.Red);
-                 //   CriHigWarning.Content = "Crimp Height isn't meet requirements";
-                    return false;
-                }else{
-                    CriHigWarning.Content = "";
-                    CriHig.Background = new SolidColorBrush(Colors.White);
-                    return true;
-                }
+        private bool CheckCriHig(TextBox CriHig, double CriHigStr, double CriHigLowStr, double CriHigHigStr, Label CriHigWarning)
+        {
+            CriHig.Background = new SolidColorBrush(Colors.White);
+            CriHigWarning.Content = "";
+            if (CriHigStr < CriHigLowStr || CriHigStr > CriHigHigStr)
+            {
+                CriHig.Background = new SolidColorBrush(Colors.Red);
+                //   CriHigWarning.Content = "Crimp Height isn't meet requirements";
+                return false;
             }
+            else
+            {
+                CriHigWarning.Content = "";
+                CriHig.Background = new SolidColorBrush(Colors.White);
+                return true;
+            }
+        }
         //Crimp width function
         private bool CheckCriWid(TextBox CriWid, double CriWidStr, double CriWidLowStr, double CriWidHigStr, Label CriWidWarning)
         {
@@ -407,7 +416,7 @@ namespace PmsNCR
             if (CriWidStr < CriWidLowStr || CriWidStr > CriWidHigStr)
             {
                 CriWid.Background = new SolidColorBrush(Colors.Red);
-            //    CriWidWarning.Content = "Crimp Width isn't meet requirements "; 
+                //    CriWidWarning.Content = "Crimp Width isn't meet requirements "; 
                 return false;
             }
             else
@@ -418,14 +427,14 @@ namespace PmsNCR
             }
         }
         //Pulloff function
-        private bool CheckPullOff(TextBox PullOff, double PullOffStr,double PullOffStaStr, Label PullOffWarning)
+        private bool CheckPullOff(TextBox PullOff, double PullOffStr, double PullOffStaStr, Label PullOffWarning)
         {
             PullOff.Background = new SolidColorBrush(Colors.White);
             PullOffWarning.Content = "";
             if (PullOffStr < PullOffStaStr)
             {
                 PullOff.Background = new SolidColorBrush(Colors.Red);
-              //  PullOffWarning.Content = "Pulloff isn't meet requirements ";
+                //  PullOffWarning.Content = "Pulloff isn't meet requirements ";
                 return false;
             }
             else
@@ -437,7 +446,8 @@ namespace PmsNCR
         }
 
         //Draw Chart
-        private void DrawLine() {
+        private void DrawLine()
+        {
 
             List<string> strListy = new List<string>(5);
             strListy.Add(CriHig1Side1.Text);
@@ -547,7 +557,7 @@ namespace PmsNCR
             double CriHigStaSid1FauVau = System.Convert.ToDouble(CriHigStaSid1Fau.Text);
             double CriHigLowVau = CriHigStaSid1Vau - CriHigStaSid1FauVau * 4 / 3;
             double CriHigVau = CriHigStaSid1Vau + CriHigStaSid1FauVau * 4 / 3;
-            
+
             //new Chart
             Chart chart = new Chart();
 
@@ -573,7 +583,7 @@ namespace PmsNCR
             title.Text = name;
             title.Padding = new Thickness(0, 10, 10, 0);
             title.FontColor = new SolidColorBrush(Colors.Black);
-            FontFamilyConverter fontfamilyConver = new FontFamilyConverter();　　　 
+            FontFamilyConverter fontfamilyConver = new FontFamilyConverter();
             title.FontFamily = (System.Windows.Media.FontFamily)fontfamilyConver.ConvertFrom("Arial");
             chart.Titles.Add(title);
 
@@ -615,7 +625,7 @@ namespace PmsNCR
                 dataPoint = new DataPoint();
                 dataPoint.AxisXLabel = valuex[i];
                 //dataPoint.YValue = System.Convert.ToDouble(valuey[i]);
-                double value=0;
+                double value = 0;
                 double.TryParse(valuey[i], out value);
                 dataPoint.YValue = value;
                 //dataPoint.YValue = Convert.ToDouble(valuey[i]);
@@ -659,7 +669,7 @@ namespace PmsNCR
             title.Text = name;
             title.Padding = new Thickness(0, 10, 5, 0);
             title.FontColor = new SolidColorBrush(Colors.Black);
-            FontFamilyConverter fontfamilyConver = new FontFamilyConverter();　　　
+            FontFamilyConverter fontfamilyConver = new FontFamilyConverter();
             title.FontFamily = (System.Windows.Media.FontFamily)fontfamilyConver.ConvertFrom("Arial");
             chart.Titles.Add(title);
 
@@ -721,20 +731,22 @@ namespace PmsNCR
         }
 
         //Hidden Side
-       
-        private void HidSide1() {
-              InputSide1.Visibility = Visibility.Hidden;
-              StandardSide1.Visibility = Visibility.Hidden;
-              LineSide1.Visibility = Visibility.Hidden;
-              LineSide1Bg.Visibility = Visibility.Hidden; 
+
+        private void HidSide1()
+        {
+            InputSide1.Visibility = Visibility.Hidden;
+            StandardSide1.Visibility = Visibility.Hidden;
+            LineSide1.Visibility = Visibility.Hidden;
+            LineSide1Bg.Visibility = Visibility.Hidden;
         }
-        private void HidSide2() {
+        private void HidSide2()
+        {
             InputSide2.Visibility = Visibility.Hidden;
             StandardSide2.Visibility = Visibility.Hidden;
             LineSide2.Visibility = Visibility.Hidden;
             LineSide2Bg.Visibility = Visibility.Hidden;
         }
-       
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             LoadSPCStandard();
@@ -745,7 +757,7 @@ namespace PmsNCR
         {
             OrderItemCheck order = MainWindow.CurrentOrder;
 
-            if (order==null)
+            if (order == null)
             {
                 CurrentJobLab.Content = "No Order!";
                 CurrentJobLab.Foreground = new SolidColorBrush(Colors.Red);
@@ -763,55 +775,76 @@ namespace PmsNCR
                 if (msg.Result)
                 {
                     Dictionary<string, SPCStandard> standard = msg.Object;
-                    if (order.Terminal1Nr != null&&standard.Count!=0)
+                    if (order.Terminal1Nr != null && standard.Count != 0)
                     {
-                        PullOffStaSide1.Text = standard[order.Terminal1Nr].Min_pullOff_value.ToString();
-                        CriHigStaSid1.Text = standard[order.Terminal1Nr].Crimp_height.ToString();
-                        CriHigStaSid1Fau.Text = standard[order.Terminal1Nr].Crimp_height_iso.ToString();
-                        CriWidStaSide1.Text = standard[order.Terminal1Nr].Crimp_width.ToString();
-                        CriWidFauSide1.Text = standard[order.Terminal1Nr].Crimp_width_iso.ToString();
+                        try
+                        {
+                            PullOffStaSide1.Text = standard[order.Terminal1Nr].Min_pullOff_value.ToString();
+                            CriHigStaSid1.Text = standard[order.Terminal1Nr].Crimp_height.ToString();
+                            CriHigStaSid1Fau.Text = standard[order.Terminal1Nr].Crimp_height_iso.ToString();
+                            CriWidStaSide1.Text = standard[order.Terminal1Nr].Crimp_width.ToString();
+                            CriWidFauSide1.Text = standard[order.Terminal1Nr].Crimp_width_iso.ToString();
 
-                        Chart1Title.Content = "Latest for tool:" + order.Tool1Nr + "/" + order. Terminal1Nr;
+                            Chart1Title.Content = "Latest for tool:" + order.Tool1Nr + "/" + order.Terminal1Nr;
+                        }
+                        catch
+                        {
+                            HidSide1();
+                            ServerError.Content = "Termina1Nr：" + order.Terminal1Nr + ",ISO not Found.";
+                            Check.IsEnabled = false;
+                        }
+
                     }
                     else if (order.Terminal1Nr == null)
                     {
                         HidSide1();
                     }
-                    else {
+                    else
+                    {
                         HidSide1();
                         ServerError.Content = "order.TerminalNr：" + order.Terminal1Nr + ".There may be a server error";
                         Check.IsEnabled = false;
                     }
 
-                    if (order.Terminal2Nr != null&&standard.Count!=0)
+                    if (order.Terminal2Nr != null && standard.Count != 0)
                     {
-                        PullOffStaSide2.Text = standard[order.Terminal2Nr].Min_pullOff_value.ToString();
-                        CriHigStaSid2.Text = standard[order.Terminal2Nr].Crimp_height.ToString();
-                        CriHigStaSid2Fau.Text = standard[order.Terminal2Nr].Crimp_height_iso.ToString();
-                        CriWidStaSide2.Text = standard[order.Terminal2Nr].Crimp_width.ToString();
-                        CriWidFauSide2.Text = standard[order.Terminal2Nr].Crimp_width_iso.ToString();
+                        try {
+                            PullOffStaSide2.Text = standard[order.Terminal2Nr].Min_pullOff_value.ToString();
+                            CriHigStaSid2.Text = standard[order.Terminal2Nr].Crimp_height.ToString();
+                            CriHigStaSid2Fau.Text = standard[order.Terminal2Nr].Crimp_height_iso.ToString();
+                            CriWidStaSide2.Text = standard[order.Terminal2Nr].Crimp_width.ToString();
+                            CriWidFauSide2.Text = standard[order.Terminal2Nr].Crimp_width_iso.ToString();
 
-                        Chart2Title.Content = "Latest for tool:" + order.Tool2Nr + "/" + order.Terminal2Nr;
+                            Chart2Title.Content = "Latest for tool:" + order.Tool2Nr + "/" + order.Terminal2Nr;
+                        }
+                        catch {
+                            HidSide2();
+                            ServerError2.Content = "order.Termina2Nr：" + order.Terminal2Nr + ",ISO not Found.";
+                            Check.IsEnabled = false;
+                        }
+                        
                     }
                     else if (order.Terminal2Nr == null)
                     {
                         HidSide2();
                     }
-                    else {
+                    else
+                    {
                         HidSide2();
-                        ServerError.Content = "order.Termina2Nr：" + order.Terminal2Nr + ".There may be a server error";
+                        ServerError2.Content = "order.Termina2Nr：" + order.Terminal2Nr + ".There may be a server error";
                         Check.IsEnabled = false;
                     }
                 }
             }
         }
-    
-    // check input is double
-        public bool CheckStringIsInvalid(string value) {
+
+        // check input is double
+        public bool CheckStringIsInvalid(string value)
+        {
             //if (string.IsNullOrWhiteSpace(value)) {
             //    return false;
             //}
-            double v = 0;            
+            double v = 0;
             return !double.TryParse(value, out v);
         }
 

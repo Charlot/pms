@@ -157,7 +157,8 @@
                 <Label Content="" Height="25" HorizontalAlignment="Left" Margin="0,1,0,0" Name="CriWidWarning" VerticalAlignment="Top" />
                 <Label Content="" Height="25" HorizontalAlignment="Left" Margin="0,1,0,0" Name="PullOffWarning" VerticalAlignment="Top" />
             </StackPanel>
-            <Label Content="" Height="35" Name="ServerError" Foreground="Red" FontSize="15" Margin="472,190,26,344" Grid.ColumnSpan="2" />
+            <Label Content="" Height="35" Name="ServerError" Foreground="Red" FontSize="15" Margin="472,193,26,344" Grid.ColumnSpan="2" />
+            <Label Content="" Height="35" Name="ServerError2" Foreground="Red" FontSize="15" Margin="472,130,26,344" Grid.ColumnSpan="2" />
         </Grid>
     </Grid>
 </Window>
