@@ -124,6 +124,8 @@ Rails.application.routes.draw do
       match :import, to: :import, via: [:get, :post]
       match :transport, to: :transport, via: [:get, :post]
       match :export, to: :export, via: [:get, :post]
+      match :export_uniq_product, to: :export_uniq_product, via: [:get, :post]
+
       get :search
       match :import_delete, to: :import_delete, via: [:get, :post]
     end

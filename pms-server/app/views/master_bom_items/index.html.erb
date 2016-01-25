@@ -12,8 +12,11 @@
 
 <%= link_to '导出Master Bom', export_master_bom_items_path(params), :class => 'btn btn-warning', data: {confirm: "数据量较大，确定导出?"} %>
 <%= link_to '导入删除Master Bom', import_delete_master_bom_items_path, :class => 'btn btn-info' %>
+<%= link_to '导出存在Master Bom的成品', export_uniq_product_master_bom_items_path(params), :class => 'btn btn-default', data: {confirm: "数据量较大，确定导出?"} %>
 
-<div class="digg_pagination">
+<div class="digg_pagination">  <div class="page_info">
+  <%= page_entries_info @master_bom_items %>
+</div>
   <%= will_paginate @master_bom_items, :container => false %>
 </div>
 
@@ -34,8 +37,8 @@
   <% @master_bom_items.each_with_index do |master_bom_item, i| %>
       <tr>
         <td><%= i+1 %></td>
-        <td><%= master_bom_item.product_nr %></td>
-        <td><%= master_bom_item.bom_item_nr %></td>
+        <td><%= master_bom_item.product_nr  %></td>
+        <td><%= master_bom_item.bom_item_nr  %></td>
         <td><%= master_bom_item.qty %></td>
         <td><%= master_bom_item.department_name %></td>
         <td><%= master_bom_item.department_code %></td>
