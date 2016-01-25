@@ -2,7 +2,7 @@ module FileHandler
   module Excel
     class WireGroupHandler<Base
       HEADERS=[
-          "group_name", "wire_type", "cross_section"
+          "ID", "group_name", "wire_type", "cross_section", "operator"
       ]
 
       def self.import(file)
@@ -23,7 +23,16 @@ module FileHandler
                   row[k] = book.cell(line, i+1).to_s.strip
                 end
 
-                WireGroup.create(row)
+                if !row["ID"].blank? && wg=WireGroup.find_by_id(row["ID"])
+                  if row['operator'].blank? || row['operator']=='update'
+                    wg.update(row.except("ID", "operator"))
+                  elsif row['operator']=='delete'
+                    wg.destroy
+                  end
+                elsif row["ID"].blank?
+                  WireGroup.create(row.except("ID", "operator")) if row['operator'].blank?
+                end
+
               end
             end
             msg.result = true
@@ -76,10 +85,12 @@ module FileHandler
 
       def self.validate_row(row, line)
         msg=Message.new(contents: [])
-        items = WireGroup.where(wire_type: row["wire_type"])
-        items.each do |item|
-          if item.cross_section == row["cross_section"].to_f
-            msg.contents << "wire_type:#{row['wire_type']}, cross_section:#{row['cross_section']},该信息已存在线组名：#{item.group_name}"
+        if row["ID"].blank?
+          items = WireGroup.where(wire_type: row["wire_type"])
+          items.each do |item|
+            if item.cross_section == row["cross_section"].to_f
+              msg.contents << "wire_type:#{row['wire_type']}, cross_section:#{row['cross_section']},该信息已存在线组名：#{item.group_name}"
+            end
           end
         end
 
