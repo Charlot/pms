@@ -2,8 +2,8 @@ module FileHandler
   module Excel
     class CrimpConfigurationHandler<Base
       HEADERS=[
-          "custom_id", "wire_group_name", "part_id", "cross_section", "min_pulloff_value", "crimp_height", "crimp_height_iso",
-          "crimp_width", "crimp_width_iso", "i_crimp_height", "i_crimp_height_iso", "i_crimp_width", "i_crimp_width_iso"
+          "ID", "custom_id", "wire_group_name", "part_id", "cross_section", "min_pulloff_value", "crimp_height", "crimp_height_iso",
+          "crimp_width", "crimp_width_iso", "i_crimp_height", "i_crimp_height_iso", "i_crimp_width", "i_crimp_width_iso", "operator"
       ]
 
       def self.import(file)
@@ -13,7 +13,7 @@ module FileHandler
         book.default_sheet = book.sheets.first
 
         validate_msg = validate_import(file)
-        if true#validate_msg.result
+        if true #validate_msg.result
           #validate file
           begin
             CrimpConfiguration.transaction do
@@ -25,10 +25,17 @@ module FileHandler
                   row[k]=row[k].sub(/\.0/, '') if k=='part_id' || k=='custom_id'
                 end
 
-                if item = CrimpConfiguration.where(custom_id: row["custom_id"], part_id: row["part_id"], wire_group_name: row["wire_group_name"], cross_section: row["cross_section"]).first
-                  item.update(row)
-                else
-                  CrimpConfiguration.create(row)
+                if !row["ID"].blank? && cc=CrimpConfiguration.find_by_id(row["ID"])
+                  if row['operator'].blank? || row['operator']=='update'
+                    cc.update(row.except("ID", "operator"))
+                  elsif row['operator']=='delete'
+                    cc.destroy
+                  end
+                elsif row["ID"].blank?
+                  if row['operator'].blank? &&
+                      CrimpConfiguration.where(custom_id: row["custom_id"], part_id: row["part_id"], wire_group_name: row["wire_group_name"], cross_section: row["cross_section"]).blank?
+                    CrimpConfiguration.create(row.except("ID", "operator"))
+                  end
                 end
 
               end
@@ -46,8 +53,6 @@ module FileHandler
         end
         msg
       end
-
-
 
 
       def self.validate_import file
