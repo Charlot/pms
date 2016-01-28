@@ -26,6 +26,13 @@ namespace PmsNCR
         {
             InitializeComponent();
             //barSeries1.ItemsSource = new List<int>() { 3, 3, 7, 8 };
+            try
+            {
+                LoadSPCStandard();
+            }
+            catch {
+                ServerError.Content = "LoadSPCStandard is error.maybe order is wrong.";
+            }
         }
 
         //X axis data is fixed
@@ -747,10 +754,10 @@ namespace PmsNCR
             LineSide2Bg.Visibility = Visibility.Hidden;
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            LoadSPCStandard();
-        }
+        //private void Window_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    LoadSPCStandard();
+        //}
 
         //Receives standard value or rule
         private void LoadSPCStandard()
