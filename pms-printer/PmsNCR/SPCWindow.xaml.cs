@@ -31,7 +31,7 @@ namespace PmsNCR
                 LoadSPCStandard();
             }
             catch {
-                ServerError.Content = "LoadSPCStandard is error.maybe order is wrong.";
+                ServerError.Content = "ISO not Found.";
             }
         }
 
@@ -809,7 +809,7 @@ namespace PmsNCR
                     else
                     {
                         HidSide1();
-                        ServerError.Content = "order.TerminalNr：" + order.Terminal1Nr + ".There may be a server error";
+                        ServerError.Content = "order.TerminalNr：" + order.Terminal1Nr + ",ISO not Found.";
                         Check.IsEnabled = false;
                     }
 
@@ -838,7 +838,7 @@ namespace PmsNCR
                     else
                     {
                         HidSide2();
-                        ServerError2.Content = "order.Termina2Nr：" + order.Terminal2Nr + ".There may be a server error";
+                        ServerError2.Content = "order.Termina2Nr：" + order.Terminal2Nr + ",ISO not Found.";
                         Check.IsEnabled = false;
                     }
                 }
