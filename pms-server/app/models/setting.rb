@@ -8,6 +8,8 @@ class Setting < ActiveRecord::Base
   KANBAN_QTY_CHANGE_ORDER='kanban_qty_change_order'
   PRESETER_CHANGE_ITEM_QTY='presenter_change_item_qty'
   MACHINE_PREVIEW_QTY='machine_preview_qty'
+  BOM_TRANSLATE_ROUND='bom_translate_round'
+  BOM_TRANSLATE_ROUND_LENGTH='bom_translate_round_length'
 
   def self.method_missing(method_name, *args, &block)
     puts method_name
@@ -32,5 +34,13 @@ class Setting < ActiveRecord::Base
 
   def self.check_kanban_version?
     false
+  end
+
+  def self.bom_translate_round?
+    self.bom_translate_round!='NO'
+  end
+
+  def self.bom_translate_round_value
+    self.bom_translate_round.to_i
   end
 end
