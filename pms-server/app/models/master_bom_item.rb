@@ -60,4 +60,14 @@ class MasterBomItem < ActiveRecord::Base
     self.department.nil? ? '' : self.department.code
   end
 
+  def round_qty
+    return @round_qty if @round_qty.present?
+    @round_qty=self.qty||0
+    if Setting.bom_translate_round? && self.qty.present?
+      if self.qty.to_f.to_s.split('.').last.length>=Setting.bom_translate_round_length.to_i
+        @round_qty=self.qty.round(Setting.bom_translate_round_value)
+      end
+    end
+    @round_qty
+  end
 end

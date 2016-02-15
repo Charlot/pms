@@ -202,12 +202,12 @@ module FileHandler
                   total_key="#{item.bom_item_id}"
                   key="#{item.bom_item_id}:#{item.department_id}"
 
-                  rqty=item.qty||0
-                  if Setting.bom_translate_round? && item.qty.present?
-                    if item.qty.to_f.to_s.split(',').last.length>=Setting.bom_translate_round_length.to_i
-                      rqty=item.qty.round(Setting.bom_translate_round_value)
-                    end
-                  end
+                  rqty=item.round_qty
+                  # if Setting.bom_translate_round? && item.qty.present?
+                  #   if item.qty.to_f.to_s.split(',').last.length>=Setting.bom_translate_round_length.to_i
+                  #     rqty=item.qty.round(Setting.bom_translate_round_value)
+                  #   end
+                  # end
 
 
                   raise("#{Part.find(product_id).nr} bom 基础数据中未存在用量，请更新后分解") if item.qty.nil?
