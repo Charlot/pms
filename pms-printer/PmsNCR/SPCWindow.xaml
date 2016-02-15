@@ -1,7 +1,7 @@
 ﻿<Window x:Class="PmsNCR.SPCWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="SPC Input" Height="641" Width="983" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="Window_Loaded">
+        Title="SPC Input" Height="641" Width="983" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="48*" />
@@ -157,7 +157,8 @@
                 <Label Content="" Height="25" HorizontalAlignment="Left" Margin="0,1,0,0" Name="CriWidWarning" VerticalAlignment="Top" />
                 <Label Content="" Height="25" HorizontalAlignment="Left" Margin="0,1,0,0" Name="PullOffWarning" VerticalAlignment="Top" />
             </StackPanel>
-            <Label Content="" Height="35" Name="ServerError" Foreground="Red" FontSize="15" Margin="472,190,26,344" Grid.ColumnSpan="2" />
+            <Label Content="" Height="35" Name="ServerError" Foreground="Red" FontSize="15" Margin="472,193,26,344" Grid.ColumnSpan="2" />
+            <Label Content="" Height="35" Name="ServerError2" Foreground="Red" FontSize="15" Margin="472,130,26,344" Grid.ColumnSpan="2" />
         </Grid>
     </Grid>
 </Window>

@@ -15,6 +15,7 @@ E:\Work\pms\pms\pms-printer\PmsNCRWcf\bin\Debug\Brilliantech.ReportGenConnector.
 E:\Work\pms\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.csprojResolveAssemblyReference.cache
 E:\Work\pms\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.dll
 E:\Work\pms\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.pdb
+<<<<<<< HEAD
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\bin\Debug\Template\BaiKa.tff
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\bin\Debug\Template\read.ini
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\bin\Debug\PmsNCRWcf.dll.config
@@ -31,3 +32,39 @@ C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\bin\Debug\Brilliante
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.csprojResolveAssemblyReference.cache
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.dll
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.pdb
+=======
+E:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\Template\BaiKa.tff
+E:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\Template\read.ini
+E:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\PmsNCRWcf.dll.config
+E:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\PmsNCRWcf.dll
+E:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\PmsNCRWcf.pdb
+E:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\Brilliantech.Framwork.dll
+E:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\Brilliantech.ReportGenConnector.dll
+E:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\log4net.dll
+E:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\Newtonsoft.Json.dll
+E:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\RestSharp.dll
+E:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\TECIT.TFORMer.dll
+E:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\Nini.dll
+E:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\Brilliantech.Framwork.pdb
+E:\Work\pms\pms-printer\PmsNCRWcf\bin\Debug\Brilliantech.ReportGenConnector.pdb
+E:\Work\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.csprojResolveAssemblyReference.cache
+E:\Work\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.dll
+E:\Work\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.pdb
+E:\Work\Complete\pms\pms-printer\PmsNCRWcf\bin\Debug\Template\BaiKa.tff
+E:\Work\Complete\pms\pms-printer\PmsNCRWcf\bin\Debug\Template\read.ini
+E:\Work\Complete\pms\pms-printer\PmsNCRWcf\bin\Debug\PmsNCRWcf.dll.config
+E:\Work\Complete\pms\pms-printer\PmsNCRWcf\bin\Debug\PmsNCRWcf.dll
+E:\Work\Complete\pms\pms-printer\PmsNCRWcf\bin\Debug\PmsNCRWcf.pdb
+E:\Work\Complete\pms\pms-printer\PmsNCRWcf\bin\Debug\Brilliantech.Framwork.dll
+E:\Work\Complete\pms\pms-printer\PmsNCRWcf\bin\Debug\Brilliantech.ReportGenConnector.dll
+E:\Work\Complete\pms\pms-printer\PmsNCRWcf\bin\Debug\log4net.dll
+E:\Work\Complete\pms\pms-printer\PmsNCRWcf\bin\Debug\Newtonsoft.Json.dll
+E:\Work\Complete\pms\pms-printer\PmsNCRWcf\bin\Debug\RestSharp.dll
+E:\Work\Complete\pms\pms-printer\PmsNCRWcf\bin\Debug\TECIT.TFORMer.dll
+E:\Work\Complete\pms\pms-printer\PmsNCRWcf\bin\Debug\Nini.dll
+E:\Work\Complete\pms\pms-printer\PmsNCRWcf\bin\Debug\Brilliantech.Framwork.pdb
+E:\Work\Complete\pms\pms-printer\PmsNCRWcf\bin\Debug\Brilliantech.ReportGenConnector.pdb
+E:\Work\Complete\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.csprojResolveAssemblyReference.cache
+E:\Work\Complete\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.dll
+E:\Work\Complete\pms\pms-printer\PmsNCRWcf\obj\Debug\PmsNCRWcf.pdb
+>>>>>>> 155d4f2ec659c93e3073dea529ca30bfc60e3382
