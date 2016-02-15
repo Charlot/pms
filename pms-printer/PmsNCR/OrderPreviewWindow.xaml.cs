@@ -83,6 +83,7 @@ namespace PmsNCR
             {
                 OrderItemCheck item = PreviewOrderDG.SelectedItem as OrderItemCheck;
                 new TerminateProductionConfirmWindow(item).ShowDialog();
+                LoadOrderListForPreview();
             }
         }
 

@@ -49,6 +49,12 @@ namespace PmsNCRWcf.Converter
                     case "ProductionInterrupted":
                         string pOrderNr = GetJobNr(config.Get("Job", node));
                         int piece = int.Parse(config.Get("TotalGoodPieces", node));
+                        int userPiece = 0;
+                        if (config.Get("UserRequestedPieces",node) != null) {
+                            userPiece = int.Parse(config.Get("UserRequestedPieces", node));
+                            piece = piece - userPiece;
+                        }
+
                         Msg<OrderItem> msg = service.ProducePiece(pOrderNr, piece);
                         if (msg.Result)
                         {
@@ -65,6 +71,13 @@ namespace PmsNCRWcf.Converter
                         if (config.Get("Manual", node)==null)
                         {
                             int piece2 = int.Parse(config.Get("TotalGoodPieces", node));
+                            int userPiece2 = 0;
+                            if (config.Get("UserRequestedPieces",node) != null)
+                            {
+                                userPiece2 = int.Parse(config.Get("UserRequestedPieces", node));
+                                piece2 = piece2 - userPiece2;
+                            }
+
                             Msg<OrderItem> msg2 = service.ProducePiece(pOrderNr2, piece2);
                             if (msg2.Result)
                             {
