@@ -4,7 +4,7 @@ module FileHandler
       HEADERS=[
           'Part No.', 'Component P/N', 'Material Qty Per Harness', 'Dep', 'Delete'
       ]
-      EXPORT_HEADERS=['Part No.', 'Component P/N', 'Material Qty Per Harness', 'Dep', 'Delete']
+      EXPORT_HEADERS=['Part No.', 'Component P/N', 'Material Qty Per Harness', 'Dep', 'Delete', 'Round Qty(导入时,这一列需删除)']
       DELETE_HEADERS=['Part No.', 'Component P/N', 'Dep']
       TRANSPORT_HEADERS=['Part No.', 'Qty']
       TRANSPORT_SUCCEED_HEADERS=['Component P/N', 'Dep', 'Total Qty', 'Mark']
@@ -119,8 +119,9 @@ module FileHandler
                                 item.bom_item_nr,
                                 item.qty,
                                 item.department_code,
-                                '0'
-                            ], types: [:string, :string, :string, :string, :string]
+                                '0',
+                                item.round_qty
+                            ], types: [:string, :string, :string, :string, :string, :string]
             end
           end
           p.use_shared_strings = true
