@@ -16,8 +16,8 @@ class MasterBomItem < ActiveRecord::Base
       # q=q.where(parts: {nr: params[:product_nr]})
       products=Part.where("nr like '%#{params[:product_nr]}%'").limit(50).pluck(:id)
       # if products.present?
-        q=q.where(product_id: products)
-       # end
+      q=q.where(product_id: products)
+      # end
     end
     #
     unless params[:bom_item_nr].blank?
@@ -25,7 +25,7 @@ class MasterBomItem < ActiveRecord::Base
 
 
       # if bom_items.present?
-        q=q.where(bom_item_id: bom_items)
+      q=q.where(bom_item_id: bom_items)
       # end
     end
     #
@@ -44,7 +44,7 @@ class MasterBomItem < ActiveRecord::Base
   end
 
   def product_nr
-     self.product.nil? ? '' : self.product.nr
+    self.product.nil? ? '' : self.product.nr
   end
 
 
@@ -64,8 +64,12 @@ class MasterBomItem < ActiveRecord::Base
     return @round_qty if @round_qty.present?
     @round_qty=self.qty||0
     if Setting.bom_translate_round? && self.qty.present?
+      p self.qty.to_f.to_s
+      p self.qty.to_f.to_s.split('.').last.length
+      p self.qty.to_f.to_s.split('.').last.length>=Setting.bom_translate_round_length.to_i
+
       if self.qty.to_f.to_s.split('.').last.length>=Setting.bom_translate_round_length.to_i
-        @round_qty=self.qty.round(Setting.bom_translate_round_value)
+        @round_qty=BigDecimal.new(self.qty.to_s).round(Setting.bom_translate_round_value).to_f #self.qty.round(Setting.bom_translate_round_value)
       end
     end
     @round_qty
