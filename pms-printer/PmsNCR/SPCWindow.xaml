@@ -1,7 +1,7 @@
 ﻿<Window x:Class="PmsNCR.SPCWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="SPC Input" Height="641" Width="983" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="SPC Input" Height="641" Width="983" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="48*" />
@@ -137,6 +137,7 @@
                 <TextBox FontSize="11" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriWidSide1" VerticalAlignment="Top" Width="80" />
                 <TextBox FontSize="11" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="PullOffSide1" VerticalAlignment="Top" Width="80" />
             </StackPanel>
+
             <StackPanel Height="205" Name="InputSide2" Width="102" Margin="232,32,212,332">
                 <Label Content="Side2" Height="28" HorizontalAlignment="Left" Margin="30,0,0,0" Name="label8" VerticalAlignment="Top" />
                 <TextBox FontSize="11" Height="20" HorizontalAlignment="Left" Margin="10,-5,0,0" Name="CriHig1Side2" VerticalAlignment="Top" Width="80" />

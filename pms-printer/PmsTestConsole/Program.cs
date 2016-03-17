@@ -18,6 +18,13 @@ namespace PmsTestConsole
     {
         static void Main(string[] args)
         {
+            string s = "01A+0002.421";
+            Regex r=new Regex (@"\d*\.\d*");
+            Match m =r.Match(s);
+            if(m.Success){
+            float f = float.Parse(m.Value);
+            Console.WriteLine(f);
+            }
             Console.WriteLine(CheckMutiTool("WZ001,WZ002","WZ002"));
             Console.Read();
         }

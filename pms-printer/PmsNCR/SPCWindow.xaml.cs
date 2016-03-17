@@ -15,24 +15,122 @@ using Visifire.Gauges;
 using PmsNCRWcf;
 using PmsNCRWcf.Model;
 using PmsNCRWcf.Config;
+using System.IO.Ports;
+using Brilliantech.Framwork.Utils.LogUtil;
+using System.Text.RegularExpressions;
+using System.Windows.Threading; 
 namespace PmsNCR
 {
     /// <summary>
     /// SPCWindow.xaml 的交互逻辑
     /// </summary>
     public partial class SPCWindow : Window
-    {
+    { 
+            SerialPort sp;
         public SPCWindow()
         {
             InitializeComponent();
+        }
+
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
             //barSeries1.ItemsSource = new List<int>() { 3, 3, 7, 8 };
             try
             {
                 LoadSPCStandard();
             }
-            catch {
+            catch
+            {
                 ServerError.Content = "ISO not Found.";
             }
+            openCom();
+        }
+
+        void openCom() {
+
+            if (sp == null)
+            {
+                sp = new SerialPort(SPCConfig.Com,9600);
+                sp.DataBits = 8;
+                sp.StopBits = StopBits.One;
+                sp.Parity = Parity.None;
+
+                if (!sp.IsOpen)
+                {
+                    try
+                    {
+                        sp.Open();
+
+                        sp.DataReceived += new SerialDataReceivedEventHandler(sp_DataReceived);
+                        LogUtil.Logger.Info("OpenCom Success");
+                    }
+                    catch (Exception ex)
+                    {
+                        LogUtil.Logger.Error("OpenCom Error");
+                        LogUtil.Logger.Error(ex.Message);
+                    }
+                }
+            }
+        }
+
+        void sp_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            System.Threading.Thread.Sleep(50);
+            try
+            {
+                string data = sp.ReadExisting();
+                LogUtil.Logger.Info("[Read Data]" + data);
+
+                Regex r = new Regex(SPCConfig.RuleValueRegex);
+                Match m = r.Match(data);
+                if (m.Success)
+                {
+                    float f = float.Parse(m.Value);
+                    this.Dispatcher.Invoke(DispatcherPriority.Normal, (System.Windows.Forms.MethodInvoker)delegate()
+                    {
+                        TextBox currentTB = getFocusedTB();
+                        if (currentTB != null) {
+                            currentTB.Text = string.Empty;
+                            currentTB.Text = f.ToString();
+                            currentTB.SelectAll();
+                            currentTB.Focus();
+                        }
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                LogUtil.Logger.Error("Read Com Error");
+                LogUtil.Logger.Error(ex.Message);
+            }
+            // throw new NotImplementedException();
+        }
+
+        TextBox getFocusedTB() {
+            foreach (var ctrl in InputSide1.Children)
+            {
+                if (ctrl is TextBox)
+                {
+                    if ((ctrl as TextBox).IsFocused) {
+                        return ctrl as TextBox;
+                    }
+                }
+            }
+
+            foreach (var ctrl in InputSide2.Children)
+            {
+                if (ctrl is TextBox)
+                {
+                    if ((ctrl as TextBox).IsFocused)
+                    {
+                        return ctrl as TextBox;
+                    }
+                }
+            }
+
+            return null;
         }
 
         //X axis data is fixed
@@ -797,7 +895,7 @@ namespace PmsNCR
                         catch
                         {
                             HidSide1();
-                            ServerError.Content = "Termina1Nr：" + order.Terminal1Nr + ",ISO not Found.";
+                            ServerError.Content = "Termina1Nr:" + order.Terminal1Nr + ",ISO not Found.";
                             Check.IsEnabled = false;
                         }
 
@@ -809,7 +907,7 @@ namespace PmsNCR
                     else
                     {
                         HidSide1();
-                        ServerError.Content = "order.TerminalNr：" + order.Terminal1Nr + ",ISO not Found.";
+                        ServerError.Content = "order.TerminalNr:" + order.Terminal1Nr + ",ISO not Found.";
                         Check.IsEnabled = false;
                     }
 
@@ -826,7 +924,7 @@ namespace PmsNCR
                         }
                         catch {
                             HidSide2();
-                            ServerError2.Content = "order.Termina2Nr：" + order.Terminal2Nr + ",ISO not Found.";
+                            ServerError2.Content = "order.Termina2Nr:" + order.Terminal2Nr + ",ISO not Found.";
                             Check.IsEnabled = false;
                         }
                         
@@ -838,7 +936,7 @@ namespace PmsNCR
                     else
                     {
                         HidSide2();
-                        ServerError2.Content = "order.Termina2Nr：" + order.Terminal2Nr + ",ISO not Found.";
+                        ServerError2.Content = "order.Termina2Nr:" + order.Terminal2Nr + ",ISO not Found.";
                         Check.IsEnabled = false;
                     }
                 }
@@ -855,10 +953,25 @@ namespace PmsNCR
             return !double.TryParse(value, out v);
         }
 
-        //private string CheckPullOffInvalidString(string input)
-        //{
-        //    return CheckStringInvalidString("PullOff", input);
-        //}
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (sp != null)
+            {
+                try
+                {
+                    sp.Close();
+                    LogUtil.Logger.Info("Close Success");
+
+                }
+                catch (Exception ex)
+                {
+                    LogUtil.Logger.Error("Close Error");
+                    LogUtil.Logger.Error(ex.Message);
+
+                }
+
+            }
+        }
 
         //private string CheckCrimpWidthInvalidString(string input)
         //{
