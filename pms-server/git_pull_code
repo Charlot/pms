@@ -1,5 +1,13 @@
 #! /bin/sh
 
+if [ -z "$1" ] ; then
+	echo "kong"
+	exit 0
+fi
+
+
+
+
 git add .
 
 git commit -m "on local server"
@@ -7,3 +15,6 @@ git commit -m "on local server"
 git pull origin master
 
 sudo /opt/nginx/sbin/nginx -s reload
+
+
+
