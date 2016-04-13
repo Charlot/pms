@@ -39,10 +39,10 @@ class PartBom < ActiveRecord::Base
     return children
   end
 
-  def self.leaf_by_part(part, type=nil,leaf_id=nil)
+  def self.leaf_by_part(part, type=nil, leaf_id=nil)
     leaf=[]
     if part_boms=by_part_id(part.id, type)
-      call_leaf_by_part(part_boms, leaf, type,leaf_id)
+      call_leaf_by_part(part_boms, leaf, type, leaf_id)
     end
     return leaf
   end
@@ -65,12 +65,13 @@ class PartBom < ActiveRecord::Base
     part_boms.each do |part_bom|
       children<<PartBomNode.new(id: part_bom.id,
                                 part_nr: part_bom.nr,
+                                part_nick_name: part_bom.nr_nick_name,
                                 part_id: part_bom.bom_item_id,
                                 quantity: part_bom.quantity,
-                                type:part_bom.type,
+                                type: part_bom.type,
                                 deep: deep)
 
-      call_children_node_by_part(by_part_id(part_bom.bom_item_id), children,deep)
+      call_children_node_by_part(by_part_id(part_bom.bom_item_id), children, deep)
     end
   end
 
@@ -81,14 +82,14 @@ class PartBom < ActiveRecord::Base
     end
   end
 
-  def self.call_leaf_by_part(part_boms, leaf, type=nil,leaf_id=nil)
+  def self.call_leaf_by_part(part_boms, leaf, type=nil, leaf_id=nil)
     part_boms.each do |part_bom|
-		if left_id.nil?
-            leaf<<part_bom
-		else
-			left<< part_bom if part_bom.item_id=leaf_id
-		end if part_bom.is_leaf?
-      call_leaf_by_part(by_part_id(part_bom.bom_item_id, type), leaf, type,leaf_id)
+      if left_id.nil?
+        leaf<<part_bom
+      else
+        left<< part_bom if part_bom.item_id=leaf_id
+      end if part_bom.is_leaf?
+      call_leaf_by_part(by_part_id(part_bom.bom_item_id, type), leaf, type, leaf_id)
     end
   end
 
