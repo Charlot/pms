@@ -2,7 +2,7 @@ require 'csv'
 module FileHandler
   module Csv
     class PartHandler<Base
-      IMPORT_HEADERS=['Part Nr', 'Custom Nr', 'Type', 'Strip Length', 'Color', 'Color Desc', 'Component Type', 'Cross Section', 'Unit', 'P/NO.', 'Desc1', 'FullDesc', 'Operator']
+      IMPORT_HEADERS=['Part Nr', 'Custom Nr', 'Type', 'Strip Length', 'Color', 'Color Desc', 'Component Type', 'Cross Section', 'Unit', 'P/NO.', 'Desc1', 'FullDesc','NickName', 'Operator']
 
       def self.import(file)
         msg = Message.new
@@ -99,6 +99,7 @@ module FileHandler
                   part.pno,
                   part.desc1,
                   part.description,
+                  part.nick_name,
                   'update'
               ]
             end
@@ -170,6 +171,8 @@ module FileHandler
             :desc1
           when 'FullDesc'
             :description
+          when 'NickName'
+            :nick_name
           else
         end
       end

@@ -54,19 +54,15 @@ module Printer
         route_part_info=''
         total=0
 
-        puts "--------------------------------------0 #{pe.value_default_wire_nr}".blue
-        puts "--------------------------------------1 #{pe.parsed_wire_nr}".blue
 
         # route_part_info.sub!(/TOTAL/, total.to_s)
-        puts "$$$$$$$$$$$$$$$$$$$$#{ pe.process_template.code}".green
         body[:route_part_info]=Printer::Extend::ProcessTemplate2410.process_route_part_info_text(pe) if pe.process_template.code=='2410'
 
         ii=0
-        puts "------------------#{ pe.value_default_wire_nr}".yellow
         pe.process_parts.joins(:part).order('parts.type').where.not(part_id: nil).each_with_index { |pp, index|
           if pe.value_default_wire_nr.nil? || pe.value_default_wire_nr != pp.part.id.to_s
-            if pp.part.type == PartType::PRODUCT_SEMIFINISHED && pp.part.nr.include?("_")
-              body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr.split("_").last
+            if pp.part.type == PartType::PRODUCT_SEMIFINISHED #&& pp.part.nr.include?("_")
+              body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr_nick_name#.split("_").last
               puts "################{pp.part.nr}".red
             else
               body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr

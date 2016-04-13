@@ -126,7 +126,7 @@ class Kanban < ActiveRecord::Base
     # }
     process_parts.distinct.each { |pp|
       part = pp.part
-      data << [part.parsed_nr, part.positions(self.id, self.product_id, pp.process_entity).join(",")].join(":") if part
+      data << [part.nr_nick_name, part.positions(self.id, self.product_id, pp.process_entity).join(",")].join(":") if part
     }
     data.uniq.join('      ')
   end

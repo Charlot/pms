@@ -12,10 +12,29 @@
 # It's strongly recommended that you check this file into your version control system.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20150929102842) do
 =======
 ActiveRecord::Schema.define(version: 20150921101105) do
 >>>>>>> pms_spc_server
+=======
+ActiveRecord::Schema.define(version: 20160413084541) do
+
+  create_table "auto_scrap_records", force: true do |t|
+    t.string   "scrap_id"
+    t.string   "order_nr"
+    t.string   "kanban_nr"
+    t.string   "machine_nr"
+    t.string   "part_nr"
+    t.decimal  "qty",        precision: 15, scale: 10
+    t.string   "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "auto_scrap_records", ["order_nr"], name: "index_auto_scrap_records_on_order_nr", using: :btree
+  add_index "auto_scrap_records", ["scrap_id"], name: "index_auto_scrap_records_on_scrap_id", using: :btree
+>>>>>>> 2728925... update
 
   create_table "crimp_configuration_items", force: true do |t|
     t.integer  "crimp_configuration_id"
@@ -375,6 +394,7 @@ ActiveRecord::Schema.define(version: 20150921101105) do
     t.string   "unit"
     t.string   "desc1"
     t.string   "pno"
+    t.string   "nick_name"
   end
 
   add_index "parts", ["custom_nr"], name: "index_parts_on_custom_nr", using: :btree

@@ -17,6 +17,10 @@ class Part < ActiveRecord::Base
   has_many :part_tools, dependent: :delete_all
   has_many :tools, -> { where(locked: false) }, through: :part_tools
 
+<<<<<<< HEAD
+=======
+  has_many :product_master_bom_items, class_name: 'MasterBomItem', foreign_key: :product_id
+>>>>>>> 2728925... update
   has_paper_trail
   scoped_search on: [:nr, :custom_nr]
   scoped_search on: :unit
@@ -99,7 +103,8 @@ class Part < ActiveRecord::Base
       # 那么，找生产该零件的白卡的送料位置
       if store.present? && (cutting_storage.include? store)
         kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
-            "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'", KanbanType::WHITE, kanban_id, product_id, self.id
+            "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",
+            KanbanType::WHITE, kanban_id, product_id, self.id
         ).distinct
       else
         # 如果是送往总装的
@@ -123,10 +128,19 @@ class Part < ActiveRecord::Base
         # 如果没有找到，则寻找白卡的送料位置
         if kks.count <=0
           kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
-              "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'", KanbanType::WHITE, kanban_id, product_id, self.id
+              "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",
+              KanbanType::WHITE, kanban_id, product_id, self.id
           ).distinct
         else
           kanbans = kks
+        end
+
+        # 如果没有找到，则兰卡的送料位置
+        if kanbans.count==0
+          kanbans= Kanban.joins(:process_entities).where(
+              "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? and kanban_process_entities.position=0 and process_entities.product_id=? and process_entities.nr=?",
+              KanbanType::BLUE, kanban_id, product_id, product_id, self.parsed_nr
+          ).distinct
         end
       end
       # case process_entity.process_template.wire_from
@@ -143,7 +157,9 @@ class Part < ActiveRecord::Base
       #   else
       # end
       #puts "#{kanbans.collect { |k| k.nr }.join(',')}".red
-      kanbans.collect { |k| k.des_storage }.uniq
+      positionss= kanbans.collect { |k| k.des_storage }.uniq
+      puts "---------------------------------------#{positionss}".yellow
+      positionss
     end
   end
 
@@ -158,6 +174,13 @@ class Part < ActiveRecord::Base
     end
   end
 
+  def nr_nick_name
+    if nick_name.present?
+      "#{parsed_nr}[#{nick_name}]"
+    else
+      parsed_nr
+    end
+  end
 
   def materials
     # PartBom.leaf_by_part(self,PartType.MaterialTypes)
