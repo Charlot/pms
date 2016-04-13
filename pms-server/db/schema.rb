@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151113091217) do
+ActiveRecord::Schema.define(version: 20160413084541) do
 
   create_table "auto_scrap_records", force: true do |t|
     t.string   "scrap_id"
@@ -386,6 +386,7 @@ ActiveRecord::Schema.define(version: 20151113091217) do
     t.string   "unit"
     t.string   "desc1"
     t.string   "pno"
+    t.string   "nick_name"
   end
 
   add_index "parts", ["custom_nr"], name: "index_parts_on_custom_nr", using: :btree
