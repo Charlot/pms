@@ -11,14 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20150929102842) do
-=======
-ActiveRecord::Schema.define(version: 20150921101105) do
->>>>>>> pms_spc_server
-=======
-ActiveRecord::Schema.define(version: 20160413084541) do
 
   create_table "auto_scrap_records", force: true do |t|
     t.string   "scrap_id"
@@ -34,7 +27,6 @@ ActiveRecord::Schema.define(version: 20160413084541) do
 
   add_index "auto_scrap_records", ["order_nr"], name: "index_auto_scrap_records_on_order_nr", using: :btree
   add_index "auto_scrap_records", ["scrap_id"], name: "index_auto_scrap_records_on_scrap_id", using: :btree
->>>>>>> 2728925... update
 
   create_table "crimp_configuration_items", force: true do |t|
     t.integer  "crimp_configuration_id"
