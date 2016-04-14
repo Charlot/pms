@@ -17,7 +17,7 @@ class Part < ActiveRecord::Base
   has_many :part_tools, dependent: :delete_all
   has_many :tools, -> { where(locked: false) }, through: :part_tools
 
-  has_many :product_master_bom_items,class_name:'MasterBomItem',foreign_key: :product_id
+  has_many :product_master_bom_items, class_name: 'MasterBomItem', foreign_key: :product_id
   has_paper_trail
   scoped_search on: [:nr, :custom_nr]
   scoped_search on: :unit
@@ -74,7 +74,9 @@ class Part < ActiveRecord::Base
 
   # 获得某个步骤中使用的零件的库位
   def positions(kanban_id, product_id, process_entity)
-    #如果是零件，则直接在PartPosition中查找
+    puts kanban_id
+    puts product_id
+    #如果是零Part件，则直接在PartPosition中查找
     if PartType.is_material?(self.type)
       pp = PartPosition.find_by_part_id(self.id)
       pp.nil? ? ["没有维护"] : [pp.storage]
@@ -85,16 +87,16 @@ class Part < ActiveRecord::Base
 
       kanban = Kanban.find_by_id(kanban_id)
 
-      store = kanban.des_storage.split(" ").first
+      store = kanban.des_storage.split(' ').first
 
+
+      p kanban
       cutting_storage =WarehouseRegex.where(warehouse_nr: 'SRPL').pluck(:regex).collect { |r| r.sub(/\^/, '') }
-      # puts '------------------------'
-      # puts cutting_storage
-      # puts '------------------------'
       assembly_storage = WarehouseRegex.where(warehouse_nr: '3PL').pluck(:regex).map { |r| r.sub(/\^/, '') }
-      # puts '------------------------'
-      # puts assembly_storage
-      # puts '------------------------'
+
+      p cutting_storage
+      p assembly_storage
+
       # 如果当前看板卡的宋辽位置在cutting_storage 中
       # 也就是送往半自动线架再加工的
       # 那么，找生产该零件的白卡的送料位置
@@ -103,6 +105,15 @@ class Part < ActiveRecord::Base
             "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",
             KanbanType::WHITE, kanban_id, product_id, self.id
         ).distinct
+
+        if kanbans.count==0
+          # 兰卡也可能送到cutting
+          kanbans= Kanban.joins(:process_entities).where(
+              "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? and kanban_process_entities.position=0 and process_entities.product_id=? and process_entities.nr=?",
+              KanbanType::BLUE, kanban_id, product_id, product_id, self.parsed_nr
+          ).distinct
+        end
+        # raise
       else
         # 如果是送往总装的
         # 那么，先找蓝卡
@@ -120,16 +131,19 @@ class Part < ActiveRecord::Base
           end
         }
 
-        # puts kks
-
+        puts "###########################################"
+        p kks
+        p kks.collect { |k| k.des_storage }.uniq
+        puts "###########################################"
+        # raise
         # 如果没有找到，则寻找白卡的送料位置
         if kks.count <=0
           kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
               "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",
               KanbanType::WHITE, kanban_id, product_id, self.id
           ).distinct
-        else
-          kanbans = kks
+          # else
+          #   kanbans = kks
         end
 
         # 如果没有找到，则兰卡的送料位置
@@ -140,20 +154,7 @@ class Part < ActiveRecord::Base
           ).distinct
         end
       end
-      # case process_entity.process_template.wire_from
-      #   when WireFromType::SEMI_AUTO
-      #     puts "#{process_entity.nr},#{process_entity.process_template.wire_from},SEMI_AUTO".red
-      #     kanbans = Kanban.joins(process_entities: :process_parts).where(
-      #         "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND process_parts.part_id = ?",KanbanType::BLUE,kanban_id,product_id,self.id
-      #     ).distinct
-      #   when WireFromType::AUTO
-      #     puts "#{process_entity.nr},#{process_entity.process_template.wire_from},AUTO".red
-      #     kanbans = Kanban.joins(process_entities: {custom_values: :custom_field}).where(
-      #         "kanbans.ktype = ? AND kanbans.id != ? AND kanbans.product_id = ? AND custom_values.value = ? AND custom_fields.field_format = 'part'",KanbanType::WHITE,kanban_id,product_id,self.id
-      #     ).distinct
-      #   else
-      # end
-      #puts "#{kanbans.collect { |k| k.nr }.join(',')}".red
+
       positionss= kanbans.collect { |k| k.des_storage }.uniq
       puts "---------------------------------------#{positionss}".yellow
       positionss
