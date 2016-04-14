@@ -127,8 +127,8 @@ class Part < ActiveRecord::Base
         kanbans.each { |k|
           store = k.des_storage.split(" ").first
           unless assembly_storage.include?(store)
-            kks << k
-          end
+            # kks << k
+           end
         }
 
         puts "###########################################"
