@@ -5,7 +5,7 @@ module Printer
     # BODY=[:route_nr, :route_name, :route_desc, :route_part_info, :work_time_of_route, :consume_date, :route_remark]
     BODY=[:route_nr, :route_name, :route_desc, :route_part_info, :work_time_of_route, :consume_date, :route_remark]
 
-    $ROUTE_PART_COUNT.times { |i|
+    5.times { |i|
       BODY<<"wire_nr#{i+1}_of_route".to_sym
       BODY<<"wiredesc#{i+1}_of_route".to_sym
       BODY<<"wire_quantity#{i+1}_of_route".to_sym
@@ -62,7 +62,7 @@ module Printer
         pe.process_parts.joins(:part).order('parts.type').where.not(part_id: nil).each_with_index { |pp, index|
           if pe.value_default_wire_nr.nil? || pe.value_default_wire_nr != pp.part.id.to_s
             if pp.part.type == PartType::PRODUCT_SEMIFINISHED #&& pp.part.nr.include?("_")
-              body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr_nick_name#.split("_").last
+              body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr_nick_name #.split("_").last
               puts "################{pp.part.nr}".red
             else
               body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr
@@ -71,7 +71,7 @@ module Printer
             body["wire_quantity#{index+1}_of_route".to_sym] = pp.quantity
             body["unit_of_wire#{index+1}".to_sym] = pp.part.unit
             ii+=1
-          end if pp.part && ii<$ROUTE_PART_COUNT
+          end if pp.part && ii<5
         }
 
         BODY.each do |k|

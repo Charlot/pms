@@ -1,7 +1,7 @@
 <li class="list-group-item">
   <label>步骤号:</label>
   <ins>
-    <a href="<%= process_entity_path(process_entity)%>"><%= process_entity.nr %></a>
+    <a href="<%= process_entity_path(process_entity) %>"><%= process_entity.nr %></a>
   </ins>
   /
   <label>名称:</label>
@@ -11,14 +11,14 @@
 
   <label>使用零件:</label>
   <% process_entity.process_parts.each do |pp| %>
-  <span><%= pp.parsed_nr%></span>
+      <span><%= pp.nr_nick_name %></span>
   <% end %>
 
   <label>生产零件:</label>
-  <span><%= process_entity.wire.nr if process_entity.wire%></span>
+  <span><%= process_entity.wire.nr if process_entity.wire %></span>
 
-  <a href="<%= process_template_path(process_entity.process_template)%>">
+  <a href="<%= process_template_path(process_entity.process_template) %>">
     <label>Template:</label>
-    <%= process_entity.template_text%>
+    <%= process_entity.template_text %>
   </a>
 </li>
