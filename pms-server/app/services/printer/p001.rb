@@ -1,11 +1,12 @@
 # Print BLUE KANBAN
 module Printer
   class P001<Base
+    ROUTE_PART_COUNT=5
     HEAD=[:kanban_nr, :part_nr, :customer_nr, :wire_position, :card_number, :card_quantity, :print_date, :remark1, :remark2, :kanban_2dcode]
     # BODY=[:route_nr, :route_name, :route_desc, :route_part_info, :work_time_of_route, :consume_date, :route_remark]
     BODY=[:route_nr, :route_name, :route_desc, :route_part_info, :work_time_of_route, :consume_date, :route_remark]
 
-    5.times { |i|
+    ROUTE_PART_COUNT.times { |i|
       BODY<<"wire_nr#{i+1}_of_route".to_sym
       BODY<<"wiredesc#{i+1}_of_route".to_sym
       BODY<<"wire_quantity#{i+1}_of_route".to_sym
@@ -71,7 +72,7 @@ module Printer
             body["wire_quantity#{index+1}_of_route".to_sym] = pp.quantity
             body["unit_of_wire#{index+1}".to_sym] = pp.part.unit
             ii+=1
-          end if pp.part && ii<5
+          end if pp.part && ii<ROUTE_PART_COUNT
         }
 
         BODY.each do |k|
