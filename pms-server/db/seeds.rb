@@ -111,6 +111,14 @@ Setting.transaction do
   unless Setting.find_by_code(Setting::MACHINE_PREVIEW_QTY)
     Setting.create(code: Setting::MACHINE_PREVIEW_QTY, value: '8', name: '机器预览订单个数')
   end
+
+  unless Setting.find_by_code(Setting::BOM_TRANSLATE_ROUND)
+    Setting.create(code: Setting::BOM_TRANSLATE_ROUND, value: '4', name: 'BOM分解保留小数位(四舍五入,填NO,表示不取近似)')
+  end
+
+  unless Setting.find_by_code(Setting::BOM_TRANSLATE_ROUND_LENGTH)
+    Setting.create(code: Setting::BOM_TRANSLATE_ROUND_LENGTH, value: '5', name: 'BOM分解,当位数>=多少位数时四舍五入')
+  end
 end
 
 puts 'create warehouse regex...'

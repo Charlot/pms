@@ -4,11 +4,11 @@ module FileHandler
       HEADERS=[
           'Part No.', 'Component P/N', 'Material Qty Per Harness', 'Dep', 'Delete'
       ]
-      EXPORT_HEADERS=['Part No.', 'Component P/N', 'Material Qty Per Harness', 'Dep', 'Delete']
+      EXPORT_HEADERS=['Part No.', 'Component P/N', 'Material Qty Per Harness', 'Dep', 'Delete', 'Round Qty(导入时,这一列需删除)']
       DELETE_HEADERS=['Part No.', 'Component P/N', 'Dep']
       TRANSPORT_HEADERS=['Part No.', 'Qty']
-      TRANSPORT_SUCCEED_HEADERS=['Component P/N', 'Dep', 'Total Qty','Mark']
-      TRANSPORT_SUCCEED_TOTAL_HEADERS=['Component P/N', 'Total Qty','Mark']
+      TRANSPORT_SUCCEED_HEADERS=['Component P/N', 'Dep', 'Total Qty', 'Mark']
+      TRANSPORT_SUCCEED_TOTAL_HEADERS=['Component P/N', 'Total Qty', 'Mark']
       #INVALID_TRANSPORT_HEADERS=TRANSPORT_HEADERS<<'Error MS'
 
       def self.import(file)
@@ -78,7 +78,7 @@ module FileHandler
                 end
 
                 query=MasterBomItem
-                if row['Part No.'].present? && ( product=Part.find_by_nr(row['Part No.']))
+                if row['Part No.'].present? && (product=Part.find_by_nr(row['Part No.']))
                   query=query.where(product_id: product.id)
                 end
 
@@ -119,8 +119,35 @@ module FileHandler
                                 item.bom_item_nr,
                                 item.qty,
                                 item.department_code,
-                                '0'
-                            ], types: [:string, :string, :string, :string, :string]
+                                '0',
+                                item.round_qty
+                            ], types: [:string, :string, :string, :string, :string, :string]
+            end
+          end
+          p.use_shared_strings = true
+          p.serialize(tmp_file)
+
+          msg.result =true
+          msg.content =tmp_file
+        rescue => e
+          msg.content =e.message
+        end
+        msg
+      end
+
+
+      def self.export_uniq_product
+        msg = Message.new
+        begin
+          tmp_file = MasterBomItemHandler.full_tmp_path('master_bom_uniq_product.xlsx')
+          p = Axlsx::Package.new
+          p.workbook.add_worksheet(:name => "Basic Worksheet") do |sheet|
+            sheet.add_row %w(零件号 客户号)
+            Part.joins(:product_master_bom_items).uniq.each do |item|
+              sheet.add_row [
+                                item.nr,
+                                item.custom_nr
+                            ], types: [:string, :string]
             end
           end
           p.use_shared_strings = true
@@ -176,17 +203,25 @@ module FileHandler
                   total_key="#{item.bom_item_id}"
                   key="#{item.bom_item_id}:#{item.department_id}"
 
-                raise("#{Part.find(product_id).nr} bom 基础数据中未存在用量，请更新后分解")  if item.qty.nil?
+                  rqty=item.round_qty
+                  # if Setting.bom_translate_round? && item.qty.present?
+                  #   if item.qty.to_f.to_s.split(',').last.length>=Setting.bom_translate_round_length.to_i
+                  #     rqty=item.qty.round(Setting.bom_translate_round_value)
+                  #   end
+                  # end
+
+
+                  raise("#{Part.find(product_id).nr} bom 基础数据中未存在用量，请更新后分解") if item.qty.nil?
                   if total_transport_result.has_key?(total_key)
-                    total_transport_result[total_key]+=(item.qty||0)*product_qty[item.product_id.to_s]
+                    total_transport_result[total_key]+=rqty*product_qty[item.product_id.to_s]
                   else
-                    total_transport_result[total_key]=(item.qty||0)*product_qty[item.product_id.to_s]
+                    total_transport_result[total_key]=rqty*product_qty[item.product_id.to_s]
                   end
 
                   if transport_result.has_key?(key)
-                    transport_result[key]+=(item.qty||0)*product_qty[item.product_id.to_s]
+                    transport_result[key]+=rqty*product_qty[item.product_id.to_s]
                   else
-                    transport_result[key]=(item.qty||0)*product_qty[item.product_id.to_s]
+                    transport_result[key]=rqty*product_qty[item.product_id.to_s]
                   end
 
                 end
@@ -199,9 +234,10 @@ module FileHandler
               package.workbook.add_worksheet(:name => "分解汇总") do |sheet|
                 sheet.add_row TRANSPORT_SUCCEED_TOTAL_HEADERS
                 total_transport_result.keys.each do |key|
-                  part=Part.find_by_id(key)
-                  sheet.add_row [part.nr,
-                                 total_transport_result[key],part.material_mark], types: [:string, :float,:string]
+                  if part=Part.find_by_id(key)
+                    sheet.add_row [part.nr,
+                                   total_transport_result[key], part.material_mark], types: [:string, :float, :string]
+                  end
                 end
               end
 
@@ -209,10 +245,11 @@ module FileHandler
                 sheet.add_row TRANSPORT_SUCCEED_HEADERS
                 transport_result.keys.each do |key|
                   p, d=key.split(':')
-                  part=Part.find_by_id(p)
-                  sheet.add_row [part.nr,
-                                 Department.find_by_id(d).name,
-                                 transport_result[key],part.material_mark], types: [:string, :string, :float,:string]
+                  if part=Part.find_by_id(p)
+                    sheet.add_row [part.nr,
+                                   Department.find_by_id(d).name,
+                                   transport_result[key], part.material_mark], types: [:string, :string, :float, :string]
+                  end
                 end
               end
               package.use_shared_strings = true
@@ -378,8 +415,12 @@ module FileHandler
 
       def self.validate_transport_row(row)
         msg=Message.new(contents: [])
-        unless Part.find_by_nr(row['Part No.'])
+        unless part=Part.find_by_nr(row['Part No.'])
           msg.contents<<"Part No.#{row['Part No.']} 不存在"
+        else
+          if part.product_master_bom_items.count==0
+            msg.contents<<"不存在BOM,请维护"
+          end
         end
 
         if row['Qty'].blank?

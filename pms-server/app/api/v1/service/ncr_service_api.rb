@@ -56,9 +56,11 @@ module V1
 
           # preview order item list
           get :preview do
+            I18n.locale='en'
+
             if machine=Machine.find_by_nr(params[:machine_nr])
               return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_produce(machine).limit(
-                                                                                                                      Setting.get_machine_preview_qty
+                                                                              Setting.get_machine_preview_qty
                                                                           ))
             end
           end
@@ -73,13 +75,14 @@ module V1
           get :produce_content do
             if item=ProductionOrderItem.find_by_id(params[:order_item_id])
               mirror= params.has_key?(:mirror)
-              return ProductionOrderItemPresenter.new(item).to_produce_order(params[:machine_type],mirror)
+              return ProductionOrderItemPresenter.new(item).to_produce_order(params[:machine_type], mirror)
             end
           end
 
           put :update_state do
             if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
               # 当任务结束时，不可以使用API改变状态
+              p item
               r=false
               if item.state==ProductionOrderItemState::TERMINATED
                 r= false
@@ -234,6 +237,57 @@ module V1
             msg
           end
         end
+
+        namespace :scraps do
+          post :auto do
+            msg = nil
+            args = {}
+            puts params
+            scraps = JSON.parse(params[:scraps])
+            args[:kanban_nr] = scraps["kanban_nr"]
+            args[:machine_nr] = scraps["machine_nr"]
+            args[:order_nr] = scraps["order_nr"]
+            args[:user_id] = scraps["user_nr"]
+            args[:scrap_id] = AutoScrapRecord.generate_scrap_id
+
+            moves=[]
+            base_params={
+                fromWh: "SR01",
+                fromPosition: "SR01",
+                toWh: "BAOFEIKU",
+                toPosition: "BaofeiWeizhi"
+            }
+
+            begin
+              AutoScrapRecord.transaction do
+                scraps["parts"].each_with_index do |part, index|
+                  if Part.find_by(nr: part["nr"]).blank?
+                    msg= {result: 0, content: "Part Nr #{part["nr"]} Not Exist, Please Contact Admin!"}
+                    return msg
+                  else
+                    args[:part_nr] = part["nr"]
+                    args[:qty] = part["qty"]
+                  end
+                  AutoScrapRecord.create args
+
+                  remarks = "Kanban Nr #{args[:kanban_nr]},Machinr Nr #{args[:machine_nr]},Order Nr#{args[:order_nr]},User Nr #{args[:user_nr]}"
+                  moves<<base_params.merge({
+                                               remarks: remarks,
+                                               qty: args[:qty],
+                                               partNr: args[:part_nr]
+                                           })
+                end
+
+                puts "NStorage Move #{moves.to_json}".yellow
+                ScrapWorker.perform_async(moves)
+              end
+            rescue => e
+              puts e.message
+              msg={result: 0, content: e.message}
+            end
+          end
+        end
+
 
       end
     end

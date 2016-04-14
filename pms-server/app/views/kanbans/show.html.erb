@@ -108,7 +108,7 @@
         <% @kanban.kanban_process_entities.each do |kpe| %>
             <label>顺序:</label>
             <%= best_in_place kpe, :position, as: :input %>
-            <%= render partial: 'process_entities/simple', locals: {process_entity: kpe.process_entity} %>
+            <%= render partial: 'process_entities/simple', locals: {process_entity: kpe.process_entity, count: @kanban.quantity} %>
         <% end %>
       </ul>
     </div>

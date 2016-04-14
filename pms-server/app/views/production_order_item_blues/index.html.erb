@@ -79,7 +79,7 @@
         <td><%= production_order_item.kanban_qty if production_order_item.kanban %></td>
         <td><%= production_order_item.kanban_bundle if production_order_item.kanban %></td>
         <td><%= production_order_item.produced_qty %></td>
-        <td><%= production_order_item.created_at.localtime %>
+        <td><%= production_order_item.created_at.localtime%>
         <td><%= production_order_item.terminated_at.localtime if production_order_item.terminated_at %>
         <td><%= production_order_item.terminate_user %>
         <td><%= production_order_item.terminated_kanban_code %>

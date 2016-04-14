@@ -3,6 +3,6 @@ class ItemBlueMoveStockWorker
   sidekiq_options(queue: :store)
 
   def perform(id)
-    ProductionOrderItemLabelService.move_blue_stock(id)
+    ProductionOrderItemService.move_blue_stock(id)
   end
 end

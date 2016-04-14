@@ -11,7 +11,7 @@ class ProductionOrderItemLabel < ActiveRecord::Base
 
   after_create :update_production_order_item_state
   after_create :enter_stock
-  after_create :move_stock
+  # after_create :move_stock
   after_create :update_tool_cut_count
 
   def update_production_order_item_state
@@ -33,11 +33,11 @@ class ProductionOrderItemLabel < ActiveRecord::Base
     ItemLabelInStockWorker.perform_async(self.id) if self.type==ProductionOrderItemType::WHITE
   end
 
-  def move_stock
-    if Setting.auto_move_kanban?
-      ItemLabelMoveStockWorker.perform_async(self.id)
-    end if self.type==ProductionOrderItemType::WHITE
-  end
+  # def move_stock
+  #   if Setting.auto_move_kanban?
+  #     ItemLabelMoveStockWorker.perform_async(self.id)
+  #   end if self.type==ProductionOrderItemType::WHITE
+  # end
 
   def update_tool_cut_count
     UpdateToolCutCountWorker.perform_async(self.id) if self.type==ProductionOrderItemType::WHITE

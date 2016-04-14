@@ -60,6 +60,8 @@ class ProductionOrderItemLabelService
           moves=[]
           puts "white kanban#{kb.to_json}".red
 
+          kb.create_part_bom(false)
+
           kb.materials.each do |material|
             puts "white: #{material.to_json}".red
             moves<<base_params.merge({
@@ -77,7 +79,7 @@ class ProductionOrderItemLabelService
     end
   end
 
-  def self.move_blue_stock(id, from_whouse='SR01', from_position='SR01')
+  def self.move_blue_stock(id, from_whouse='SRPL', from_position='SRPL')
     ProductionOrderItemBlueLabel.transaction do
       if (label=ProductionOrderItemBlueLabel.find_by_id(id)) && (item =label.production_order_item_blue)
         if kb=item.kanban
@@ -90,16 +92,27 @@ class ProductionOrderItemLabelService
           puts "blue kanban#{kb.to_json}".red
 
 		  kb.create_part_bom(false)
-		  
-          kb.kanban_part.materials_with_deep.each do |material|
+
+          # kb.kanban_part.materials_with_deep.each do |material|
+          #   puts "blue: #{material.to_json}".yellow
+          #   moves<<base_params.merge({
+          #                                remarks:kb.nr,
+          #                                qty: BigDecimal.new(material.quantity.to_s)*label.qty,
+          #                                partNr: material.part_nr,
+          #                                from_whouse: material.deep==1 ? 'SR01' : 'SRPL'
+          #                            })
+          # end
+
+
+          kb.kanban_part.materials.each do |material|
             puts "blue: #{material.to_json}".yellow
             moves<<base_params.merge({
                                          remarks:kb.nr,
                                          qty: BigDecimal.new(material.quantity.to_s)*label.qty,
-                                         partNr: material.part_nr,
-                                         from_whouse: material.deep==1 ? 'SR01' : 'SRPL'
+                                         partNr: material.nr
                                      })
           end
+
           puts "blue kanban#{moves.to_json}".yellow
 
           Whouse::StorageClient.new.move_stocks(moves) if moves.size>0

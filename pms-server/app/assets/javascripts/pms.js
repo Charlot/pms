@@ -65,7 +65,7 @@ function check_all_box(box_class) {
 }
 
 function change_state(state) {
-    if (confirm('确定执行？？？')) {
+    if (confirm('确定执行？？？操作员工将被记录！')) {
         var items = get_items();
         console.log(items);
         if (items.length == 0) {

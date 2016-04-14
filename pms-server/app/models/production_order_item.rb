@@ -6,7 +6,8 @@ class ProductionOrderItem < ActiveRecord::Base
   has_many :production_order_item_labels
   after_update :update_qty_to_terminate, if: :auto?
   after_update :generate_production_item_label, if: :auto?
-  after_update :set_terminated_at
+  before_update :set_terminated
+  after_update :move_stock
 
   after_update :generate_production_item_not_auto_label, :if => :not_auto?
 
@@ -14,7 +15,8 @@ class ProductionOrderItem < ActiveRecord::Base
   default_scope { where(type: ProductionOrderItemType::WHITE) }
   # after_update :enter_store
   # after_update :move_store
-  # has_paper_trail
+  has_paper_trail
+
   def not_auto?
     !self.auto
   end
@@ -192,9 +194,20 @@ class ProductionOrderItem < ActiveRecord::Base
     end if self.type==ProductionOrderItemType::WHITE
   end
 
-  def set_terminated_at
+  def set_terminated
     if self.state_changed? && self.state==ProductionOrderItemState::TERMINATED
-      self.terminated_at= Time.now
+      if self.type==ProductionOrderItemType::WHITE
+        self.terminated_at= Time.now
+      end
+      if self.kanban
+        self.produced_qty=self.kanban.quantity
+      end
+    end
+  end
+
+  def move_stock
+    if self.state_changed? && self.state==ProductionOrderItemState::TERMINATED
+      ItemMoveStockWorker.perform_async(self.id)
     end if self.type==ProductionOrderItemType::WHITE
   end
 

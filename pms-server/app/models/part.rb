@@ -17,8 +17,7 @@ class Part < ActiveRecord::Base
   has_many :part_tools, dependent: :delete_all
   has_many :tools, -> { where(locked: false) }, through: :part_tools
 
-  has_many :product_master_bom_items, class_name: 'MasterBomItem', foreign_key: :product_id
-
+  has_many :product_master_bom_items,class_name:'MasterBomItem',foreign_key: :product_id
   has_paper_trail
   scoped_search on: [:nr, :custom_nr]
   scoped_search on: :unit

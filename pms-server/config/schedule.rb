@@ -19,9 +19,9 @@ set :output, {:error => "#{path}/log/cron_error_log.log", :standard => "#{path}/
 # end
 set :environment, :development
 # Learn more: http://github.com/javan/whenever
-every :reboot do
-  rake 'sidekiq:start'
-end
+# every :reboot do
+#   rake 'sidekiq:start'
+# end
 
 every 1.day,:at=>['07:35','11:30','19:35'] do
   command "backup perform -t db_backup -c #{path}/config/backup/config.rb"

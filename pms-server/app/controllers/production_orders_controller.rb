@@ -43,6 +43,7 @@ class ProductionOrdersController < ApplicationController
 
   # GET /production_orders/preview
   def preview
+    I18n.locale='zh'
     # authorize(ProductionOrder)
     @machine = params[:machine_nr].nil? ? Machine.first : Machine.find_by_nr(params[:machine_nr])
     if params[:machine_nr] == 'All'

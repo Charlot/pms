@@ -15,41 +15,69 @@ class ProductionOrderItemState<BaseType
   PAUSED=700
   SCANNED=800
 
-
   def self.display(state)
     case state
       when INIT
-        '已扫描'
+        I18n.t 'production_order_item_state.INIT'
+      # '已扫描'
       when OPTIMISE_FAIL
-        '优化失败'
+        # '优化失败'
+        I18n.t 'production_order_item_state.OPTIMISE_FAIL'
+
       when OPTIMISE_SUCCEED
-        '优化成功'
+        # '优化成功'
+        I18n.t 'production_order_item_state.OPTIMISE_SUCCEED'
+
       when OPTIMISE_CANCELED
-        '优化取消'
+        # '优化取消'
+        I18n.t 'production_order_item_state.OPTIMISE_CANCELED'
+
       when DISTRIBUTE_FAIL
-        '分发失败'
+        # '分发失败'
+        I18n.t 'production_order_item_state.DISTRIBUTE_FAIL'
+
       when DISTRIBUTE_SUCCEED
-        '已分发'
+        I18n.t 'production_order_item_state.DISTRIBUTE_SUCCEED'
       when STARTED
-        '进行中'
+        # '进行中'
+        I18n.t 'production_order_item_state.STARTED'
+
       when RESTARTED
-        '已重启'
+        # '已重启'
+        I18n.t 'production_order_item_state.RESTARTED'
+
       when TERMINATED
-        '已结束'
+        # '已结束'
+        I18n.t 'production_order_item_state.TERMINATED'
+
       when ABORTED
-        '已终止'
+        # '已终止'
+        I18n.t 'production_order_item_state.ABORTED'
+
       when MANUAL_ABORTED
-        '手动终止'
+        # '手动终止'
+        I18n.t 'production_order_item_state.MANUAL_ABORTED'
+
       when SYSTEM_ABORTED
-        '系统终止'
+        # '系统终止'
+        I18n.t 'production_order_item_state.SYSTEM_ABORTED'
+
       when INTERRUPTED
-        '已中断'
+        # '已中断'
+        I18n.t 'production_order_item_state.INTERRUPTED'
+
       when PAUSED
-        '已暂停'
+        # '已暂停'
+        I18n.t 'production_order_item_state.PAUSED'
+
       when SCANNED
-        '已销卡'
+        # '已销卡'
+        I18n.t 'production_order_item_state.SCANNED'
+
       else
-        'Init'
+        # 'Init'
+        I18n.t 'production_order_item_state.INIT'
+
     end
   end
 
@@ -79,7 +107,7 @@ class ProductionOrderItemState<BaseType
 
   def self.to_blue_select
     select_options = []
-    [INIT,DISTRIBUTE_SUCCEED, TERMINATED].each do |v|
+    [INIT, DISTRIBUTE_SUCCEED, TERMINATED].each do |v|
       select_options << SelectOption.new(display: self.display(v), value: v, key: self.key(v))
     end
     select_options

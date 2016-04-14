@@ -1,6 +1,8 @@
 require 'devise'
 Rails.application.routes.draw do
 
+  resources :auto_scrap_records
+
   resources :part_tools
 
   resources :custom_details do
@@ -122,6 +124,8 @@ Rails.application.routes.draw do
       match :import, to: :import, via: [:get, :post]
       match :transport, to: :transport, via: [:get, :post]
       match :export, to: :export, via: [:get, :post]
+      match :export_uniq_product, to: :export_uniq_product, via: [:get, :post]
+
       get :search
       match :import_delete, to: :import_delete, via: [:get, :post]
     end
@@ -283,6 +287,7 @@ Rails.application.routes.draw do
       get :export
       get :export_white
       get :export_simple
+      get :export_items_count
       get :management
       match :import, to: :import, via: [:get, :post]
       get 'scan_finish/:type', to: :scan_finish, as: 'scan_finish'

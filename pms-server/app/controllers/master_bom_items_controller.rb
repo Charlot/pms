@@ -4,7 +4,7 @@ class MasterBomItemsController < ApplicationController
   # GET /master_bom_items
   # GET /master_bom_items.json
   def index
-    @master_bom_items = MasterBomItem.search(params).paginate(:page => params[:page])
+    @master_bom_items = MasterBomItem.paginate(:page => params[:page])
   end
 
   # GET /master_bom_items/1
@@ -119,6 +119,20 @@ class MasterBomItemsController < ApplicationController
     msg = Message.new
     begin
       msg = FileHandler::Excel::MasterBomItemHandler.export(params)
+    rescue => e
+      msg.content = e.message
+    end
+    if msg.result
+      send_file msg.content
+    else
+      render json: msg
+    end
+  end
+
+  def export_uniq_product
+    msg = Message.new
+    begin
+      msg = FileHandler::Excel::MasterBomItemHandler.export_uniq_product
     rescue => e
       msg.content = e.message
     end

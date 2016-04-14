@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150929102842) do
+ActiveRecord::Schema.define(version: 20151113091217) do
 
   create_table "auto_scrap_records", force: true do |t|
     t.string   "scrap_id"
