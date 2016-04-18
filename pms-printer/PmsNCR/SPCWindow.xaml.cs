@@ -26,12 +26,11 @@ namespace PmsNCR
     /// </summary>
     public partial class SPCWindow : Window
     { 
-            SerialPort sp;
+        SerialPort sp;
         public SPCWindow()
         {
             InitializeComponent();
         }
-
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -39,6 +38,7 @@ namespace PmsNCR
             try
             {
                 LoadSPCStandard();
+                SetReadOnlyTB();
             }
             catch
             {
@@ -91,6 +91,7 @@ namespace PmsNCR
                     {
                         TextBox currentTB = getFocusedTB();
                         if (currentTB != null) {
+                            currentTB.IsReadOnly = false;
                             currentTB.Text = string.Empty;
                             currentTB.Text = f.ToString();
                             currentTB.SelectAll();
@@ -99,6 +100,7 @@ namespace PmsNCR
                             TextBox nextTB = getNextTB(int.Parse(currentTB.Tag.ToString()));
                             if (nextTB != null)
                             {
+                                currentTB.IsReadOnly = true;
                                 nextTB.Focus();
                             }
                         }
@@ -107,7 +109,6 @@ namespace PmsNCR
             }
             catch (Exception ex)
             {
-
                 LogUtil.Logger.Error("Read Com Error");
                 LogUtil.Logger.Error(ex.Message);
             }
@@ -185,14 +186,45 @@ namespace PmsNCR
         //X axis data is fixed
         private List<string> strListx = new List<string>() { "1", "2", "3", "4", "5" };
 
-
         #region Click
-        //Click
         void dataPoint_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DataPoint dp = sender as DataPoint;
         }
         #endregion
+
+        private void SetReadOnlyTB()
+        {
+            foreach (var ctrl in InputSide1.Children)
+            {
+                if (ctrl is TextBox)
+                {
+                    TextBox CurrentTB = ctrl as TextBox;
+                    String CurrentTag = (ctrl as TextBox).Tag.ToString();
+                    LogUtil.Logger.Info("Side1 Tag Is =====" + CurrentTag);
+
+                    if (CurrentTag != "13")
+                    {
+                        CurrentTB.IsReadOnly = true;
+                    }
+                }
+            }
+
+            foreach (var ctrl in InputSide2.Children)
+            {
+                if (ctrl is TextBox)
+                {
+                    TextBox CurrentTB = ctrl as TextBox;
+                    String CurrentTag = (ctrl as TextBox).Tag.ToString();
+                    LogUtil.Logger.Info("Side2 Tag Is =====" + CurrentTag);
+
+                    if (CurrentTag != "14")
+                    {
+                        CurrentTB.IsReadOnly = true;
+                    }
+                }
+            }
+        }
 
         private void Btn_Close(object sender, RoutedEventArgs e)
         {
@@ -885,7 +917,6 @@ namespace PmsNCR
         }
 
         //Hidden Side
-
         private void HidSide1()
         {
             InputSide1.Visibility = Visibility.Hidden;
@@ -900,11 +931,6 @@ namespace PmsNCR
             LineSide2.Visibility = Visibility.Hidden;
             LineSide2Bg.Visibility = Visibility.Hidden;
         }
-
-        //private void Window_Loaded(object sender, RoutedEventArgs e)
-        //{
-        //    LoadSPCStandard();
-        //}
 
         //Receives standard value or rule
         private void LoadSPCStandard()
@@ -929,6 +955,38 @@ namespace PmsNCR
                 if (msg.Result)
                 {
                     Dictionary<string, SPCStandard> standard = msg.Object;
+                    if (order.Terminal2Nr != null && standard.Count != 0)
+                    {
+                        try
+                        {
+                            PullOffStaSide2.Text = standard[order.Terminal2Nr].Min_pullOff_value.ToString();
+                            CriHigStaSid2.Text = standard[order.Terminal2Nr].Crimp_height.ToString();
+                            CriHigStaSid2Fau.Text = standard[order.Terminal2Nr].Crimp_height_iso.ToString();
+                            CriWidStaSide2.Text = standard[order.Terminal2Nr].Crimp_width.ToString();
+                            CriWidFauSide2.Text = standard[order.Terminal2Nr].Crimp_width_iso.ToString();
+
+                            Chart2Title.Content = "Latest for tool:" + order.Tool2Nr + "/" + order.Terminal2Nr;
+                            CriHig1Side2.Focus();
+                        }
+                        catch
+                        {
+                            HidSide2();
+                            ServerError2.Content = "order.Termina2Nr:" + order.Terminal2Nr + ",ISO not Found.";
+                            Check.IsEnabled = false;
+                        }
+
+                    }
+                    else if (order.Terminal2Nr == null)
+                    {
+                        HidSide2();
+                    }
+                    else
+                    {
+                        HidSide2();
+                        ServerError2.Content = "order.Termina2Nr:" + order.Terminal2Nr + ",ISO not Found.";
+                        Check.IsEnabled = false;
+                    }
+
                     if (order.Terminal1Nr != null && standard.Count != 0)
                     {
                         try
@@ -940,6 +998,8 @@ namespace PmsNCR
                             CriWidFauSide1.Text = standard[order.Terminal1Nr].Crimp_width_iso.ToString();
 
                             Chart1Title.Content = "Latest for tool:" + order.Tool1Nr + "/" + order.Terminal1Nr;
+
+                            CriHig1Side1.Focus();
                         }
                         catch
                         {
@@ -947,7 +1007,6 @@ namespace PmsNCR
                             ServerError.Content = "Termina1Nr:" + order.Terminal1Nr + ",ISO not Found.";
                             Check.IsEnabled = false;
                         }
-
                     }
                     else if (order.Terminal1Nr == null)
                     {
@@ -957,35 +1016,6 @@ namespace PmsNCR
                     {
                         HidSide1();
                         ServerError.Content = "order.TerminalNr:" + order.Terminal1Nr + ",ISO not Found.";
-                        Check.IsEnabled = false;
-                    }
-
-                    if (order.Terminal2Nr != null && standard.Count != 0)
-                    {
-                        try {
-                            PullOffStaSide2.Text = standard[order.Terminal2Nr].Min_pullOff_value.ToString();
-                            CriHigStaSid2.Text = standard[order.Terminal2Nr].Crimp_height.ToString();
-                            CriHigStaSid2Fau.Text = standard[order.Terminal2Nr].Crimp_height_iso.ToString();
-                            CriWidStaSide2.Text = standard[order.Terminal2Nr].Crimp_width.ToString();
-                            CriWidFauSide2.Text = standard[order.Terminal2Nr].Crimp_width_iso.ToString();
-
-                            Chart2Title.Content = "Latest for tool:" + order.Tool2Nr + "/" + order.Terminal2Nr;
-                        }
-                        catch {
-                            HidSide2();
-                            ServerError2.Content = "order.Termina2Nr:" + order.Terminal2Nr + ",ISO not Found.";
-                            Check.IsEnabled = false;
-                        }
-                        
-                    }
-                    else if (order.Terminal2Nr == null)
-                    {
-                        HidSide2();
-                    }
-                    else
-                    {
-                        HidSide2();
-                        ServerError2.Content = "order.Termina2Nr:" + order.Terminal2Nr + ",ISO not Found.";
                         Check.IsEnabled = false;
                     }
                 }
@@ -1016,9 +1046,17 @@ namespace PmsNCR
                 {
                     LogUtil.Logger.Error("Close Error");
                     LogUtil.Logger.Error(ex.Message);
-
                 }
+            }
+        }
 
+        private void Mouse_Doubel_Click(object sender, MouseButtonEventArgs e)
+        {
+            if(sender is TextBox)
+            {
+                TextBox ChoosedTB = sender as TextBox;
+                ChoosedTB.IsReadOnly = false;
+                ChoosedTB.BorderBrush = new SolidColorBrush(Colors.Orange); 
             }
         }
 
@@ -1034,7 +1072,5 @@ namespace PmsNCR
         //private string CheckStringInvalidString( params string[] inputs) {
         //    return string.Format("%s %s Is Invalid!",inputs);
         //}
-
-
     }
 }

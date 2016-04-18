@@ -127,26 +127,27 @@
                 <TextBox FontSize="11" Height="20" HorizontalAlignment="Left" IsEnabled="False" Margin="60,-20,0,0" Name="CriWidFauSide2" Text="" VerticalAlignment="Top" Width="46" />
 
             </StackPanel>
+            
             <StackPanel Height="205" HorizontalAlignment="Left" Margin="124,32,0,0" Name="InputSide1" VerticalAlignment="Top" Width="102" >
                 <Label Content="Side1" Height="28" HorizontalAlignment="Left" Margin="30,0,0,0" Name="label7" VerticalAlignment="Top" />
-                <TextBox Height="20"  Tag="1" HorizontalAlignment="Left" Margin="10,-5,0,0" Name="CriHig1Side1" VerticalAlignment="Top" Width="80" FontSize="11"/>
-                <TextBox FontSize="11"  Tag="2" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriHig2Side1" VerticalAlignment="Top" Width="80" />
-                <TextBox FontSize="11" Tag="3" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriHig3Side1" VerticalAlignment="Top" Width="80" />
-                <TextBox FontSize="11" Tag="4" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriHig4Side1" VerticalAlignment="Top" Width="80" />
-                <TextBox FontSize="11" Tag="5" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriHig5Side1" VerticalAlignment="Top" Width="80" />
-                <TextBox FontSize="11" Tag="6" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriWidSide1" VerticalAlignment="Top" Width="80" />
+                <TextBox Height="20"  Tag="1" HorizontalAlignment="Left" Margin="10,-5,0,0" Name="CriHig1Side1" VerticalAlignment="Top" Width="80" FontSize="11" MouseDoubleClick="Mouse_Doubel_Click" />
+                <TextBox FontSize="11"  Tag="2" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriHig2Side1" VerticalAlignment="Top" Width="80" MouseDoubleClick="Mouse_Doubel_Click"  />
+                <TextBox FontSize="11" Tag="3" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriHig3Side1" VerticalAlignment="Top" Width="80" MouseDoubleClick="Mouse_Doubel_Click"  />
+                <TextBox FontSize="11" Tag="4" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriHig4Side1" VerticalAlignment="Top" Width="80" MouseDoubleClick="Mouse_Doubel_Click"  />
+                <TextBox FontSize="11" Tag="5" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriHig5Side1" VerticalAlignment="Top" Width="80" MouseDoubleClick="Mouse_Doubel_Click"  />
+                <TextBox FontSize="11" Tag="6" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriWidSide1" VerticalAlignment="Top" Width="80" MouseDoubleClick="Mouse_Doubel_Click"  />
                 <TextBox FontSize="11" Tag="13"  Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="PullOffSide1" VerticalAlignment="Top" Width="80" />
             </StackPanel>
 
             <StackPanel Height="205" Name="InputSide2" Width="102" Margin="232,32,212,332">
                 <Label Content="Side2" Height="28" HorizontalAlignment="Left" Margin="30,0,0,0" Name="label8" VerticalAlignment="Top" />
-                <TextBox FontSize="11" Tag="7" Height="20" HorizontalAlignment="Left" Margin="10,-5,0,0" Name="CriHig1Side2" VerticalAlignment="Top" Width="80" />
-                <TextBox FontSize="11" Tag="8" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriHig2Side2" VerticalAlignment="Top" Width="80" />
-                <TextBox FontSize="11" Tag="9" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriHig3Side2" VerticalAlignment="Top" Width="80" />
-                <TextBox FontSize="11" Tag="10" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriHig4Side2" VerticalAlignment="Top" Width="80" />
-                <TextBox FontSize="11" Tag="11" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriHig5Side2" VerticalAlignment="Top" Width="80" />
-                <TextBox FontSize="11" Tag="12" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriWidSide2" VerticalAlignment="Top" Width="80" />
-                <TextBox FontSize="11" Tag="14" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="PullOffSide2" VerticalAlignment="Top" Width="80" />
+                <TextBox FontSize="11" Tag="7" Height="20" HorizontalAlignment="Left" Margin="10,-5,0,0" Name="CriHig1Side2" VerticalAlignment="Top" Width="80" MouseDoubleClick="Mouse_Doubel_Click" />
+                <TextBox FontSize="11" Tag="8" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriHig2Side2" VerticalAlignment="Top" Width="80" MouseDoubleClick="Mouse_Doubel_Click" />
+                <TextBox FontSize="11" Tag="9" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriHig3Side2" VerticalAlignment="Top" Width="80" MouseDoubleClick="Mouse_Doubel_Click" />
+                <TextBox FontSize="11" Tag="10" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriHig4Side2" VerticalAlignment="Top" Width="80" MouseDoubleClick="Mouse_Doubel_Click" />
+                <TextBox FontSize="11" Tag="11" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriHig5Side2" VerticalAlignment="Top" Width="80" MouseDoubleClick="Mouse_Doubel_Click" />
+                <TextBox FontSize="11" Tag="12" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="CriWidSide2" VerticalAlignment="Top" Width="80" MouseDoubleClick="Mouse_Doubel_Click" />
+                <TextBox FontSize="11" Tag="14" Height="20" HorizontalAlignment="Left" Margin="10,5,0,0" Name="PullOffSide2" VerticalAlignment="Top" Width="80" MouseDoubleClick="Mouse_Doubel_Click" />
             </StackPanel>
 
             <StackPanel Height="205" HorizontalAlignment="Left" Margin="334,32,0,0" Name="InputWarning" VerticalAlignment="Top" Width="228" Grid.ColumnSpan="2">
