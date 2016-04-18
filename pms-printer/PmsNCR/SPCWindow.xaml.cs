@@ -95,6 +95,12 @@ namespace PmsNCR
                             currentTB.Text = f.ToString();
                             currentTB.SelectAll();
                             currentTB.Focus();
+
+                            TextBox nextTB = getNextTB(int.Parse(currentTB.Tag.ToString()));
+                            if (nextTB != null)
+                            {
+                                nextTB.Focus();
+                            }
                         }
                     });
                 }
@@ -115,6 +121,7 @@ namespace PmsNCR
                 {
                     if ((ctrl as TextBox).IsFocused) {
                         return ctrl as TextBox;
+                       
                     }
                 }
             }
@@ -126,6 +133,48 @@ namespace PmsNCR
                     if ((ctrl as TextBox).IsFocused)
                     {
                         return ctrl as TextBox;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        TextBox getNextTB(int currenTag)
+        {
+            int nextTag = currenTag + 1;
+            foreach (var ctrl in InputSide1.Children)
+            {
+                if (ctrl is TextBox)
+                {
+                    if ((ctrl as TextBox).Tag.ToString().Equals(nextTag.ToString()))
+                    {
+                        if ((ctrl as TextBox).IsVisible)
+                        {
+                            return ctrl as TextBox;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+            }
+
+            foreach (var ctrl in InputSide2.Children)
+            {
+                if (ctrl is TextBox)
+                {
+                    if ((ctrl as TextBox).Tag.ToString().Equals(nextTag.ToString()))
+                    {
+                        if ((ctrl as TextBox).IsVisible)
+                        {
+                            return ctrl as TextBox;
+                        }
+                        else
+                        {
+                            return null;
+                        }
                     }
                 }
             }

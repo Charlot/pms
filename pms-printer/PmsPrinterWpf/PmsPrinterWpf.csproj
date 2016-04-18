@@ -187,6 +187,9 @@
     <None Include="Template\BaiKa.tff">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Template\LanKaBig.tff">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Template\read.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
