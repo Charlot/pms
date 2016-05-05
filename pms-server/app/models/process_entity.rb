@@ -200,7 +200,7 @@ class ProcessEntity < ActiveRecord::Base
         if cf=cfs.detect { |f|
           f.id.to_i==v.scan(/{(\d+)}/).map(&:first).first.to_i }
           cfv=cfvs.detect { |v| v.custom_field_id==cf.id }
-          CustomFieldFormatType.part?(cf.field_format) ? ((part=Part.find_by_id(cfv.value)).nil? ? '' : part.parsed_nr) : (cfv.value.nil? ? '' : cfv.value)
+          CustomFieldFormatType.part?(cf.field_format) ? ((part=Part.find_by_id(cfv.value)).nil? ? '' : part.nr_nick_name) : (cfv.value.nil? ? '' : cfv.value)
         else
           'ERROR'
         end

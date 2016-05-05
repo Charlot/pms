@@ -1,11 +1,12 @@
 # Print BLUE KANBAN
 module Printer
   class P001<Base
+    ROUTE_PART_COUNT=5
     HEAD=[:kanban_nr, :part_nr, :customer_nr, :wire_position, :card_number, :card_quantity, :print_date, :remark1, :remark2, :kanban_2dcode]
     # BODY=[:route_nr, :route_name, :route_desc, :route_part_info, :work_time_of_route, :consume_date, :route_remark]
     BODY=[:route_nr, :route_name, :route_desc, :route_part_info, :work_time_of_route, :consume_date, :route_remark]
 
-    $ROUTE_PART_COUNT.times { |i|
+    ROUTE_PART_COUNT.times { |i|
       BODY<<"wire_nr#{i+1}_of_route".to_sym
       BODY<<"wiredesc#{i+1}_of_route".to_sym
       BODY<<"wire_quantity#{i+1}_of_route".to_sym
@@ -54,19 +55,15 @@ module Printer
         route_part_info=''
         total=0
 
-        puts "--------------------------------------0 #{pe.value_default_wire_nr}".blue
-        puts "--------------------------------------1 #{pe.parsed_wire_nr}".blue
 
         # route_part_info.sub!(/TOTAL/, total.to_s)
-        puts "$$$$$$$$$$$$$$$$$$$$#{ pe.process_template.code}".green
         body[:route_part_info]=Printer::Extend::ProcessTemplate2410.process_route_part_info_text(pe) if pe.process_template.code=='2410'
 
         ii=0
-        puts "------------------#{ pe.value_default_wire_nr}".yellow
         pe.process_parts.joins(:part).order('parts.type').where.not(part_id: nil).each_with_index { |pp, index|
           if pe.value_default_wire_nr.nil? || pe.value_default_wire_nr != pp.part.id.to_s
-            if pp.part.type == PartType::PRODUCT_SEMIFINISHED && pp.part.nr.include?("_")
-              body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr.split("_").last
+            if pp.part.type == PartType::PRODUCT_SEMIFINISHED #&& pp.part.nr.include?("_")
+              body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr_nick_name #.split("_").last
               puts "################{pp.part.nr}".red
             else
               body["wire_nr#{index+1}_of_route".to_sym] = pp.part.nr
@@ -75,7 +72,7 @@ module Printer
             body["wire_quantity#{index+1}_of_route".to_sym] = pp.quantity
             body["unit_of_wire#{index+1}".to_sym] = pp.part.unit
             ii+=1
-          end if pp.part && ii<$ROUTE_PART_COUNT
+          end if pp.part && ii<ROUTE_PART_COUNT
         }
 
         BODY.each do |k|

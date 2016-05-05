@@ -508,7 +508,7 @@ module FileHandler
         if validate_msg.result
 
           #validate file
-          begin
+          #begin
             Kanban.transaction do
               2.upto(book.last_row) do |line|
                 row = {}
@@ -584,11 +584,11 @@ module FileHandler
             end
             msg.result = true
             msg.content = "导入看板成功"
-          rescue => e
-            puts e.backtrace
-            msg.result = false
-            msg.content = e.message
-          end
+          #rescue => e
+           # puts e.backtrace
+           # msg.result = false
+           # msg.content = e.message
+         # end
         else
           msg.result = false
           msg.content = validate_msg.content

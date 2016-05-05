@@ -493,14 +493,14 @@ class KanbansController < ApplicationController
   def import_lock_unlock(state)
     if request.post?
       msg = Message.new
-      begin
+      #begin
         file=params[:files][0]
         fd = FileData.new(data: file, original_name: file.original_filename, path: $upload_data_file_path, path_name: "#{Time.now.strftime('%Y%m%d%H%M%S%L')}~#{file.original_filename}")
         fd.save
         msg = FileHandler::Excel::KanbanHandler.import_lock_unlock(fd.full_path, state)
-      rescue => e
-        msg.content = e.message
-      end
+     # rescue => e
+       # msg.content = e.message
+      #end
       render json: msg
     end
   end

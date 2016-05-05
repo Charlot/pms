@@ -86,6 +86,8 @@ module FileHandler
                       end
                     end
                   when 'update'
+                    puts "#{row['Wire NO']}...........................................".blue
+
                     # pe = ProcessEntity.where({nr: params[:nr], product_id: product.id}).first
                     if pe
                       wire = Part.where({nr: "#{product.nr}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED}).first
