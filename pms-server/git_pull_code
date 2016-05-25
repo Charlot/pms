@@ -1,15 +1,22 @@
 #! /bin/sh
 
+git branch
+
+
 if [ -z "$1" ] ; then
 	echo "请选择代码分支"
+	echo "命令行：$./git_pull_code 分支"
 	exit 0
 else
-  echo "添加本地改动到本地仓库"
+  echo "添加代码本地改动到本地仓库"
   git add .
   git commit -m "on local server"
 
   echo "更新代码至本地仓库"
-  git pull origin master
+  git pull origin "$1"
+
+  echo "安装GEM"
+  bundle install
 
   echo "运行数据库迁移"
   rake db:migrate

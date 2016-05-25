@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151113091217) do
+ActiveRecord::Schema.define(version: 20160525094810) do
 
   create_table "auto_scrap_records", force: true do |t|
     t.string   "scrap_id"
@@ -270,6 +270,7 @@ ActiveRecord::Schema.define(version: 20151113091217) do
     t.integer  "department_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "project_name"
   end
 
   add_index "master_bom_items", ["bom_item_id"], name: "index_master_bom_items_on_bom_item_id", using: :btree

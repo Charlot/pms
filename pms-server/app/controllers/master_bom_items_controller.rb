@@ -160,6 +160,6 @@ class MasterBomItemsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def master_bom_item_params
-    params.require(:master_bom_item).permit(:qty, :bom_item_id, :product_id, :department_id)
+    params.require(:master_bom_item).permit(:qty, :bom_item_id, :product_id, :department_id, :project_name)
   end
 end

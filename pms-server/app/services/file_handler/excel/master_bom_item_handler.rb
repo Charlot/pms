@@ -2,10 +2,10 @@ module FileHandler
   module Excel
     class MasterBomItemHandler<Base
       HEADERS=[
-          'Part No.', 'Component P/N', 'Material Qty Per Harness', 'Dep', 'Delete'
+          'Part No.', 'Component P/N', 'Material Qty Per Harness', 'Dep', 'Project Name', 'Delete'
       ]
-      EXPORT_HEADERS=['Part No.', 'Component P/N', 'Material Qty Per Harness', 'Dep', 'Delete', 'Round Qty(导入时,这一列需删除)']
-      DELETE_HEADERS=['Part No.', 'Component P/N', 'Dep']
+      EXPORT_HEADERS=['Part No.', 'Component P/N', 'Material Qty Per Harness', 'Dep', 'Project Name', 'Delete', 'Round Qty(导入时,这一列需删除)']
+      DELETE_HEADERS=['Part No.', 'Component P/N', 'Dep', 'Project Name']
       TRANSPORT_HEADERS=['Part No.', 'Qty']
       TRANSPORT_SUCCEED_HEADERS=['Component P/N', 'Dep', 'Total Qty', 'Mark']
       TRANSPORT_SUCCEED_TOTAL_HEADERS=['Component P/N', 'Total Qty', 'Mark']
@@ -40,7 +40,8 @@ module FileHandler
                   MasterBomItem.create(product_id: product.id,
                                        bom_item_id: bom_item.id,
                                        qty: row['Material Qty Per Harness'],
-                                       department_id: department.id)
+                                       department_id: department.id,
+                                       project_name: row['Project Name'])
                 end
 
               end
@@ -90,6 +91,10 @@ module FileHandler
                   query=query.where(department_id: department.id)
                 end
 
+                if row['Project Name'].present?
+                  query=query.where(project_name: row['Project Name'])
+                end
+
                 query.destroy_all
 
               end
@@ -119,9 +124,10 @@ module FileHandler
                                 item.bom_item_nr,
                                 item.qty,
                                 item.department_code,
+                                item.project_name,
                                 '0',
                                 item.round_qty
-                            ], types: [:string, :string, :string, :string, :string, :string]
+                            ], types: [:string, :string, :string, :string, :string, :string, :string]
             end
           end
           p.use_shared_strings = true
