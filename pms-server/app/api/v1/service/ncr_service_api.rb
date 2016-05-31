@@ -240,7 +240,7 @@ module V1
 
         namespace :scraps do
           post :auto do
-            msg = nil
+            msg = ServiceMessage.new
             args = {}
             puts params
             scraps = JSON.parse(params[:scraps])
@@ -262,7 +262,7 @@ module V1
               AutoScrapRecord.transaction do
                 scraps["parts"].each_with_index do |part, index|
                   if Part.find_by(nr: part["nr"]).blank?
-                    msg= {result: 0, content: "Part Nr #{part["nr"]} Not Exist, Please Contact Admin!"}
+                    msg.Content = "Part Nr #{part["nr"]} Not Exist, Please Contact Admin!"
                     return msg
                   else
                     args[:part_nr] = part["nr"]
@@ -283,8 +283,12 @@ module V1
               end
             rescue => e
               puts e.message
-              msg={result: 0, content: e.message}
+              msg.Content = e.message
             end
+
+            msg.Result = true
+            msg.Content = "Success"
+            msg
           end
         end
 
