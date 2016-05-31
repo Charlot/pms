@@ -5,6 +5,7 @@
       Component P/N:<input type="text" class="form-control" name="bom_item_nr" value="<%= @bom_item_nr %>"/>
       Department:
       <%= select_tag :department_id, options_for_select(department_options, @department_id), selected: @department_id, include_blank: true, class: "form-control" %>
+      Project Name:<input type="text" class="form-control" name="project_name" value="<%= @project_name %>"/>
     </div>
     <button type="submit" class="btn btn-default">搜索</button>
   </form>

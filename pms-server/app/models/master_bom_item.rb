@@ -40,6 +40,10 @@ class MasterBomItem < ActiveRecord::Base
         q=q.where(department_id: nil)
       end
     end
+    #
+    unless params[:project_name].blank?
+      q=q.where("project_name like '%#{params[:project_name]}%'")
+    end
     q
   end
 

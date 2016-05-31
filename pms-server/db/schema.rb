@@ -276,6 +276,7 @@ ActiveRecord::Schema.define(version: 20160525094810) do
   add_index "master_bom_items", ["bom_item_id"], name: "index_master_bom_items_on_bom_item_id", using: :btree
   add_index "master_bom_items", ["department_id"], name: "index_master_bom_items_on_department_id", using: :btree
   add_index "master_bom_items", ["product_id"], name: "index_master_bom_items_on_product_id", using: :btree
+  add_index "master_bom_items", ["project_name"], name: "index_master_bom_items_on_project_name", using: :btree
 
   create_table "measure_units", force: true do |t|
     t.string   "code"
