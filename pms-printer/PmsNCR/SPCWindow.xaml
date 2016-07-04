@@ -71,7 +71,7 @@
                 <Label Background="Red" Content="" Height="18" HorizontalAlignment="Left" Margin="315,210,0,0" Name="label_561" VerticalAlignment="Top" Width="19" Grid.Column="1" />
                 <Label Content="Error" FontSize="10" Height="28" HorizontalAlignment="Right" Margin="0,210,57,0" Name="label_571" VerticalAlignment="Top" Width="41" Grid.Column="1" />
                 
-                    <Label Content="" Height="28" HorizontalAlignment="Left" Margin="83,6,0,0" Name="Chart1Title" VerticalAlignment="Top" Width="287" Grid.Column="1" />
+                    <Label Content="" Height="28" HorizontalAlignment="Left" Margin="0,6,0,0" Name="Chart1Title" VerticalAlignment="Top" Width="426" Grid.Column="1" HorizontalContentAlignment="Center" />
                 </Grid>
             </StackPanel>
 
@@ -101,7 +101,7 @@
                     <Label Background="Red" Content="" Height="18" HorizontalAlignment="Left" Margin="337,220,0,0" Name="label_5611" VerticalAlignment="Top" Width="19" />
                     <Label Content="Error" FontSize="10" Height="28" HorizontalAlignment="Right" Margin="0,220,63,0" Name="label_5711" VerticalAlignment="Top" Width="41" />
 
-                    <Label Content="" Height="28" HorizontalAlignment="Left" Margin="104,16,0,0" Name="Chart2Title" VerticalAlignment="Top" Width="287" />
+                    <Label Content="" Height="28"  HorizontalAlignment="Left" Margin="3,16,0,0" Name="Chart2Title" VerticalAlignment="Top" Width="450" HorizontalContentAlignment="Center" />
                 </Grid>
             </StackPanel>
             <Button Content="CHECK" Height="37" HorizontalAlignment="Left" Margin="277,498,0,0"
@@ -160,6 +160,8 @@
             </StackPanel>
             <Label Content="" Height="35" Name="ServerError" Foreground="Red" FontSize="15" Margin="472,193,26,344" Grid.ColumnSpan="2" />
             <Label Content="" Height="35" Name="ServerError2" Foreground="Red" FontSize="15" Margin="472,130,26,344" Grid.ColumnSpan="2" />
+            <Label Content="Current KB:" Height="28" HorizontalAlignment="Left" Margin="182,6,0,0" Name="label17" VerticalAlignment="Top" />
+            <Label Content="Label" FontWeight="Bold" Height="28" HorizontalAlignment="Left" Margin="262,6,0,0" Name="kanbanLabel" VerticalAlignment="Top" />
         </Grid>
     </Grid>
 </Window>

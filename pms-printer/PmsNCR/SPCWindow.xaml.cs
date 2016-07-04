@@ -924,7 +924,7 @@ namespace PmsNCR
             {
                 string orderNr = order.ItemNr;
                 CurrentJobLab.Content = orderNr;
-
+                kanbanLabel.Content = order.KanbanNr;
                 Msg<Dictionary<string, SPCStandard>> msg = new OrderService().OrderItemGetConfigAction(orderNr);
                 if (msg.Result)
                 {

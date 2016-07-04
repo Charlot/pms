@@ -52,7 +52,7 @@ namespace PmsNCR
             {
                 orderItem = msg.Object;
                 //MainWindow.CurrentOrderNr = orderItem.OrderNr;
-                MainWindow.CurrentOrder = orderItem;
+                //MainWindow.CurrentOrder = orderItem;
 
             }
             else
@@ -291,6 +291,8 @@ namespace PmsNCR
             MessageBoxResult result = MessageBox.Show("Confirm Start?");
             if (result.Equals(MessageBoxResult.OK))
             {
+                MainWindow.CurrentOrder = orderItem;
+
                 try
                 {
                     OrderService s = new OrderService();
