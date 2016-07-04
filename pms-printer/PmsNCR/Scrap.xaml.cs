@@ -18,6 +18,7 @@ using PmsNCRWcf.Config;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using System.Collections;
+using Brilliantech.Framwork.Utils.LogUtil;
 namespace PmsNCR
 {
     /// <summary>
@@ -104,7 +105,6 @@ namespace PmsNCR
         {
             if (ForEach() && parts.Count > 0)
             {
-
                 List<ScrapDataPart> scrapPart = new List<ScrapDataPart>();
                 foreach (var p in parts)
                 {
@@ -114,6 +114,7 @@ namespace PmsNCR
                         qty = p.Value
                     });
                 }
+
                 ScrapData scrap = new ScrapData()
                 {
                     order_nr = currentOrder.OrderNr,
@@ -124,13 +125,15 @@ namespace PmsNCR
                     parts = scrapPart
                 };
 
-
                 Msg<string> msg = new OrderService().StoreScrapData(scrap);
-                error.Content = msg.Content;
+                LogUtil.Logger.Info("Msg Result==" + msg.Result + ",Msg Content==" + msg.Content);
+                LogUtil.Logger.Info(parts);
                 if (msg.Result)
                 {
+                    LogUtil.Logger.Info("{Order_nr:" + currentOrder.OrderNr + ",Kanban_nr:" + currentOrder.KanbanNr + ",Machine_nr:" + WPCSConfig.MachineNr + ",User_Nr:" + WPCSConfig.UserNr + ",Scipt_time：" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "}");
                     ok.IsEnabled = false;
                 }
+                error.Content = msg.Content;
             }
             else
             {
@@ -148,10 +151,10 @@ namespace PmsNCR
         private bool ForEach() {
             bool result = true;
             parts = new Dictionary<string, string>();
-            foreach (UIElement ui in Input_StackPanel.Children)
+            foreach (var ui in Input_StackPanel.Children)
             {
                 if (ui is TextBox) {
-                    TextBox current = ((TextBox)ui);
+                    TextBox current = ui as TextBox;
                     if (current.Text == null || current.Text == "")
                     {
                         current.Background = Brushes.White;
@@ -172,10 +175,8 @@ namespace PmsNCR
                         }
                     }
                 }
-              
             }
             return result;
-           
         }
 
         //close button
