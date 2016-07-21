@@ -47,6 +47,7 @@ namespace PmsNCRWcf.Config
                 OrderItemGetConfigAction = config.Get("OrderItemGetConfigAction");
                 StoreMeasuredData = config.Get("StoreMeasuredData");
                 StoreScrapData = config.Get("StoreScrapData");
+                GetOrderItemByNrAction = config.Get("GetOrderItemByNrAction");
             }
             catch (Exception e)
             {
@@ -98,5 +99,6 @@ namespace PmsNCRWcf.Config
         public static string OrderItemGetConfigAction { get; set; }
         public static string StoreMeasuredData { get; set; }
         public static string StoreScrapData { get; set; }
+        public static string GetOrderItemByNrAction { get; set; }
     }
 }

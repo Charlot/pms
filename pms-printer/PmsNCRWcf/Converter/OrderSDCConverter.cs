@@ -68,11 +68,11 @@ namespace PmsNCRWcf.Converter
                         break;
                     case "ProductionTerminated":
                         string pOrderNr2 = GetJobNr(config.Get("Job", node));
-                        if (config.Get("Manual", node)==null)
+                        if (config.Get("Manual", node) == null)
                         {
                             int piece2 = int.Parse(config.Get("TotalGoodPieces", node));
                             int userPiece2 = 0;
-                            if (config.Get("UserRequestedPieces",node) != null)
+                            if (config.Get("UserRequestedPieces", node) != null)
                             {
                                 userPiece2 = int.Parse(config.Get("UserRequestedPieces", node));
                                 piece2 = piece2 - userPiece2;
@@ -97,8 +97,12 @@ namespace PmsNCRWcf.Converter
                                     }
                                 }
                             }
-                        }          
-                       return  service.ChangeOrderItemState(pOrderNr2, OrderItemState.TERMINATED, userNr, userGroupNr).Result; 
+                            return service.ChangeOrderItemState(pOrderNr2, OrderItemState.TERMINATED, userNr, userGroupNr).Result;
+                        }
+                        else
+                        {
+                            return service.ChangeOrderItemState(pOrderNr2, OrderItemState.MANUAL_TERMINATED, userNr, userGroupNr).Result;
+                        }
                          
                     default:
                         break;

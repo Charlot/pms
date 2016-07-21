@@ -1,0 +1,18 @@
+﻿<Window x:Class="PmsNCR.MaterialCheckSelect"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MaterialCheckSelect" Height="387" Width="658">
+    <Grid>
+        <CheckBox Content=""  Height="16" HorizontalAlignment="Left" Margin="170,39,0,0" Name="WireCB" VerticalAlignment="Top" />
+        <CheckBox Content="" Height="16" HorizontalAlignment="Left" Margin="28,124,0,0" Name="T1CB" VerticalAlignment="Top" />
+        <CheckBox Content="" Height="16" HorizontalAlignment="Left" Margin="28,217,0,0" Name="S1CB" VerticalAlignment="Top" />
+        <CheckBox Content="" Height="16" HorizontalAlignment="Left" Margin="350,124,0,0" Name="T2CB" VerticalAlignment="Top" />
+        <CheckBox Content="" Height="16" HorizontalAlignment="Left" Margin="350,217,0,0" Name="S2CB" VerticalAlignment="Top" />
+        <Button Content="GO" Height="52" HorizontalAlignment="Left" Margin="258,284,0,0" Name="GoBtn" VerticalAlignment="Top" Width="123" Click="GoBtn_Click" />
+        <Label Content="Wire" Height="51" HorizontalAlignment="Left" Margin="201,22,0,0" Name="WireLab" VerticalAlignment="Top" Width="253" FontWeight="Bold" FontSize="14" VerticalContentAlignment="Center" />
+        <Label Content="LeftT" FontSize="14" FontWeight="Bold" Height="51" HorizontalAlignment="Left" Margin="51,105,0,0" Name="T1Lab" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="258" />
+        <Label Content="LeftS" FontSize="14" FontWeight="Bold" Height="51" HorizontalAlignment="Left" Margin="51,198,0,0" Name="S1Lab" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="258" />
+        <Label Content="LeftT" FontSize="14" FontWeight="Bold" Height="51" HorizontalAlignment="Left" Margin="373,105,0,0" Name="T2Lab" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="251" />
+        <Label Content="LeftS" FontSize="14" FontWeight="Bold" Height="51" HorizontalAlignment="Left" Margin="373,198,0,0" Name="S2Lab" VerticalAlignment="Top" VerticalContentAlignment="Center" Width="251" />
+    </Grid>
+</Window>

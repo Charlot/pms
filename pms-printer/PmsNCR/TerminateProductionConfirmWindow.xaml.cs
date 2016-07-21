@@ -41,7 +41,7 @@ namespace PmsNCR
 
         private void TerminateBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (PasswdTB.Password.Equals(ConfigurationManager.AppSettings["TeminateProductionPasswd"]))
+            if (PasswdTB.Password.Equals(ConfigurationManager.AppSettings["TeminateProductionPasswd"]) || PasswdTB.Password.Equals(ConfigurationManager.AppSettings["AdminPwd"]))
             {
                 if (item != null)
                 {

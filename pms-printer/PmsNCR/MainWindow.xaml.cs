@@ -126,5 +126,10 @@ namespace PmsNCR
         {
             new Scrap().ShowDialog();
         }
+
+        private void RecheckBtn_Click(object sender, RoutedEventArgs e)
+        {
+            new MaterialCheckSelect().ShowDialog(); 
+        }
     }
 }

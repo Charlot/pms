@@ -13,8 +13,8 @@ using System.Collections;
 
 namespace PmsNCRWcf
 {
-    public class OrderService:IOrderService
-    { 
+    public class OrderService : IOrderService
+    {
         /// <summary>
         /// get item for check
         /// </summary>
@@ -31,7 +31,7 @@ namespace PmsNCRWcf
                 var res = new ApiClient().Execute(req);
                 var data = JSONHelper.parse<OrderItemCheck>(res.Content);
                 if (data != null)
-                { 
+                {
                     msg.Result = true;
                     msg.Object = data;
                 }
@@ -40,7 +40,8 @@ namespace PmsNCRWcf
                     msg.Content = "No Order";
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 msg.Result = false;
                 msg.Content = e.Message;
                 LogUtil.Logger.Error(e.Message);
@@ -64,10 +65,11 @@ namespace PmsNCRWcf
                 req.AddParameter("mirror", mirror);
             }
 
-            if (machine_type != null) {
+            if (machine_type != null)
+            {
                 req.AddParameter("machine_type", machine_type);
             }
-            
+
             var res = new ApiClient().Execute(req);
             var data = res.Content;
             if (data != null)
@@ -148,7 +150,7 @@ namespace PmsNCRWcf
                 LogUtil.Logger.Error(e.Message);
             }
             return msg;
- 
+
         }
 
 
@@ -286,7 +288,7 @@ namespace PmsNCRWcf
 
         public Msg<Dictionary<string, SPCStandard>> OrderItemGetConfigAction(params string[] SpcStandard)
         {
-            
+
             Msg<Dictionary<string, SPCStandard>> msg = new Msg<Dictionary<string, SPCStandard>>();
             try
             {
@@ -297,7 +299,7 @@ namespace PmsNCRWcf
                 msg = JSONHelper.parse<Msg<Dictionary<string, SPCStandard>>>(res.Content);
                 if (msg.Result)
                 {
-                    if (msg.Object ==null)
+                    if (msg.Object == null)
                     {
                         msg.Result = false;
                         msg.Content = "API ERROR";
@@ -332,6 +334,8 @@ namespace PmsNCRWcf
                 req.AddParameter("i_crimp_width", MeasuredData[9]);
                 req.AddParameter("pulloff_value", MeasuredData[10]);
                 req.AddParameter("note", MeasuredData[11]);
+                req.AddParameter("machine_id", MeasuredData[12]);
+
                 var res = new ApiClient().Execute(req);
                 msg = JSONHelper.parse<Msg<string>>(res.Content);
                 if (msg.Result)
@@ -359,7 +363,7 @@ namespace PmsNCRWcf
             {
                 var req = new RestRequest(ApiConfig.StoreScrapData, Method.POST);
                 req.RequestFormat = DataFormat.Json;
-                req.AddParameter("scraps",JSONHelper.stringify(ScrapData));
+                req.AddParameter("scraps", JSONHelper.stringify(ScrapData));
 
                 var res = new ApiClient().Execute(req);
                 msg = JSONHelper.parse<Msg<string>>(res.Content);
@@ -372,6 +376,37 @@ namespace PmsNCRWcf
                 //        msg.Content = "API ERROR";
                 //    }
                 //}
+            }
+            catch (Exception e)
+            {
+                msg.Result = false;
+                msg.Content = e.Message;
+                LogUtil.Logger.Error(e.Message);
+            }
+            return msg;
+        }
+
+
+        public Msg<OrderItemCheck> GetOrderItemByNr(string nr)
+        {
+
+            Msg<OrderItemCheck> msg = new Msg<OrderItemCheck>();
+            try
+            {
+                var req = new RestRequest(ApiConfig.GetOrderItemByNrAction, Method.GET);
+                req.RequestFormat = DataFormat.Json;
+                req.AddParameter("nr", nr);
+                var res = new ApiClient().Execute(req);
+                var data = JSONHelper.parse<OrderItemCheck>(res.Content);
+                if (data != null)
+                {
+                    msg.Result = true;
+                    msg.Object = data;
+                }
+                else
+                {
+                    msg.Content = "No Order";
+                }
             }
             catch (Exception e)
             {

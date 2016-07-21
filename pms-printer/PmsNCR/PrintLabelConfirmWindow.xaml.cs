@@ -30,7 +30,7 @@ namespace PmsNCR
             InitializeComponent();
         }
 
-        public PrintLabelConfirmWindow(OrderItemCheck item,bool inStore=false,int bundleNo=1)
+        public PrintLabelConfirmWindow(OrderItemCheck item, bool inStore = false, int bundleNo = 1)
         {
             InitializeComponent();
             this.item = item;
@@ -44,12 +44,11 @@ namespace PmsNCR
 
         private void PrintBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (PasswdTB.Password.Equals(ConfigurationManager.AppSettings["PrintLabelPasswd"]))
+            if (PasswdTB.Password.Equals(ConfigurationManager.AppSettings["PrintLabelPasswd"]) || PasswdTB.Password.Equals(ConfigurationManager.AppSettings["AdminPwd"]))
             {
                 if (item != null)
                 {
-                   // new PrintService().PrintKB("P002", item.ItemNr, WPCSConfig.MachineNr);
-                    new PrintService().PrintBundleLabel("P003", item.ItemNr, WPCSConfig.MachineNr, this.bundleNo, this.inStore);          
+                    new PrintService().PrintBundleLabel("P003", item.ItemNr, WPCSConfig.MachineNr, this.bundleNo, this.inStore);
                     this.Close();
                 }
             }

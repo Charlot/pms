@@ -27,6 +27,11 @@ namespace PmsNCRWcf.Config
         private static string toolPattern;
         private static bool toolLockCheck = false;
 
+
+        private static string sealPrefix;
+        private static string sealPattern;
+        private static bool sealLockCheck = true;    
+
         private static bool autoLoad = false;
 
         
@@ -52,6 +57,10 @@ namespace PmsNCRWcf.Config
                 toolPrefix = config.Get("ToolPrefix");
                 toolPattern = config.Get("ToolPattern");
                 toolLockCheck = bool.Parse(config.Get("ToolLockCheck"));
+
+                sealPrefix = config.Get("SealPrefix");
+                sealPattern = config.Get("SealPattern");
+                sealLockCheck = bool.Parse(config.Get("SealLockCheck"));
 
                 autoLoad = bool.Parse(config.Get("AutoLoad"));
             }
@@ -135,6 +144,24 @@ namespace PmsNCRWcf.Config
             get { return MaterialCheckConfig.toolLockCheck; }
             set { MaterialCheckConfig.toolLockCheck = value; }
         }
+
+        public static string SealPrefix
+        {
+            get { return MaterialCheckConfig.sealPrefix; }
+            set { MaterialCheckConfig.sealPrefix = value; }
+        }
+
+        public static string SealPattern
+        {
+            get { return MaterialCheckConfig.sealPattern; }
+            set { MaterialCheckConfig.sealPattern = value; }
+        }
+        public static bool SealLockCheck
+        {
+            get { return MaterialCheckConfig.sealLockCheck; }
+            set { MaterialCheckConfig.sealLockCheck = value; }
+        }
+
         public static bool AutoLoad
         {
             get { return MaterialCheckConfig.autoLoad; }

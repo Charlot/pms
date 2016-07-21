@@ -10,6 +10,7 @@ namespace PmsNCRWcf.Enmu
         STARTED = 200,
         RESTARTED = 300,
         TERMINATED = 400,
+        MANUAL_TERMINATED = 401,
         ABORTED = 500,
         MANUAL_ABORTED = 501,
         INTERRUPTED = 600,

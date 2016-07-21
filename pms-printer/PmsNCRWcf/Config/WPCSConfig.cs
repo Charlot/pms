@@ -41,6 +41,7 @@ namespace PmsNCRWcf.Config
 
         private static int printSleep = 1000;
 
+        private static string currentOrderNr = string.Empty;
 
 
         static WPCSConfig()
@@ -94,6 +95,7 @@ namespace PmsNCRWcf.Config
 
             printSleep = int.Parse(config.Get("PrintSleep"));
 
+            currentOrderNr=config.Get("CurrentOrderNr");
         }
 
 
@@ -252,6 +254,17 @@ namespace PmsNCRWcf.Config
             {
                 WPCSConfig.printSleep = value;
                 config.Set("PrintSleep", value);
+                config.Save();
+            }
+        }
+
+        public static string CurrentOrderNr
+        {
+            get { return WPCSConfig.currentOrderNr; }
+            set
+            {
+                WPCSConfig.currentOrderNr = value;
+                config.Set("CurrentOrderNr", value);
                 config.Save();
             }
         }

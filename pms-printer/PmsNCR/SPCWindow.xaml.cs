@@ -489,9 +489,9 @@ namespace PmsNCR
         OrderItemCheck order = MainWindow.CurrentOrder;
         private void MeasureSide1(string note)
         {
-            string[] MeasuredDataSide1 = new string[12];
+            string[] MeasuredDataSide1 = new string[13];
             MeasuredDataSide1[0] = order.ItemNr;
-            MeasuredDataSide1[1] = WPCSConfig.MachineNr;
+            MeasuredDataSide1[1] = order.WireNr;
             MeasuredDataSide1[2] = CriHig1Side1.Text;
             MeasuredDataSide1[3] = CriHig2Side1.Text;
             MeasuredDataSide1[4] = CriHig3Side1.Text;
@@ -502,13 +502,14 @@ namespace PmsNCR
             MeasuredDataSide1[9] = "";
             MeasuredDataSide1[10] = PullOffSide1.Text;
             MeasuredDataSide1[11] = note;
+            MeasuredDataSide1[12] = WPCSConfig.MachineNr;
             Msg<string> msg = new OrderService().StoreMeasuredData(MeasuredDataSide1);
         }
         private void MeasureSide2(string note)
         {
-            string[] MeasuredDataSide2 = new string[12];
+            string[] MeasuredDataSide2 = new string[13];
             MeasuredDataSide2[0] = order.ItemNr;
-            MeasuredDataSide2[1] = WPCSConfig.MachineNr;
+            MeasuredDataSide2[1] = order.WireNr;
             MeasuredDataSide2[2] = CriHig1Side2.Text;
             MeasuredDataSide2[3] = CriHig2Side2.Text;
             MeasuredDataSide2[4] = CriHig3Side2.Text;
@@ -519,6 +520,8 @@ namespace PmsNCR
             MeasuredDataSide2[9] = "";
             MeasuredDataSide2[10] = PullOffSide2.Text;
             MeasuredDataSide2[11] = note;
+            MeasuredDataSide2[12] = WPCSConfig.MachineNr;
+
             Msg<string> msg = new OrderService().StoreMeasuredData(MeasuredDataSide2);
         }
 
@@ -959,11 +962,14 @@ namespace PmsNCR
                     {
                         try
                         {
-                            PullOffStaSide2.Text = standard[order.Terminal2Nr].Min_pullOff_value.ToString();
-                            CriHigStaSid2.Text = standard[order.Terminal2Nr].Crimp_height.ToString();
-                            CriHigStaSid2Fau.Text = standard[order.Terminal2Nr].Crimp_height_iso.ToString();
-                            CriWidStaSide2.Text = standard[order.Terminal2Nr].Crimp_width.ToString();
-                            CriWidFauSide2.Text = standard[order.Terminal2Nr].Crimp_width_iso.ToString();
+
+                            string key = string.Format("{0}{1}", order.Terminal2Nr, order.Tool2Nr);
+
+                            PullOffStaSide2.Text = standard[key].Min_pullOff_value.ToString();
+                            CriHigStaSid2.Text = standard[key].Crimp_height.ToString();
+                            CriHigStaSid2Fau.Text = standard[key].Crimp_height_iso.ToString();
+                            CriWidStaSide2.Text = standard[key].Crimp_width.ToString();
+                            CriWidFauSide2.Text = standard[key].Crimp_width_iso.ToString();
 
                             Chart2Title.Content = "Latest for tool:" + order.Tool2Nr + "/" + order.Terminal2Nr;
                             CriHig1Side2.Focus();
@@ -971,7 +977,7 @@ namespace PmsNCR
                         catch
                         {
                             HidSide2();
-                            ServerError2.Content = "order.Termina2Nr:" + order.Terminal2Nr + ",ISO not Found.";
+                            ServerError2.Content = "order.Termina2Nr:" + order.Terminal2Nr + "/" + order.Tool2Nr + ",ISO not Found.";
                             Check.IsEnabled = false;
                         }
 
@@ -983,7 +989,7 @@ namespace PmsNCR
                     else
                     {
                         HidSide2();
-                        ServerError2.Content = "order.Termina2Nr:" + order.Terminal2Nr + ",ISO not Found.";
+                        ServerError2.Content = "order.Termina2Nr:" + order.Terminal2Nr + "/" + order.Tool2Nr + ",ISO not Found.";
                         Check.IsEnabled = false;
                     }
 
@@ -991,11 +997,13 @@ namespace PmsNCR
                     {
                         try
                         {
-                            PullOffStaSide1.Text = standard[order.Terminal1Nr].Min_pullOff_value.ToString();
-                            CriHigStaSid1.Text = standard[order.Terminal1Nr].Crimp_height.ToString();
-                            CriHigStaSid1Fau.Text = standard[order.Terminal1Nr].Crimp_height_iso.ToString();
-                            CriWidStaSide1.Text = standard[order.Terminal1Nr].Crimp_width.ToString();
-                            CriWidFauSide1.Text = standard[order.Terminal1Nr].Crimp_width_iso.ToString();
+                            string key = string.Format("{0}{1}", order.Terminal1Nr, order.Tool1Nr);
+
+                            PullOffStaSide1.Text = standard[key].Min_pullOff_value.ToString();
+                            CriHigStaSid1.Text = standard[key].Crimp_height.ToString();
+                            CriHigStaSid1Fau.Text = standard[key].Crimp_height_iso.ToString();
+                            CriWidStaSide1.Text = standard[key].Crimp_width.ToString();
+                            CriWidFauSide1.Text = standard[key].Crimp_width_iso.ToString();
 
                             Chart1Title.Content = "Latest for tool:" + order.Tool1Nr + "/" + order.Terminal1Nr;
 
@@ -1004,7 +1012,7 @@ namespace PmsNCR
                         catch
                         {
                             HidSide1();
-                            ServerError.Content = "Termina1Nr:" + order.Terminal1Nr + ",ISO not Found.";
+                            ServerError.Content = "Termina1Nr:" + order.Terminal1Nr + "/" + order.Tool1Nr + ",ISO not Found.";
                             Check.IsEnabled = false;
                         }
                     }
@@ -1015,7 +1023,7 @@ namespace PmsNCR
                     else
                     {
                         HidSide1();
-                        ServerError.Content = "order.TerminalNr:" + order.Terminal1Nr + ",ISO not Found.";
+                        ServerError.Content = "order.TerminalNr:" + order.Terminal1Nr+"/"+order.Tool1Nr + ",ISO not Found.";
                         Check.IsEnabled = false;
                     }
                 }

@@ -37,7 +37,7 @@ namespace PmsNCR
 
         private void AbortBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (PasswdTB.Password.Equals(ConfigurationManager.AppSettings["OrderAbortPasswd"]))
+            if (PasswdTB.Password.Equals(ConfigurationManager.AppSettings["OrderAbortPasswd"]) || PasswdTB.Password.Equals(ConfigurationManager.AppSettings["AdminPwd"]))
             {
                 OrderService service = new OrderService();
                 bool result = service.ChangeOrderItemState(OrderLab.Content.ToString(), OrderItemState.MANUAL_ABORTED).Result;

@@ -112,6 +112,12 @@
       <DependentUpon>AdminWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helper\SettingReader.cs" />
+    <Compile Include="MaterialCheckSelect.xaml.cs">
+      <DependentUpon>MaterialCheckSelect.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MsgWinow.xaml.cs">
+      <DependentUpon>MsgWinow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PrintKBConfirmWindow.xaml.cs">
       <DependentUpon>PrintKBConfirmWindow.xaml</DependentUpon>
     </Compile>
@@ -175,6 +181,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MaterialCheck.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MaterialCheckSelect.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MsgWinow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

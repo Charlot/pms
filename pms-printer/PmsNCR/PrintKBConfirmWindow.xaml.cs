@@ -40,7 +40,7 @@ namespace PmsNCR
 
         private void PrintBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (PasswdTB.Password.Equals(ConfigurationManager.AppSettings["PrintKbPasswd"]))
+            if (PasswdTB.Password.Equals(ConfigurationManager.AppSettings["PrintKbPasswd"]) || PasswdTB.Password.Equals(ConfigurationManager.AppSettings["AdminPwd"]))
             {
                 if (item != null)
                 {

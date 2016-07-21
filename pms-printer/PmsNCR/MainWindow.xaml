@@ -1,7 +1,7 @@
 ﻿<Window x:Class="PmsNCR.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="PMS CLIENT" Height="315" Width="210" Loaded="Window_Loaded" Closing="Window_Closing" ResizeMode="NoResize" Topmost="True" Icon="/PmsNCR;component/robot.ico">
+        Title="PMS CLIENT" Height="360" Width="210" Loaded="Window_Loaded" Closing="Window_Closing" ResizeMode="NoResize" Topmost="True" Icon="/PmsNCR;component/robot.ico">
     <Grid>
         <StackPanel>
             <StackPanel.Background>
@@ -16,6 +16,7 @@
             <Button Content="Printer Setting" Height="29" Name="PrinterSettingBtn" Width="171"  Margin="10,5,0,10" Click="PrinterSettingBtn_Click"/>
             <Button Content="Machine Setting" Height="29" Name="MachineSettingBtn" Width="171"  Margin="10,5,0,10" Click="MachineSettingBtn_Click" />
             <Button Content="Scrap" Height="29" Name="ScrapBtn" Width="171"  Margin="10,5,0,10" Click="ScrapBtn_Click" />
+            <Button Content="*ReCheck*" Height="29" Name="RecheckBtn" Width="171" Margin="10,5,0,10" Click="RecheckBtn_Click" />
             <!--<Button Content="ADMIN" Height="31" Name="button1" Width="165" Click="button1_Click" />-->
         </StackPanel>
     </Grid>
