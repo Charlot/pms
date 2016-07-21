@@ -2,7 +2,7 @@ module FileHandler
   module Excel
     class CrimpConfigurationHandler<Base
       HEADERS=[
-          "ID", "custom_id", "part_id", "wire_group_name", "cross_section", "min_pulloff_value", "crimp_height", "crimp_height_iso",
+          "ID", "custom_id", "tool_id", "part_id", "wire_group_name", "cross_section", "min_pulloff_value", "crimp_height", "crimp_height_iso",
           "crimp_width", "crimp_width_iso", "i_crimp_height", "i_crimp_height_iso", "i_crimp_width", "i_crimp_width_iso", "operator"
       ]
 
@@ -13,7 +13,7 @@ module FileHandler
         book.default_sheet = book.sheets.first
 
         validate_msg = validate_import(file)
-        if true #validate_msg.result
+        if validate_msg.result
           #validate file
           begin
             CrimpConfiguration.transaction do
@@ -22,8 +22,11 @@ module FileHandler
                 row = {}
                 HEADERS.each_with_index do |k, i|
                   row[k] = book.cell(line, i+1).to_s.strip
-                  row[k]=row[k].sub(/\.0/, '') if k=='part_id' || k=='custom_id'
+                  row[k]=row[k].sub(/\.0/, '') if k=='part_id' || k=='custom_id' || k=='tool_id'
                 end
+
+                tool=Tool.find_by_nr(row["tool_id"])
+                row["tool_id"]=tool.id
 
                 if !row["ID"].blank? && cc=CrimpConfiguration.find_by_id(row["ID"])
                   if row['operator'].blank? || row['operator']=='update'
@@ -69,6 +72,7 @@ module FileHandler
             row = {}
             HEADERS.each_with_index do |k, i|
               row[k] = book.cell(line, i+1).to_s.strip
+              row[k]=row[k].sub(/\.0/, '') if k=='part_id' || k=='custom_id' || k=='tool_id'
             end
 
             mssg = validate_row(row, line)
@@ -90,6 +94,16 @@ module FileHandler
 
       def self.validate_row(row, line)
         msg=Message.new(contents: [])
+
+        unless row["tool_id"].blank?
+          unless tool=Tool.find_by_nr(row["tool_id"])
+            msg.contents<<"Tool:#{row["tool_id"]}不存在"
+          end
+        end
+
+        unless part=Part.find_by_nr(row["part_id"])
+          msg.contents<<"Part:#{row["part_id"]}不存在"
+        end
 
         unless msg.result=(msg.contents.size==0)
           msg.content=msg.contents.join('/')

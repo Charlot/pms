@@ -1,5 +1,6 @@
 class CrimpConfiguration < ActiveRecord::Base
   # before_create :init_wire_type
+  belongs_to :tool
 
 
   def self.to_xlsx crimp_configurations
@@ -7,12 +8,13 @@ class CrimpConfiguration < ActiveRecord::Base
 
     wb = p.workbook
     wb.add_worksheet(:name => "sheet1") do |sheet|
-      sheet.add_row ["ID", "客户号", "端子号", "线组名称", "截面", "最小拉力值", "压接高度", "压接高度公差", "压接宽度", "压接宽度公差", "绝缘压接高度",
+      sheet.add_row ["ID", "客户号", "模具号", "端子号", "线组名称", "截面", "最小拉力值", "压接高度", "压接高度公差", "压接宽度", "压接宽度公差", "绝缘压接高度",
                      "绝缘压接高度公差", "绝缘压接宽度", "绝缘压接宽度公差"]
       crimp_configurations.each_with_index { |crimp_configuration, index|
         sheet.add_row [
                           crimp_configuration.id,
                           crimp_configuration.custom_id,
+                          crimp_configuration.tool.blank? ? '' : crimp_configuration.tool.nr,
                           crimp_configuration.part_id,
                           crimp_configuration.wire_group_name,
                           crimp_configuration.cross_section,

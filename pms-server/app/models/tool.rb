@@ -6,6 +6,7 @@ class Tool < ActiveRecord::Base
   belongs_to :resource_group_tool, foreign_key: :resource_group_id
   has_many :part_tools, dependent: :delete_all
   has_many :parts, through: :part_tools
+  has_many :crimp_configurations
 
 
   attr_accessor :part_nrs

@@ -1,7 +1,7 @@
 module V1
   module Service
     class NcrServiceAPI<ServiceBase
-      guard_all!
+      # guard_all!
       namespace :ncr do
         # 配置机器API
         namespace :setting do
@@ -194,9 +194,20 @@ module V1
             end
             custom_id = custom_info.custom_nr
 
+            tool_condition={}
+            unless params[:tool_nr].blank?
+              if tool=Tool.find_by_nr(params[:tool_nr])
+                tool_condition[:tool_id]=tool.id
+              else
+                msg.Content = "can not find Tool INFO: Tool nr=#{params[:tool_nr]}!"
+                return msg
+              end
+            end
+
             unless process_entity.value_t1.nil?
               part1_id = Part.find(process_entity.value_t1).nr
-              item1 = CrimpConfiguration.where(custom_id: custom_id, part_id: part1_id, wire_group_name: wire_group_name, cross_section: cross_section).first
+              item1 = CrimpConfiguration.where(custom_id: custom_id, part_id: part1_id, wire_group_name: wire_group_name, cross_section: cross_section)
+                          .where(tool_condition).first
               unless item1.nil?
                 args1 = {}
                 args1[:Key] = part1_id
@@ -208,7 +219,8 @@ module V1
 
             unless process_entity.value_t2.nil?
               part2_id = Part.find(process_entity.value_t2).nr
-              item2 = CrimpConfiguration.where(custom_id: custom_id, part_id: part2_id, wire_group_name: wire_group_name, cross_section: cross_section).first
+              item2 = CrimpConfiguration.where(custom_id: custom_id, part_id: part2_id, wire_group_name: wire_group_name, cross_section: cross_section)
+                          .where(tool_condition).first
               unless item2.nil?
                 args2 = {}
                 args2[:Key] = part2_id
@@ -216,6 +228,7 @@ module V1
                 resilt[index] = args2
               end
             end
+
             {
                 Result: true,
                 Object: resilt

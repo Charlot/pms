@@ -30,6 +30,11 @@
 <hr/>
 <div class="col-sm-12">
   <p class="col-sm-4">
+    <strong>模具号:</strong>
+    <%= @crimp_configuration.tool.blank? ? '' : @crimp_configuration.tool.nr %>
+  </p>
+
+  <p class="col-sm-4">
     <strong>截面:</strong>
     <%= @crimp_configuration.cross_section %>
   </p>

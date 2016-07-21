@@ -32,6 +32,7 @@
   <tr>
     <th>NO.</th>
     <th>客户号</th>
+    <th>模具号</th>
     <th>端子号</th>
     <th>线组</th>
     <th>截面</th>
@@ -53,6 +54,7 @@
       <tr>
         <td><%= index + @crimp_configurations.offset + 1 %></td>
         <td><%= crimp_configuration.custom_id %></td>
+        <td><%= crimp_configuration.tool.blank? ? '' : crimp_configuration.tool.nr %></td>
         <td><%= crimp_configuration.part_id %></td>
         <td><%= crimp_configuration.wire_group_name %></td>
         <td><%= crimp_configuration.cross_section %></td>

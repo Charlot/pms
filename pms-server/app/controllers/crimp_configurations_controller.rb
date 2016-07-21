@@ -64,6 +64,6 @@ class CrimpConfigurationsController < ApplicationController
     end
 
     def crimp_configuration_params
-      params.require(:crimp_configuration).permit(:custom_id, :wire_group_name, :part_id, :wire_type, :cross_section, :min_pulloff_value, :crimp_height, :crimp_height_iso, :crimp_width, :crimp_width_iso, :i_crimp_height, :i_crimp_height_iso, :i_crimp_width, :i_crimp_width_iso)
+      params.require(:crimp_configuration).permit(:tool_id, :custom_id, :wire_group_name, :part_id, :wire_type, :cross_section, :min_pulloff_value, :crimp_height, :crimp_height_iso, :crimp_width, :crimp_width_iso, :i_crimp_height, :i_crimp_height_iso, :i_crimp_width, :i_crimp_width_iso)
     end
 end

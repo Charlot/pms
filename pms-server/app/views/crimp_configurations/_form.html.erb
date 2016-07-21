@@ -35,6 +35,12 @@
         <%= f.text_field :custom_id %>
       </div>
       <div class="field col-sm-4">
+        <%= f.label :tool_id, '模具号' %><br>
+        <%= f.select(:tool_id, Tool.all.collect{|w| [w.nr, w.id]}, { include_blank: false}) %>
+      </div>
+    </div>
+    <div class="col-sm-12">
+      <div class="field col-sm-4">
         <%= f.label :wire_group_name, '线组' %>
         <br>
         <%= f.text_field :wire_group_name %>

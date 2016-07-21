@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160525094810) do
+ActiveRecord::Schema.define(version: 20160721104856) do
 
   create_table "auto_scrap_records", force: true do |t|
     t.string   "scrap_id"
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(version: 20160525094810) do
     t.float    "i_crimp_height_iso",                           default: 0.0
     t.float    "i_crimp_width",                                default: 0.0
     t.float    "i_crimp_width_iso",                            default: 0.0
+    t.integer  "tool_id"
   end
 
   add_index "crimp_configurations", ["part_id"], name: "index_crimp_configurations_on_part_id", using: :btree
