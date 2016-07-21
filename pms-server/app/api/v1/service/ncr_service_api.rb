@@ -202,37 +202,51 @@ module V1
             custom_id = custom_info.custom_nr
 
             tool_condition={}
-            unless params[:tool_nr].blank?
-              if tool=Tool.find_by_nr(params[:tool_nr])
-                tool_condition[:tool_id]=tool.id
-              else
-                msg.Content = "can not find Tool INFO: Tool nr=#{params[:tool_nr]}!"
-                return msg
-              end
-            end
-
+            tool1=part1_id=nil
             unless process_entity.value_t1.nil?
+              unless production_order_item.tool1.blank?
+                if tool1=Tool.find_by_nr(production_order_item.tool1)
+                  tool_condition[:tool_id]=tool.id
+                else
+                  msg.Content = "can not find Tool1 INFO: Tool nr=#{params[:tool_nr]}!"
+                  return msg
+                end
+              end
+
               part1_id = Part.find(process_entity.value_t1).nr
               item1 = CrimpConfiguration.where(custom_id: custom_id, part_id: part1_id, wire_group_name: wire_group_name, cross_section: cross_section)
                           .where(tool_condition).first
               unless item1.nil?
                 args1 = {}
-                args1[:Key] = part1_id
+                args1[:Key] = "#{part1_id}#{tool1.blank? ? '' : tool1.nr}"
                 args1[:Value] = {Min_pullOff_value: item1.min_pulloff_value, Crimp_height: item1.crimp_height, Crimp_height_iso: item1.crimp_height_iso, Crimp_width: item1.crimp_width, Crimp_width_iso: item1.crimp_width_iso, I_crimp_height: item1.i_crimp_height, I_crimp_height_iso: item1.i_crimp_height_iso, I_crimp_width: item1.i_crimp_width, I_crimp_width_iso: item1.i_crimp_width_iso}
                 resilt[index] = args1
                 index += 1
               end
             end
 
+            tool_condition={}
+            tool2=part2_id=nil
             unless process_entity.value_t2.nil?
+              unless production_order_item.tool2.blank?
+                if tool2=Tool.find_by_nr(production_order_item.tool2)
+                  tool_condition[:tool_id]=tool.id
+                else
+                  msg.Content = "can not find Tool2 INFO: Tool nr=#{params[:tool_nr]}!"
+                  return msg
+                end
+              end
+
               part2_id = Part.find(process_entity.value_t2).nr
-              item2 = CrimpConfiguration.where(custom_id: custom_id, part_id: part2_id, wire_group_name: wire_group_name, cross_section: cross_section)
-                          .where(tool_condition).first
-              unless item2.nil?
-                args2 = {}
-                args2[:Key] = part2_id
-                args2[:Value] = {Min_pullOff_value: item2.min_pulloff_value, Crimp_height: item2.crimp_height, Crimp_height_iso: item2.crimp_height_iso, Crimp_width: item2.crimp_width, Crimp_width_iso: item2.crimp_width_iso, I_crimp_height: item2.i_crimp_height, I_crimp_height_iso: item2.i_crimp_height_iso, I_crimp_width: item2.i_crimp_width, I_crimp_width_iso: item2.i_crimp_width_iso}
-                resilt[index] = args2
+              if part1_id==part2_id && tool1==tool2
+                item2 = CrimpConfiguration.where(custom_id: custom_id, part_id: part2_id, wire_group_name: wire_group_name, cross_section: cross_section)
+                            .where(tool_condition).first
+                unless item2.nil?
+                  args2 = {}
+                  args2[:Key] = "#{part2_id}#{tool2.blank? ? '' : tool2.nr}"
+                  args2[:Value] = {Min_pullOff_value: item2.min_pulloff_value, Crimp_height: item2.crimp_height, Crimp_height_iso: item2.crimp_height_iso, Crimp_width: item2.crimp_width, Crimp_width_iso: item2.crimp_width_iso, I_crimp_height: item2.i_crimp_height, I_crimp_height_iso: item2.i_crimp_height_iso, I_crimp_width: item2.i_crimp_width, I_crimp_width_iso: item2.i_crimp_width_iso}
+                  resilt[index] = args2
+                end
               end
             end
 
