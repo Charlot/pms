@@ -1,7 +1,7 @@
 module V1
   module Service
     class NcrServiceAPI<ServiceBase
-      # guard_all!
+      guard_all!
       namespace :ncr do
         # 配置机器API
         namespace :setting do
