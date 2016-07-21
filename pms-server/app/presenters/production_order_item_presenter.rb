@@ -19,6 +19,7 @@ class ProductionOrderItemPresenter<Presenter
     }
   end
 
+
   def self.init_preview_presenters(params)
     params.map.with_index { |param, i| self.new(param).to_preview_order(i+1) }.reject { |p| p.blank? }
   end
@@ -118,5 +119,16 @@ class ProductionOrderItemPresenter<Presenter
 
   def to_produce_order(machine_type=nil, mirror=false)
     Ncr::Order.new.json_order_item_content(@production_order_item, machine_type, mirror)
+  end
+
+  def to_simple
+    {
+        Id: @production_order_item.id,
+        ItemNr: @production_order_item.nr,
+        State: @production_order_item.state,
+        StateDisplay:ProductionOrderItemState.display(@production_order_item.state),
+        IsUrgent: @production_order_item.is_urgent,
+        OptimiseIndex: @production_order_item.optimise_index
+    }
   end
 end

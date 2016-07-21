@@ -212,6 +212,7 @@ zh:
      STARTED: 进行中
      RESTARTED: 已重启
      TERMINATED: 已结束
+     MANUAL_TERMINATED: 已手动结束
      ABORTED: 已终止
      MANUAL_ABORTED: 已手动终止
      SYSTEM_ABORTED: 已系统终止
