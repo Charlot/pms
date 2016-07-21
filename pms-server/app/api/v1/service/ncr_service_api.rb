@@ -199,7 +199,7 @@ module V1
             unless process_entity.value_t1.nil?
               unless production_order_item.tool1.blank?
                 if tool1=Tool.find_by_nr(production_order_item.tool1)
-                  tool_condition[:tool_id]=tool.id
+                  tool_condition[:tool_id]=tool1.id
                 else
                   msg.Content = "can not find Tool1 INFO: Tool nr=#{params[:tool_nr]}!"
                   return msg
@@ -223,7 +223,7 @@ module V1
             unless process_entity.value_t2.nil?
               unless production_order_item.tool2.blank?
                 if tool2=Tool.find_by_nr(production_order_item.tool2)
-                  tool_condition[:tool_id]=tool.id
+                  tool_condition[:tool_id]=tool2.id
                 else
                   msg.Content = "can not find Tool2 INFO: Tool nr=#{params[:tool_nr]}!"
                   return msg
@@ -231,7 +231,7 @@ module V1
               end
 
               part2_id = Part.find(process_entity.value_t2).nr
-              if part1_id==part2_id && tool1==tool2
+              unless part1_id==part2_id && tool1==tool2
                 item2 = CrimpConfiguration.where(custom_id: custom_id, part_id: part2_id, wire_group_name: wire_group_name, cross_section: cross_section)
                             .where(tool_condition).first
                 unless item2.nil?
