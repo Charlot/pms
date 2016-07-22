@@ -55,10 +55,12 @@ module Printer
         route_part_info=''
         total=0
 
-
+        templates=['2410', '2200', '2210', '2220', '2250', '2221', '2222', '2205']
         # route_part_info.sub!(/TOTAL/, total.to_s)
-        body[:route_part_info]=Printer::Extend::ProcessTemplate2410.process_route_part_info_text(pe) if pe.process_template.code=='2410'
-
+        body[:route_part_info]=''
+        begin
+          body[:route_part_info]=Printer::Extend::ProcessTemplate2410.process_route_part_info_text(pe) if templates.include?(pe.process_template.code)
+        end
         ii=0
         pe.process_parts.joins(:part).order('parts.type').where.not(part_id: nil).each_with_index { |pp, index|
           if pe.value_default_wire_nr.nil? || pe.value_default_wire_nr != pp.part.id.to_s
