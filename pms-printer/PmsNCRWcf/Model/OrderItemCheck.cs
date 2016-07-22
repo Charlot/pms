@@ -52,6 +52,8 @@ namespace PmsNCRWcf.Model
         [DataMember]
         public string Tool1Nr { get; set; }
         [DataMember]
+        public string CurrentT1Nr { get; set; }
+        [DataMember]
         public string Terminal2Nr { get; set; }
       [DataMember]
         public string Terminal2Unit{get;set;}
@@ -61,6 +63,9 @@ namespace PmsNCRWcf.Model
         public string Terminal2StripLength { get; set; }
         [DataMember]
         public string Tool2Nr { get; set; }
+        [DataMember]
+        public string CurrentT2Nr { get; set; }
+
         [DataMember]
         public string Seal1Nr { get; set; }
         [DataMember]

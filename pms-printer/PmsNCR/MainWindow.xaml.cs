@@ -45,6 +45,16 @@ namespace PmsNCR
             // if (startService()) {
             new ClientDataWatcher().Show();
             //}
+            try
+            {
+                OrderService os = new OrderService();
+                Msg<OrderItemCheck> msg = os.GetOrderItemByNr(WPCSConfig.CurrentOrderNr);
+                if (msg.Result)
+                {
+                    MainWindow.CurrentOrder = msg.Object;
+                }
+            }
+            catch (Exception ex) { }
         }
 
         //private bool startService()

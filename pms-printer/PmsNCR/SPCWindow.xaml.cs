@@ -491,7 +491,7 @@ namespace PmsNCR
         {
             string[] MeasuredDataSide1 = new string[13];
             MeasuredDataSide1[0] = order.ItemNr;
-            MeasuredDataSide1[1] = order.WireNr;
+            MeasuredDataSide1[1] = order.Terminal1Nr;
             MeasuredDataSide1[2] = CriHig1Side1.Text;
             MeasuredDataSide1[3] = CriHig2Side1.Text;
             MeasuredDataSide1[4] = CriHig3Side1.Text;
@@ -509,7 +509,7 @@ namespace PmsNCR
         {
             string[] MeasuredDataSide2 = new string[13];
             MeasuredDataSide2[0] = order.ItemNr;
-            MeasuredDataSide2[1] = order.WireNr;
+            MeasuredDataSide2[1] = order.Terminal2Nr;
             MeasuredDataSide2[2] = CriHig1Side2.Text;
             MeasuredDataSide2[3] = CriHig2Side2.Text;
             MeasuredDataSide2[4] = CriHig3Side2.Text;
@@ -963,7 +963,7 @@ namespace PmsNCR
                         try
                         {
 
-                            string key = string.Format("{0}{1}", order.Terminal2Nr, order.Tool2Nr);
+                            string key = string.Format("{0}{1}", order.Terminal2Nr, order.CurrentT2Nr);
 
                             PullOffStaSide2.Text = standard[key].Min_pullOff_value.ToString();
                             CriHigStaSid2.Text = standard[key].Crimp_height.ToString();
@@ -971,13 +971,13 @@ namespace PmsNCR
                             CriWidStaSide2.Text = standard[key].Crimp_width.ToString();
                             CriWidFauSide2.Text = standard[key].Crimp_width_iso.ToString();
 
-                            Chart2Title.Content = "Latest for tool:" + order.Tool2Nr + "/" + order.Terminal2Nr;
+                            Chart2Title.Content = "Latest for tool:" + order.CurrentT2Nr + "/" + order.Terminal2Nr;
                             CriHig1Side2.Focus();
                         }
                         catch
                         {
                             HidSide2();
-                            ServerError2.Content = "order.Termina2Nr:" + order.Terminal2Nr + "/" + order.Tool2Nr + ",ISO not Found.";
+                            ServerError2.Content = "order.Termina2Nr:" + order.Terminal2Nr + "/" + order.CurrentT2Nr + ",ISO not Found.";
                             Check.IsEnabled = false;
                         }
 
@@ -989,7 +989,7 @@ namespace PmsNCR
                     else
                     {
                         HidSide2();
-                        ServerError2.Content = "order.Termina2Nr:" + order.Terminal2Nr + "/" + order.Tool2Nr + ",ISO not Found.";
+                        ServerError2.Content = "order.Termina2Nr:" + order.Terminal2Nr + "/" + order.CurrentT2Nr + ",ISO not Found.";
                         Check.IsEnabled = false;
                     }
 
@@ -997,7 +997,7 @@ namespace PmsNCR
                     {
                         try
                         {
-                            string key = string.Format("{0}{1}", order.Terminal1Nr, order.Tool1Nr);
+                            string key = string.Format("{0}{1}", order.Terminal1Nr, order.CurrentT1Nr);
 
                             PullOffStaSide1.Text = standard[key].Min_pullOff_value.ToString();
                             CriHigStaSid1.Text = standard[key].Crimp_height.ToString();
@@ -1005,14 +1005,14 @@ namespace PmsNCR
                             CriWidStaSide1.Text = standard[key].Crimp_width.ToString();
                             CriWidFauSide1.Text = standard[key].Crimp_width_iso.ToString();
 
-                            Chart1Title.Content = "Latest for tool:" + order.Tool1Nr + "/" + order.Terminal1Nr;
+                            Chart1Title.Content = "Latest for tool:" + order.CurrentT1Nr + "/" + order.Terminal1Nr;
 
                             CriHig1Side1.Focus();
                         }
                         catch
                         {
                             HidSide1();
-                            ServerError.Content = "Termina1Nr:" + order.Terminal1Nr + "/" + order.Tool1Nr + ",ISO not Found.";
+                            ServerError.Content = "Termina1Nr:" + order.Terminal1Nr + "/" + order.CurrentT1Nr + ",ISO not Found.";
                             Check.IsEnabled = false;
                         }
                     }
@@ -1023,7 +1023,7 @@ namespace PmsNCR
                     else
                     {
                         HidSide1();
-                        ServerError.Content = "order.TerminalNr:" + order.Terminal1Nr+"/"+order.Tool1Nr + ",ISO not Found.";
+                        ServerError.Content = "order.TerminalNr:" + order.Terminal1Nr+"/"+order.CurrentT1Nr + ",ISO not Found.";
                         Check.IsEnabled = false;
                     }
                 }

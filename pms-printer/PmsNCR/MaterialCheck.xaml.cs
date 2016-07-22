@@ -60,7 +60,7 @@ namespace PmsNCR
                 {
                     canStart = false;
                     new MsgWinow(string.Format("Order: {0} is not terminate!", msg.Object.ItemNr)).ShowDialog();
-                    WarnLab.Content = string.Format("!! Order: {0} is not terminate!", msg.Object.OrderNr);
+                    WarnLab.Content = string.Format("!! Order: {0} is not terminate!", msg.Object.ItemNr);
                 }
             }
         }
@@ -422,8 +422,8 @@ namespace PmsNCR
                             if (OrderDDSConverter.ConvertJsonOrderToDDS(orderItem.FileName))
                             {
                                 s.SetOrderItemTool(orderItem.ItemNr, currentTool1.Trim(), currentTool2.Trim());
-                                orderItem.Tool1Nr = currentTool1;
-                                orderItem.Tool2Nr = currentTool2;
+                                orderItem.CurrentT1Nr = currentTool1;
+                                orderItem.CurrentT2Nr = currentTool2;
 
                                 MainWindow.CurrentOrder = orderItem;
                                 WPCSConfig.CurrentOrderNr = orderItem.ItemNr;
