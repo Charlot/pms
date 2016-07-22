@@ -421,7 +421,7 @@ namespace PmsNCR
                         {
                             if (OrderDDSConverter.ConvertJsonOrderToDDS(orderItem.FileName))
                             {
-                                s.SetOrderItemTool(orderItem.ItemNr, currentTool1.Trim(), currentTool2.Trim());
+                                s.SetOrderItemTool(orderItem.ItemNr, currentTool1, currentTool2);
                                 orderItem.CurrentT1Nr = currentTool1;
                                 orderItem.CurrentT2Nr = currentTool2;
 
