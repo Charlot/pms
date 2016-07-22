@@ -129,6 +129,13 @@ module V1
             end
             return nil
           end
+
+          get :get_by_nr do
+            if item=ProductionOrderItem.find_by_nr(params[:nr])
+              return ProductionOrderItemPresenter.new(item).to_simple
+            end
+            return nil
+          end
         end
 
         namespace :printer do

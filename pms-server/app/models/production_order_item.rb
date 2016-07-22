@@ -203,10 +203,22 @@ class ProductionOrderItem < ActiveRecord::Base
         self.produced_qty=self.kanban.quantity
       end
     end
+
+    if self.state_changed? && self.state==ProductionOrderItemState::MANUAL_TERMINATED
+      if self.type==ProductionOrderItemType::WHITE
+        self.terminated_at= Time.now
+      end
+    end
+
+
   end
 
   def move_stock
     if self.state_changed? && self.state==ProductionOrderItemState::TERMINATED
+      ItemMoveStockWorker.perform_async(self.id)
+    end if self.type==ProductionOrderItemType::WHITE
+
+    if self.state_changed? && self.state==ProductionOrderItemState::MANUAL_TERMINATED
       ItemMoveStockWorker.perform_async(self.id)
     end if self.type==ProductionOrderItemType::WHITE
   end

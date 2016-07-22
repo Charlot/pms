@@ -8,6 +8,7 @@ class ProductionOrderItemState<BaseType
   STARTED=200
   RESTARTED=300
   TERMINATED=400
+  MANUAL_TERMINATED=401
   ABORTED=500
   MANUAL_ABORTED=501
   SYSTEM_ABORTED=502
@@ -49,6 +50,9 @@ class ProductionOrderItemState<BaseType
       when TERMINATED
         # '已结束'
         I18n.t 'production_order_item_state.TERMINATED'
+      when MANUAL_TERMINATED
+        # '已结束'
+        I18n.t 'production_order_item_state.MANUAL_TERMINATED'
 
       when ABORTED
         # '已终止'

@@ -21,7 +21,7 @@ class ProductionOrderItemService
             puts "white: #{material.to_json}".red
             moves<<base_params.merge({
                                          remarks: "看板:#{kb.nr},订单#{item.nr}",
-                                         qty: BigDecimal.new(material.quantity.to_s)*item.kanban_qty,
+                                         qty: BigDecimal.new(material.quantity.to_s)*item.produced_qty,
                                          partNr: material.nr
                                      })
           end
@@ -65,7 +65,7 @@ class ProductionOrderItemService
             puts "blue: #{material.to_json}".yellow
             moves<<base_params.merge({
                                          remarks: "看板:#{kb.nr},订单#{item.nr}",
-                                         qty: BigDecimal.new(material.quantity.to_s)*item.kanban_qty,
+                                         qty: BigDecimal.new(material.quantity.to_s)*item.produced_qty,
                                          partNr: material.nr
                                      })
           end
