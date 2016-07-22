@@ -242,7 +242,12 @@ module FileHandler
                     # pe.process_parts.destroy_all
                     arrs=pe.process_parts.pluck(:id)
                     puts arrs.to_json.yellow
-                    temp_quantity = template_fields.select { |tf| tf[:type] == "part" }.collect { |a| a[:ext] }
+                    temp_quantity = template_fields.select { |tf| tf[:type] == "part" && !tf[:value].blank? }.collect { |a| a[:ext] }
+                    puts "-----------------------------------------------".red
+                    p template_fields
+                    p temp_quantity
+                    puts "-----------------------------------------------".red
+
                     pe.custom_values.reload.select { |cv| (cv.custom_field.name != "default_wire_nr")&&(cv.custom_field.field_format=="part") }.each_with_index do |cv, index|
                       cf=cv.custom_field
                       if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
@@ -250,9 +255,11 @@ module FileHandler
                         # puts "#{Part.find_by_id(cv.value).nr},#{temp_quantity[index]},#{index}".red
                         if cv.value #&& Part.find_by_id(cv.value)
                           qty=temp_quantity[index].to_f
+
                           if (part=Part.find_by_id(cv.value)) && (part.type==PartType::MATERIAL_WIRE) && qty>10
                             qty=qty/1000
                           end if Setting.auto_convert_material_length?
+
                           if ppp=pe.process_parts.where(custom_value_id: cv.id, part_id: cv.value).first
                             puts "@@@@@@@@@@update process part:#{ppp.to_json}".blue
                             ppp.update_attributes!(quantity: qty)

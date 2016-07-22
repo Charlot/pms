@@ -94,6 +94,9 @@ module FileHandler
                       if wire.nil?
                         part = Part.create({nr: "#{row['Product Nr']}_#{row['Wire NO']}", type: PartType::PRODUCT_SEMIFINISHED})
                       end
+
+                      puts params.to_s.red
+                      # raise 'ssssssssssssssssssssssssssssssssssssss'
                       pe.update(params.except(:nr))
 
                       # update nr to new nr
