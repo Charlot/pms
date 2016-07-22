@@ -132,7 +132,7 @@ module V1
 
           get :get_by_nr do
             if item=ProductionOrderItem.find_by_nr(params[:nr])
-              return ProductionOrderItemPresenter.new(item).to_simple
+              return ProductionOrderItemPresenter.new(item).to_preview_order
             end
             return nil
           end

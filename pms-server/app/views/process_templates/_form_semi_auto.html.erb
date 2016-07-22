@@ -7,7 +7,9 @@
   <input type="button" value="ADD" id="add_input_to_template_btn"/>
 </div>
 <%= f.text_area :template, cols: 50, rows: 8 %>
-
+<div>
+  <span>说明:<%= @process_template.template_with_type %></span>
+</div>
 <input type="hidden" id="process_entity_editor_hidden" name="custom_field_is_for_out"/>
 <script type="text/javascript">
     var custom_field_formats = <%= format_type_js_var.to_json.html_safe%>;

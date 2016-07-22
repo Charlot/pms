@@ -64,11 +64,17 @@ class Kanban < ActiveRecord::Base
     puts "#{value}.....#{key}....#{operator}..........................................."
     q={conditions: "kanbans.nr like '%#{value}%'"}
 
-    parts = Part.where("nr LIKE '%#{value}%'").map(&:id)
+    parts = Part.where("nr LIKE '%#{value}%'").all#.map(&:id)
     if parts.count > 0
-
+      ids=[]
+      parts.each do |p|
+        ids<<p.id
+        PartBom.where(bom_item_id: p.id).each do |b|
+          ids<<b.part_id
+        end
+      end
       process = ProcessEntity.joins(custom_values: :custom_field).where(
-          "custom_values.value IN (#{parts.join(',')}) AND custom_fields.field_format = 'part'"
+          "custom_values.value IN (#{ids.join(',')}) AND custom_fields.field_format = 'part'"
       ).pluck(:id)
       kanbans=[]
       if process.count > 0

@@ -65,6 +65,11 @@ class ProcessTemplate < ActiveRecord::Base
     @template_custom_field_ids||=self.template.scan(/{(\d+)}/).map(&:first)
   end
 
+  def template_with_type
+    @template_with_type||= self.template.gsub!(/{\d+}/).each_with_index { |v, i|
+      "#{v}(#{(c=CustomField.find_by_id(v.sub(/[{}]/,''))).blank? ? '' : c.field_format })" }
+  end
+
   # 导入自动模版
 
   def self.import(file, import_type)
