@@ -36,7 +36,7 @@ module FileHandler
                   end
                 elsif row["ID"].blank?
                   if row['operator'].blank? &&
-                      CrimpConfiguration.where(custom_id: row["custom_id"], part_id: row["part_id"], wire_group_name: row["wire_group_name"], cross_section: row["cross_section"]).blank?
+                      CrimpConfiguration.where(tool_id: row["tool_id"], custom_id: row["custom_id"], part_id: row["part_id"], wire_group_name: row["wire_group_name"], cross_section: row["cross_section"]).blank?
                     CrimpConfiguration.create(row.except("ID", "operator"))
                   end
                 end
