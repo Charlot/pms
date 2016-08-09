@@ -508,6 +508,20 @@ namespace PmsNCR
             Seal1TB.Text = Seal2TB.Text;
             Seal2TB.Text = seal1;
 
+            Visibility sealLabVisi = Seal1Lab.Visibility;
+            Seal1Lab.Visibility = Seal2Lab.Visibility;
+            Seal2Lab.Visibility = sealLabVisi;
+
+            Visibility sealCBVisi = Seal1CB.Visibility;
+            Seal1CB.Visibility = Seal2CB.Visibility;
+            Seal2CB.Visibility = sealCBVisi;
+
+            Visibility sealTBVisi = Seal1TB.Visibility;
+            Seal1TB.Visibility = Seal2TB.Visibility;
+            Seal2TB.Visibility = sealTBVisi;
+
+
+
             string mold1 = CurrentMold1.Content.ToString();
             CurrentMold1.Content = CurrentMold2.Content;
             CurrentMold2.Content = mold1;
