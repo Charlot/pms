@@ -46,10 +46,10 @@ module V1
               else
                 r= {}
               end
-              NcrLogWorker.perform_async({machine_nr: params[:machine_nr],
-                                          log_type: NcrApiLogType::MACHINE_MATERIAL_CHECK,
-                                          return_detail: r.to_json,
-                                          params_detail: params.to_json})
+             # NcrLogWorker.perform_async({machine_nr: params[:machine_nr],
+                              #            log_type: NcrApiLogType::MACHINE_MATERIAL_CHECK,
+                               #           return_detail: r.to_json,
+                                #          params_detail: params.to_json})
               return r
             end
           end
@@ -91,10 +91,10 @@ module V1
                 r= item.update(state: params[:state], user_nr: params[:user_nr], user_group_nr: params[:user_group_nr])
               end
 
-              NcrLogWorker.perform_async({order_item_nr: params[:order_item_nr],
-                                          log_type: NcrApiLogType::ORDER_UPDATE_STATE,
-                                          order_item_state: params[:state],
-                                          return_detail: r, params_detail: params.to_json})
+             # NcrLogWorker.perform_async({order_item_nr: params[:order_item_nr],
+              #                            log_type: NcrApiLogType::ORDER_UPDATE_STATE,
+               #                           order_item_state: params[:state],
+                #                          return_detail: r, params_detail: params.to_json})
               return r
             end
           end
@@ -106,11 +106,11 @@ module V1
                 item.update(produced_qty: params[:produced_qty])
                 r= ProductionOrderItemPresenter.new(item).to_bundle_produce_order
 
-                NcrLogWorker.perform_async({order_item_nr: params[:order_item_nr],
-                                            log_type: NcrApiLogType::MACHINE_OUT_PUT_QTY,
-                                            return_detail: r.to_json,
-                                            order_item_qty: params[:produced_qty],
-                                            params_detail: params.to_json})
+             #   NcrLogWorker.perform_async({order_item_nr: params[:order_item_nr],
+             #                               log_type: NcrApiLogType::MACHINE_OUT_PUT_QTY,
+              #                              return_detail: r.to_json,
+               #                             order_item_qty: params[:produced_qty],
+                #                            params_detail: params.to_json})
 
                 return r
               end
