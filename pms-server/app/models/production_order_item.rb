@@ -15,7 +15,7 @@ class ProductionOrderItem < ActiveRecord::Base
   default_scope { where(type: ProductionOrderItemType::WHITE) }
   # after_update :enter_store
   # after_update :move_store
-  has_paper_trail
+  #has_paper_trail
 
   def not_auto?
     !self.auto
