@@ -66,7 +66,7 @@ class ProcessTemplate < ActiveRecord::Base
   end
 
   def template_with_type
-    @template_with_type||= self.template.gsub!(/{\d+}/).each_with_index { |v, i|
+    @template_with_type||= self.template.blank? ? '' : self.template.gsub!(/{\d+}/).each_with_index { |v, i|
       "#{v}(#{(c=CustomField.find_by_id(v.sub(/[{}]/,''))).blank? ? '' : c.field_format })" }
   end
 

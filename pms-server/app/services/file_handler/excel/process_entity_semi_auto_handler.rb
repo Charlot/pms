@@ -246,9 +246,10 @@ module FileHandler
                     puts "-----------------------------------------------".red
                     p template_fields
                     p temp_quantity
+                    p pe.custom_values.reload.select { |cv| (cv.custom_field.name != "default_wire_nr")&&(cv.custom_field.field_format=="part") }
                     puts "-----------------------------------------------".red
 
-                    pe.custom_values.reload.select { |cv| (cv.custom_field.name != "default_wire_nr")&&(cv.custom_field.field_format=="part") }.each_with_index do |cv, index|
+                    pe.custom_values.reload.select { |cv| (cv.custom_field.name != "default_wire_nr")&&(cv.custom_field.field_format=="part")&&(cv.value.present?) }.each_with_index do |cv, index|
                       cf=cv.custom_field
                       if CustomFieldFormatType.part?(cf.field_format) && cf.is_for_out_stock
                         # puts "#{template_fields}-----#{cv}".red
@@ -271,6 +272,7 @@ module FileHandler
                         end
 
                       end
+
                     end
                     puts arrs.to_json.red
 
