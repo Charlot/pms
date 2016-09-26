@@ -62,7 +62,23 @@ namespace PmsNCR
         private void scanTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             scanTimer.Stop();
-            List<string> files = GetAllFilesFromDirectory(WPCSConfig.ClientDataDir,"*.sdc");
+
+            String allDir = WPCSConfig.ClientDataDir;
+            if (WPCSConfig.MachineType == "THB")
+            {
+                System.DateTime currentTime = System.DateTime.Now;
+
+                allDir = System.IO.Path.Combine(allDir, String.Format("{0,2:D2}",currentTime.Year));
+                allDir = System.IO.Path.Combine(allDir, String.Format("{0,2:D2}",currentTime.Month));
+                allDir = System.IO.Path.Combine(allDir, String.Format("{0,2:D2}",currentTime.Day));
+                //List<string> files = GetAllFilesFromDirectory(allDir, "*.sdc");
+            } else {
+                //List<string> files = GetAllFilesFromDirectory(WPCSConfig.ClientDataDir, "*.sdc");
+            }
+
+            List<string> files = GetAllFilesFromDirectory(allDir, "*.sdc");
+            if (files != null)
+            {
             foreach (string file in files)
             {
 
@@ -75,6 +91,7 @@ namespace PmsNCR
                     
                 }
 
+            }
             }
             scanTimer.Enabled = true;
             scanTimer.Start();

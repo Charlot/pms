@@ -421,10 +421,18 @@ namespace PmsNCR
                         {
                             if (OrderDDSConverter.ConvertJsonOrderToDDS(orderItem.FileName))
                             {
-                                s.SetOrderItemTool(orderItem.ItemNr, currentTool1, currentTool2);
-                                orderItem.CurrentT1Nr = currentTool1;
-                                orderItem.CurrentT2Nr = currentTool2;
-
+                                if (!mirror)
+                                {
+                                    s.SetOrderItemTool(orderItem.ItemNr, currentTool1, currentTool2);
+                                    orderItem.CurrentT1Nr = currentTool1;
+                                    orderItem.CurrentT2Nr = currentTool2;
+                                }
+                                else
+                                {
+                                    s.SetOrderItemTool(orderItem.ItemNr, currentTool2, currentTool1); 
+                                    orderItem.CurrentT1Nr = currentTool2;
+                                    orderItem.CurrentT2Nr = currentTool1;
+                                }
                                 MainWindow.CurrentOrder = orderItem;
                                 WPCSConfig.CurrentOrderNr = orderItem.ItemNr;
 

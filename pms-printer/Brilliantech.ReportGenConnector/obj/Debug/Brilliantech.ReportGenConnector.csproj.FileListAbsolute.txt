@@ -5,6 +5,6 @@ C:\Users\Charlot\Documents\GitHub\pms\pms-printer\Brilliantech.ReportGenConnecto
 C:\Users\Charlot\Documents\GitHub\pms\pms-printer\Brilliantech.ReportGenConnector\obj\Debug\Brilliantech.ReportGenConnector.csprojResolveAssemblyReference.cache
 F:\if-project\pms\pms-printer\Brilliantech.ReportGenConnector\bin\Debug\Brilliantech.ReportGenConnector.dll
 F:\if-project\pms\pms-printer\Brilliantech.ReportGenConnector\bin\Debug\Brilliantech.ReportGenConnector.pdb
-F:\if-project\pms\pms-printer\Brilliantech.ReportGenConnector\obj\Debug\Brilliantech.ReportGenConnector.csprojResolveAssemblyReference.cache
 F:\if-project\pms\pms-printer\Brilliantech.ReportGenConnector\obj\Debug\Brilliantech.ReportGenConnector.dll
 F:\if-project\pms\pms-printer\Brilliantech.ReportGenConnector\obj\Debug\Brilliantech.ReportGenConnector.pdb
+F:\if-project\pms\pms-printer\Brilliantech.ReportGenConnector\obj\Debug\Brilliantech.ReportGenConnector.csprojResolveAssemblyReference.cache
