@@ -88,7 +88,7 @@
                 <TextBox Height="23" Name="BundleNoTB" Width="120" />
                 <Button Content="Print Bundle Label" Height="23" Name="PrintBundleLabelBtn" Width="120" Click="PrintBundleLabelBtn_Click" />
                 
-                <CheckBox Content="INSTORE" Height="16" Name="InstoreCheck" Foreground="Red" FontWeight="Bold" Margin="15"/>
+                <CheckBox Content="INSTORE" Height="16" Name="InstoreCheck" Foreground="Red" FontWeight="Bold" Margin="15" IsChecked="True" />
             </StackPanel>
             <!--<Button Height="56"  Width="88"  Margin="34,16,0,0" Content="显示预览卡"/>-->
         </StackPanel>
