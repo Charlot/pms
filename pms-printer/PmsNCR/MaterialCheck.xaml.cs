@@ -121,6 +121,8 @@ namespace PmsNCR
                 WireColorTB.Text = orderItem.WireColor;
                 WireCB.IsEnabled = !MaterialCheckConfig.WireLockCheck;
                 Terminal1CB.IsEnabled = Terminal2CB.IsEnabled = !MaterialCheckConfig.TerminalLockCheck;
+                Tool1CB.IsChecked = CheckBoxConfig.Tool1Check;
+                Tool2CB.IsChecked = CheckBoxConfig.Tool2Check;
                 Tool1CB.IsEnabled = Tool2CB.IsEnabled = !MaterialCheckConfig.ToolLockCheck;
                 Seal1CB.IsEnabled = Seal2CB.IsEnabled = !MaterialCheckConfig.SealLockCheck;
 

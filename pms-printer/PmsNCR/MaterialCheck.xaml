@@ -103,15 +103,15 @@
         <CheckBox Content="Auto Clear" Height="16" IsChecked="True" HorizontalAlignment="Left" Margin="510,347,0,0" Name="AutoCleanScanCB" VerticalAlignment="Top" />
         <Button Content="Clear" Height="23" HorizontalAlignment="Left" Margin="600,344,0,0" Name="CleanScanBtn" VerticalAlignment="Top" Width="75" Click="CleanScanBtn_Click" />
         <Button Content="START"      Height="61" 
-                HorizontalAlignment="Left" Margin="782,337,0,0" Name="StartProduceBtn"  
+                HorizontalAlignment="Left" Margin="688,337,0,0" Name="StartProduceBtn"  
                 VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                 Width="100" IsEnabled="False" Click="StartProduceBtn_Click" />
         <Button Content="!ABORT!" Height="60" 
-                HorizontalAlignment="Left" Margin="839,0,0,0"
+                HorizontalAlignment="Left" Margin="700,0,0,0"
                 Name="AbortBtn" VerticalAlignment="Top" Width="87" 
                 Foreground="#FFF21919" FontWeight="Bold" FontSize="14" Click="AbortBtn_Click" />
         <Button Content="Mirror" 
-                Height="60" HorizontalAlignment="Left" Margin="710,0,0,0" Name="MirrorBtn"
+                Height="60" HorizontalAlignment="Left" Margin="585,0,0,0" Name="MirrorBtn"
                 VerticalAlignment="Top" Width="87" Click="MirrorBtn_Click" />
         <Label Content="Color:" Height="28" HorizontalAlignment="Left" Margin="332,84,0,0" Name="label11" VerticalAlignment="Top" />
         <TextBox Height="23" HorizontalAlignment="Left" IsEnabled="False" Margin="384,86,0,0" Name="WireColorTB" VerticalAlignment="Top" Width="120" />

@@ -53,6 +53,7 @@
     <Reference Include="System.ServiceModel.Activation" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="TECIT.TFORMer, Version=6.0.3.0, Culture=neutral, PublicKeyToken=1b5f4306b234b83d, processorArchitecture=MSIL">
@@ -62,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\ApiConfig.cs" />
+    <Compile Include="Config\CheckBoxConfig.cs" />
     <Compile Include="Config\ColorConfig.cs" />
     <Compile Include="Config\MaterialCheckConfig.cs" />
     <Compile Include="Config\PrinterConfig.cs" />

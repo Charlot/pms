@@ -48,6 +48,7 @@ namespace PmsNCR
             {
                 List<OrderItemCheck> items = msg.Object;
                 PreviewOrderDG.ItemsSource = items;
+                InstoreCheck.IsChecked = CheckBoxConfig.InstoreCheck;
             }
             else
             {
