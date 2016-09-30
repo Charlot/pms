@@ -7,7 +7,7 @@ class ProductionOrderItem < ActiveRecord::Base
   after_update :update_qty_to_terminate, if: :auto?
   after_update :generate_production_item_label, if: :auto?
   before_update :set_terminated
-  after_update :move_stock
+  # after_update :move_stock
 
   after_update :generate_production_item_not_auto_label, :if => :not_auto?
 
