@@ -217,7 +217,7 @@ module FileHandler
                   # end
 
 
-                  raise("#{Part.find(product_id).nr} bom 基础数据中未存在用量，请更新后分解") if item.qty.nil?
+                  raise("#{Part.find(product_id).nr} bom ，请更新后分解") if item.qty.nil?
                   if total_transport_result.has_key?(total_key)
                     total_transport_result[total_key]+=rqty*product_qty[item.product_id.to_s]
                   else

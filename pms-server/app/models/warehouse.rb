@@ -10,11 +10,12 @@ class Warehouse < ActiveRecord::Base
                  # '^XT' => '3PL'
                  '^XM' => '3PL',
                  '^XF' => '3PL',
-                 '^XT' => '3PL'
+                 '^XT' => '3PL',
+                 '^YM' => 'BCPW'
   }
 
-  DEFAULT_WAREHOUSE='CUTTING_TMP'
-  DEFAULT_POSITION='CUTTING_TMP'
+  DEFAULT_WAREHOUSE='BCPW'
+  DEFAULT_POSITION='BCPP'
 
   def self.get_whouse_by_position_prefix(position_nr)
     WarehouseRegex.all.each do |w|

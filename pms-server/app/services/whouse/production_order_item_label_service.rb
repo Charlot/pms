@@ -4,7 +4,7 @@ class ProductionOrderItemLabelService
       if (label=ProductionOrderItemLabel.find_by_id(id)) && (label.state==ProductionOrderItemLabel::INIT)
         r=false
         if (kb=label.production_order_item.kanban) && kb.kanban_part_nr
-          r=Whouse::StorageClient.new.enter_stock({partNr: kb.kanban_part_nr,
+          r=Whouse::StorageClient.new.enter_stock({partNr: kb.kanban_part_nr.split('_').last.gsub(/\.0/, ''),
                                              qty: label.qty,
                                              fifo: label.created_at.localtime,
                                              toWh: label.whouse_nr,
