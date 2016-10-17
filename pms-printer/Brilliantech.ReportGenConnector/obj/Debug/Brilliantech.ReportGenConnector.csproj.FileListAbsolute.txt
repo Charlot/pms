@@ -7,3 +7,4 @@ F:\if-project\pms\pms-printer\Brilliantech.ReportGenConnector\bin\Debug\Brillian
 F:\if-project\pms\pms-printer\Brilliantech.ReportGenConnector\bin\Debug\Brilliantech.ReportGenConnector.pdb
 F:\if-project\pms\pms-printer\Brilliantech.ReportGenConnector\obj\Debug\Brilliantech.ReportGenConnector.dll
 F:\if-project\pms\pms-printer\Brilliantech.ReportGenConnector\obj\Debug\Brilliantech.ReportGenConnector.pdb
+F:\if-project\pms\pms-printer\Brilliantech.ReportGenConnector\obj\Debug\Brilliantech.ReportGenConnector.csprojResolveAssemblyReference.cache
