@@ -98,7 +98,7 @@ namespace PmsNCR
                 new PrintLabelConfirmWindow(item, InstoreCheck.IsChecked.Value,bundleNo).ShowDialog();
                 BundleNoTB.Text = string.Empty;
                 InstoreCheck.IsChecked = true;
-              //  new PrintService().PrintBundleLabel("P003", item.ItemNr, WPCSConfig.MachineNr,bundleNo,InstoreCheck.IsChecked.Value);          
+                new PrintService().PrintBundleLabel("P003", item.ItemNr, WPCSConfig.MachineNr, bundleNo, InstoreCheck.IsChecked.Value);          
             }
         }
          
