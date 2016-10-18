@@ -1,13 +1,14 @@
 # Print BUNDLE LABEL
 module Printer
   class P003<Base
-    HEAD=[:CO_Nr, :CP_Nr,
-          :kBanNr,:user, :warehouse,
-          :pnNr, :bundleNo, :totalQuantity, :bQuantity, :singleResCC, :wireNr,
-          :partNr, :partDesc, :color, :length, :diameter,
-          :t1_nr, :t1_custom_nr, :t1_strip_length, :s1_nr,
-          :t2_nr, :t2_custom_nr, :t2_strip_length, :s2_nr,
-          :bundleLabelNr]
+    # HEAD=[:CO_Nr, :CP_Nr,
+    #       :kBanNr,:user, :warehouse,
+    #       :pnNr, :bundleNo, :totalQuantity, :bQuantity, :singleResCC, :wireNr,
+    #       :partNr, :partDesc, :color, :length, :diameter,
+    #       :t1_nr, :t1_custom_nr, :t1_strip_length, :s1_nr,
+    #       :t2_nr, :t2_custom_nr, :t2_strip_length, :s2_nr,
+    #       :bundleLabelNr]
+    HEAD=[:totalQuantity, :bQuantity,:bundleLabelNr, :kBanNr, :warehouse]
 
     def generate_data(args=nil)
       item=ProductionOrderItem.find_by_nr(args[:order_item_nr])
@@ -22,24 +23,24 @@ module Printer
         wire=Part.find_by_id(process_entity.value_wire_nr)
 
         head={
-            CO_Nr: item.nr,
-            CP_Nr: item.optimise_index,
-            user: item.user_nr.blank? ? '' : "#{item.user_nr} / #{item.user_group_nr}",
+            # CO_Nr: item.nr,
+            # CP_Nr: item.optimise_index,
+            # user: item.user_nr.blank? ? '' : "#{item.user_nr} / #{item.user_group_nr}",
             kBanNr: kanban.nr,
             warehouse: kanban.des_storage,
-            pnNr: (product.nil? ? '' : "#{product.nr} / #{product.custom_nr}"),
-            bundleNo: args[:bundle_no],
+            # pnNr: (product.nil? ? '' : "#{product.nr} / #{product.custom_nr}"),
+            # bundleNo: args[:bundle_no],
             totalQuantity: kanban.quantity,
             bQuantity: item_label.qty.to_i,
-            singleResCC: args[:machine_nr],
-            wireNr: kanban.wire_nr,
-            partNr: wire.nr,
-            partDesc: "#{wire.component_type}  #{wire.description}",
-            color: wire.color,
-            length: process_entity.value_wire_qty_factor,
-            diameter: wire.cross_section,
-            t1_nr: '', t1_custom_nr: '', t1_strip_length: '', s1_nr: '',
-            t2_nr: '', t2_custom_nr: '', t2_strip_length: '', s2_nr: '',
+            # singleResCC: args[:machine_nr],
+            # wireNr: kanban.wire_nr,
+            # partNr: wire.nr,
+            # partDesc: "#{wire.component_type}  #{wire.description}",
+            # color: wire.color,
+            # length: process_entity.value_wire_qty_factor,
+            # diameter: wire.cross_section,
+            # t1_nr: '', t1_custom_nr: '', t1_strip_length: '', s1_nr: '',
+            # t2_nr: '', t2_custom_nr: '', t2_strip_length: '', s2_nr: '',
             bundleLabelNr: item_label.nr
         }
 
