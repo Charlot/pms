@@ -69,7 +69,7 @@ module V1
           get :passed do
             I18n.locale='en'
             if machine=Machine.find_by_nr(params[:machine_nr])
-              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_passed(machine).limit(30))
+              return ProductionOrderItemPresenter.init_preview_presenters(ProductionOrderItem.for_passed(machine).limit(3))
             end
           end
 
