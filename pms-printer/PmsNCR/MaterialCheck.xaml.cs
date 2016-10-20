@@ -529,6 +529,41 @@ namespace PmsNCR
             Seal2TB.Visibility = sealTBVisi;
 
 
+            //if (string.IsNullOrWhiteSpace(Seal1TB.Text))
+            //{
+            //    Seal1CB.IsChecked = true;
+            //}
+            //else
+            //{
+            //    Seal1CB.IsChecked = false;
+            //}
+
+            //if (string.IsNullOrWhiteSpace(Seal2TB.Text))
+            //{
+            //    Seal2CB.IsChecked = true;
+            //}
+            //else
+            //{
+            //    Seal2CB.IsChecked = false;
+            //}
+
+            if (Seal1CB.Visibility==Visibility.Visible)
+            {
+                Seal1CB.IsChecked = false;
+            }
+            else
+            {
+                Seal1CB.IsChecked = true;
+            }
+
+            if (Seal2CB.Visibility==Visibility.Visible )
+            {
+                Seal2CB.IsChecked = false;
+            }
+            else
+            {
+                Seal2CB.IsChecked = true;
+            }
 
             string mold1 = CurrentMold1.Content.ToString();
             CurrentMold1.Content = CurrentMold2.Content;
@@ -538,17 +573,15 @@ namespace PmsNCR
             WorkArea1.Visibility = WorkArea2.Visibility;
             WorkArea2.Visibility = visibility;
 
-
-
         }
 
-        //private void ScanCodeTB_TextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    if (ScanCodeTB.Text.Length>0)
-        //    {
-        //        CheckMaterial();
-        //    }
-        //}
+        private void ScanCodeTB_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (ScanCodeTB.Text.Length > 0)
+            {
+                CheckMaterial();
+            }
+        }
 
         private void MaterialCB_Checked(object sender, RoutedEventArgs e)
         {
