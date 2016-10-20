@@ -4,7 +4,8 @@ class ProductionOrderItemLabelService
       if (label=ProductionOrderItemLabel.find_by_id(id)) && (label.state==ProductionOrderItemLabel::INIT)
         r=false
         if (kb=label.production_order_item.kanban) && kb.kanban_part_nr
-          r=Whouse::StorageClient.new.enter_stock({partNr: kb.kanban_part_nr.split('_').first + kb.process_entities.first.nr,
+
+          r=Whouse::StorageClient.new.enter_stock({partNr: kb.kanban_part_nr.split('_').last.gsub(/\.0/, ''),
                                              qty: label.qty,
                                              fifo: label.created_at.localtime,
                                              toWh: label.whouse_nr,
@@ -30,7 +31,8 @@ class ProductionOrderItemLabelService
         if (kb=label.production_order_item_blue.kanban) && kb.kanban_part_nr
           puts '----------------------------------ddd'
 
-          r=Whouse::StorageClient.new.enter_stock({partNr: kb.kanban_part_nr,
+          # r=Whouse::StorageClient.new.enter_stock({partNr: kb.kanban_part_nr,
+          r=Whouse::StorageClient.new.enter_stock({partNr: kb.kanban_part_nr.split('_').first + kb.process_entities.first.nr,
                                              qty: label.qty,
                                              fifo: label.created_at.localtime,
                                              toWh: label.whouse_nr,

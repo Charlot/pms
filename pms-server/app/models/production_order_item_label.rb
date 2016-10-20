@@ -10,7 +10,7 @@ class ProductionOrderItemLabel < ActiveRecord::Base
 
 
   after_create :update_production_order_item_state
-  after_create :enter_stock
+  after_commit :enter_stock
   # after_create :move_stock
   after_create :update_tool_cut_count
 

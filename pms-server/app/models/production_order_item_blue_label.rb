@@ -5,7 +5,7 @@ class ProductionOrderItemBlueLabel < ProductionOrderItemLabel
   default_scope { where(type: ProductionOrderItemType::BLUE) }
 
 
-  after_create :enter_stock
+  after_commit :enter_stock
   # after_create :move_stock
 
 
