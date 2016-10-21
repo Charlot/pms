@@ -9,8 +9,8 @@ module AutoKey
     end
 
     def generate_auto_key
-      key=redis_incr_key
-      if key.to_s.length<6
+      key=redis_incr_key+100000
+      if key.to_i < 1000000
         self.nr= '%06d' % key
       else
         self.nr= "%0#{key.to_s.length+1}d" % key
