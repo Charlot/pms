@@ -55,7 +55,7 @@ class Kanban < ActiveRecord::Base
       return Kanban.find_by_nr(v.sub(/\/\d+/, ''))
     else
       if /\d+\/\d+/.match(v)
-        return Kanban.find_by_id(v.sub(/\/\d+/, ''))
+        return Kanban.find_by_nr(v.sub(/\/\d+/, ''))
       else
         return Kanban.find_by_nr(v.sub(/\/\d+/, ''))
       end
