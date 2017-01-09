@@ -98,6 +98,18 @@ namespace PmsNCR
                 BundleNoTB.Text = string.Empty;
                 InstoreCheck.IsChecked = false;
               //  new PrintService().PrintBundleLabel("P003", item.ItemNr, WPCSConfig.MachineNr,bundleNo,InstoreCheck.IsChecked.Value);          
+
+                //------------------------Update Log Start --------------------------------------- 
+                // update by sfz 2017-1-9
+                // for penglai  \  when order Preview print over  \  auto show Scrap Page
+
+                MainWindow.CurrentOrder = item;
+                WPCSConfig.CurrentOrderNr = item.ItemNr;
+
+                Scrap scrap = new Scrap();
+                scrap.ShowDialog();
+
+                //------------------------Update Log End---------------------------------------
             }
         }
          

@@ -1,0 +1,4 @@
+2017-1-9  by sfz  客户 - 蓬莱
+
+问题点
+   1、 在OrderPreviewWindow 界面， 点击Print Bundle Label 之后， 自动弹出Scrap界面
