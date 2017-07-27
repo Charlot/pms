@@ -262,14 +262,14 @@ class Kanban < ActiveRecord::Base
           task_time = process_entity.get_process_entity_worktime(self.production_order_items.last)
         end
 
-        task_time *= (self.quantity.blank? 0 : self.quantity)
+        task_time *= (self.quantity.blank? ? 0 : self.quantity)
       when KanbanType::BLUE
         self.process_entities.each_with_index do |process_entity, i|
           puts "-------#{i}..#{process_entity.process_template.code}----#{process_entity.nr}".yellow
           task_time += process_entity.get_process_entity_worktime
         end
 
-        task_time = task_time * (self.quantity.blank? 0 : self.quantity)
+        task_time = task_time * (self.quantity.blank? ? 0 : self.quantity)
     end
     # rescue => e
     #   task_time=0
