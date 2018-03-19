@@ -32,9 +32,9 @@ every 1.month,:at=>['7:00'] do
   rake "log:clear"
 end
 
-every 1.minute do
- command 'sudo service nginx -s reload'
-end
+#every 1.minute do
+ #command 'sudo /opt/nginx/sbin/nginx -s reload'
+#end
 #every 1.minute do
 #  rake "log:clear"
 #end
