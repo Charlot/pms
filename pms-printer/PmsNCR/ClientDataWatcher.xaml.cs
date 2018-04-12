@@ -122,7 +122,7 @@ namespace PmsNCR
             {
                 LogUtil.Logger.Error(e.GetType());
                 canMoveFile = false;
-                LogUtil.Logger.Error(e.Message);
+                LogUtil.Logger.Error(e.Message,e);
             }
             // 是否可以访问服务 不可以访问时保持文件不处理
             if (canMoveFile)
@@ -166,7 +166,7 @@ namespace PmsNCR
             }
             catch (Exception e)
             {
-                LogUtil.Logger.Error("[Get All File Error]" + e.Message);
+                LogUtil.Logger.Error("[Get All File Error]数据获取路径错误，请检查WPCS的相关配置，如路径、机器型号。\r\n THB的机器使用 的年/月/日作为路径\r\n" + e.Message,e);
                 return null;
             }
         }
@@ -211,7 +211,7 @@ namespace PmsNCR
             }
             catch (Exception e)
             {
-                LogUtil.Logger.Error("Move File [From]" + sourceFileName + "[To]" + destFileName + "[ERROR]" + e.Message);
+                LogUtil.Logger.Error("Move File [From]" + sourceFileName + "[To]" + destFileName + "[ERROR]" + e.Message,e);
             }
             return null;
         }
@@ -259,7 +259,7 @@ namespace PmsNCR
             }
             catch (Exception e)
             {
-                LogUtil.Logger.Warn(fileName + "File not close." + e.Message);
+                LogUtil.Logger.Warn(fileName + "File not close." + e.Message,e);
                 return false;
             }
         }
