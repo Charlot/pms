@@ -21,7 +21,8 @@ module V1
           end
 
           post :tool do
-            if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
+            #if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
+            if item=ProductionOrderItem.where(nr: params[:order_item_nr]).order(id: :desc).first
               puts "-------------------#{params.to_json}".red
               # item.without_versioning do
               item.update_attributes(tool1: params[:tool1_nr], tool2: params[:tool2_nr])
@@ -81,7 +82,8 @@ module V1
           end
 
           put :update_state do
-            if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
+            #if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
+            if item=ProductionOrderItem.where(nr: params[:order_item_nr]).order(id: :desc).first
               # 当任务结束时，不可以使用API改变状态
               p item
               r=false
@@ -101,8 +103,9 @@ module V1
 
           post :produce_piece do
             ProductionOrderItem.transaction do
-              if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
-                # TODO generate bundle storage
+              #if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
+              if item=ProductionOrderItem.where(nr: params[:order_item_nr]).order(id: :desc).first
+              # TODO generate bundle storage
                 item.update(produced_qty: params[:produced_qty])
                 r= ProductionOrderItemPresenter.new(item).to_bundle_produce_order
 
@@ -141,7 +144,8 @@ module V1
 
         namespace :printer do
           get :kanban_by_order_item do
-            if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
+            #if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
+            if item=ProductionOrderItem.where(nr: params[:order_item_nr]).order(id: :desc).first
               printer=Printer::Client.new({code: params[:code], id: Kanban.find_by_id(item.kanban_id).nr, machine_nr: params[:machine_nr]})
               printer.gen_data
             end
@@ -149,7 +153,8 @@ module V1
 
 
           get :bundle_label do
-            if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
+            #if item=ProductionOrderItem.find_by_nr(params[:order_item_nr])
+            if item=ProductionOrderItem.where(nr: params[:order_item_nr]).order(id: :desc).first
               unless params[:in_store].blank?
                 item.create_label(params[:bundle_no])
               end
@@ -168,8 +173,9 @@ module V1
             resilt = []
             index = 0
             msg=ServiceMessage.new
+             # production_order_item = ProductionOrderItem.find_by_nr(params[:production_order_item_id])
+            production_order_item=ProductionOrderItem.where(nr: params[:production_order_item_id]).order(id: :desc).first
 
-            production_order_item = ProductionOrderItem.find_by_nr(params[:production_order_item_id])
             if production_order_item.nil?
               msg.Content = "This order:#{params[:production_order_item_id]} is not valid!"
               return msg
